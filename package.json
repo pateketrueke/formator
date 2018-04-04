@@ -1,0 +1,61 @@
+{
+  "name": "jsonschema-form-mw",
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "tarima watch -d",
+    "dist": "tarima -fqe production"
+  },
+  "author": "Alvaro Cabrera <pateketrueke@gmail.com>",
+  "license": "MIT",
+  "tarima": {
+    "from": "src",
+    "public": "build",
+    "rename": [
+      "**/src/**:{fullpath/1}"
+    ],
+    "filter": [
+      "!_*",
+      "!**/_*",
+      "!**/_*/**"
+    ],
+    "bundle": [
+      "**/main.js"
+    ],
+    "ignoreFiles": [
+      ".gitignore"
+    ],
+    "bundleOptions": {
+      "extensions": {
+        "js": "es6",
+        "css": "less"
+      },
+      "less": {
+        "plugins": [
+          "less-plugin-autoprefix"
+        ]
+      },
+      "rollup": {
+        "plugins": [
+          "rollup-plugin-node-resolve",
+          "rollup-plugin-commonjs"
+        ],
+        "rollup-plugin-node-resolve": {
+          "module": true,
+          "jsnext": true,
+          "main": true,
+          "browser": true
+        }
+      }
+    }
+  },
+  "devDependencies": {
+    "buble": "^0.19.3",
+    "less": "^2.7.3",
+    "less-plugin-autoprefix": "^1.5.1",
+    "rollup": "^0.57.1",
+    "rollup-plugin-commonjs": "^9.1.0",
+    "rollup-plugin-node-resolve": "^3.3.0",
+    "tarima": "^4.0.7"
+  },
+  "dependencies": {}
+}
