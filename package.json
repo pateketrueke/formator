@@ -1,6 +1,10 @@
 {
   "name": "jsonschema-form-mw",
   "version": "0.1.0",
+  "files": [
+    "index.js",
+    "dist"
+  ],
   "scripts": {
     "dev": "tarima watch -d",
     "dist": "tarima -fqe production"
@@ -9,7 +13,7 @@
   "license": "MIT",
   "tarima": {
     "from": "src",
-    "public": "build",
+    "output": "dist",
     "rename": [
       "**/src/**:{fullpath/1}"
     ],
@@ -33,18 +37,6 @@
         "plugins": [
           "less-plugin-autoprefix"
         ]
-      },
-      "rollup": {
-        "plugins": [
-          "rollup-plugin-node-resolve",
-          "rollup-plugin-commonjs"
-        ],
-        "rollup-plugin-node-resolve": {
-          "module": true,
-          "jsnext": true,
-          "main": true,
-          "browser": true
-        }
       }
     }
   },
@@ -53,9 +45,6 @@
     "less": "^2.7.3",
     "less-plugin-autoprefix": "^1.5.1",
     "rollup": "^0.57.1",
-    "rollup-plugin-commonjs": "^9.1.0",
-    "rollup-plugin-node-resolve": "^3.3.0",
     "tarima": "^4.0.7"
-  },
-  "dependencies": {}
+  }
 }

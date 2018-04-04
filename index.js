@@ -143,5 +143,5 @@ module.exports = (options, isJSON) => {
     });
 };
 
-module.exports.publicDir = `${__dirname}/build`;
+module.exports.publicDir = `${__dirname}/dist`;
 module.exports.buildAttachments = _buildAttachments;
