@@ -72,7 +72,7 @@ function loadScript(fromSrc) {
 
     script.onerror = e => {
       // FIXME: how recover from this?
-      console.log(e.stack);
+      debugLog(e.stack);
       reject(e);
     };
 
@@ -99,7 +99,7 @@ function loadScript(fromSrc) {
               }
 
               return (cur.indexOf('.css') > -1 ? loadStyle(cur) : loadScript(cur))
-                .catch(() => console.log('ERROR LOADING', cur));
+                .catch(() => debugLog('ERROR LOADING', cur));
             })
           , Promise.resolve());
         });
