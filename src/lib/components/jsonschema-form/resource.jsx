@@ -1544,6 +1544,23 @@ function initJsonForm(el, options, callbacks) {
   }, callbacks);
 }
 
+function initJsonViewer(el, options) {
+  const ref = options.refs[options.model || options.schema.id];
+
+  ReactDOM.render(<div className="json-form">
+    <h2 className="form-title">
+    {options.title
+      ? options.title
+      : <span>Viewing {ref.singular}</span>
+    }
+    </h2>
+    {React.createElement(reactJsonView.default, {
+      src: options.result,
+      collapsed: 1,
+    })}
+  </div>, el);
+}
+
 window.addEventListener('keyup', e => {
   console.log(e.keyCode);
 
@@ -1561,4 +1578,5 @@ document.currentScript.exports = {
   initForm,
   initTable,
   initJsonForm,
+  initJsonViewer,
 };

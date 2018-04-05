@@ -11,6 +11,7 @@ loadScript([
   '//unpkg.com/react-input-autosize@2.0.0/dist/react-input-autosize.js',
   '//unpkg.com/react-select/dist/react-select.js',
   '//unpkg.com/react-select/dist/react-select.css',
+  '//unpkg.com/react-json-view@1.16.1/dist/main.js',
   '//cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.min.js',
   '//cdnjs.cloudflare.com/ajax/libs/react-datetime/2.10.3/react-datetime.js',
   '//cdnjs.cloudflare.com/ajax/libs/react-datetime/2.10.3/css/react-datetime.css',
@@ -28,7 +29,9 @@ document.currentScript.exports = {
     }
 
     switch (context.action) {
-      case 'show': break;
+      case 'show':
+        jsonschemaForm.initJsonViewer(node, context);
+        break;
 
       case 'index':
         jsonschemaForm.initTable(node, context);
