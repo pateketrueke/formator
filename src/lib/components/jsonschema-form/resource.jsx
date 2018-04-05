@@ -144,6 +144,20 @@ function paramify(obj) {
   return out.join(';');
 }
 
+function fetchCall(url, options) {
+  // FIXME: enable real fetch() calls on production!
+  console.log(options.method, url, options.body);
+
+  return Promise.resolve({
+    json() {
+      return {
+        status: 'ok',
+        result: {},
+      };
+    },
+  });
+}
+
 function getJSON(payload, query) {
   const q = [];
 
@@ -159,7 +173,7 @@ function getJSON(payload, query) {
     });
   }
 
-  return fetch(`${payload.path}${q.join('')}`, {
+  return fetchCall(`${payload.path}${q.join('')}`, {
     credentials: 'same-origin',
     headers: HEADERS,
   })
@@ -181,7 +195,7 @@ function fixData(options) {
 // FIXME: add proper replace for :params
 
 function postJSON(payload, formData, param, prop) {
-  return fetch(linkTo(payload.path.replace(param, formData[prop])), {
+  return fetchCall(linkTo(payload.path.replace(param, formData[prop])), {
     credentials: 'same-origin',
     method: 'POST',
     headers: HEADERS,
@@ -203,17 +217,18 @@ function buildSchema(options) {
         ? options.refs[ref]
         : options.refs[prop];
 
+      // FIXME: use through-models for?
+      // schema.model = schema.through || schema.model;
+
       options.schema.properties[prop] = {
         type: value.type || 'object',
         ref: schema,
         prop,
       };
 
-      if (value.type === 'array') {
-        options.schema.properties[prop].items = {
-          type: 'object',
-          properties: {},
-        };
+      if (value.type === 'array' || prop === 'items') {
+        options.schema.properties[prop].type = 'array';
+        options.schema.properties[prop].items = { type: 'object' };
       } else {
         options.schema.properties[prop].properties = {};
       }
@@ -1297,7 +1312,6 @@ class ResourceTable extends React.Component {
           <input
             type="search"
             ref={e => { this._search = e }}
-            value={this.state.search}
             onInput={e => { this.searchIn(e.target.value); }}
             placeholder="Search"
            />

@@ -13,9 +13,10 @@
   "license": "MIT",
   "tarima": {
     "from": "src",
-    "output": "dist",
+    "output": ".",
     "rename": [
-      "**/src/**:{fullpath/1}"
+      "**/lib/**:dist/{fullpath/2}",
+      "**/spec/**:public/{fullpath/2}"
     ],
     "filter": [
       "!_*",
@@ -25,9 +26,17 @@
     "bundle": [
       "**/main.js"
     ],
+    "devPlugins": [
+      "tarima-lr"
+    ],
     "ignoreFiles": [
       ".gitignore"
     ],
+    "pluginOptions": {
+      "tarima-lr": {
+        "serve": "dist"
+      }
+    },
     "bundleOptions": {
       "extensions": {
         "js": "es6",
@@ -44,7 +53,9 @@
     "buble": "^0.19.3",
     "less": "^2.7.3",
     "less-plugin-autoprefix": "^1.5.1",
+    "pug": "^2.0.3",
     "rollup": "^0.57.1",
-    "tarima": "^4.0.7"
+    "tarima": "^4.0.7",
+    "tarima-lr": "^0.4.1"
   }
 }

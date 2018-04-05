@@ -1,0 +1,10 @@
+- var defaultSchema = { type: 'object', properties: { id: { type: 'integer' } } }
+doctype html
+html
+  head
+    title jsonschema-form-mw #{label ? ` (${label})`: ''}
+    link(rel='stylesheet' href='/styles.css')
+  body
+    script(type='application/json' data-component='jsonschema-form')
+      != JSON.stringify(Object.assign({}, { schema: $schema || defaultSchema }, resource))
+    script(src='/main.js')
