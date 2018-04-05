@@ -100,8 +100,7 @@ function loadScript(fromSrc) {
 
               return (cur.indexOf('.css') > -1 ? loadStyle(cur) : loadScript(cur))
                 .catch(() => debugLog('ERROR LOADING', cur));
-            })
-          , Promise.resolve());
+            }), Promise.resolve());
         });
 
       _deferred = _deferred.then(() => p());
@@ -128,11 +127,9 @@ _components.forEach(node => {
   debugLog('Component declaration found', node.dataset.component);
 
   // Creates a host element for mounting the component
-  const target = document.createElement(
-    node.tagName !== 'SCRIPT'
-      ? node.tagName
-      : 'DIV'
-  );
+  const target = document.createElement(node.tagName !== 'SCRIPT'
+    ? node.tagName
+    : 'DIV');
 
   target.classList.add('is-loading');
 

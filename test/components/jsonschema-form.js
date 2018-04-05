@@ -15,29 +15,29 @@ export default class JsonSchemaForm extends Component {
   }
 
   async hasFields(value) {
-    for (let field of value) {
-      const label = this.fieldLabel.withAttribute('for', field.key);
+    Object.keys(value).forEach(async field => {
+      const label = this.fieldLabel.withAttribute('for', value[field].key);
 
       await this.t
         .expect(label.visible).ok();
 
-      if (field.optional) {
+      if (value[field].optional) {
         const small = label.find('small');
 
         await this.t
           .expect(small.visible).ok()
           .expect(small.innerText).contains('optional');
       }
-    }
+    });
   }
 
   async hasActions(value) {
-    for (let action of value) {
-      const element = this.formActions.find(action.type);
+    Object.keys(value).forEach(async action => {
+      const element = this.formActions.find(value[action].type);
 
       await this.t
         .expect(element.visible).ok()
-        .expect(element.innerText).contains(action.label);
-    }
+        .expect(element.innerText).contains(value[action].label);
+    });
   }
-};
+}

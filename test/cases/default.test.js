@@ -1,12 +1,14 @@
-import JsonSchemaForm from '../components/jsonschema-form';
-import indexPage from '../pages/index';
-
 import 'testcafe';
+
+import indexPage from '../pages/index';
+import JsonSchemaForm from '../components/jsonschema-form';
+
+/* global fixture, test */
 
 fixture('default test')
   .page(indexPage.url());
 
-test('render the defaultSchema', async t => {
+test('render the defaultSchema', async () => {
   await new JsonSchemaForm().begin()
     .hasTitle('New Object')
     .hasFields([{
