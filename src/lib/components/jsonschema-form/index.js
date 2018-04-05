@@ -36,19 +36,57 @@ document.currentScript.exports = {
       id: { type: 'integer' },
     };
 
+    context.uiSchema = context.uiSchema || {};
+    context.actions = context.actions || {
+      Object: {
+        index: {
+          verb: 'GET',
+          path: '/',
+        },
+        new: {
+          verb: 'GET',
+          path: '/',
+        },
+        create: {
+          verb: 'PUT',
+          path: '/',
+        },
+        edit: {
+          verb: 'GET',
+          path: '/',
+        },
+        show: {
+          verb: 'GET',
+          path: '/',
+        },
+        update: {
+          verb: 'PATCH',
+          path: '/',
+        },
+        destroy: {
+          verb: 'DELETE',
+          path: '/',
+        },
+      },
+    };
+
+    context.action = context.action || (context.isNew ? 'new' : '');
+    context.result = context.result || {};
     context.model = context.model || 'Object';
     context.refs = context.refs || {
       Object: {
         singular: 'Object',
         plural: 'Objects',
+        references: {
+          primaryKey: {
+            prop: 'id',
+            type: 'integer',
+          },
+        },
       },
     };
 
     switch (context.action) {
-      case 'show':
-        jsonschemaForm.initJsonViewer(node, context);
-        break;
-
       case 'index':
         jsonschemaForm.initTable(node, context);
         break;
@@ -58,8 +96,9 @@ document.currentScript.exports = {
         jsonschemaForm.initForm(node, context);
         break;
 
+      case 'show':
       default:
-        jsonschemaForm.initJsonForm(node, context);
+        jsonschemaForm.initViewer(node, context);
         break;
     }
   },

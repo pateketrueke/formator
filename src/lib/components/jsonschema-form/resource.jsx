@@ -1517,34 +1517,7 @@ function initForm(el, options, callbacks) {
   </div>, el);
 }
 
-// FIXME: test and improve this
-function initJsonForm(el, options, callbacks) {
-  initForm(el, {
-    action: 'new',
-    actions: {
-      Object: {
-        create: {
-          verb: (options.endpoint ? options.endpoint.method : null) || 'POST',
-          path: (options.endpoint ? options.endpoint.url : null) || location.pathname,
-        },
-      },
-    },
-    isNew: true,
-    model: 'Object',
-    refs: {
-      Object: {
-        plural: 'Object',
-        singular: 'Object',
-      },
-    },
-    result: options.defaults,
-    title: options.title,
-    schema: options.schema || {},
-    uiSchema: options.uiSchema || {},
-  }, callbacks);
-}
-
-function initJsonViewer(el, options) {
+function initViewer(el, options) {
   const ref = options.refs[options.model || options.schema.id];
 
   ReactDOM.render(<div className="json-form">
@@ -1577,6 +1550,5 @@ window.addEventListener('keyup', e => {
 document.currentScript.exports = {
   initForm,
   initTable,
-  initJsonForm,
-  initJsonViewer,
+  initViewer,
 };

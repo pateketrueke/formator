@@ -82,10 +82,10 @@ module.exports = (options, isJSON) => {
         res.options.actions[resourceName] = {
           index: addMethod('GET', undefined, resourceName),
           new: addMethod('GET', 'new', resourceName),
-          create: addMethod('POST', undefined, resourceName),
+          create: addMethod('PUT', undefined, resourceName),
           edit: addMethod('GET', 'edit', resourceName),
           show: addMethod('GET', 'show', resourceName),
-          update: addMethod('PUT', 'update', resourceName),
+          update: addMethod('PATCH', 'update', resourceName),
           destroy: addMethod('DELETE', 'delete', resourceName),
         };
       }
