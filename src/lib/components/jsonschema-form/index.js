@@ -28,6 +28,22 @@ document.currentScript.exports = {
       return;
     }
 
+    // normalize context
+    context.schema = context.schema || {};
+    context.schema.id = context.schema.id || 'Object';
+    context.schema.type = context.schema.type || 'object';
+    context.schema.properties = context.schema.properties || {
+      id: { type: 'integer' },
+    };
+
+    context.model = context.model || 'Object';
+    context.refs = context.refs || {
+      Object: {
+        singular: 'Object',
+        plural: 'Objects',
+      },
+    };
+
     switch (context.action) {
       case 'show':
         jsonschemaForm.initJsonViewer(node, context);

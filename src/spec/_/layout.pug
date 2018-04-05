@@ -1,4 +1,3 @@
-- var defaultSchema = { type: 'object', properties: { id: { type: 'integer' } } }
 doctype html
 html
   head
@@ -6,5 +5,5 @@ html
     link(rel='stylesheet' href='/styles.css')
   body
     script(type='application/json' data-component='jsonschema-form')
-      != JSON.stringify(Object.assign({}, { schema: $schema || defaultSchema }, resource))
+      != JSON.stringify(Object.assign({}, { schema: $schema }, resource))
     script(src='/main.js')
