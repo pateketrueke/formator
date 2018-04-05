@@ -9,6 +9,8 @@ WORKDIR /var/lib/app
 RUN npm ci
 
 COPY ./ /var/lib/app
+RUN npm run dist
+
 COPY ./docker/scripts /home/docker/
 
 ENTRYPOINT ['true']

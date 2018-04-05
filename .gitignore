@@ -1,0 +1,7 @@
+*.log
+*.mkv
+.tarima
+.DS_Store
+dist
+public
+node_modules

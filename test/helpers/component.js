@@ -20,17 +20,20 @@ export default class Component {
   }
 
   _setupMethods() {
-    for (let prop in this) {
-      if (prop === 'begin' || prop === 'end') return;
-      if (prop.charAt() !== '_' && typeof this[prop] === 'function') {
-        const fn = this[prop].bind(this);
+    const proto = this.constructor.prototype;
+    const props = Object.getOwnPropertyNames(proto);
+
+    props.forEach(prop => {
+      if (prop === 'constructor' || prop === 'begin' || prop === 'end') return;
+      if (prop.charAt() !== '_' && typeof proto[prop] === 'function') {
+        const fn = proto[prop].bind(this);
 
         this[prop] = (...args) => {
           this.q.push(() => fn(...args));
           return this;
         };
       }
-    }
+    });
   }
 
   _setupScope() {
