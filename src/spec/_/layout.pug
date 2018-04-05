@@ -4,6 +4,7 @@ html
     title jsonschema-form-mw #{label ? ` (${label})`: ''}
     link(rel='stylesheet' href='/styles.css')
   body
-    script(type='application/json' data-component='jsonschema-form')
-      != JSON.stringify(Object.assign({}, { schema: $schema }, resource))
-    script(src='/main.js')
+    block main
+      script(type='application/json' data-component='jsonschema-form')
+        != JSON.stringify(Object.assign({}, { schema: $schema }, resource))
+      script(src='/main.js')
