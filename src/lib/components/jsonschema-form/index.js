@@ -32,9 +32,7 @@ document.currentScript.exports = {
     context.schema = context.schema || {};
     context.schema.id = context.schema.id || 'Object';
     context.schema.type = context.schema.type || 'object';
-    context.schema.properties = context.schema.properties || {
-      id: { type: 'integer' },
-    };
+    context.schema.properties = context.schema.properties || {};
 
     context.uiSchema = context.uiSchema || {};
     context.actions = context.actions || {

@@ -5,11 +5,12 @@ import JsonSchemaForm from '../components/jsonschema-form';
 
 /* global fixture, test */
 
-fixture('action: show')
+fixture('single form with no options')
   .page(defaultPage.url('show.html'));
 
-test('should render with react-json-view', async () => {
-  await new JsonSchemaForm().begin()
-    .hasTitle('Viewing Object')
-    .end();
+const $ = new JsonSchemaForm();
+const title = $.formTitle.withText('Viewing Object');
+
+test('should render with react-json-view', async t => {
+  await t.expect(title.visible).ok();
 });

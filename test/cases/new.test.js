@@ -5,19 +5,22 @@ import JsonSchemaForm from '../components/jsonschema-form';
 
 /* global fixture, test */
 
-fixture('action: new')
+fixture('single form with { isNew: true }')
   .page(defaultPage.url('new.html'));
 
-test('should render with jsonschema-form', async () => {
-  await new JsonSchemaForm().begin()
-    .hasTitle('New Object')
-    .hasFields([{
-      key: 'Object_id',
-      optional: true,
-    }])
-    .hasActions([{
-      type: 'button',
-      label: 'Save',
-    }])
-    .end();
+const $ = new JsonSchemaForm();
+const title = $.formTitle.withText('New Object');
+const actions = $.formActions.find('button');
+
+test('should render with jsonschema-form', async t => {
+  await t.expect(title.visible).ok();
+});
+
+test('should fallback to an empty schema', async t => {
+  await t.expect($.fieldLabel.count).eql(0);
+});
+
+test('should display just one action to save', async t => {
+  await t.expect(actions.count).eql(1);
+  await t.expect(actions.withText('Save').visible).ok();
 });
