@@ -17,5 +17,5 @@ test('should render with jsonschema-form', async t => {
 
 test('should fallback to an empty schema', async t => {
   await t.expect($.fieldLabel.count).eql(0);
-  await t.expect($.jsonForm.find('p').withText('Missing $schema.properties').visible).ok();
+  await t.expect($.jsonForm.find('p em').withText('Missing properties')).ok();
 });

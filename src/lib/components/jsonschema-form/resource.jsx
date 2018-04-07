@@ -1518,7 +1518,7 @@ function initForm(el, options, callbacks) {
     {hasProps
       ? new Form(el, options, callbacks)
       : <div>
-        <p>Missing $schema.properties</p>
+        <p>Unsupported schema for <code>{options.model}</code>: <em>Missing properties</em>.</p>
         <pre>{JSON.stringify(options.schema, null, 2)}</pre>
       </div>}
   </div>, el);
