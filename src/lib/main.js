@@ -131,12 +131,14 @@ _components.forEach(node => {
     ? node.tagName
     : 'DIV');
 
+  const prefix = node.dataset.endpoint || BASE_URL;
+
   target.classList.add('is-loading');
 
   node.parentNode.insertBefore(target, node);
   node.parentNode.removeChild(node);
 
-  loadScript(`${BASE_URL}/${node.dataset.component}/index.js`)
+  loadScript(`${prefix}/${node.dataset.component}/index.js`)
     .then(component => {
       debugLog('Component', node.dataset.component, 'loaded');
 
