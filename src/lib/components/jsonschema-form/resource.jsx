@@ -1506,6 +1506,8 @@ function initForm(el, options, callbacks) {
     }
   });
 
+  const hasProps = Object.keys(options.schema.properties).length > 0;
+
   ReactDOM.render(<div className="json-form">
     <h2 className="form-title">
     {options.title
@@ -1513,7 +1515,12 @@ function initForm(el, options, callbacks) {
       : <span>{options.isNew ? 'New' : 'Editing'} {ref.singular}</span>
     }
     </h2>
-    {new Form(el, options, callbacks)}
+    {hasProps
+      ? new Form(el, options, callbacks)
+      : <div>
+        <p>Missing $schema.properties</p>
+        <pre>{JSON.stringify(options.schema, null, 2)}</pre>
+      </div>}
   </div>, el);
 }
 
