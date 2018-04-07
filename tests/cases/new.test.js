@@ -10,7 +10,6 @@ fixture('single form with { isNew: true }')
 
 const $ = new JsonSchemaForm();
 const title = $.formTitle.withText('New Object');
-const actions = $.formActions.find('button');
 
 test('should render with jsonschema-form', async t => {
   await t.expect(title.visible).ok();
@@ -18,9 +17,5 @@ test('should render with jsonschema-form', async t => {
 
 test('should fallback to an empty schema', async t => {
   await t.expect($.fieldLabel.count).eql(0);
-});
-
-test('should display just one action to save', async t => {
-  await t.expect(actions.count).eql(1);
-  await t.expect(actions.withText('Save').visible).ok();
+  await t.expect($.jsonForm.find('p').withText('Missing $schema.properties').visible).ok();
 });

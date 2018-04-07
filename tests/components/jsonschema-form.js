@@ -2,9 +2,10 @@ import { Selector } from 'testcafe';
 
 export default class JsonSchemaForm {
   constructor() {
-    this.formTitle = Selector('.json-form > .form-title');
-    this.fieldLabel = Selector('.json-form .field-group .field-label');
-    this.formActions = Selector('.json-form .rjsf .form-group.no-select');
+    this.jsonForm = Selector('.json-form');
+    this.formTitle = this.jsonForm.find('.form-title');
+    this.fieldLabel = this.jsonForm.find('.field-group .field-label');
+    this.formActions = this.jsonForm.find('.rjsf .form-group.no-select');
   }
 
   field(modelName, property) {
