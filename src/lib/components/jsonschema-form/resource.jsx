@@ -1066,7 +1066,7 @@ class ResourceTable extends React.Component {
   constructor(options) {
     super(options);
 
-    const _fields = options.uiSchema['ui:fields'] || options.schema.required;
+    const _fields = options.uiSchema['ui:fields'] || options.schema.required || [];
 
     if (!Array.isArray(_fields)) {
       throw new Error('Expecting ui:fields to be an array, given ' + typeof _fields);
@@ -1085,12 +1085,12 @@ class ResourceTable extends React.Component {
         return obj;
       });
 
-    this.ref = options.refs[options.model || options.schema.id];
+    this.ref = options.refs[options.model || options.schema.id] || {};
     this.total = (options.result || {}).length || 0;
     this.current = 1;
     this.items = 10;
 
-    this.property = this.ref.references.primaryKey.prop;
+    this.property = this.ref.references ? this.ref.references.primaryKey.prop : 'id';
     this.placeholder = `:${this.property}`;
 
     this.state = {
@@ -1138,6 +1138,7 @@ class ResourceTable extends React.Component {
   }
 
   _doFocus() {
+    if (!this._search) return;
     setTimeout(() => {
       const max = this._search.value.length;
 
@@ -1298,11 +1299,12 @@ class ResourceTable extends React.Component {
       pages.push(i + 1);
     }
 
-    const newAction = this.props.actions[this.props.schema.id].new
-      ? linkTo(this.props.actions[this.props.schema.id].new.path)
-      : null;
+    const actionInfo = this.props.actions[this.props.schema.id];
+    const newAction = actionInfo && (actionInfo.new
+      ? linkTo(actionInfo.new.path)
+      : null);
 
-    const singleLabel = this.props.refs[this.props.schema.id].singular;
+    const singleLabel = (this.props.refs[this.props.schema.id] || {}).singular || 'Object';
     const canAdd = !this.props.uiSchema['ui:actions'] || this.props.uiSchema['ui:actions'].indexOf('add') > -1;
 
     return <div className="json-table-container">
@@ -1315,15 +1317,15 @@ class ResourceTable extends React.Component {
             onInput={e => { this.searchIn(e.target.value); }}
             placeholder="Search"
            />
-           <a href="#" className={this.state.search ? 'filled' : ''} onClick={e => {
+           {this.fields.length ? <a href="#" className={this.state.search ? 'filled' : ''} onClick={e => {
              e.preventDefault();
              this.toggleOpts();
-           }}>{icon('magic')}</a>
+           }}>{icon('magic')}</a> : null}
          </label>
            {canAdd && newAction
              ? <a href={newAction}>Add {singleLabel} {icon('plus')}</a>
              : null}
-             <div className="json-table-settings" ref={e => { this._opts = e }}>
+             {this.fields.length ? <div className="json-table-settings" ref={e => { this._opts = e }}>
                 <ul className="reset">
                 {this.fields.map((col, key) =>
                   <li key={key}>{col.enum
@@ -1377,10 +1379,14 @@ class ResourceTable extends React.Component {
                       .map(col => <option key={col.prop} value={col.prop}>{col.title || col.prop}</option>)}
                   </select>
                 </label>
-             </div>
+             </div> : null}
       </div>
-      <table className="json-table responsive">
-        <thead className="no-select"><tr>{this.state.fields.map((field, key) =>
+      {!this.fields.length ? <div>
+          <p>Unsupported schema for <code>{this.props.model}</code>: <em>Missing properties</em>.</p>
+          <pre>{JSON.stringify(this.props.schema, null, 2)}</pre>
+        </div>
+      : <table className="json-table responsive">
+        <thead className="no-select"><tr>{this.fields.map((field, key) =>
           <th
             key={key}
             className={field.className}
@@ -1402,7 +1408,7 @@ class ResourceTable extends React.Component {
                 </tr>
               : null}
             {this.state.data[group].map((row, key) =>
-            <tr key={key} className="row">{this.state.fields.map((field, k) => {
+            <tr key={key} className="row">{this.fields.map((field, k) => {
               let label = ifDef(getProperty(row, field.template, this._el),
                 getProp(row, field.getter),
                 getProp(row, field.prop),
@@ -1424,7 +1430,7 @@ class ResourceTable extends React.Component {
               </td>
             </tr>)}
           </tbody>)}
-      </table>
+      </table>}
       <div className="json-table-pagination no-select">
         <div>
           <select
