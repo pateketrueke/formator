@@ -6,5 +6,5 @@ html
   body
     block main
       script(type='application/json' data-component='jsonschema-form')
-        != JSON.stringify(Object.assign({}, { schema: $schema }, resource))
+        != JSON.stringify(Object.assign({}, { schema: $schema }, resource), null, 2)
       script(src='/main.js')
