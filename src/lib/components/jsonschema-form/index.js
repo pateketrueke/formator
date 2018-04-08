@@ -35,54 +35,12 @@ document.currentScript.exports = {
     context.schema.properties = context.schema.properties || {};
 
     context.uiSchema = context.uiSchema || {};
-    context.actions = context.actions || {
-      Object: {
-        index: {
-          verb: 'GET',
-          path: '/',
-        },
-        new: {
-          verb: 'GET',
-          path: '/',
-        },
-        create: {
-          verb: 'PUT',
-          path: '/',
-        },
-        edit: {
-          verb: 'GET',
-          path: '/',
-        },
-        show: {
-          verb: 'GET',
-          path: '/',
-        },
-        update: {
-          verb: 'PATCH',
-          path: '/',
-        },
-        destroy: {
-          verb: 'DELETE',
-          path: '/',
-        },
-      },
-    };
+    context.actions = context.actions || {};
 
     context.action = context.action || (context.isNew ? 'new' : '');
     context.result = context.result || {};
     context.model = context.model || 'Object';
-    context.refs = context.refs || {
-      Object: {
-        singular: 'Object',
-        plural: 'Objects',
-        references: {
-          primaryKey: {
-            prop: 'id',
-            type: 'integer',
-          },
-        },
-      },
-    };
+    context.refs = context.refs || {};
 
     switch (context.action) {
       case 'index':

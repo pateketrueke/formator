@@ -239,7 +239,7 @@ function buildSchema(options) {
 }
 
 function buildUISchema(options) {
-  const ref = options.refs[options.model || options.schema.id];
+  const ref = options.refs[options.model || options.schema.id] || {};
 
   options.uiSchema['ui:rootFieldId'] = ref.singular;
 
@@ -1465,7 +1465,7 @@ function initTable(el, options) {
 }
 
 function initForm(el, options, callbacks) {
-  const ref = options.refs[options.model || options.schema.id];
+  const ref = options.refs[options.model || options.schema.id] || {};
 
   Object.keys(options.schema.properties).forEach(key => {
     if (!options.result) {
@@ -1512,7 +1512,7 @@ function initForm(el, options, callbacks) {
     <h2 className="form-title">
     {options.title
       ? options.title
-      : <span>{options.isNew ? 'New' : 'Editing'} {ref.singular}</span>
+      : <span>{options.isNew ? 'New' : 'Editing'} {ref.singular || 'Object'}</span>
     }
     </h2>
     {hasProps
@@ -1525,13 +1525,13 @@ function initForm(el, options, callbacks) {
 }
 
 function initViewer(el, options) {
-  const ref = options.refs[options.model || options.schema.id];
+  const ref = options.refs[options.model || options.schema.id] || {};
 
   ReactDOM.render(<div className="json-form">
     <h2 className="form-title">
     {options.title
       ? options.title
-      : <span>Viewing {ref.singular}</span>
+      : <span>Viewing {ref.singular || 'Object'}</span>
     }
     </h2>
     {React.createElement(reactJsonView.default, {
@@ -1542,8 +1542,6 @@ function initViewer(el, options) {
 }
 
 window.addEventListener('keyup', e => {
-  console.log(e.keyCode);
-
   if (e.keyCode === 27) {
     const last = LAYERS.pop();
 
