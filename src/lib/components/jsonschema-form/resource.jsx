@@ -1306,8 +1306,15 @@ class ResourceTable extends React.Component {
 
     const singleLabel = (this.props.refs[this.props.schema.id] || {}).singular || 'Object';
     const canAdd = !this.props.uiSchema['ui:actions'] || this.props.uiSchema['ui:actions'].indexOf('add') > -1;
+    const ref = this.props.refs[this.props.model || options.schema.id] || {};
 
     return <div className="json-table-container">
+      <h2 className="form-title">
+      {this.props.title
+        ? this.props.title
+        : <span>Listing {ref.singular || 'Object'}</span>
+      }
+      </h2>
       <div className="json-table-filters no-select">
         <label className="has-icon">
           <span>{icon('glass')}</span>
