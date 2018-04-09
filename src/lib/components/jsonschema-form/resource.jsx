@@ -933,7 +933,7 @@ const Form = (el, options, callbacks) => React.createElement(JSONSchemaForm.defa
         callbacks.onSubmit(data);
         return;
       }
-      console.log('SUBMIT', formData);
+      console.log(options.isNew ? 'CREATE' : 'UPDATE', formData);
       return;
     }
 
@@ -994,10 +994,22 @@ const Form = (el, options, callbacks) => React.createElement(JSONSchemaForm.defa
 
         el.classList.add('pending');
 
-        const property = options.refs[options.model || options.schema.id].references.primaryKey.prop;
+        const refs = options.refs[options.model || options.schema.id] || {};
+        const property = refs.references ? refs.references.primaryKey.prop : 'id';
         const placeholder = `:${property}`;
+        const actions = options.actions[options.model || options.schema.id] || {};
+        const url = actions.destroy;
 
-        postJSON(options.actions[options.model || options.schema.id].destroy, options.result, placeholder, property)
+        if (!url) {
+          if (callbacks && callbacks.onDelete) {
+            callbacks.onDelete(options.result);
+            return;
+          }
+          console.log('DELETE', options.result);
+          return;
+        }
+
+        postJSON(url, options.result, placeholder, property)
           .then(data => {
             el.classList.add('success');
 
@@ -1439,7 +1451,8 @@ class ResourceTable extends React.Component {
               >{this.renderItem(label)}</td>;
             })}
               <td className="min-width no-select">
-                {!this.props.uiSchema['ui:actions'] || this.props.uiSchema['ui:actions'].indexOf('edit') > -1
+                {(!this.props.uiSchema['ui:actions'] || this.props.uiSchema['ui:actions'].indexOf('edit') > -1)
+                  && this.props.actions[this.ref.model]
                   ? <a
                     href={linkTo(this.props.actions[this.ref.model].edit.path.replace(this.placeholder, row[this.property]))}
                     onClick={e => this.openFrame(e, key, group)}
