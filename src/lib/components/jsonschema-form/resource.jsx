@@ -241,7 +241,7 @@ function buildSchema(options) {
 function buildUISchema(options) {
   const ref = options.refs[options.model || options.schema.id] || {};
 
-  options.uiSchema['ui:rootFieldId'] = ref.singular;
+  options.uiSchema['ui:rootFieldId'] = ref.singular || 'Object';
 
   Object.keys(options.schema.properties).forEach(prop => {
     if (options.schema.properties[prop].ref) {
