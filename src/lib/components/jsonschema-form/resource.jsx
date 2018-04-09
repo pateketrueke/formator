@@ -922,11 +922,22 @@ const Form = (el, options, callbacks) => React.createElement(JSONSchemaForm.defa
     el.classList.add('pending');
 
     // FIXME: smartly replace any :placeholder by looking into references...
-    const refs = options.refs[options.model || options.schema.id].references;
+    const refs = (options.refs[options.model || options.schema.id] || {}).references;
+    const actions = options.actions[options.model || options.schema.id] || {};
     const property = refs ? refs.primaryKey.prop : 'id';
     const placeholder = `:${property}`;
+    const url = actions[options.isNew ? 'create' : 'update'];
 
-    postJSON(options.actions[options.model || options.schema.id][options.isNew ? 'create' : 'update'], formData, placeholder, property)
+    if (!url) {
+      if (callbacks && callbacks.onSubmit) {
+        callbacks.onSubmit(data);
+        return;
+      }
+      console.log('SUBMIT', formData);
+      return;
+    }
+
+    postJSON(url, formData, placeholder, property)
       .then(data => {
         if (data.status !== 'ok') {
           throw new Error(data.result);
@@ -1389,7 +1400,7 @@ class ResourceTable extends React.Component {
              </div> : null}
       </div>
       {!this.fields.length ? <div>
-          <p>Unsupported schema for <code>{this.props.model}</code>: <em>Missing properties</em>.</p>
+          <p>Unsupported schema for <code>{this.props.model}</code>: <em>Missing fields</em>.</p>
           <pre>{JSON.stringify(this.props.schema, null, 2)}</pre>
         </div>
       : <table className="json-table responsive">
