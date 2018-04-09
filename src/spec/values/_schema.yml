@@ -1,5 +1,7 @@
 properties:
-  value:
-    type: 'string'
+  title:
+    type: string
+  description:
+    type: string
 required:
-  - value
+  - title
