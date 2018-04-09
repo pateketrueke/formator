@@ -656,11 +656,11 @@ class Reference extends React.Component {
   }
 
   singleItem(defaultTitle) {
-    return defaultTitle || this._form.options.refs[this.props.schema.prop].singular;
+    return defaultTitle || this._form.options.refs[this.props.schema.prop].singular || 'Object';
   }
 
   multipleItems(defaultTitle) {
-    return defaultTitle || this._form.options.refs[this.props.schema.prop].plural;
+    return defaultTitle || this._form.options.refs[this.props.schema.prop].plural || 'Objects';
   }
 
   renderActions() {
@@ -674,7 +674,7 @@ class Reference extends React.Component {
       return <a href="#" onClick={e => this.editVirtual(e)}>Add new {item}</a>;
     }
 
-    if (!this.hasAction('new')) {
+    if (!this.hasAction('new') || !this.actions.new) {
       return null;
     }
 

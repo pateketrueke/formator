@@ -1,0 +1,7 @@
+id:
+  ui:widget: hidden
+name:
+  ui:title: Name
+price:
+  ui:title: Price
+  ui:widget: updown

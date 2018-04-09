@@ -1,0 +1,13 @@
+//-
+  ---
+  resource:
+    isNew: true
+    model: Product
+    refs:
+      Product:
+        singular: Product
+    schema: !include _schemas/Product/schema.yml
+    uiSchema: !include _schemas/Product/uiSchema.yml
+  ---
+
+extend ../_/layout

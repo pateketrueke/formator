@@ -1,0 +1,22 @@
+//-
+  ---
+  resource:
+    isNew: true
+    model: Cart
+    refs:
+      Cart:
+        singular: Cart
+      Product: !include _schemas/Product/schema.yml
+      items:
+        rel: hasMany
+        model: Product
+        references:
+          primaryKey:
+            prop: id
+    actions:
+      Cart: {}
+      Product: {}
+    schema: !include _schemas/Cart/schema.yml
+  ---
+
+extend ../_/layout

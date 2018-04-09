@@ -1,0 +1,10 @@
+properties:
+  id:
+    type: integer
+    minimum: 0
+  items:
+    $ref: Product
+    belongsToMany:
+      through: CartItem
+required:
+- items
