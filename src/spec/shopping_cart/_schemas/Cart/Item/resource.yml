@@ -47,7 +47,7 @@ actions:
       path: "/db/CartItem"
     new:
       verb: GET
-      path: "/db/CartItem/new"
+      path: "/shopping_cart/resources/cart-item.json"
     create:
       verb: PUT
       path: "/db/CartItem"
@@ -69,7 +69,7 @@ actions:
       path: "/db/Cart"
     new:
       verb: GET
-      path: "/db/Cart/new"
+      path: "/shopping_cart/resources/cart.json"
     create:
       verb: PUT
       path: "/db/Cart"
@@ -91,7 +91,7 @@ actions:
       path: "/db/Product"
     new:
       verb: GET
-      path: "/db/Product/new"
+      path: "/shopping_cart/resources/product.json"
     create:
       verb: PUT
       path: "/db/Product"

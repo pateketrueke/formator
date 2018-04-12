@@ -101,6 +101,22 @@ const TYPES = {
   },
 };
 
+function fixResource(context) {
+  // normalize context
+  context.action = context.action || (context.isNew ? 'new' : '');
+  context.result = context.result || {};
+  context.model = context.model || 'Object';
+  context.refs = context.refs || {};
+
+  context.schema = context.schema || {};
+  context.schema.id = context.schema.id || context.model;
+  context.schema.type = context.schema.type || 'object';
+  context.schema.properties = context.schema.properties || {};
+
+  context.uiSchema = context.uiSchema || {};
+  context.actions = context.actions || {};
+}
+
 function linkTo(url) {
   if (location.search) {
     const q = location.search.split('?')[1];
@@ -145,16 +161,9 @@ function paramify(obj) {
 }
 
 function fetchCall(url, options) {
-  // FIXME: enable real fetch() calls on production!
-  console.log(options.method, url, options.body);
-
-  return Promise.resolve({
-    json() {
-      return {
-        status: 'ok',
-        result: {},
-      };
-    },
+  return fetch(url, {
+    method: options.method || 'GET',
+    body: options.body,
   });
 }
 
@@ -583,13 +592,19 @@ class Reference extends React.Component {
 
     target.classList.add('has-layers');
 
-    getJSON({ path: linkTo(e.target.href) })
+    const url = linkTo(e.target.href);
+
+    getJSON({ path: url })
       .then(data => {
         target.classList.add('active');
 
         const offset = LAYERS.length;
         const options = data.result || {};
         const callbacks = {};
+
+        options.isNew = true;
+
+        fixResource(options);
 
         function closeMe(e) {
           if (e.target === target) {
@@ -1498,10 +1513,14 @@ class ResourceTable extends React.Component {
 }
 
 function initTable(el, options) {
+  fixResource(options);
+
   ReactDOM.render(<div className="json-form">{React.createElement(ResourceTable, options)}</div>, el);
 }
 
 function initForm(el, options, callbacks) {
+  fixResource(options);
+
   const ref = options.refs[options.model || options.schema.id] || {};
 
   Object.keys(options.schema.properties).forEach(key => {
@@ -1562,6 +1581,8 @@ function initForm(el, options, callbacks) {
 }
 
 function initViewer(el, options) {
+  fixResource(options);
+
   const ref = options.refs[options.model || options.schema.id] || {};
 
   ReactDOM.render(<div className="json-form">

@@ -28,19 +28,7 @@ document.currentScript.exports = {
       return;
     }
 
-    // normalize context
-    context.schema = context.schema || {};
-    context.schema.id = context.schema.id || 'Object';
-    context.schema.type = context.schema.type || 'object';
-    context.schema.properties = context.schema.properties || {};
-
-    context.uiSchema = context.uiSchema || {};
-    context.actions = context.actions || {};
-
     context.action = context.action || (context.isNew ? 'new' : '');
-    context.result = context.result || {};
-    context.model = context.model || 'Object';
-    context.refs = context.refs || {};
 
     switch (context.action) {
       case 'index':

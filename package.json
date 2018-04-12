@@ -44,7 +44,8 @@
     "bundleOptions": {
       "extensions": {
         "js": "es6",
-        "css": "less"
+        "css": "less",
+        "yml": "json"
       },
       "less": {
         "plugins": [

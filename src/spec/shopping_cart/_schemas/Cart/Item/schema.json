@@ -3,9 +3,17 @@
     "qty": {
       "type": "integer",
       "minimum": 0
+    },
+    "cart_id": {
+      "$ref": "Cart"
+    },
+    "product_id": {
+      "$ref": "Product"
     }
   },
   "required": [
-    "qty"
+    "qty",
+    "cart_id",
+    "product_id"
   ]
 }
