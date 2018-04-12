@@ -609,6 +609,13 @@ class Reference extends React.Component {
 
         fixResource(options);
 
+        const refs = this.props.schema.ref.references || {};
+
+        if (refs.foreignKey) {
+          options.uiSchema = options.uiSchema || {};
+          options.uiSchema[refs.foreignKey.prop] = { 'ui:disabled': true };
+        }
+
         function closeMe(e) {
           if (e.target === target) {
             callbacks.onClose();
@@ -622,6 +629,18 @@ class Reference extends React.Component {
             if (typeof idx !== 'undefined') {
               this.state.value.splice(idx, 1);
             }
+
+            if (refs.foreignKey) {
+              payload[refs.foreignKey.prop] = undefined;
+            }
+
+            Object.keys(options.refs).forEach(prop => {
+              const pk = options.refs[prop].references.primaryKey;
+
+              if (payload[prop] && payload[prop][pk.prop]) {
+                payload[prop] = payload[prop][pk.prop];
+              }
+            });
 
             this.setState({ value: this.state.value.concat(payload) });
             this.props.onChange(this.state.value.concat(payload));
