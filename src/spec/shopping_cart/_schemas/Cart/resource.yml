@@ -44,10 +44,32 @@ refs:
     type: object
 schema: !include schema.json
 actions:
+  CartItem:
+    index:
+      verb: GET
+      path: "/shopping_cart/resources/cart-items.json"
+    new:
+      verb: GET
+      path: "/shopping_cart/resources/cart-item.json"
+    create:
+      verb: PUT
+      path: "/db/CartItem"
+    edit:
+      verb: GET
+      path: "/db/CartItem/edit/:cart_id"
+    show:
+      verb: GET
+      path: "/db/CartItem/show/:cart_id"
+    update:
+      verb: PATCH
+      path: "/db/CartItem/update/:cart_id"
+    destroy:
+      verb: DELETE
+      path: "/db/CartItem/delete/:cart_id"
   Cart:
     index:
       verb: GET
-      path: "/db/Cart"
+      path: "/shopping_cart/resources/carts.json"
     new:
       verb: GET
       path: "/shopping_cart/resources/cart.json"
@@ -69,7 +91,7 @@ actions:
   Product:
     index:
       verb: GET
-      path: "/db/Product"
+      path: "/shopping_cart/resources/products.json"
     new:
       verb: GET
       path: "/shopping_cart/resources/product.json"

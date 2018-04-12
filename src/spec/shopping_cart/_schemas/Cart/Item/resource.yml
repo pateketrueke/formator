@@ -44,7 +44,7 @@ actions:
   CartItem:
     index:
       verb: GET
-      path: "/db/CartItem"
+      path: "/shopping_cart/resources/cart-items.json"
     new:
       verb: GET
       path: "/shopping_cart/resources/cart-item.json"
@@ -66,7 +66,7 @@ actions:
   Cart:
     index:
       verb: GET
-      path: "/db/Cart"
+      path: "/shopping_cart/resources/carts.json"
     new:
       verb: GET
       path: "/shopping_cart/resources/cart.json"
@@ -88,7 +88,7 @@ actions:
   Product:
     index:
       verb: GET
-      path: "/db/Product"
+      path: "/shopping_cart/resources/products.json"
     new:
       verb: GET
       path: "/shopping_cart/resources/product.json"
