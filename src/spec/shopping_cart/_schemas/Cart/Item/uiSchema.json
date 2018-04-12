@@ -1,0 +1,9 @@
+{
+  "id": {
+    "ui:widget": "hidden"
+  },
+  "qty": {
+    "ui:widget": "updown",
+    "ui:autofocus": true
+  }
+}

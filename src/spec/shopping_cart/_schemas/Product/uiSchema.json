@@ -3,7 +3,8 @@
     "ui:widget": "hidden"
   },
   "name": {
-    "ui:title": "Name"
+    "ui:title": "Name",
+    "ui:autofocus": true
   },
   "price": {
     "ui:title": "Price",

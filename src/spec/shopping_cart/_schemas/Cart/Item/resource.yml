@@ -40,6 +40,7 @@ refs:
       name:
         ui:title: OK
 schema: !include schema.json
+uiSchema: !include uiSchema.json
 actions:
   CartItem:
     index:

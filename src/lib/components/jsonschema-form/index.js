@@ -3,8 +3,8 @@ const loadScript = document.currentScript.import;
 let jsonschemaForm;
 
 loadScript([
-  '//unpkg.com/react@16.3.1/umd/react.production.min.js',
-  '//unpkg.com/react-dom@16.3.1/umd/react-dom.production.min.js',
+  '//unpkg.com/react@16.3.1/umd/react.development.js',
+  '//unpkg.com/react-dom@16.3.1/umd/react-dom.development.js',
   '//unpkg.com/react-jsonschema-form@0.50.1/dist/react-jsonschema-form.js',
   '//unpkg.com/classnames@2.2.5/index.js',
   '//unpkg.com/prop-types@15.5.10/prop-types.js',

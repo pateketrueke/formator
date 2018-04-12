@@ -637,7 +637,7 @@ class Reference extends React.Component {
             Object.keys(options.refs).forEach(prop => {
               const pk = options.refs[prop].references.primaryKey;
 
-              if (payload[prop] && payload[prop][pk.prop]) {
+              if (payload[prop]) {
                 payload[prop] = payload[prop][pk.prop];
               }
             });

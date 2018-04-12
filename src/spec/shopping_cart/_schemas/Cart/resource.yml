@@ -43,6 +43,7 @@ refs:
     id: Product
     type: object
 schema: !include schema.json
+uiSchema: !include uiSchema.json
 actions:
   CartItem:
     index:
