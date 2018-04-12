@@ -163,10 +163,11 @@ function paramify(obj) {
 function fetchCall(url, options) {
   console.log(options.method || 'GET', url, options.body);
 
-  return fetch(url, {
-    method: options.method || 'GET',
-    body: options.body,
-  });
+  if (url.indexOf('.json') === -1) {
+    url = `//localhost:3000${url}`;
+  }
+
+  return fetch(url, options);
 }
 
 function getJSON(payload, query) {
@@ -979,6 +980,20 @@ const Form = (el, options, callbacks) => React.createElement(JSONSchemaForm.defa
       console.log(options.isNew ? 'CREATE' : 'UPDATE', formData);
       return;
     }
+
+    Object.keys(options.refs).forEach(k => {
+      const ref = options.refs[k];
+
+      if (ref && formData[k]) {
+        if (Array.isArray(formData[k])) {
+          formData[k].forEach(sub => {
+            delete sub[ref.model];
+          });
+        } else {
+          delete formData[k][ref.model];
+        }
+      }
+    })
 
     postJSON(url, formData, placeholder, property)
       .then(data => {
