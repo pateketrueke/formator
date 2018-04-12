@@ -293,6 +293,18 @@
   }
 
   .field-item {
+    > em, > small, > strong {
+      float: right;
+
+      ~ em, ~ small, ~ strong {
+        margin-left: @space;
+      }
+    }
+
+    > span ~ span {
+      margin-left: @space;
+    }
+
     > a {
       width: 20px;
       height: 20px;
@@ -301,6 +313,10 @@
       text-align: center;
       text-decoration: none;
       border: 1px solid @silver;
+      line-height: 15px;
+      text-align: center;
+      border-radius: 50%;
+      order: 999;
 
       &:hover { border-color: @gray; }
       &:first-child { margin-left: @space / 2; }

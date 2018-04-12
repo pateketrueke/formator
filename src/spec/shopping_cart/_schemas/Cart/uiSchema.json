@@ -6,7 +6,9 @@
   "items": {
     "ui:title": "Gift list",
     "ui:template": [
-      ["span", "{Product.name} ${Product.price} ({qty})"]
+      ["small", "${Product.price}"],
+      ["span", "{Product.name}"],
+      ["span", "({qty})"]
     ]
   }
 }
