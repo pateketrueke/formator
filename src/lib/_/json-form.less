@@ -250,6 +250,29 @@
       }
     }
 
+    .Select-menu-outer,
+    .Select-value-label {
+      strong, small, em {
+        float: right;
+
+        ~ strong, ~ small, ~ em {
+          margin-right: @space;
+        }
+      }
+
+      span ~ span {
+        margin-left: @space;
+      }
+
+      h2, h3, h4, h5, h6 {
+        margin: 0;
+      }
+    }
+
+    .Select.has-value.is-clearable.Select--single > .Select-control .Select-value {
+      padding-right: 50px;
+    }
+
     select ~ a,
     p ~ select,
     ol ~ a {
