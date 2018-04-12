@@ -22,7 +22,7 @@ const LAYERS = [];
 
 const TYPES = {
   debug(data, values, parentNode) {
-    return <pre>{JSON.stringify(values || data, null, 2)}</pre>;
+    return <pre>{JSON.stringify({ data, values }, null, 2)}</pre>;
   },
   embed(data, values, parentNode) {
     let fileName;
@@ -357,12 +357,12 @@ function getProperty(data, template, parentNode) {
   return template;
 }
 
-function renderFromAST(ast, data, parentNode) {
+function renderFromAST(ast, data, parentNode, parentGroup) {
   if (Array.isArray(ast)) {
     if (typeof ast[0] === 'string') {
       const tag = ast[0];
 
-      const attrs = typeof ast[1] === 'object' && !Array.isArray(ast[1])
+      let attrs = typeof ast[1] === 'object' && !Array.isArray(ast[1])
         ? ast[1]
         : null;
 
@@ -374,15 +374,20 @@ function renderFromAST(ast, data, parentNode) {
 
       const children = renderFromAST(ast[2] || ast[1], data, parentNode)
 
+      if (parentGroup) {
+        attrs = attrs || {};
+        attrs.key = attrs.key || parentGroup;
+      }
+
       if (tag === 'input') {
         return React.createElement(tag, attrs);
       }
 
-      return React.createElement(tag, attrs, children);
+      return React.createElement(tag, attrs, children.map(x => getProperty(data, x, parentNode)));
     }
 
     if (Array.isArray(ast[0])) {
-      return ast.map(x => renderFromAST(x, data, parentNode));
+      return ast.map((x, k) => renderFromAST(x, data, parentNode, k + 1));
     }
   }
 
@@ -638,6 +643,7 @@ class Reference extends React.Component {
               const pk = options.refs[prop].references.primaryKey;
 
               if (payload[prop]) {
+                payload[options.refs[prop].model] = payload[prop];
                 payload[prop] = payload[prop][pk.prop];
               }
             });
@@ -760,7 +766,7 @@ class Reference extends React.Component {
                 : null}
               {getProperty(item, this.template || '-', this._form.el)}
             </li>)
-        : <li><small>No {this.multipleItems(this.propSchema['ui:title']).toLowerCase()} found</small></li>}
+        : <li><small>No {this.multipleItems(this.ref.plural).toLowerCase()} found</small></li>}
       </ol>;
   }
 
@@ -1370,8 +1376,8 @@ class ResourceTable extends React.Component {
 
     return <div className="json-table-container">
       <h2 className="form-title">
-      {this.props.title
-        ? this.props.title
+      {(this.props.title || this.props.uiSchema.title)
+        ? (this.props.title || this.props.uiSchema.title)
         : <span>Listing {ref.singular || 'Object'}</span>
       }
       </h2>
@@ -1588,8 +1594,8 @@ function initForm(el, options, callbacks) {
 
   ReactDOM.render(<div className="json-form">
     <h2 className="form-title">
-    {options.title
-      ? options.title
+    {(options.title || options.uiSchema.title)
+      ? (options.title || options.uiSchema.title)
       : <span>{options.isNew ? 'New' : 'Editing'} {ref.singular || 'Object'}</span>
     }
     </h2>
@@ -1609,8 +1615,8 @@ function initViewer(el, options) {
 
   ReactDOM.render(<div className="json-form">
     <h2 className="form-title">
-    {options.title
-      ? options.title
+    {(options.title || options.uiSchema.title)
+      ? (options.title || options.uiSchema.title)
       : <span>Viewing {ref.singular || 'Object'}</span>
     }
     </h2>

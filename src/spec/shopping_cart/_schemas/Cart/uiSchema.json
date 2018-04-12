@@ -1,5 +1,12 @@
 {
+  "title": "Shopping cart",
   "id": {
     "ui:widget": "hidden"
+  },
+  "items": {
+    "ui:title": "Gift list",
+    "ui:template": [
+      ["span", "{Product.name} ${Product.price} ({qty})"]
+    ]
   }
 }
