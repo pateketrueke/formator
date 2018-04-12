@@ -4,6 +4,7 @@ html
     title jsonschema-form-mw #{label ? ` (${label})`: ''}
     link(rel='stylesheet' href='/styles.css')
   body
+    block before
     block main
       script(type='application/json' data-component='jsonschema-form')
         != JSON.stringify(resource || {}, null, 2)

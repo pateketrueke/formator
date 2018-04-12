@@ -1,0 +1,90 @@
+model: Cart
+refs:
+  Cart:
+    model: Cart
+    plural: Carts
+    singular: Cart
+    references:
+      primaryKey:
+        prop: id
+        type: integer
+      foreignKey:
+  items:
+    rel: belongsToMany
+    model: Product
+    plural: Products
+    singular: Product
+    references:
+      primaryKey:
+        prop: id
+        type: integer
+      foreignKey:
+        prop: cart_id
+        type: integer
+    requiredProps:
+    - id
+    - name
+    - price
+  Product:
+    properties:
+      id:
+        "$ref": dataTypes#/definitions/primaryKey
+      name:
+        type: string
+        allowNull: true
+      price:
+        type: number
+        value: decimal
+        allowNull: true
+    required:
+    - id
+    - name
+    - price
+    id: Product
+    type: object
+schema: !include schema.json
+actions:
+  Cart:
+    index:
+      verb: GET
+      path: "/db/Cart"
+    new:
+      verb: GET
+      path: "/db/Cart/new"
+    create:
+      verb: PUT
+      path: "/db/Cart"
+    edit:
+      verb: GET
+      path: "/db/Cart/edit/:id"
+    show:
+      verb: GET
+      path: "/db/Cart/show/:id"
+    update:
+      verb: PATCH
+      path: "/db/Cart/update/:id"
+    destroy:
+      verb: DELETE
+      path: "/db/Cart/delete/:id"
+  Product:
+    index:
+      verb: GET
+      path: "/db/Product"
+    new:
+      verb: GET
+      path: "/db/Product/new"
+    create:
+      verb: PUT
+      path: "/db/Product"
+    edit:
+      verb: GET
+      path: "/db/Product/edit/:id"
+    show:
+      verb: GET
+      path: "/db/Product/show/:id"
+    update:
+      verb: PATCH
+      path: "/db/Product/update/:id"
+    destroy:
+      verb: DELETE
+      path: "/db/Product/delete/:id"

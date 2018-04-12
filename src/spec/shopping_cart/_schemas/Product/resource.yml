@@ -1,0 +1,39 @@
+model: Product
+refs:
+  Product:
+    model: Product
+    plural: Products
+    singular: Product
+    references:
+      primaryKey:
+        prop: id
+        type: integer
+schema: !include schema.json
+uiSchema: !include uiSchema.json
+attributes:
+  findAll:
+  - name
+  - price
+actions:
+  Product:
+    index:
+      verb: GET
+      path: "/db/Product"
+    new:
+      verb: GET
+      path: "/db/Product/new"
+    create:
+      verb: PUT
+      path: "/db/Product"
+    edit:
+      verb: GET
+      path: "/db/Product/edit/:id"
+    show:
+      verb: GET
+      path: "/db/Product/show/:id"
+    update:
+      verb: PATCH
+      path: "/db/Product/update/:id"
+    destroy:
+      verb: DELETE
+      path: "/db/Product/delete/:id"

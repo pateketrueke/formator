@@ -24,7 +24,7 @@ loadScript('jsonschema-form/resource').then(resourceFactory => {
 document.currentScript.exports = {
   init(node, context) {
     if (context.failure) {
-      node.innerHTML = `<p>${context.failure}</p>`;
+      node.innerHTML = `<pre>${JSON.stringify(context, null, 2)}</pre>`;
       return;
     }
 

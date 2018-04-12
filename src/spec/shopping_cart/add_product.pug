@@ -1,13 +1,9 @@
 //-
   ---
-  resource:
-    isNew: true
-    model: Product
-    refs:
-      Product:
-        singular: Product
-    schema: !include _schemas/Product/schema.yml
-    uiSchema: !include _schemas/Product/uiSchema.yml
+  resource: !include _schemas/Product/resource.yml
   ---
 
 extend ../_/layout
+
+block before
+  - resource.isNew = true

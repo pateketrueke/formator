@@ -1,6 +1,0 @@
-properties:
-  qty:
-    type: integer
-    minimum: 0
-required:
-- qty
