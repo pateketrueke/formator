@@ -161,6 +161,8 @@ function paramify(obj) {
 }
 
 function fetchCall(url, options) {
+  console.log(options.method || 'GET', url, options.body);
+
   return fetch(url, {
     method: options.method || 'GET',
     body: options.body,
@@ -226,11 +228,9 @@ function buildSchema(options) {
         ? options.refs[ref]
         : options.refs[prop];
 
-      // FIXME: use through-models for?
-      // schema.model = schema.through || schema.model;
-
       options.schema.properties[prop] = {
         type: value.type || 'object',
+        rel: value[schema.rel],
         ref: schema,
         prop,
       };
@@ -412,12 +412,15 @@ class Reference extends React.Component {
 
     this.enabled = !(this.propSchema['ui:disabled'] || this.propSchema['ui:widget'] === 'hidden');
     this.template = this.propSchema['ui:template'] || this.uiSchema['ui:template'];
-    this.ref = this._form.options.refs[this.props.schema.prop];
+
+    this.rel = this._form.options.schema.properties[this.props.schema.prop].rel || {};
+    this.ref = this._form.options.refs[this.props.schema.prop] || {};
     this.model = this._form.options.refs[this.ref.model] || {};
+
     this.pk = this.ref.references.primaryKey;
     this.fk = this.ref.references.foreignKey;
 
-    this.actions = this._form.options.actions[this.ref.model];
+    this.actions = this._form.options.actions[this.rel.through || this.ref.model];
     this.attributes = this._form.options.attributes || {};
 
     if (this.ref.references.primaryKey) {
@@ -480,7 +483,7 @@ class Reference extends React.Component {
 
     getJSON(linkTo(this.actions.index), params)
       .then(data => {
-        if (data.status === 'ok') {
+        if (data.result) {
           this.setState({
             [isMany ? 'value' : 'options']: data.result,
           });
