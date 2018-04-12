@@ -164,7 +164,7 @@ function fetchCall(url, options) {
   console.log(options.method || 'GET', url, options.body);
 
   if (url.indexOf('.json') === -1) {
-    url = `//localhost:3000${url}`;
+    url = `//localhost:8081${url}`;
   }
 
   return fetch(url, options);
@@ -489,10 +489,12 @@ class Reference extends React.Component {
 
     getJSON(linkTo(this.actions.index), params)
       .then(data => {
-        if (data.result) {
+        if (typeof data.result === 'object') {
           this.setState({
             [isMany ? 'value' : 'options']: data.result,
           });
+        } else {
+          console.log(data);
         }
       });
   }
