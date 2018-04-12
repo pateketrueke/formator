@@ -18,7 +18,7 @@ actions:
   Product:
     index:
       verb: GET
-      path: "/shopping_cart/resources/products.json"
+      path: "/db/Product"
     new:
       verb: GET
       path: "/shopping_cart/resources/product.json"
