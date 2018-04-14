@@ -6,7 +6,7 @@ import JsonSchemaForm from '../components/jsonschema-form';
 /* global fixture, test */
 
 fixture('single form with { isNew: true }')
-  .page(defaultPage.url('new.html'));
+  .page(defaultPage.url('schemas/new.html'));
 
 const $ = new JsonSchemaForm();
 const title = $.formTitle.withText('New Object');

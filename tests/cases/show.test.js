@@ -6,7 +6,7 @@ import JsonSchemaForm from '../components/jsonschema-form';
 /* global fixture, test */
 
 fixture('single form with no options')
-  .page(defaultPage.url('show.html'));
+  .page(defaultPage.url('schemas/show.html'));
 
 const $ = new JsonSchemaForm();
 const title = $.formTitle.withText('Viewing Object');
