@@ -7,7 +7,7 @@
 // FIXME: replace React with Vue
 // FIXME: cancel actions?
 
-const RE_PLACEHOLDER = /\{(?:(@?[\w.]+)(?::([\w,.]+))?([|?!])?(.*?))\}/;
+const RE_PLACEHOLDER = /\{(?:(@?[\w.]+)(?::([\w*,.]+))?([|?!])?(.*?))\}/;
 const RE_DATA_BASE64 = /^data:(.+?);base64,/;
 const RE_NUM = /^\d+/;
 const RE_SPACE = /\s+/;
@@ -41,7 +41,7 @@ const TYPES = {
       fileName = values[1];
     }
 
-    return <span><a
+    return <a
       href={values[0]}
       target="_blank"
       onClick={e => {
@@ -97,7 +97,13 @@ const TYPES = {
           }, 100);
         });
       }}
-    >{fileName}</a></span>;
+    >{fileName}</a>;
+  },
+  sum(data, values) {
+    return values.map(x => x.reduce((prev, cur) => prev + cur, 0)).join(', ');
+  },
+  val(data, values) {
+    return values[0].join(', ');
   },
 };
 
@@ -333,14 +339,8 @@ function getProperty(data, template, parentNode) {
             retval = cur.value;
           }
 
-          if (typeof retval === 'object') {
-            if (React.isValidElement(retval)) {
-              retval = retval.key === null
-                ? <div key={`expr_${i}`}>{retval}</div>
-                : retval;
-            } else {
-              retval = <pre key={`obj_${i}`}>{JSON.stringify(retval, null, 2)}</pre>;
-            }
+          if (typeof retval === 'object' && !React.isValidElement(retval)) {
+            retval = <pre key={`obj_${i}`}>{JSON.stringify(retval, null, 2)}</pre>;
           }
 
           prev.push(retval);
