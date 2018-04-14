@@ -109,15 +109,19 @@ module.exports = (options, isJSON) => {
       });
 
       if (!isJSON) {
-        return res.actions[action === 'edit' || action === 'show' ? 'findOne' : 'findAll']()
-          .catch(error => {
-            res.options.failure = error;
-            return [];
-          })
-          .then(result => {
-            res.options.result = result;
-            return res.options;
-          });
+        if (['edit', 'show', 'index'].indexOf(action) !== -1) {
+          return res.actions[action === 'edit' || action === 'show' ? 'findOne' : 'findAll']()
+            .catch(error => {
+              res.options.failure = error;
+              return [];
+            })
+            .then(result => {
+              res.options.result = result;
+              return res.options;
+            });
+        }
+
+        return res.options;
       }
 
       switch (action) {
