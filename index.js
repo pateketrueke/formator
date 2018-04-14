@@ -89,7 +89,7 @@ module.exports = (options, isJSON) => {
           res.options.schema.properties[prop] = {
             $ref: res.options.refs[prop].model,
           };
-        } else {
+        } else if (res.options.schema.required) {
           const offset = res.options.schema.required.indexOf(prop);
 
           if (offset !== -1) {
