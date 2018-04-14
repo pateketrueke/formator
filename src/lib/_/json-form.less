@@ -39,7 +39,7 @@
   input[type=number], input[type=search], select, button, textarea {
     border: 0;
     font-size: 1em;
-    min-height: 30px;
+    min-height: 34px;
     padding: @space / 2;
     border: 1px solid @silver;
     background-color: @white;
@@ -60,6 +60,11 @@
       min-height: auto;
       background-color: inherit;
     }
+  }
+
+  input[type=text], input[type=email], input[type=password],
+  input[type=number], input[type=search], textarea {
+    padding-left: 10px;
   }
 
   select {
@@ -251,6 +256,10 @@
       }
     }
 
+    .Select-menu-outer {
+      box-shadow: 1px 1px 3px @silver;
+    }
+
     .Select-menu-outer,
     .Select-value-label {
       strong, small, em {
@@ -274,10 +283,34 @@
       padding-right: 50px;
     }
 
+    .Select.is-focused .Select-value { outline: none; border: none; }
+    .Select.is-focused .Select-control {
+      box-shadow: 1px 1px 3px @silver;
+      border-color: @silver;
+    }
+
+    .Select-control {
+      border-color: @silver;
+      border-radius: 0;
+    }
+
     select ~ a,
     p ~ select,
     ol ~ a {
       display: inline-block;
+    }
+  }
+
+  button, input[type=button] {
+    cursor: pointer;
+  }
+
+  button, input[type=button], input[type=text], input[type=email], input[type=password],
+  input[type=number], input[type=search], textarea {
+    outline: none;
+
+    &:focus {
+      box-shadow: 1px 1px 1px @silver;
     }
   }
 
@@ -441,7 +474,7 @@
 
       tr.row:nth-child(odd) { background: lighten(@silver, 30); }
       tr.row:nth-child(even) { background: lighten(@silver, 25); }
-      tr.row:hover { background-color: @white; }
+      tr.row:hover { background-color: @hover; }
     }
 
     th {
@@ -450,8 +483,8 @@
       background-color: lighten(@silver, 20);
 
       > em {
-        top: 6px;
-        right: 0;
+        top: @space;
+        right: @space / 2;
         font-size: 10px;
         position: absolute;
         transform: rotate(90deg);
@@ -509,7 +542,7 @@
 
           tr.row {
             position: relative;
-            padding: @space / 2;
+            padding: @space;
 
             td {
               padding: 0;
@@ -519,8 +552,13 @@
                 position: absolute;
                 align-items: center;
                 right: @space * 1.5;
+                margin: 0;
                 height: 100%;
                 top: 0;
+              }
+
+              ~ td {
+                margin-top: @space / 2;
               }
             }
           }
@@ -619,7 +657,7 @@
       }
     }
 
-    .form-group.field:hover { background-color: rgba(0, 0, 0, .03); }
+    .form-group.field:hover { background-color: @hover; }
     .form-group .field-group { padding: @space; }
 
     .field-label {
