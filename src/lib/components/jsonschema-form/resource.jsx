@@ -227,7 +227,7 @@ function buildSchema(options) {
 
       options.schema.properties[prop] = {
         type: value.type || 'object',
-        rel: value[schema.rel],
+        rel: schema.through,
         ref: schema,
         prop,
       };
@@ -419,15 +419,15 @@ class Reference extends React.Component {
     this.ref = this._form.options.refs[this.props.schema.prop] || {};
     this.model = this._form.options.refs[this.ref.model] || {};
 
-    this.pk = this.ref.references.primaryKey;
-    this.fk = this.ref.references.foreignKey;
+    this.pk = this.ref.references.primaryKeys[0];
+    this.fk = this.ref.references.foreignKeys[0];
 
-    this.actions = this._form.options.actions[this.rel.through || this.ref.model];
+    this.actions = this._form.options.actions[this.rel || this.ref.model];
     this.attributes = this._form.options.attributes || {};
 
-    if (this.ref.references.primaryKey) {
-      this.property = this.ref.references.primaryKey.prop;
-      this.placeholder = `:${this.property}`;
+    if (this.pk) {
+      this.property = this.pk.prop;
+      this.placeholder = `:${this.pk.prop}`;
     } else {
       // FIXME: ...
       this.property = 'key';
@@ -435,7 +435,7 @@ class Reference extends React.Component {
     }
 
     if (!this.actions && !this.model.virtual) {
-      throw new Error(`Missing actions for '${this.ref.model}' resource`);
+      throw new Error(`Missing actions for '${this.rel || this.ref.model}' resource`);
     }
 
     if (this._form.options.result && this._form.options.result[this.props.schema.prop]) {
