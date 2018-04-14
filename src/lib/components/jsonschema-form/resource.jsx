@@ -123,7 +123,13 @@ function fixResource(context) {
   context.actions = context.actions || {};
 }
 
-function linkTo(url) {
+function linkTo(url, params) {
+  if (params) {
+    Object.keys(params).forEach(prop => {
+      url = url.replace(`:${prop}`, params[prop]);
+    });
+  }
+
   if (location.search) {
     const q = location.search.split('?')[1];
 
@@ -1064,10 +1070,7 @@ const Form = (el, options, callbacks) => React.createElement(JSONSchemaForm.defa
         const refs = options.refs[options.model || options.schema.id] || {};
 
 
-        // FIXME:
-        console.log('>>>', refs);
-
-        const property = refs.references ? refs.references.primaryKey.prop : 'id';
+        const property = refs.references ? refs.references.primaryKeys[0].prop : 'id';
         const placeholder = `:${property}`;
 
 
@@ -1529,7 +1532,7 @@ class ResourceTable extends React.Component {
                 {(!this.props.uiSchema['ui:actions'] || this.props.uiSchema['ui:actions'].indexOf('edit') > -1)
                   && this.props.actions[this.ref.model]
                   ? <a
-                    href={linkTo(this.props.actions[this.ref.model].edit.path.replace(this.placeholder, row[this.property]))}
+                    href={linkTo(this.props.actions[this.ref.model].edit.path, row)}
                     onClick={e => this.openFrame(e, key, group)}
                     >{icon('pencil')}</a>
                   : null}
