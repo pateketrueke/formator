@@ -625,7 +625,8 @@ class Reference extends React.Component {
           options.uiSchema = options.uiSchema || {};
 
           refs.foreignKeys.forEach(fk => {
-            if (!options.uiSchema[fk.prop]) {
+            if (!options.uiSchema[fk.prop]
+              || options.uiSchema[fk.prop].xdisabled === true) {
               options.uiSchema[fk.prop] = { 'ui:disabled': true };
             }
           });
