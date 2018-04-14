@@ -615,9 +615,14 @@ class Reference extends React.Component {
 
         const refs = this.props.schema.ref.references || {};
 
-        if (refs.foreignKey) {
+        if (refs.foreignKeys) {
           options.uiSchema = options.uiSchema || {};
-          options.uiSchema[refs.foreignKey.prop] = { 'ui:disabled': true };
+
+          refs.foreignKeys.forEach(fk => {
+            if (!options.uiSchema[fk.prop]) {
+              options.uiSchema[fk.prop] = { 'ui:disabled': true };
+            }
+          });
         }
 
         function closeMe(e) {
@@ -634,18 +639,22 @@ class Reference extends React.Component {
               this.state.value.splice(idx, 1);
             }
 
-            if (refs.foreignKey) {
-              payload[refs.foreignKey.prop] = undefined;
-            }
-
             Object.keys(options.refs).forEach(prop => {
-              const pk = options.refs[prop].references.primaryKey;
+              const pk = options.refs[prop].references.primaryKeys[0];
 
-              if (payload[prop]) {
+              if (payload[prop] && typeof payload[prop][pk.prop] !== 'undefined') {
                 payload[options.refs[prop].model] = payload[prop];
                 payload[prop] = payload[prop][pk.prop];
               }
             });
+
+            if (refs.foreignKeys) {
+              refs.foreignKeys.forEach(fk => {
+                if (typeof payload[fk.prop] == 'object') {
+                  payload[fk.prop] = undefined;
+                }
+              });
+            }
 
             this.setState({ value: this.state.value.concat(payload) });
             this.props.onChange(this.state.value.concat(payload));
@@ -966,8 +975,10 @@ const Form = (el, options, callbacks) => React.createElement(JSONSchemaForm.defa
     // FIXME: smartly replace any :placeholder by looking into references...
     const refs = (options.refs[options.model || options.schema.id] || {}).references;
     const actions = options.actions[options.model || options.schema.id] || {};
-    const property = refs ? refs.primaryKey.prop : 'id';
+
+    const property = refs ? refs.primaryKeys[0].prop : 'id';
     const placeholder = `:${property}`;
+
     const url = actions[options.isNew ? 'create' : 'update'];
 
     if (!url) {
@@ -1051,8 +1062,15 @@ const Form = (el, options, callbacks) => React.createElement(JSONSchemaForm.defa
         el.classList.add('pending');
 
         const refs = options.refs[options.model || options.schema.id] || {};
+
+
+        // FIXME:
+        console.log('>>>', refs);
+
         const property = refs.references ? refs.references.primaryKey.prop : 'id';
         const placeholder = `:${property}`;
+
+
         const actions = options.actions[options.model || options.schema.id] || {};
         const url = actions.destroy;
 
@@ -1169,7 +1187,8 @@ class ResourceTable extends React.Component {
     this.current = 1;
     this.items = 10;
 
-    this.property = this.ref.references ? this.ref.references.primaryKey.prop : 'id';
+    // FIXME: allow multiple PKs
+    this.property = this.ref.references ? this.ref.references.primaryKeys[0].prop : 'id';
     this.placeholder = `:${this.property}`;
 
     this.state = {
