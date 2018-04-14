@@ -102,6 +102,10 @@ module.exports = (options, isJSON) => {
         if (refId === (res.options.refs[refId].model || res.options.refs[refId].id)) {
           addAction(refId);
         }
+
+        if (res.options.refs[refId].through) {
+          addAction(res.options.refs[refId].through);
+        }
       });
 
       if (!isJSON) {
