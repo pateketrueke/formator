@@ -14,26 +14,4 @@ attributes:
   findAll:
   - name
   - price
-actions:
-  Product:
-    index:
-      verb: GET
-      path: "/db/Product"
-    new:
-      verb: GET
-      path: "/shopping_cart/resources/product.json"
-    create:
-      verb: PUT
-      path: "/db/Product"
-    edit:
-      verb: GET
-      path: "/db/Product/edit/:id"
-    show:
-      verb: GET
-      path: "/db/Product/show/:id"
-    update:
-      verb: PATCH
-      path: "/db/Product/update/:id"
-    destroy:
-      verb: DELETE
-      path: "/db/Product/delete/:id"
+actions: !include ../actions.yml
