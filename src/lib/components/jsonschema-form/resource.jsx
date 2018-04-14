@@ -163,10 +163,6 @@ function paramify(obj) {
 function fetchCall(url, options) {
   console.log(options.method || 'GET', url, options.body);
 
-  if (url.indexOf('.json') === -1) {
-    url = `//localhost:8081${url}`;
-  }
-
   return fetch(url, options);
 }
 
