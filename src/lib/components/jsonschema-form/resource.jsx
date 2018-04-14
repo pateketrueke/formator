@@ -607,8 +607,12 @@ class Reference extends React.Component {
 
     const url = linkTo(e.target.href);
 
+    const prev = location.href;
+
     getJSON({ path: url })
       .then(data => {
+        window.history.pushState({}, document.title, url);
+
         target.classList.add('active');
 
         const offset = LAYERS.length;
@@ -626,7 +630,7 @@ class Reference extends React.Component {
 
           refs.foreignKeys.forEach(fk => {
             if (!options.uiSchema[fk.prop]
-              || options.uiSchema[fk.prop].xdisabled === true) {
+              || options.uiSchema[fk.prop]['ui:xdisabled'] === true) {
               options.uiSchema[fk.prop] = { 'ui:disabled': true };
             }
           });
@@ -688,6 +692,8 @@ class Reference extends React.Component {
           if (e) {
             e.preventDefault();
           }
+
+          window.history.pushState({}, document.title, prev);
 
           target.removeEventListener('click', closeMe);
           target.classList.remove('active');
