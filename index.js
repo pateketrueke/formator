@@ -52,18 +52,8 @@ module.exports = (options, isJSON) => {
       const Model = options.modelInstance;
       const action = options.action || 'index';
 
-      if (options.fieldId) {
-        if (options.method === 'POST' || options.method === 'PUT') {
-          return res.actions.update().then(sendResult).catch(sendError);
-        }
-
-        if (options.method === 'DELETE') {
-          return res.actions.destroy().then(sendResult).catch(sendError);
-        }
-      }
-
-      if (options.method === 'POST' || options.method === 'PUT') {
-        return res.actions.create().then(sendResult).catch(sendError);
+      if (['create', 'update', 'destroy'].indexOf(action) !== -1) {
+        return res.actions[action]().then(sendResult).catch(sendError);
       }
 
       res.options.isNew = action === 'new';
@@ -123,7 +113,7 @@ module.exports = (options, isJSON) => {
           .then(result => {
             res.options.result = result;
             return res.options;
-          })
+          });
       }
 
       switch (action) {
