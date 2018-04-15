@@ -201,13 +201,19 @@ function getJSON(payload, query) {
 }
 
 function fixData(options) {
-  if (options.result) {
-    Object.keys(options.schema.properties).forEach(key => {
-      if (options.result[key] === null) {
-        delete options.result[key];
-      }
-    });
-  }
+  options.result = options.result || {};
+
+  Object.keys(options.schema.properties).forEach(prop => {
+    const field = options.schema.properties[prop];
+
+    if (options.result[prop] === null) {
+      delete options.result[prop];
+    }
+
+    if (field.$ref) {
+      options.result[prop] = undefined;
+    }
+  });
 
   return options.result;
 }
@@ -244,11 +250,10 @@ function buildSchema(options) {
         prop,
       };
 
+      // FIXME: adjust these schemas properly, separate state from data!
       if (value.type === 'array' || prop === 'items') {
         options.schema.properties[prop].type = 'array';
         options.schema.properties[prop].items = { type: 'object' };
-      } else {
-        options.schema.properties[prop].properties = {};
       }
     }
   });
@@ -402,6 +407,29 @@ function renderFromAST(ast, data, parentNode, parentGroup) {
     React.createElement('span', null, ['Invalid template syntax']),
     React.createElement('pre', null, [JSON.stringify(ast, null, 2)]),
   ]);
+}
+
+function _fixPayload(options, refs, payload) {
+  Object.keys(options.refs).forEach(prop => {
+    const pk = options.refs[prop].references.primaryKeys[0];
+
+    if (payload[prop] && typeof payload[prop][pk.prop] !== 'undefined') {
+      payload[options.refs[prop].model] = payload[prop];
+      payload[prop] = payload[prop][pk.prop];
+    }
+
+    if (options.refs[prop]) {
+      delete payload[options.refs[prop].model];
+    }
+  });
+
+  if (refs.foreignKeys) {
+    refs.foreignKeys.forEach(fk => {
+      if (typeof payload[fk.prop] == 'object') {
+        payload[fk.prop] = undefined;
+      }
+    });
+  }
 }
 
 class Reference extends React.Component {
@@ -650,22 +678,7 @@ class Reference extends React.Component {
               this.state.value.splice(idx, 1);
             }
 
-            Object.keys(options.refs).forEach(prop => {
-              const pk = options.refs[prop].references.primaryKeys[0];
-
-              if (payload[prop] && typeof payload[prop][pk.prop] !== 'undefined') {
-                payload[options.refs[prop].model] = payload[prop];
-                payload[prop] = payload[prop][pk.prop];
-              }
-            });
-
-            if (refs.foreignKeys) {
-              refs.foreignKeys.forEach(fk => {
-                if (typeof payload[fk.prop] == 'object') {
-                  payload[fk.prop] = undefined;
-                }
-              });
-            }
+            _fixPayload(refs, options, payload);
 
             this.setState({ value: this.state.value.concat(payload) });
             this.props.onChange(this.state.value.concat(payload));
@@ -1003,19 +1016,7 @@ const Form = (el, options, callbacks) => React.createElement(JSONSchemaForm.defa
       return;
     }
 
-    Object.keys(options.refs).forEach(k => {
-      const ref = options.refs[k];
-
-      if (ref && formData[k]) {
-        if (Array.isArray(formData[k])) {
-          formData[k].forEach(sub => {
-            delete sub[ref.model];
-          });
-        } else {
-          delete formData[k][ref.model];
-        }
-      }
-    })
+    _fixPayload(options, refs, formData);
 
     postJSON(url, formData, placeholder, property)
       .then(data => {
