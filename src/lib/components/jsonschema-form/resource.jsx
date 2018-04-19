@@ -413,8 +413,12 @@ function _fixPayload(options, refs, payload, keepReferences) {
       const pk = options.refs[prop].references.primaryKeys[0];
 
       if (data[prop] && typeof data[prop][pk.prop] !== 'undefined') {
+        const key = data[prop][pk.prop];
+
+        delete data[prop][pk.prop];
+
         data[options.refs[prop].model] = data[prop];
-        data[prop] = data[prop][pk.prop];
+        data[prop] = key;
       }
 
       if (!keepReferences && options.refs[prop]) {
