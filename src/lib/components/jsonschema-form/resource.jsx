@@ -139,10 +139,6 @@ function linkTo(url, params) {
   return url;
 }
 
-function icon(id) {
-  return <i className={`icon-${id}`}></i>;
-}
-
 function merge(target) {
   Array.prototype.slice.call(arguments, 1).forEach(source => {
     if (source) {
@@ -210,7 +206,7 @@ function fixData(options) {
       delete options.result[prop];
     }
 
-    if (field.$ref) {
+    if (field.$ref && options.isNew) {
       options.result[prop] = undefined;
     }
   });
@@ -403,33 +399,39 @@ function renderFromAST(ast, data, parentNode, parentGroup) {
     return getProperty(data, ast, parentNode);
   }
 
-  return React.createElement('div', null, [
-    React.createElement('span', null, ['Invalid template syntax']),
-    React.createElement('pre', null, [JSON.stringify(ast, null, 2)]),
-  ]);
+  return <div>
+    <span>Invalid template syntax</span>
+    <pre>{JSON.stringify(ast, null, 2)}</pre>
+  </div>;
 }
 
-function _fixPayload(options, refs, payload) {
+function _fixPayload(options, refs, payload, keepReferences) {
+  const data = merge({}, payload);
+
   Object.keys(options.refs).forEach(prop => {
-    const pk = options.refs[prop].references.primaryKeys[0];
+    if (options.refs[prop].references) {
+      const pk = options.refs[prop].references.primaryKeys[0];
 
-    if (payload[prop] && typeof payload[prop][pk.prop] !== 'undefined') {
-      payload[options.refs[prop].model] = payload[prop];
-      payload[prop] = payload[prop][pk.prop];
-    }
+      if (data[prop] && typeof data[prop][pk.prop] !== 'undefined') {
+        data[options.refs[prop].model] = data[prop];
+        data[prop] = data[prop][pk.prop];
+      }
 
-    if (options.refs[prop]) {
-      delete payload[options.refs[prop].model];
+      if (!keepReferences && options.refs[prop]) {
+        delete data[options.refs[prop].model];
+      }
     }
   });
 
   if (refs.foreignKeys) {
     refs.foreignKeys.forEach(fk => {
-      if (typeof payload[fk.prop] == 'object') {
-        payload[fk.prop] = undefined;
+      if (typeof data[fk.prop] == 'object') {
+        data[fk.prop] = undefined;
       }
     });
   }
+
+  return data;
 }
 
 class Reference extends React.Component {
@@ -517,16 +519,19 @@ class Reference extends React.Component {
       params.where[this.fk.prop] = this._form.options.result[this.pk.prop];
     }
 
-    getJSON(linkTo(this.actions.index), params)
-      .then(data => {
-        if (typeof data.result === 'object') {
-          this.setState({
-            [isMany ? 'value' : 'options']: data.result,
-          });
-        } else {
-          console.log(data);
-        }
-      });
+    if (this._form.options.isNew) {
+      getJSON(linkTo(this.actions.index), params)
+        .then(data => {
+          if (typeof data.result === 'object') {
+            this.setState({
+              [isMany ? 'value' : 'options']: data.result,
+            });
+            this.props.onChange(data.result);
+          } else {
+            console.log(data);
+          }
+        });
+    }
   }
 
   openLayer(cb) {
@@ -639,7 +644,7 @@ class Reference extends React.Component {
 
     getJSON({ path: url })
       .then(data => {
-        window.history.pushState({}, document.title, url);
+        window.history.replaceState({}, document.title, url);
 
         target.classList.add('active');
 
@@ -660,6 +665,10 @@ class Reference extends React.Component {
             if (!options.uiSchema[fk.prop]
               || options.uiSchema[fk.prop]['ui:xdisabled'] === true) {
               options.uiSchema[fk.prop] = { 'ui:disabled': true };
+
+              if (options.schema.required && options.schema.required.indexOf(fk.prop) !== -1) {
+                options.schema.required.splice(options.schema.required.indexOf(fk.prop), 1);
+              }
             }
           });
         }
@@ -678,10 +687,10 @@ class Reference extends React.Component {
               this.state.value.splice(idx, 1);
             }
 
-            _fixPayload(refs, options, payload);
+            const data = _fixPayload(options, refs, payload, true);
 
-            this.setState({ value: this.state.value.concat(payload) });
-            this.props.onChange(this.state.value.concat(payload));
+            this.setState({ value: this.state.value.concat(data) });
+            this.props.onChange(this.state.value.concat(data));
           };
         }
 
@@ -706,7 +715,7 @@ class Reference extends React.Component {
             e.preventDefault();
           }
 
-          window.history.pushState({}, document.title, prev);
+          window.history.replaceState({}, document.title, prev);
 
           target.removeEventListener('click', closeMe);
           target.classList.remove('active');
@@ -790,13 +799,13 @@ class Reference extends React.Component {
                 e.preventDefault();
                 this.state.value.splice(key, 1);
                 this.setState({ value: this.state.value });
-              }}>&times;</a>
+              }}><span className="is-icon remove" /></a>
               {this.model.virtual
-                && <a href="#" onClick={e => this.editVirtual(e, key)}>{icon('pencil')}</a>}
+                && <a href="#" onClick={e => this.editVirtual(e, key)}><span className="is-icon editable" /></a>}
               {item[this.property]
                 ? <a href={
                     this.actions.edit.path.replace(this.placeholder, item[this.property])
-                  } onClick={e => this.openFrame(e, key)}>{icon('pencil')}</a>
+                  } onClick={e => this.openFrame(e, key)}><span className="is-icon editable" /></a>
                 : null}
               {getProperty(item, this.template || '-', this._form.el)}
             </li>)
@@ -1016,9 +1025,9 @@ const Form = (el, options, callbacks) => React.createElement(JSONSchemaForm.defa
       return;
     }
 
-    _fixPayload(options, refs, formData);
+    const data = _fixPayload(options, refs, formData);
 
-    postJSON(url, formData, placeholder, property)
+    postJSON(url, data, placeholder, property)
       .then(data => {
         if (data.status !== 'ok') {
           throw new Error(data.result);
@@ -1426,7 +1435,7 @@ class ResourceTable extends React.Component {
       </h2>
       <div className="json-table-filters no-select">
         <label className="has-icon">
-          <span>{icon('glass')}</span>
+          <span className="is-icon searchable" />
           <input
             type="search"
             ref={e => { this._search = e }}
@@ -1436,10 +1445,10 @@ class ResourceTable extends React.Component {
            {this.fields.length ? <a href="#" className={this.state.search ? 'filled' : ''} onClick={e => {
              e.preventDefault();
              this.toggleOpts();
-           }}>{icon('magic')}</a> : null}
+           }}><span className="is-icon hideout" /></a> : null}
          </label>
            {canAdd && newAction
-             ? <a href={newAction}>Add {singleLabel} {icon('plus')}</a>
+             ? <a href={newAction}><span className="is-icon adding" /></a>
              : null}
              {this.fields.length ? <div className="json-table-settings" ref={e => { this._opts = e }}>
                 <ul className="reset">
@@ -1542,7 +1551,7 @@ class ResourceTable extends React.Component {
                   ? <a
                     href={linkTo(this.props.actions[this.ref.model].edit.path, row)}
                     onClick={e => this.openFrame(e, key, group)}
-                    >{icon('pencil')}</a>
+                    ><span className="is-icon editable" /></a>
                   : null}
               </td>
             </tr>)}
