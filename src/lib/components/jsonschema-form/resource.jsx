@@ -1,5 +1,6 @@
 /* global fetch, React, ReactDOM, JSONSchemaForm */
 
+// FIXME: https://bvaughn.github.io/react-virtualized-select/
 // FIXME: test normal forms without javascript, check _method and such
 // FIXME: consider this and model.js into a separated module?
 // FIXME: enhance <select> with something better
@@ -235,16 +236,9 @@ function buildSchema(options) {
     const ref = (value.items || value).$ref;
 
     if (ref) {
-      const schema = (value.items || value).virtual
-        ? options.refs[ref]
-        : options.refs[prop];
-
       options.schema.properties[prop] = {
         type: value.type || 'object',
-        rel: typeof schema.through.model === 'string'
-          ? schema.through.model
-          : schema.through,
-        ref: schema,
+        ref: options.refs[ref],
         prop,
       };
 
@@ -266,13 +260,15 @@ function buildUISchema(options) {
 
   Object.keys(options.schema.properties).forEach(prop => {
     if (options.schema.properties[prop].ref) {
-      options.uiSchema[prop] = merge({}, options.uiSchema[prop], options.refs[prop].uiSchema);
+      const id = options.schema.properties[prop].ref.id;
+
+      options.uiSchema[prop] = merge({}, options.uiSchema[prop], options.refs[id].uiSchema);
       options.uiSchema[prop]['ui:field'] = 'Reference';
     }
 
     // FIXME: use a generic strategy here (date, time, etc.)
     if (options.schema.properties[prop].format === 'datetime' || options.schema.properties[prop].format === 'date-time') {
-      options.uiSchema[prop] = merge({}, options.uiSchema[prop], (options.refs[prop] || {}).uiSchema);
+      options.uiSchema[prop] = options.uiSchema[prop] || {};
       options.uiSchema[prop]['ui:field'] = 'Datetime';
     }
   });
@@ -453,14 +449,13 @@ class Reference extends React.Component {
     this.enabled = !(this.propSchema['ui:disabled'] || this.propSchema['ui:widget'] === 'hidden');
     this.template = this.propSchema['ui:template'] || this.uiSchema['ui:template'];
 
-    this.rel = this._form.options.schema.properties[this.props.schema.prop].rel || {};
     this.ref = this._form.options.refs[this.props.schema.prop] || {};
     this.model = this._form.options.refs[this.ref.model] || {};
 
     this.pk = this.ref.references.primaryKeys[0];
     this.fk = this.ref.references.foreignKeys[0];
 
-    this.actions = this._form.options.actions[this.rel || this.ref.model];
+    this.actions = this._form.options.actions[this.ref.model];
     this.attributes = this._form.options.attributes || {};
 
     if (this.pk) {
@@ -473,7 +468,7 @@ class Reference extends React.Component {
     }
 
     if (!this.actions && !this.model.virtual) {
-      throw new Error(`Missing actions for '${this.rel || this.ref.model}' resource`);
+      throw new Error(`Missing actions for '${this.ref.model}' resource`);
     }
 
     if (this._form.options.result && this._form.options.result[this.props.schema.prop]) {
@@ -500,7 +495,7 @@ class Reference extends React.Component {
     // - HAS_MANY:        options=LIST(filtered) value=SELECTED(items)
     // - BELONGS_TO_MANY: options=LIST(filtered) value=SELECTED(items) **NOT IMPLEMENTED YET
 
-    const isMany = this.props.schema.ref.rel.indexOf('Many') > -1;
+    const isMany = this.props.schema.ref.hasManyItems;
 
     if (isMany && this._form.options.isNew) {
       return;
@@ -681,7 +676,7 @@ class Reference extends React.Component {
           }
         }
 
-        if (this.props.schema.ref.rel.indexOf('Many') > -1) {
+        if (this.props.schema.ref.hasManyItems) {
           callbacks.onPayload = payload => {
             callbacks.onClose();
 
@@ -699,7 +694,7 @@ class Reference extends React.Component {
         callbacks.onDelete = () => {
           callbacks.onClose();
 
-          if (this.props.schema.ref.rel.indexOf('Many') > -1) {
+          if (this.props.schema.ref.hasManyItems) {
             this.state.value.splice(offset, 1);
             this.setState({ value: this.state.value });
           } else {
@@ -906,7 +901,7 @@ class Reference extends React.Component {
       return this.renderVirtual();
     }
 
-    if (this.ref.rel.indexOf('Many') > -1) {
+    if (this.ref.hasManyItems) {
       return this.renderMany();
     }
 
