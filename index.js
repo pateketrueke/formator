@@ -104,7 +104,11 @@ module.exports = (options, isJSON) => {
         }
 
         if (res.options.refs[refId].through) {
-          addAction(res.options.refs[refId].through);
+          const model = typeof res.options.refs[refId].through.model === 'string'
+            ? res.options.refs[refId].through.model
+            : res.options.refs[refId].through;
+
+          addAction(model);
         }
       });
 

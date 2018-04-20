@@ -241,7 +241,9 @@ function buildSchema(options) {
 
       options.schema.properties[prop] = {
         type: value.type || 'object',
-        rel: schema.through,
+        rel: typeof schema.through.model === 'string'
+          ? schema.through.model
+          : schema.through,
         ref: schema,
         prop,
       };
