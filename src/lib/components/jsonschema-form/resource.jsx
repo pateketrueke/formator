@@ -218,6 +218,7 @@ function fixData(options) {
 // FIXME: add proper replace for :params
 
 function postJSON(payload, formData, param, prop) {
+  console.log('...');
   return fetchCall(linkTo(payload.path.replace(param, formData[prop])), {
     credentials: 'same-origin',
     method: 'POST',
@@ -237,7 +238,6 @@ function buildSchema(options) {
 
     if (ref) {
       options.schema.properties[prop] = {
-        type: value.type || 'object',
         ref: options.refs[ref],
         prop,
       };
@@ -245,7 +245,6 @@ function buildSchema(options) {
       // FIXME: adjust these schemas properly, separate state from data!
       if (value.type === 'array' || prop === 'items') {
         options.schema.properties[prop].type = 'array';
-        options.schema.properties[prop].items = { type: 'object' };
       }
     }
   });
@@ -406,28 +405,39 @@ function renderFromAST(ast, data, parentNode, parentGroup) {
 function _fixPayload(options, refs, payload, keepReferences) {
   const data = merge({}, payload);
 
-  Object.keys(options.refs).forEach(prop => {
-    if (options.refs[prop].references) {
-      const pk = options.refs[prop].references.primaryKeys[0];
+  // FIXME: all this is outdated...
+  console.log('>>>', data);
+  console.log('>>>', refs);
+  console.log('>>>', options);
 
-      if (data[prop] && typeof data[prop][pk.prop] !== 'undefined') {
-        data[options.refs[prop].model] = data[prop];
-        data[prop] = data[prop][pk.prop];
-      }
-
-      if (!keepReferences && options.refs[prop]) {
-        delete data[options.refs[prop].model];
-      }
+  Object.keys(data).forEach(k => {
+    if (typeof data[k] === 'undefined') {
+      delete data[k];
     }
   });
 
-  if (refs.foreignKeys) {
-    refs.foreignKeys.forEach(fk => {
-      if (typeof data[fk.prop] == 'object') {
-        data[fk.prop] = undefined;
-      }
-    });
-  }
+  // Object.keys(options.refs).forEach(prop => {
+  //   if (options.refs[prop].references) {
+  //     const pk = options.refs[prop].references.primaryKeys[0];
+
+  //     if (data[prop] && typeof data[prop][pk.prop] !== 'undefined') {
+  //       data[options.refs[prop].model] = data[prop];
+  //       data[prop] = data[prop][pk.prop];
+  //     }
+
+  //     if (!keepReferences && options.refs[prop]) {
+  //       delete data[options.refs[prop].model];
+  //     }
+  //   }
+  // });
+
+  // if (refs.foreignKeys) {
+  //   refs.foreignKeys.forEach(fk => {
+  //     if (typeof data[fk.prop] == 'object') {
+  //       data[fk.prop] = undefined;
+  //     }
+  //   });
+  // }
 
   return data;
 }
@@ -449,13 +459,17 @@ class Reference extends React.Component {
     this.enabled = !(this.propSchema['ui:disabled'] || this.propSchema['ui:widget'] === 'hidden');
     this.template = this.propSchema['ui:template'] || this.uiSchema['ui:template'];
 
-    this.ref = this._form.options.refs[this.props.schema.prop] || {};
-    this.model = this._form.options.refs[this.ref.model] || {};
+    // FIXME: adjust through-ref as main model
+    const _target = this._form.options.refs[this.props.schema.prop];
+    const _model = _target.through || _target.model;
+
+    this.ref = _target;
+    this.model = this._form.options.refs[_model] || {};
 
     this.pk = this.ref.references.primaryKeys[0];
     this.fk = this.ref.references.foreignKeys[0];
 
-    this.actions = this._form.options.actions[this.ref.model];
+    this.actions = this._form.options.actions[_model];
     this.attributes = this._form.options.attributes || {};
 
     if (this.pk) {
@@ -468,7 +482,7 @@ class Reference extends React.Component {
     }
 
     if (!this.actions && !this.model.virtual) {
-      throw new Error(`Missing actions for '${this.ref.model}' resource`);
+      throw new Error(`Missing actions for '${_model}' resource`);
     }
 
     if (this._form.options.result && this._form.options.result[this.props.schema.prop]) {
@@ -653,22 +667,17 @@ class Reference extends React.Component {
 
         fixResource(options);
 
-        const refs = this.props.schema.ref.references || {};
+        Object.keys(options.schema.properties).forEach(prop => {
+          const ui = options.uiSchema[prop];
 
-        if (refs.foreignKeys) {
-          options.uiSchema = options.uiSchema || {};
+          if (!ui || ui['ui:xdisabled'] === true) {
+            options.uiSchema[prop] = { 'ui:disabled': true };
 
-          refs.foreignKeys.forEach(fk => {
-            if (!options.uiSchema[fk.prop]
-              || options.uiSchema[fk.prop]['ui:xdisabled'] === true) {
-              options.uiSchema[fk.prop] = { 'ui:disabled': true };
-
-              if (options.schema.required && options.schema.required.indexOf(fk.prop) !== -1) {
-                options.schema.required.splice(options.schema.required.indexOf(fk.prop), 1);
-              }
+            if (options.schema.required && options.schema.required.indexOf(prop) !== -1) {
+              options.schema.required.splice(options.schema.required.indexOf(prop), 1);
             }
-          });
-        }
+          }
+        });
 
         function closeMe(e) {
           if (e.target === target) {
@@ -676,20 +685,20 @@ class Reference extends React.Component {
           }
         }
 
-        if (this.props.schema.ref.hasManyItems) {
-          callbacks.onPayload = payload => {
-            callbacks.onClose();
+        const refs = this._form.options.refs[this.props.name].references || {};
 
-            if (typeof idx !== 'undefined') {
-              this.state.value.splice(idx, 1);
-            }
+        callbacks.onPayload = payload => {
+          callbacks.onClose();
 
-            const data = _fixPayload(options, refs, payload, true);
+          if (typeof idx !== 'undefined') {
+            this.state.value.splice(idx, 1);
+          }
 
-            this.setState({ value: this.state.value.concat(data) });
-            this.props.onChange(this.state.value.concat(data));
-          };
-        }
+          const data = _fixPayload(options, refs, payload, true);
+
+          this.setState({ value: this.state.value.concat(data) });
+          this.props.onChange(this.state.value.concat(data));
+        };
 
         callbacks.onDelete = () => {
           callbacks.onClose();
