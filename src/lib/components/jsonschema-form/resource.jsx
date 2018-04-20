@@ -218,7 +218,6 @@ function fixData(options) {
 // FIXME: add proper replace for :params
 
 function postJSON(payload, formData, param, prop) {
-  console.log('...');
   return fetchCall(linkTo(payload.path.replace(param, formData[prop])), {
     credentials: 'same-origin',
     method: 'POST',
@@ -406,38 +405,28 @@ function _fixPayload(options, refs, payload, keepReferences) {
   const data = merge({}, payload);
 
   // FIXME: all this is outdated...
-  console.log('>>>', data);
-  console.log('>>>', refs);
-  console.log('>>>', options);
+  Object.keys(options.refs).forEach(prop => {
+    if (options.refs[prop].references) {
+      const pk = options.refs[prop].references.primaryKeys[0];
 
-  Object.keys(data).forEach(k => {
-    if (typeof data[k] === 'undefined') {
-      delete data[k];
+      if (data[prop] && typeof data[prop][pk.prop] !== 'undefined') {
+        data[options.refs[prop].model] = data[prop];
+        data[prop] = data[prop][pk.prop];
+      }
+
+      if (!keepReferences && options.refs[prop]) {
+        delete data[options.refs[prop].model];
+      }
     }
   });
 
-  // Object.keys(options.refs).forEach(prop => {
-  //   if (options.refs[prop].references) {
-  //     const pk = options.refs[prop].references.primaryKeys[0];
-
-  //     if (data[prop] && typeof data[prop][pk.prop] !== 'undefined') {
-  //       data[options.refs[prop].model] = data[prop];
-  //       data[prop] = data[prop][pk.prop];
-  //     }
-
-  //     if (!keepReferences && options.refs[prop]) {
-  //       delete data[options.refs[prop].model];
-  //     }
-  //   }
-  // });
-
-  // if (refs.foreignKeys) {
-  //   refs.foreignKeys.forEach(fk => {
-  //     if (typeof data[fk.prop] == 'object') {
-  //       data[fk.prop] = undefined;
-  //     }
-  //   });
-  // }
+  if (refs.foreignKeys) {
+    refs.foreignKeys.forEach(fk => {
+      if (typeof data[fk.prop] == 'object') {
+        data[fk.prop] = undefined;
+      }
+    });
+  }
 
   return data;
 }
@@ -685,20 +674,22 @@ class Reference extends React.Component {
           }
         }
 
-        const refs = this._form.options.refs[this.props.name].references || {};
+        const ref = this._form.options.refs[this.props.name];
 
-        callbacks.onPayload = payload => {
-          callbacks.onClose();
+        if (ref.hasManyItems) {
+          callbacks.onPayload = payload => {
+            callbacks.onClose();
 
-          if (typeof idx !== 'undefined') {
-            this.state.value.splice(idx, 1);
-          }
+            if (typeof idx !== 'undefined') {
+              this.state.value.splice(idx, 1);
+            }
 
-          const data = _fixPayload(options, refs, payload, true);
+            const data = _fixPayload(options, ref.references, payload, true);
 
-          this.setState({ value: this.state.value.concat(data) });
-          this.props.onChange(this.state.value.concat(data));
-        };
+            this.setState({ value: this.state.value.concat(data) });
+            this.props.onChange(this.state.value.concat(data));
+          };
+        }
 
         callbacks.onDelete = () => {
           callbacks.onClose();
