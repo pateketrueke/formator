@@ -794,8 +794,17 @@ class Reference extends React.Component {
             <li key={key} className="field-item">
               <a href="#" className="destroy" onClick={e => {
                 e.preventDefault();
-                this.state.value.splice(key, 1);
-                this.setState({ value: this.state.value });
+
+                const ref = this._form.options.refs[this.props.name];
+                const model = ref.through || ref.model;
+                const actions = this._form.options.actions[model];
+
+                // FIXME: use proper callback...
+                postJSON(actions.destroy, item, ':id', 'id')
+                  .then(() => {
+                    this.state.value.splice(key, 1);
+                    this.setState({ value: this.state.value });
+                  });
               }}><span className="is-icon remove" /></a>
               {this.model.virtual
                 && <a href="#" onClick={e => this.editVirtual(e, key)}><span className="is-icon editable" /></a>}
