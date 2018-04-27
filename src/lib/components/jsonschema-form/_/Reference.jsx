@@ -12,6 +12,11 @@ import { LAYERS } from './constants';
 
 const Select = VirtualizedSelect.default;
 
+function initForm(target, options, callbacks) {
+  console.log('RUN', target, options, callbacks);
+  return jsonschemaForm.initForm(target, options, callbacks);
+}
+
 export default class Reference extends React.Component {
   constructor(props, options) {
     super(props);

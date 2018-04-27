@@ -261,25 +261,6 @@
       border: 1px solid @silver;
     }
 
-    .Select-menu-outer,
-    .Select-value-label {
-      strong, small, em {
-        float: right;
-
-        ~ strong, ~ small, ~ em {
-          margin-right: @space;
-        }
-      }
-
-      span ~ span {
-        margin-left: @space;
-      }
-
-      h2, h3, h4, h5, h6 {
-        margin: 0;
-      }
-    }
-
     .Select.has-value.is-clearable.Select--single > .Select-control .Select-value {
       padding-right: 50px;
     }
@@ -293,6 +274,33 @@
     .Select-control {
       border-color: @silver;
       border-radius: 0;
+    }
+
+    .Select-value-label {
+      display: flex;
+    }
+
+    .Select-value-label,
+    .VirtualizedSelectOption {
+      h2, h3, h4, h5, h6 {
+        margin: 0;
+      }
+
+      span {
+        flex: 1 1 auto;
+
+        ~ span {
+          margin-left: @space;
+        }
+      }
+
+      small {
+        font-weight: normal;
+      }
+
+      strong, small, em {
+        order: 999;
+      }
     }
 
     select ~ a,

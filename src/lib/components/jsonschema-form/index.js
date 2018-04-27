@@ -1,7 +1,5 @@
 const loadScript = document.currentScript.import;
 
-let jsonschemaForm;
-
 loadScript([
   '//unpkg.com/react@16.3.1/umd/react.development.js',
   '//unpkg.com/react-dom@16.3.1/umd/react-dom.development.js',
@@ -19,7 +17,7 @@ loadScript([
 ]);
 
 loadScript('jsonschema-form/resource').then(resourceFactory => {
-  jsonschemaForm = resourceFactory;
+  window.jsonschemaForm = resourceFactory;
 });
 
 document.currentScript.exports = {
