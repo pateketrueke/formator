@@ -8,6 +8,10 @@ import {
 
 import { LAYERS } from './constants';
 
+/* global VirtualizedSelect */
+
+const Select = VirtualizedSelect.default;
+
 export default class Reference extends React.Component {
   constructor(props, options) {
     super(props);
