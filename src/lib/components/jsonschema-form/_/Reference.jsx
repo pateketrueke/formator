@@ -105,19 +105,20 @@ export default class Reference extends React.Component {
       params.where[this.fk.prop] = this._form.options.result[this.pk.prop];
     }
 
-    if (this._form.options.isNew) {
-      getJSON(linkTo(this.actions.index), params)
-        .then(data => {
-          if (typeof data.result === 'object') {
-            this.setState({
-              [isMany ? 'value' : 'options']: data.result,
-            });
-            this.props.onChange(data.result);
-          } else {
-            console.log(data);
-          }
-        });
-    }
+    // FIXME: how enable item consumption?
+    // if (this._form.options.isNew) {
+    //   getJSON(linkTo(this.actions.index), params)
+    //     .then(data => {
+    //       if (typeof data.result === 'object') {
+    //         this.setState({
+    //           [!isMany ? 'value' : 'options']: data.result,
+    //         });
+    //         this.props.onChange(data.result);
+    //       } else {
+    //         console.log(data);
+    //       }
+    //     });
+    // }
   }
 
   openLayer(cb) {
