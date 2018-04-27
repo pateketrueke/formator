@@ -6,6 +6,8 @@ import {
   getProp,
   getProperty } from './helpers';
 
+import { LAYERS } from './constants';
+
 export default class ResourceTable extends React.Component {
   constructor(options) {
     super(options);
@@ -200,6 +202,14 @@ export default class ResourceTable extends React.Component {
 
   toggleOpts() {
     if (this._opts) {
+      if (this._opts.classList.contains('show')) {
+        LAYERS.splice(this._offset, 1);
+      } else {
+        this._offset = LAYERS.push(() => {
+          this._opts.classList.remove('show');
+        });
+      }
+
       this._opts.classList.toggle('show');
       this._doFocus();
     }
