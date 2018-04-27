@@ -24,7 +24,11 @@ loadScript('jsonschema-form/resource').then(resourceFactory => {
 document.currentScript.exports = {
   init(node, context) {
     if (context.failure) {
-      node.innerHTML = `<pre>${JSON.stringify(context, null, 2)}</pre>`;
+      const e = context.failure;
+
+      node.innerHTML = `
+        <pre>${e.name}\n${JSON.stringify(e.stack || e.original || e.message, null, 2)}</pre>
+      `;
       return;
     }
 

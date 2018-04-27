@@ -28,7 +28,8 @@
       "!**/_*/**"
     ],
     "bundle": [
-      "**/main.js"
+      "**/main.js",
+      "**/resource.jsx"
     ],
     "devPlugins": [
       "tarima-lr"
