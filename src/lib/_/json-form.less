@@ -336,22 +336,29 @@
   }
 
   .field-item {
-    > em, > small, > strong {
-      float: right;
+    display: flex;
+    align-items: center;
 
-      ~ em, ~ small, ~ strong {
+    > span {
+      &:first-child {
+        flex: 1 1 auto;
+      }
+
+      > em, > small, > strong {
+        float: right;
+
+        ~ em, ~ small, ~ strong {
+          margin-left: @space;
+        }
+      }
+
+      > a {
+        margin-left: @space / 2;
+      }
+
+      ~ span {
         margin-left: @space;
       }
-    }
-
-    > span ~ span {
-      margin-left: @space;
-    }
-
-    > a {
-      order: 999;
-      float: right;
-      height: 16px;
     }
   }
 
@@ -365,10 +372,6 @@
       top: 0;
       bottom: 0;
       line-height: 30px;
-
-      > * {
-        height: 32px;
-      }
     }
 
     > a {
@@ -396,8 +399,11 @@
       margin-top: @space;
 
       > a {
-        line-height: 32px;
         margin-left: @space;
+      }
+
+      .is-icon {
+        height: 32px;
       }
     }
 

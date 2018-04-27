@@ -379,6 +379,14 @@ export default class Reference extends React.Component {
       {this.state.value.length
         ? this.state.value.map((item, key) =>
             <li key={key} className="field-item">
+              <span>{getProperty(item, this.template || '-', this._form.el)}</span>
+              <span>{this.model.virtual
+                && <a href="#" onClick={e => this.editVirtual(e, key)}><span className="is-icon editable" /></a>}
+              {item[this.property]
+                ? <a href={
+                    this.actions.edit.path.replace(this.placeholder, item[this.property])
+                  } onClick={e => this.openFrame(e, key)}><span className="is-icon editable" /></a>
+                : null}
               <a href="#" className="destroy" onClick={e => {
                 e.preventDefault();
 
@@ -392,15 +400,7 @@ export default class Reference extends React.Component {
                     this.state.value.splice(key, 1);
                     this.setState({ value: this.state.value });
                   });
-              }}><span className="is-icon remove" /></a>
-              {this.model.virtual
-                && <a href="#" onClick={e => this.editVirtual(e, key)}><span className="is-icon editable" /></a>}
-              {item[this.property]
-                ? <a href={
-                    this.actions.edit.path.replace(this.placeholder, item[this.property])
-                  } onClick={e => this.openFrame(e, key)}><span className="is-icon editable" /></a>
-                : null}
-              {getProperty(item, this.template || '-', this._form.el)}
+              }}><span className="is-icon remove" /></a></span>
             </li>)
         : <li><small>No {this.multipleItems(this.ref.plural).toLowerCase()} found</small></li>}
       </ol>;
