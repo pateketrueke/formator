@@ -106,19 +106,19 @@ export default class Reference extends React.Component {
     }
 
     // FIXME: how enable item consumption?
-    // if (this._form.options.isNew) {
-    //   getJSON(linkTo(this.actions.index), params)
-    //     .then(data => {
-    //       if (typeof data.result === 'object') {
-    //         this.setState({
-    //           [!isMany ? 'value' : 'options']: data.result,
-    //         });
-    //         this.props.onChange(data.result);
-    //       } else {
-    //         console.log(data);
-    //       }
-    //     });
-    // }
+    if (this._form.options.isNested) {
+      getJSON(linkTo(this.actions.index), params)
+        .then(data => {
+          if (typeof data.result === 'object') {
+            this.setState({
+              options: data.result,
+            });
+            this.props.onChange(data.result);
+          } else {
+            console.log(data);
+          }
+        });
+    }
   }
 
   openLayer(cb) {
@@ -216,7 +216,7 @@ export default class Reference extends React.Component {
 
   // FIXME: use openLayer()
 
-  openFrame(e, idx) {
+  openFrame(e, idx, action, values) {
     e.preventDefault();
 
     const target = document.createElement('div');
@@ -225,7 +225,7 @@ export default class Reference extends React.Component {
 
     target.classList.add('has-layers');
 
-    const url = linkTo(e.target.href);
+    const url = linkTo(action.path, values);
 
     const prev = location.href;
 
@@ -236,10 +236,11 @@ export default class Reference extends React.Component {
         target.classList.add('active');
 
         const offset = LAYERS.length;
-        const options = data.result || {};
+        const options = data || {};
         const callbacks = {};
 
-        options.isNew = true;
+        options.isNew = !values;
+        options.isNested = true;
 
         fixResource(options);
 
@@ -350,8 +351,8 @@ export default class Reference extends React.Component {
 
     return <span>
       <a
-        href={linkTo(this.actions.new.path)}
-        onClick={e => this.openFrame(e)}
+        href='#'
+        onClick={e => this.openFrame(e, null, this.actions.new)}
       >Add new {item}</a>
     </span>;
 
@@ -383,9 +384,9 @@ export default class Reference extends React.Component {
               <span>{this.model.virtual
                 && <a href="#" onClick={e => this.editVirtual(e, key)}><span className="is-icon editable" /></a>}
               {item[this.property]
-                ? <a href={
-                    this.actions.edit.path.replace(this.placeholder, item[this.property])
-                  } onClick={e => this.openFrame(e, key)}><span className="is-icon editable" /></a>
+                ? <a href='#' onClick={e => this.openFrame(e, key, this.actions.edit, item)}>
+                  <span className="is-icon editable" />
+                </a>
                 : null}
               <a href="#" className="destroy" onClick={e => {
                 e.preventDefault();
