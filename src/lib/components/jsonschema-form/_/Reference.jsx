@@ -268,14 +268,18 @@ export default class Reference extends React.Component {
           callbacks.onPayload = payload => {
             callbacks.onClose();
 
+            const data = fixPayload(options, ref.references, payload, true);
+            const newValue = this.state.value.slice().concat(data);
+
             if (typeof idx !== 'undefined') {
               this.state.value.splice(idx, 1);
             }
 
-            const data = fixPayload(options, ref.references, payload, true);
+            this.setState({
+              value: newValue,
+            });
 
-            this.setState({ value: this.state.value.concat(data) });
-            this.props.onChange(this.state.value.concat(data));
+            this.props.onChange(newValue);
           };
         }
 
