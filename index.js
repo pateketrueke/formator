@@ -61,6 +61,14 @@ module.exports = (options, isJSON) => {
       res.options.actions = {};
       res.options.schema.type = res.options.schema.type || 'object';
 
+      function end(result) {
+        // FIXME: pass a param to skip all options?
+        res.options.result = result;
+        res.options.status = 'ok';
+
+        return res.options;
+      }
+
       function addMethod(verb, actionName, resourceName) {
         return {
           verb,
@@ -114,10 +122,15 @@ module.exports = (options, isJSON) => {
 
       if (!isJSON) {
         if (['edit', 'show', 'index'].indexOf(action) !== -1) {
-          return res.actions[action === 'edit' || action === 'show' ? 'findOne' : 'findAll']()
+          const isOne = action === 'edit' || action === 'show';
+
+          return res.actions[isOne ? 'findOne' : 'findAll']()
             .catch(error => {
               res.options.failure = error;
-              return [];
+
+              return isOne
+                ? null
+                : [];
             })
             .then(result => {
               res.options.result = result;
@@ -133,11 +146,11 @@ module.exports = (options, isJSON) => {
           return sendResult(res.options);
 
         case 'index':
-          return res.actions.findAll().then(sendResult).catch(sendError);
+          return res.actions.findAll().then(end).catch(sendError);
 
         case 'edit':
         case 'show':
-          return res.actions.findOne().then(sendResult).catch(sendError);
+          return res.actions.findOne().then(end).catch(sendError);
 
         default:
           return sendError();
