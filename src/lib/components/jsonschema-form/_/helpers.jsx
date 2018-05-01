@@ -76,24 +76,6 @@ export function fixResource(context) {
   context.actions = context.actions || {};
 }
 
-export function fixReferences(value, through, source) {
-  if (Array.isArray(value)) {
-    return value.map(x => fixReferences(x, through, source));
-  }
-
-  if (typeof value === 'string') {
-    value = value.replace(/\{(\w+)(.*?)\}/g, ($0, pre, val) => {
-      if (pre === through) {
-        return `{${val.substr(1)}}`;
-      }
-
-      return `{${source}.${pre}${val}}`;
-    });
-  }
-
-  return value;
-}
-
 export function fixPayload(options, refs, payload, keepReferences) {
   const data = merge({}, payload);
 
@@ -118,13 +100,6 @@ export function fixPayload(options, refs, payload, keepReferences) {
       if (typeof data[fk.prop] == 'object') {
         data[fk.prop] = undefined;
       }
-    });
-  }
-
-  if (keepReferences) {
-    Object.defineProperty(data, '_new', {
-      value: true,
-      enumerable: false,
     });
   }
 
