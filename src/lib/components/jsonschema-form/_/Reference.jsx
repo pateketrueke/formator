@@ -1,4 +1,5 @@
 import {
+  fixReferences,
   fixResource,
   fixPayload,
   linkTo,
@@ -37,6 +38,8 @@ export default class Reference extends React.Component {
     // FIXME: adjust through-ref as main model
     const _target = this._form.options.refs[this.props.schema.prop];
     const _model = _target.through || _target.model;
+
+    this.templateInput = fixReferences(this.template, _model, _target.model);
 
     this.ref = _target;
     this.model = this._form.options.refs[_model] || {};
@@ -106,7 +109,7 @@ export default class Reference extends React.Component {
     }
 
     // FIXME: how enable item consumption?
-    if (this._form.options.isNested) {
+    if (this._form.options.isNew || this._form.options.isNested) {
       getJSON(linkTo(this.actions.index), params)
         .then(data => {
           if (typeof data.result === 'object') {
@@ -384,7 +387,7 @@ export default class Reference extends React.Component {
       {this.state.value.length
         ? this.state.value.map((item, key) =>
             <li key={key} className="field-item">
-              <span>{getProperty(item, this.template || '-', this._form.el)}</span>
+              <span>{getProperty(item, item._new ? this.templateInput : this.template || '-', this._form.el)}</span>
               <span>{this.model.virtual
                 && <a href="#" onClick={e => this.editVirtual(e, key)}><span className="is-icon editable" /></a>}
               {item[this.property]
