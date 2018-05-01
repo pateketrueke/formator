@@ -143,7 +143,7 @@ module.exports = (options, isJSON) => {
 
       switch (action) {
         case 'new':
-          return sendResult(res.options);
+          return end(null);
 
         case 'index':
           return res.actions.findAll().then(end).catch(sendError);
