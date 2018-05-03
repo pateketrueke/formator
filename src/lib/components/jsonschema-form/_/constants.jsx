@@ -93,6 +93,22 @@ export const TYPES = {
   sum(data, values) {
     return values.map(x => x.reduce((prev, cur) => prev + cur, 0)).join(', ');
   },
+  mul(data, values) {
+    const isMixed = Array.isArray(values[0]);
+    const length = isMixed ? values[0].length : 1;
+
+    if (isMixed) {
+      values = values.map(x => x.map(Number).reduce((prev, cur) => prev + cur, 0));
+    }
+
+    return values
+      .reduce((prev, cur) => {
+        if (cur !== 0 && cur !== Infinity) {
+          prev *= cur;
+        }
+        return prev || cur;
+      }, 0) / length;
+  },
   uniq(data, values) {
     return (this.value(data, values) || [])
       .reduce((prev, cur) => {
