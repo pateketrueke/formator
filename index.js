@@ -126,7 +126,7 @@ module.exports = (options, isJSON) => {
 
           return res.actions[isOne ? 'findOne' : 'findAll']()
             .catch(error => {
-              res.options.failure = error;
+              res.options.failure = error.message;
 
               return isOne
                 ? null

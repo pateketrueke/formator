@@ -93,7 +93,16 @@ export const TYPES = {
   sum(data, values) {
     return values.map(x => x.reduce((prev, cur) => prev + cur, 0)).join(', ');
   },
-  val(data, values) {
-    return values[0].join(', ');
+  uniq(data, values) {
+    return (this.value(data, values) || [])
+      .reduce((prev, cur) => {
+        if (prev.indexOf(cur) === -1) {
+          prev.push(cur);
+        }
+        return prev;
+      }, []).join(', ');
+  },
+  value(data, values) {
+    return values.filter(Boolean)[0] || null;
   },
 };
