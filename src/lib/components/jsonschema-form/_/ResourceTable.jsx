@@ -6,7 +6,11 @@ import {
   getProp,
   getProperty } from './helpers';
 
-import { LAYERS } from './constants';
+import {
+  RE_SPACE,
+  RE_NWORD,
+  RE_NUM,
+  LAYERS } from './constants';
 
 export default class ResourceTable extends React.Component {
   constructor(options) {
@@ -62,6 +66,7 @@ export default class ResourceTable extends React.Component {
 
   _doIndex() {
     // FIXME: skip refs/ids from indexing
+    // FIXME: improve indexing... add computed fields?
     this.indexes = getText(this.props.result) || [];
   }
 

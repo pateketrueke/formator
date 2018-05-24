@@ -8,6 +8,11 @@
 // FIXME: replace React with Vue
 // FIXME: cancel actions?
 
+// FIXME: cache on-the-fly-jsx-templates
+// FIXME: precompute values from tpl-calls (see above)
+// FIXME: the final state should be static... without no more transforms,
+// or their transforms are calculated on the fly and stored to be reused...
+
 import {
   RE_NUM,
   RE_SPACE,
