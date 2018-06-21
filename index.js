@@ -4,6 +4,7 @@ const path = require('path');
 const url = require('url');
 const fs = require('fs');
 
+const PARAMS = /^\/db(\/.+?)?$/;
 const FILES = {};
 
 [
@@ -47,7 +48,7 @@ function _buildAttachments(Model, baseDir, uploadDir) {
   return _attachments;
 }
 
-module.exports = (options, isJSON) => {
+function _resourceHook(options, isJSON) {
   options = options || {};
 
   if (typeof options.url !== 'function') {
@@ -181,10 +182,10 @@ module.exports = (options, isJSON) => {
           return sendError();
       }
     });
-};
+}
 
-module.exports.distFiles = () => {
-  return (req, res, next) => {
+function _distFiles() {
+  return (req, res) => {
     const uri = req.path || req.pathname || url.parse(req).pathname;
     const data = FILES[uri];
 
@@ -197,6 +198,123 @@ module.exports.distFiles = () => {
     res.writeHead(200, data.headers);
     fs.createReadStream(data.abs).pipe(res);
   };
-};
+}
 
-module.exports.buildAttachments = _buildAttachments;
+function _makeHandler(db, options) {
+  return (req, res) => {
+    const matches = req.url.match(PARAMS);
+
+    let pathname = (matches && matches[1]) || '/';
+
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+
+    let isJSON = /application\/.*json/.test(req.headers.accept);
+
+    if (/\.json$/.test(pathname)) {
+      pathname = pathname.replace('.json', '');
+      isJSON = true;
+    }
+
+    const parts = pathname.substr(1).split('/');
+    const params = {};
+
+    if (parts[0]) {
+      params.model = parts.shift();
+    }
+
+    if (/^[a-z]+$/.test(parts[parts.length - 1])) {
+      params.action = parts.pop();
+    }
+
+    params.keys = parts.filter(Boolean);
+
+    if (params.keys[0]) {
+      params.action = params.action || 'show';
+    } else {
+      params.action = req.method === 'GET'
+        ? (params.action || 'index')
+        : 'create';
+    }
+
+    if (params.action === 'show' && req.method === 'POST') {
+      params.action = req.body._method === 'DELETE' ? 'destroy' : 'update';
+    }
+
+    const Model = db.models[params.model];
+    const pk = Model && Model.primaryKeyAttribute;
+
+    if (req.method === 'OPTIONS') {
+      res.end();
+      return;
+    }
+
+    const opts = {
+      url(modelName, action) {
+        const _pks = db.models[modelName].primaryKeys;
+        const _path = Object.keys(_pks).sort().map(k => `:${k}`).join('/');
+
+        return !action
+          ? `/db/${modelName}`
+          : `/db/${modelName}/${action === 'new'
+          ? action
+          : `${_path}/${action === 'edit' ? action : ''}`.replace(/\/$/, '')
+        }`;
+      },
+      resource: Model ? db.resource({
+        attachments: Model ? _buildAttachments(Model, options.cwd || process.cwd(), 'tmp') : [],
+        payload: req.body.payload || req.query.payload,
+        where: req.body.where || req.query.where,
+        keys: params.keys,
+        raw: true,
+      }, Model.name) : undefined,
+      action: params.action,
+      modelName: params.model,
+      modelNames: Object.keys(db.models),
+      modelInstance: Model,
+    };
+
+    _resourceHook(opts, isJSON)
+      .then(data => {
+        if (!isJSON) {
+          if (!opts.resource) {
+            res.send(`<ul><li>${data.map(x => `<a href="/db/${x}">${x}</a>`).join('</li><li>')}</li></ul>`);
+            return;
+          }
+
+          res.send([
+            `<html><head><link rel="stylesheet" href="/jsonschema-form-mw/styles.css"/></head>`,
+            `<body><script type="application/json" data-component="jsonschema-form">${JSON.stringify(data, null, 2)}</script>`,
+            `<script src="/jsonschema-form-mw/main.js"></script></body></html>`,
+          ].join(''));
+          return;
+        }
+
+        res.json(data);
+      })
+      .catch(e => {
+        if (isJSON) {
+          res.json({
+            result: e.stack || e,
+          });
+          return;
+        }
+
+        res.send(e.stack || e);
+      });
+  };
+}
+
+module.exports = (db, options) => {
+  const _handler = _makeHandler(db, options || {});
+
+  return (req, res) => {
+    const _extension = req.url.split('?')[0].split('.').pop();
+
+    if (['css', 'js'].indexOf(_extension) === -1) {
+      _handler(req, res);
+    } else {
+      _distFiles(req, res);
+    }
+  };
+};
