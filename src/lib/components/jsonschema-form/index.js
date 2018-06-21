@@ -33,17 +33,17 @@ document.currentScript.exports = {
 
     switch (context.action) {
       case 'index':
-        jsonschemaForm.initTable(node, context);
+        window.jsonschemaForm.initTable(node, context);
         break;
 
       case 'edit':
       case 'new':
-        jsonschemaForm.initForm(node, context);
+        window.jsonschemaForm.initForm(node, context);
         break;
 
       case 'show':
       default:
-        jsonschemaForm.initViewer(node, context);
+        window.jsonschemaForm.initViewer(node, context);
         break;
     }
   },
