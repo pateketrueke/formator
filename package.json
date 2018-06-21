@@ -68,7 +68,5 @@
     "tarima-lr": "^0.4.1",
     "testcafe": "^0.19.1"
   },
-  "dependencies": {
-    "tiny-glob": "^0.2.1"
-  }
+  "dependencies": {}
 }

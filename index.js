@@ -1,19 +1,18 @@
 'use strict';
 
-const tglob = require('tiny-glob/sync');
 const path = require('path');
 const url = require('url');
 const fs = require('fs');
 
 const FILES = {};
 
-const opts = {
-  dot: false,
-  cwd: `${__dirname}/dist`,
-};
-
-tglob('**/*.*', opts).forEach(file => {
-  const abs = path.join(dir, file);
+[
+  'styles.css',
+  'main.js',
+  'components/jsonschema-form/index.js',
+  'components/jsonschema-form/resource.js',
+].forEach(file => {
+  const abs = path.join(__dirname, 'dist', file);
   const stats = fs.statSync(abs);
   const headers = {
     'content-length': stats.size,
@@ -197,7 +196,7 @@ module.exports.distFiles = () => {
 
     res.writeHead(200, data.headers);
     fs.createReadStream(data.abs).pipe(res);
-  }
+  };
 };
 
 module.exports.buildAttachments = _buildAttachments;
