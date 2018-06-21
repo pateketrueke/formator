@@ -1,5 +1,31 @@
 'use strict';
 
+const tglob = require('tiny-glob/sync');
+const path = require('path');
+const url = require('url');
+const fs = require('fs');
+
+const FILES = {};
+
+const opts = {
+  dot: false,
+  cwd: `${__dirname}/dist`,
+};
+
+tglob('**/*.*', opts).forEach(file => {
+  const abs = path.join(dir, file);
+  const stats = fs.statSync(abs);
+  const headers = {
+    'content-length': stats.size,
+    'content-type': file.indexOf('.js') === -1
+      ? 'text/css'
+      : 'application/javascript',
+    'last-modified': stats.mtime.toUTCString(),
+  };
+
+  FILES[`/${file}`] = { abs, stats, headers };
+});
+
 function _buildAttachments(Model, baseDir, uploadDir) {
   const _attachments = [];
 
@@ -158,5 +184,20 @@ module.exports = (options, isJSON) => {
     });
 };
 
-module.exports.publicDir = `${__dirname}/dist`;
+module.exports.distFiles = () => {
+  return (req, res, next) => {
+    const uri = req.path || req.pathname || url.parse(req).pathname;
+    const data = FILES[uri];
+
+    if (!data) {
+      res.statusCode = 404;
+      res.end();
+      return;
+    }
+
+    res.writeHead(200, data.headers);
+    fs.createReadStream(data.abs).pipe(res);
+  }
+};
+
 module.exports.buildAttachments = _buildAttachments;
