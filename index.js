@@ -184,22 +184,6 @@ function _resourceHook(options, isJSON) {
     });
 }
 
-function _distFiles() {
-  return (req, res) => {
-    const uri = req.path || req.pathname || url.parse(req).pathname;
-    const data = FILES[uri];
-
-    if (!data) {
-      res.statusCode = 404;
-      res.end();
-      return;
-    }
-
-    res.writeHead(200, data.headers);
-    fs.createReadStream(data.abs).pipe(res);
-  };
-}
-
 function _makeHandler(db, options) {
   return (req, res) => {
     const matches = req.url.match(PARAMS);
@@ -283,9 +267,9 @@ function _makeHandler(db, options) {
           }
 
           res.send([
-            `<html><head><link rel="stylesheet" href="/jsonschema-form-mw/styles.css"/></head>`,
+            `<html><head><link rel="stylesheet" href="/db/styles.css"/></head>`,
             `<body><script type="application/json" data-component="jsonschema-form">${JSON.stringify(data, null, 2)}</script>`,
-            `<script src="/jsonschema-form-mw/main.js"></script></body></html>`,
+            `<script src="/db/main.js"></script></body></html>`,
           ].join(''));
           return;
         }
@@ -305,11 +289,31 @@ function _makeHandler(db, options) {
   };
 }
 
+function _distFiles(req, res) {
+  const uri = req.path || req.pathname || url.parse(req).pathname;
+  const data = FILES[uri.replace('/db', '')];
+
+  if (!data) {
+    res.statusCode = 404;
+    res.end();
+    return;
+  }
+
+  res.writeHead(200, data.headers);
+  fs.createReadStream(data.abs).pipe(res);
+}
+
 module.exports = (db, options) => {
   const _handler = _makeHandler(db, options || {});
 
   return (req, res) => {
     const _extension = req.url.split('?')[0].split('.').pop();
+
+    if (req.url.indexOf('/db') === -1) {
+      res.statusCode = 501;
+      res.end();
+      return;
+    }
 
     if (['css', 'js'].indexOf(_extension) === -1) {
       _handler(req, res);
