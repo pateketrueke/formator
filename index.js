@@ -306,12 +306,11 @@ function _distFiles(req, res) {
 module.exports = (db, options) => {
   const _handler = _makeHandler(db, options || {});
 
-  return (req, res) => {
+  return (req, res, next) => {
     const _extension = req.url.split('?')[0].split('.').pop();
 
     if (req.url.indexOf('/db') === -1) {
-      res.statusCode = 501;
-      res.end();
+      next();
       return;
     }
 
