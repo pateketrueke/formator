@@ -1,11 +1,8 @@
 //--
   ---
   features:
-    defaults:
+    schema:
       - index
-      - new
-      - show
-      - edit
   ---
 
 extend _/layout
@@ -16,11 +13,11 @@ block main
     ul.reset
       li
         each tests, feature in features
-          h3= feature
+          h3 #{feature}
           ul
             each test in tests
               li
-                a(href=`/${feature}/${test}.html` target='_frame')= test
+                a(href=`/${feature}/${test}.html` target='_frame') #{test}
 
   iframe(name='_frame' src='about:blank' frameborder=0)
   style.

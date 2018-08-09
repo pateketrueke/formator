@@ -1,5 +1,5 @@
-import App from './_/app.svelte';
+import Form from './components/Form';
 
-import { loader } from './_/shared';
+import { loader } from './shared/utils';
 
-loader(App, 'script[rel=resource],div[data-resource]');
+loader(Form, 'script[rel=resource],div[data-resource]');

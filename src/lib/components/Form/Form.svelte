@@ -1,5 +1,4 @@
-<script src="app.js"></script>
-<style src="app.less"></style>
+<h1>FORM</h1>
 
 <summary>
   refs:
