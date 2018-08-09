@@ -1,14 +1,24 @@
 <h1>FORM</h1>
 
-<summary>
-  refs:
-  <details>
-    <pre>{JSON.stringify(refs, null, 2)}</pre>
-  </details>
-</summary>
-<summary>
-  schema:
-  <details>
-    <pre>{JSON.stringify(schema, null, 2)}</pre>
-  </details>
-</summary>
+<ul>
+  {#each Object.entries(schema.properties) as [prop, field]}
+    <li><Field name={prop} props={field} /></li>
+  {:else}
+    <li>NO PROPS</li>
+  {/each}
+</ul>
+
+<script>
+import Field from '../Field';
+
+export default {
+  components: {
+    Field,
+  },
+  oncreate() {
+    console.log(this.options.data);
+  },
+};
+</script>
+
+
