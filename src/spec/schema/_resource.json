@@ -1,0 +1,181 @@
+{
+  "model": "Cart",
+  "refs": {
+    "Cart": {
+      "model": "Cart",
+      "plural": "Carts",
+      "singular": "Cart",
+      "references": {
+        "primaryKeys": [
+          {
+            "prop": "id",
+            "type": "integer"
+          }
+        ]
+      }
+    },
+    "items": {
+      "through": "CartItem",
+      "model": "Product",
+      "plural": "Products",
+      "singular": "Product",
+      "references": {
+        "primaryKeys": [
+          {
+            "prop": "id",
+            "type": "integer"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "prop": "CartId",
+            "type": "integer"
+          },
+          {
+            "prop": "ProductId",
+            "type": "integer"
+          }
+        ]
+      },
+      "hasManyItems": true,
+      "requiredProps": [
+        "name",
+        "price"
+      ],
+      "uiSchema": {}
+    },
+    "Product": {
+      "id": "Product",
+      "properties": {
+        "id": {
+          "$ref": "dataTypes#/definitions/primaryKey"
+        },
+        "name": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number",
+          "value": "decimal"
+        }
+      },
+      "required": [
+        "name",
+        "price"
+      ]
+    }
+  },
+  "schema": {
+    "id": "Cart",
+    "properties": {
+      "id": {
+        "type": "integer"
+      },
+      "items": {
+        "type": "array",
+        "items": {
+          "$ref": "Product"
+        }
+      }
+    },
+    "required": [
+      "items"
+    ],
+    "type": "object"
+  },
+  "uiSchema": {},
+  "attributes": {},
+  "isNew": true,
+  "action": "new",
+  "actions": {
+    "Cart": {
+      "index": {
+        "verb": "GET",
+        "path": "/db/Cart"
+      },
+      "new": {
+        "verb": "GET",
+        "path": "/db/Cart/new"
+      },
+      "create": {
+        "verb": "PUT",
+        "path": "/db/Cart"
+      },
+      "edit": {
+        "verb": "GET",
+        "path": "/db/Cart/:id/edit"
+      },
+      "show": {
+        "verb": "GET",
+        "path": "/db/Cart/:id"
+      },
+      "update": {
+        "verb": "PATCH",
+        "path": "/db/Cart/:id"
+      },
+      "destroy": {
+        "verb": "DELETE",
+        "path": "/db/Cart/:id"
+      }
+    },
+    "CartItem": {
+      "index": {
+        "verb": "GET",
+        "path": "/db/CartItem"
+      },
+      "new": {
+        "verb": "GET",
+        "path": "/db/CartItem/new"
+      },
+      "create": {
+        "verb": "PUT",
+        "path": "/db/CartItem"
+      },
+      "edit": {
+        "verb": "GET",
+        "path": "/db/CartItem/:CartId/:ProductId/edit"
+      },
+      "show": {
+        "verb": "GET",
+        "path": "/db/CartItem/:CartId/:ProductId"
+      },
+      "update": {
+        "verb": "PATCH",
+        "path": "/db/CartItem/:CartId/:ProductId"
+      },
+      "destroy": {
+        "verb": "DELETE",
+        "path": "/db/CartItem/:CartId/:ProductId"
+      }
+    },
+    "Product": {
+      "index": {
+        "verb": "GET",
+        "path": "/db/Product"
+      },
+      "new": {
+        "verb": "GET",
+        "path": "/db/Product/new"
+      },
+      "create": {
+        "verb": "PUT",
+        "path": "/db/Product"
+      },
+      "edit": {
+        "verb": "GET",
+        "path": "/db/Product/:id/edit"
+      },
+      "show": {
+        "verb": "GET",
+        "path": "/db/Product/:id"
+      },
+      "update": {
+        "verb": "PATCH",
+        "path": "/db/Product/:id"
+      },
+      "destroy": {
+        "verb": "DELETE",
+        "path": "/db/Product/:id"
+      }
+    }
+  }
+}

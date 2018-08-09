@@ -6,6 +6,5 @@ html
   body
     block before
     block main
-      script(type='application/json' rel='schema')
-        != JSON.stringify(resource || {}, null, 2)
+      script(type='application/json' rel='resource') !{JSON.stringify(resource || {}, null, 2)}
       script(src='/main.js')
