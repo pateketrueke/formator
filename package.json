@@ -1,6 +1,6 @@
 {
-  "name": "jsonschema-form-mw",
-  "version": "0.2.1",
+  "name": "json-schema-formalizer",
+  "version": "0.0.0",
   "files": [
     "index.js",
     "dist"
@@ -28,8 +28,7 @@
       "!**/_*/**"
     ],
     "bundle": [
-      "**/main.js",
-      "**/resource.jsx"
+      "**/main.js"
     ],
     "devPlugins": [
       "tarima-lr"
@@ -64,9 +63,9 @@
     "less-plugin-autoprefix": "^1.5.1",
     "pug": "^2.0.3",
     "rollup": "^0.57.1",
+    "svelte": "^2.9.11",
     "tarima": "^4.0.7",
     "tarima-lr": "^0.4.1",
     "testcafe": "^0.19.1"
-  },
-  "dependencies": {}
+  }
 }

@@ -1,11 +1,11 @@
 doctype html
 html
   head
-    title jsonschema-form-mw #{label ? ` (${label})`: ''}
-    link(rel='stylesheet' href='/styles.css')
+    title json-schema-formalizer #{label ? ` (${label})`: ''}
+    link(rel='stylesheet' href='/style.css')
   body
     block before
     block main
-      script(type='application/json' data-component='jsonschema-form')
+      script(type='application/json' rel='schema')
         != JSON.stringify(resource || {}, null, 2)
       script(src='/main.js')
