@@ -1,33 +1,42 @@
 <svelte:component this={propType} {props} />
 
 <script>
-import { elements } from './Types';
+import Utils from './Utils';
 
 const {
-  RefType,
   ErrorType,
-} = elements;
+  LoaderType,
+} = Utils;
 
 export default {
   oncreate() {
     import('./Types').then(components => {
       this.set({ components });
     });
+
+    const { $ref } = this.options.data.props;
+    const { refs } = this.root.options.data;
+
+    if ($ref) {
+      if ($ref.indexOf('#/definitions') !== -1) {
+        this.set({ err: ErrorType })
+      } else {
+        this.set({ props: refs[$ref] });
+      }
+    }
   },
   computed: {
-    propType({ props, components }) {
-      if (props) {
-        if (props.$ref) {
-          if (props.$ref.indexOf('#/definitions') !== -1) {
-            return ErrorType;
-          }
+    propType({ err, props, components }) {
+      if (err) {
+        return err;
+      }
 
-          return RefType;
-        }
+      if (!props) {
+        return LoaderType;
+      }
 
-        if (components) {
-          return components[props.type || 'object'];
-        }
+      if (components) {
+        return components[props.type || 'object'];
       }
     },
   },

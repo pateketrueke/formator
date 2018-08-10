@@ -20,10 +20,6 @@ export default {
   },
   computed: {
     fields({ props }) {
-      if (!props) {
-        return {};
-      }
-
       return Object.entries(props.properties);
     },
   },
