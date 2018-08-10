@@ -1,4 +1,4 @@
-<pre>{JSON.stringify(items, null, 2)}</pre>
+<Field name="item" props={items} />
 
 <script>
 export default {
@@ -7,11 +7,7 @@ export default {
   },
   computed: {
     items({ props }) {
-      const schema = props.items;
-
-      console.log(schema);
-
-      return [];
+      return props.items;
     },
   },
 };
