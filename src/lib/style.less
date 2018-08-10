@@ -1,0 +1,104 @@
+@space: 4px;
+
+html {
+  box-sizing: border-box;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+}
+
+fieldset {
+  border: 0;
+
+  ~ button {
+    margin-top: @space * 2;
+    font-size: 110%;
+  }
+}
+
+button,
+input:not([type=file]),
+input:not([type=radio]),
+input:not([type=checkbox]) {
+  border: 1px solid silver;
+  background: inherit;
+  padding: @space;
+
+  &:hover {
+    border-color: gray;
+  }
+}
+
+form {
+  padding: @space * 2;
+
+  > fieldset {
+    border: 1px dashed silver;
+    padding: @space * 2;
+  }
+}
+
+ul {
+  list-style-position: inside;
+}
+
+li {
+  border-bottom: 1px dashed silver;
+  padding-bottom: @space * 2;
+  margin-bottom: @space * 2;
+  position: relative;
+  display: flex;
+  width: 100%;
+
+  &:last-child {
+    border: 0;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+label {
+  min-width: 50px;
+
+  + * {
+    flex: 1 1 auto;
+    xmargin-left: 10px;
+  }
+}
+
+input {
+  padding: @space;
+}
+
+summary {
+  span {
+    color: red;
+  }
+}
+
+details {
+  top: 0;
+  right: 0;
+  z-index: 1;
+  background: white;
+  position: absolute;
+
+  &[open] {
+    border: 1px dashed silver;
+  }
+
+  > * {
+    overflow: auto;
+    max-width: 300px;
+  }
+}
