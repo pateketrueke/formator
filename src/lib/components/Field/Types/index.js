@@ -6,10 +6,10 @@ import ArrayType from './Array.svelte';
 import ObjectType from './Object.svelte';
 
 export default {
-  StringType,
-  NumberType,
-  IntegerType,
-  BooleanType,
-  ArrayType,
-  ObjectType,
+  string: StringType,
+  number: NumberType,
+  integer: IntegerType,
+  boolean: BooleanType,
+  array: ArrayType,
+  object: ObjectType,
 };

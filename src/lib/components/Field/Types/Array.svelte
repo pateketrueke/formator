@@ -2,6 +2,9 @@
 
 <script>
 export default {
+  components: {
+    Field: '../Field',
+  },
   computed: {
     items({ props }) {
       const schema = props.items;

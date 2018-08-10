@@ -1,33 +1,18 @@
-<label>
-  <span>{name}</span>
-  {#if props.type === 'string'}<StringType {props} />{/if}
-  {#if props.type === 'number'}<NumberType {props} />{/if}
-  {#if props.type === 'integer'}<IntegerType {props} />{/if}
-  {#if props.type === 'boolean'}<BooleanType {props} />{/if}
-  {#if props.type === 'array'}<ArrayType {props} />{/if}
-  {#if props.type === 'object'}<ObjectType {props} />{/if}
-</label>
+<svelte:component this={propType} {props} />
 
 <script>
-import Types from './Types';
-
-const {
-  StringType,
-  NumberType,
-  IntegerType,
-  BooleanType,
-  ArrayType,
-  ObjectType,
-} = Types;
-
 export default {
-  components: {
-    StringType,
-    NumberType,
-    IntegerType,
-    BooleanType,
-    ArrayType,
-    ObjectType,
+  oncreate() {
+    import('./Types').then(components => {
+      this.set({ components });
+    });
+  },
+  computed: {
+    propType({ props, components }) {
+      if (components) {
+        return components[props.type];
+      }
+    },
   },
 };
 </script>
