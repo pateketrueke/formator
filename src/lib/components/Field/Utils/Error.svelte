@@ -8,7 +8,7 @@ export default {
   computed: {
     errorMessage({ props }) {
       if (props.$ref) {
-        return 'Unknown reference';
+        return 'Unexpected reference';
       }
 
       return 'Unknown error';

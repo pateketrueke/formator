@@ -1,4 +1,4 @@
-<svelte:component this={propType} {props} />
+<svelte:component this={propType} {name} {props} />
 
 <script>
 import Utils from './Utils';
@@ -18,7 +18,7 @@ export default {
     const { refs } = this.root.options.data;
 
     if ($ref) {
-      if ($ref.indexOf('#/definitions') !== -1) {
+      if ($ref.indexOf('#/') !== -1) {
         this.set({ err: ErrorType })
       } else {
         this.set({ props: refs[$ref] });

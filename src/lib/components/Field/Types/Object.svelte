@@ -2,10 +2,10 @@
   <ul>
     {#each fields as [name, props]}
       <li>
-        <label>{name}</label>
-        <div>
+        <label for={getId(name, true)}>{name}</label>
+        <p>
           <Field {name} {props} />
-        </div>
+        </p>
       </li>
     {:else}
       <li>NO PROPS</li>
@@ -14,9 +14,16 @@
 </fieldset>
 
 <script>
+import { getId } from '../Utils';
+
 export default {
   components: {
     Field: '../Field',
+  },
+  data() {
+    return {
+      getId,
+    };
   },
   computed: {
     fields({ props }) {
