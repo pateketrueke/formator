@@ -67,23 +67,31 @@ li {
   }
 }
 
+label,
+input,
+summary {
+  line-height: 1.5;
+}
+
 label {
-  min-width: 50px;
+  min-width: 1in;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 
   + * {
-    flex: 1 1 auto;
-    xmargin-left: 10px;
+    width: 100%;
+    margin-left: @space * 2;
   }
 }
 
 input {
+  width: inherit;
   padding: @space;
 }
 
 summary {
-  span {
-    color: red;
-  }
+  padding: 0 @space;
 }
 
 details {
@@ -99,6 +107,6 @@ details {
 
   > * {
     overflow: auto;
-    max-width: 300px;
+    max-width: 260px;
   }
 }
