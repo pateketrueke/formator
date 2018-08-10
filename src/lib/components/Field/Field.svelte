@@ -1,14 +1,15 @@
-FIELD: {name} ({props.type})
-
-{#if props.type === 'string'}<StringType {props} />{/if}
-{#if props.type === 'number'}<NumberType {props} />{/if}
-{#if props.type === 'integer'}<IntegerType {props} />{/if}
-{#if props.type === 'boolean'}<BooleanType {props} />{/if}
-{#if props.type === 'array'}<ArrayType {props} />{/if}
-{#if props.type === 'object'}<ObjectType {props} />{/if}
+<label>
+  <span>{name}</span>
+  {#if props.type === 'string'}<StringType {props} />{/if}
+  {#if props.type === 'number'}<NumberType {props} />{/if}
+  {#if props.type === 'integer'}<IntegerType {props} />{/if}
+  {#if props.type === 'boolean'}<BooleanType {props} />{/if}
+  {#if props.type === 'array'}<ArrayType {props} />{/if}
+  {#if props.type === 'object'}<ObjectType {props} />{/if}
+</label>
 
 <script>
-import Types from '../Types';
+import Types from './Types';
 
 const {
   StringType,

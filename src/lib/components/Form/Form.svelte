@@ -1,4 +1,5 @@
 <form {...props}>
+  <input type="hidden" name="_method" value={nextAction.verb}/>
   <ul>
     {#each fields as [name, props]}
       <li><Field {name} {props} /></li>
@@ -14,15 +15,13 @@
 </form>
 
 <script>
-import Field from '../Field';
-
 const ACTION_MAP = {
   new: 'create',
 };
 
 export default {
   components: {
-    Field,
+    Field: '../Field',
   },
   computed: {
     currentAction({ model, action, actions }) {
@@ -36,7 +35,7 @@ export default {
     },
     props({ nextAction }) {
       return {
-        method: nextAction.verb.toLowerCase(),
+        method: 'post',
         action: nextAction.path,
       };
     },
