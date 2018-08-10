@@ -1,0 +1,65 @@
+button,
+textarea,
+input[type=text],
+input[type=number],
+input[type=search],
+input[type=password] {
+  border: 1px solid @light;
+  background: inherit;
+  padding: @sp1;
+
+  &:hover {
+    border-color: @dark;
+  }
+}
+
+label,
+input,
+summary {
+  line-height: 1.5;
+}
+
+label {
+  min-width: @smp;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  @media @md {
+    min-width: @mdp;
+  }
+
+  + * {
+    width: 100%;
+
+    @media @sm {
+      margin-left: @sp2;
+    }
+  }
+}
+
+input {
+  width: inherit;
+  padding: @sp1;
+}
+
+summary {
+  padding: 0 @sp1;
+}
+
+details {
+  top: 0;
+  right: 0;
+  z-index: 1;
+  background: white;
+  position: absolute;
+
+  &[open] {
+    border: 1px dashed @light;
+  }
+
+  > * {
+    overflow: auto;
+    max-width: 260px;
+  }
+}

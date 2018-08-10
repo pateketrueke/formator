@@ -1,0 +1,38 @@
+padding: @sp2;
+
+fieldset {
+  border: 0;
+
+  ~ button {
+    margin-top: @sp2;
+    font-size: 110%;
+  }
+}
+
+> fieldset {
+  border: 1px dashed @light;
+  padding: @sp2;
+}
+
+ul {
+  list-style-position: inside;
+}
+
+li {
+  border-bottom: 1px dashed @light;
+  padding-bottom: @sp2;
+  margin-bottom: @sp2;
+  position: relative;
+  display: block;
+  width: 100%;
+
+  &:last-child {
+    border: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+  @media @sm {
+    display: flex;
+  }
+}

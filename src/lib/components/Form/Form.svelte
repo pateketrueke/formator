@@ -1,7 +1,7 @@
-<form {...props}>
-  <input type="hidden" name="_method" value={nextAction.verb}/>
+<form class="json-schema-formalizer" {...props}>
   <Field name='root' props={params} />
   <button type="submit">Save</button>
+  <input type="hidden" name="_method" value={nextAction.verb}/>
 </form>
 
 <script>
