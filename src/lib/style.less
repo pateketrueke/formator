@@ -1,4 +1,14 @@
-@space: 4px;
+@sp1: 4px;
+@sp2: 8px;
+
+@smp: 72px;
+@smw: 360px;
+
+@mdw: 768px;
+@mdp: 120px;
+
+@sm: ~"screen and (min-width: @{smw})";
+@md: ~"screen and (min-width: @{mdw})";
 
 html {
   box-sizing: border-box;
@@ -21,7 +31,7 @@ fieldset {
   border: 0;
 
   ~ button {
-    margin-top: @space * 2;
+    margin-top: @sp2;
     font-size: 110%;
   }
 }
@@ -32,7 +42,7 @@ input:not([type=radio]),
 input:not([type=checkbox]) {
   border: 1px solid silver;
   background: inherit;
-  padding: @space;
+  padding: @sp1;
 
   &:hover {
     border-color: gray;
@@ -40,11 +50,11 @@ input:not([type=checkbox]) {
 }
 
 form {
-  padding: @space * 2;
+  padding: @sp2;
 
   > fieldset {
     border: 1px dashed silver;
-    padding: @space * 2;
+    padding: @sp2;
   }
 }
 
@@ -54,16 +64,20 @@ ul {
 
 li {
   border-bottom: 1px dashed silver;
-  padding-bottom: @space * 2;
-  margin-bottom: @space * 2;
+  padding-bottom: @sp2;
+  margin-bottom: @sp2;
   position: relative;
-  display: flex;
+  display: block;
   width: 100%;
 
   &:last-child {
     border: 0;
     margin: 0;
     padding: 0;
+  }
+
+  @media @sm {
+    display: flex;
   }
 }
 
@@ -74,24 +88,31 @@ summary {
 }
 
 label {
-  min-width: 1in;
+  min-width: @smp;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 
+  @media @md {
+    min-width: @mdp;
+  }
+
   + * {
     width: 100%;
-    margin-left: @space * 2;
+
+    @media @sm {
+      margin-left: @sp2;
+    }
   }
 }
 
 input {
   width: inherit;
-  padding: @space;
+  padding: @sp1;
 }
 
 summary {
-  padding: 0 @space;
+  padding: 0 @sp1;
 }
 
 details {
