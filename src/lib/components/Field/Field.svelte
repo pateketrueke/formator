@@ -1,4 +1,4 @@
-<svelte:component this={propType} {name} {props} />
+<svelte:component bind:result this={propType} {name} {props} />
 
 <script>
 import Utils from './Utils';
@@ -14,12 +14,16 @@ export default {
       this.set({ components });
     });
 
-    const { $ref } = this.options.data.props;
+    const { name, props: { $ref } } = this.options.data;
     const { refs } = this.root.options.data;
+
+    if (refs[name]) {
+      console.log('REF', refs[name]);
+    }
 
     if ($ref) {
       if ($ref.indexOf('#/') !== -1) {
-        this.set({ err: ErrorType })
+        this.set({ err: true })
       } else {
         this.set({ props: refs[$ref] });
       }
@@ -28,7 +32,7 @@ export default {
   computed: {
     propType({ err, props, components }) {
       if (err) {
-        return err;
+        return ErrorType;
       }
 
       if (!props) {

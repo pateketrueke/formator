@@ -1,5 +1,5 @@
-<form class="json-schema-formalizer" {...props}>
-  <Field name='root' props={params} />
+<form class="json-schema-formalizer" on:submit="save(event)" {...props}>
+  <Field name='root' bind:result="value" props={schema} />
   <button type="submit">Save</button>
   <input type="hidden" name="_method" value={nextAction.verb}/>
 </form>
@@ -13,6 +13,12 @@ export default {
   components: {
     Field: '../Field',
   },
+  methods: {
+    save(e) {
+      e.preventDefault();
+      console.log(this.get().value);
+    },
+  },
   computed: {
     currentAction({ model, action, actions }) {
       return actions[model][action];
@@ -20,8 +26,12 @@ export default {
     nextAction({ model, action, actions }) {
       return actions[model][ACTION_MAP[action]];
     },
-    params({ schema }) {
-      return schema;
+    value({ result, schema }) {
+      if (!result) {
+        return schema.type === 'array' ? [] : {};
+      }
+
+      return result;
     },
     props({ nextAction }) {
       return {

@@ -1,4 +1,4 @@
-<input type="number" {id} {name} />
+<input type="number" bind:value="result" {id} {name} />
 
 <script>
 import { getId } from '../Utils';

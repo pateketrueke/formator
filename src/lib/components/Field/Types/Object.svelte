@@ -4,7 +4,7 @@
       <li>
         <label for={getId(name, true)}>{name}</label>
         <p>
-          <Field {name} {props} />
+          <Field bind:result="values[name]" {name} {props} />
         </p>
       </li>
     {:else}
@@ -26,6 +26,9 @@ export default {
     };
   },
   computed: {
+    values({ result }) {
+      return result || {};
+    },
     fields({ props }) {
       return Object.entries(props.properties);
     },
