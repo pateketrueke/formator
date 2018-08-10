@@ -1,13 +1,17 @@
-<ul>
-  {#each fields as [name, props]}
-    <li>
-      <label>{name}</label>
-      <Field {name} {props} />
-    </li>
-  {:else}
-    <li>NO PROPS</li>
-  {/each}
-</ul>
+<fieldset>
+  <ul>
+    {#each fields as [name, props]}
+      <li>
+        <label>{name}</label>
+        <div>
+          <Field {name} {props} />
+        </div>
+      </li>
+    {:else}
+      <li>NO PROPS</li>
+    {/each}
+  </ul>
+</fieldset>
 
 <script>
 export default {

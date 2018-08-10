@@ -8,6 +8,8 @@ export const loader = (Component, selector) => [].slice.call(document.querySelec
     data = {};
   }
 
+  console.log('>>>', data);
+
   if (node.tagName === 'SCRIPT') {
     target = document.createElement('div');
     node.parentNode.insertBefore(target, node);

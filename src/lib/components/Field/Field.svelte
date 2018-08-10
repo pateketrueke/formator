@@ -1,7 +1,12 @@
 <svelte:component this={propType} {props} />
 
 <script>
-import Ref from '../Ref';
+import { elements } from './Types';
+
+const {
+  RefType,
+  ErrorType,
+} = elements;
 
 export default {
   oncreate() {
@@ -13,8 +18,11 @@ export default {
     propType({ props, components }) {
       if (props) {
         if (props.$ref) {
-          console.log(props);
-          return Ref;
+          if (props.$ref.indexOf('#/definitions') !== -1) {
+            return ErrorType;
+          }
+
+          return RefType;
         }
 
         if (components) {

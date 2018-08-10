@@ -1,11 +1,7 @@
 <form {...props}>
   <input type="hidden" name="_method" value={nextAction.verb}/>
-  <p>
-    <button type="submit">Save</button>
-  </p>
-  <pre>{JSON.stringify(currentAction)}</pre>
-  <pre>{JSON.stringify(nextAction)}</pre>
   <Field name='root' props={params} />
+  <button type="submit">Save</button>
 </form>
 
 <script>
