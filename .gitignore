@@ -1,5 +1,6 @@
 *.log
 *.mkv
+*.todo
 .tarima
 .DS_Store
 dist
