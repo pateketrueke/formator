@@ -6,5 +6,8 @@ html
   body
     block before
     block main
-      script(type='application/json' rel='resource') !{JSON.stringify(resource || {}, null, 2)}
+      each test, i in tests
+        details
+          summary Test ##{i} &mdash; #{(test && test.description) || ''}
+          script(type='application/json' rel='resource') !{JSON.stringify(test, null, 2)}
       script(src='/main.js')
