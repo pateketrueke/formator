@@ -4,6 +4,11 @@
 import { getId } from '../Utils';
 
 export default {
+  data() {
+    return {
+      result: null,
+    };
+  },
   computed: {
     id: ({ name }) => getId(name),
   },

@@ -19,6 +19,11 @@ export default {
   components: {
     Field: '../Field',
   },
+  data() {
+    return {
+      result: null,
+    };
+  },
   methods: {
     append() {
       const { result, schema } = this.get();

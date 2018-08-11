@@ -1,10 +1,17 @@
-<svelte:component {name} {schema} bind:result this={propType} />
+<svelte:component {name} {props} {schema} bind:result this={propType} />
 
 <script>
 import Utils from './Utils';
 import getTypes from './Types/getTypes'; // eslint-disable-line
 
+const { ErrorType, LoaderType } = Utils;
+
 export default {
+  data() {
+    return {
+      result: null,
+    };
+  },
   oncreate() {
     getTypes().then(components => {
       this.set({ components });
@@ -30,11 +37,17 @@ export default {
   computed: {
     propType({ props, components }) {
       if (!props) {
-        return Utils.LoaderType;
+        return LoaderType;
+      }
+
+      const { $ref } = props;
+
+      if ($ref && $ref.indexOf('#/') !== -1) {
+        return ErrorType;
       }
 
       if (components) {
-        return components[props.type || 'object'];
+        return components[props.type || 'object'] || ErrorType;
       }
     },
   },

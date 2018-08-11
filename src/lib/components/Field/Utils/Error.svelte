@@ -6,9 +6,9 @@
 <script>
 export default {
   computed: {
-    errorMessage({ props }) {
-      if (props.$ref) {
-        return 'Unexpected reference';
+    errorMessage({ schema }) {
+      if (!schema) {
+        return 'Missing definition';
       }
 
       return 'Unknown error';
