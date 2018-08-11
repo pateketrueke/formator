@@ -6,7 +6,11 @@
 <script>
 export default {
   computed: {
-    errorMessage({ schema }) {
+    errorMessage({ err, schema }) {
+      if (err) {
+        return err;
+      }
+
       if (!schema) {
         return 'Missing definition';
       }

@@ -1,4 +1,4 @@
-<svelte:component {name} {props} {schema} bind:result this={propType} />
+<svelte:component {err} {name} {props} {schema} bind:result this={propType} />
 
 <script>
 import utils from './utils';
@@ -17,8 +17,15 @@ export default {
       this.set({ components });
     });
 
-    const { refs } = this.root.options.data;
-    const { name, props } = this.options.data;
+    const { refs } = this.root.get();
+    const { name, props } = this.get();
+
+    if (!props) {
+      this.set({
+        err: 'Missing props',
+      });
+      return;
+    }
 
     let schema = props;
 
@@ -51,7 +58,11 @@ export default {
     this.set({ schema });
   },
   computed: {
-    propType({ props, components }) {
+    propType({ err, props, components }) {
+      if (err) {
+        return ErrorType;
+      }
+
       if (!props) {
         return LoaderType;
       }
