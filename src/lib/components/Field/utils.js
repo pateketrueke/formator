@@ -26,6 +26,10 @@ export function getId(forName, isLabel) {
 }
 
 export function defaultValue(schema, refs) {
+  if (!schema) {
+    return null;
+  }
+
   if (schema.$ref) {
     return refs[schema.$ref] ? defaultValue(refs[schema.$ref], refs) : null;
   }

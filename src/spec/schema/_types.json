@@ -1,7 +1,25 @@
 {
+  "description": "Type definitions",
   "schema": {
     "properties": {
-      "emptyValue": {}
+      "intValue": {
+        "type": "integer"
+      },
+      "numValue": {
+        "type": "number"
+      },
+      "bolValue": {
+        "type": "boolean"
+      },
+      "strValue": {
+        "type": "string"
+      },
+      "arrValue": {
+        "type": "array"
+      },
+      "objValue": {
+        "type": "object"
+      }
     }
   }
 }

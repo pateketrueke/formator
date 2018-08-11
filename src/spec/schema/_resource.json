@@ -1,4 +1,5 @@
 {
+  "description": "Shopping Cart example",
   "refs": {
     "Cart": {
       "model": "Cart",
