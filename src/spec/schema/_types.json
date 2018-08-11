@@ -19,6 +19,20 @@
       },
       "objValue": {
         "type": "object"
+      },
+      "arrValues": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objValues": {
+        "type": "object",
+        "properties": {
+          "strValue": {
+            "type": "string"
+          }
+        }
       }
     }
   }
