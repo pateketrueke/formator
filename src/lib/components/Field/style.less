@@ -36,24 +36,3 @@ input {
   width: inherit;
   padding: @sp1;
 }
-
-summary {
-  padding: 0 @sp1;
-}
-
-details {
-  top: 0;
-  right: 0;
-  z-index: 1;
-  background: white;
-  position: absolute;
-
-  &[open] {
-    border: 1px dashed @light;
-  }
-
-  > * {
-    overflow: auto;
-    max-width: 260px;
-  }
-}

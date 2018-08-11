@@ -14,6 +14,11 @@ fieldset {
   padding: @sp2;
 }
 
+summary {
+  padding: 0 @sp1;
+  white-space: nowrap;
+}
+
 ul {
   list-style-position: inside;
 }
@@ -31,6 +36,23 @@ li {
     border: 0;
     margin: 0;
     padding: 0;
+  }
+
+  details {
+    top: 0;
+    right: 0;
+    z-index: 1;
+    background: white;
+    position: absolute;
+
+    &[open] {
+      border: 1px dashed @light;
+    }
+
+    > * {
+      overflow: auto;
+      max-width: 260px;
+    }
   }
 
   @media @sm {
