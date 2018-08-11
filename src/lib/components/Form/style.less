@@ -1,6 +1,7 @@
 padding: @sp2;
 
 fieldset {
+  width: 100%;
   border: 0;
 
   ~ button {
@@ -27,7 +28,7 @@ ul {
 
 li {
   border-bottom: 1px dashed @light;
-  min-height: 13px + (@sp2 + @sp1);
+  min-height: 12px * 2;
   padding-bottom: @sp2;
   margin-bottom: @sp2;
   position: relative;
@@ -42,20 +43,24 @@ li {
   }
 
   details {
-    top: 0;
-    right: 0;
-    z-index: 1;
+    border: 1px solid transparent;
     background: white;
     position: absolute;
+    right: 0;
 
     &[open] {
       border: 1px dashed @light;
+      z-index: 1;
     }
 
     > * {
       overflow: auto;
       max-width: 260px;
     }
+  }
+
+  span {
+    width: 100%;
   }
 
   @media @sm {

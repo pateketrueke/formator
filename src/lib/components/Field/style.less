@@ -14,14 +14,12 @@ input[type=password] {
 }
 
 label {
-  min-width: @smp;
+  width: 100%;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-
-  @media @md {
-    min-width: @mdp;
-  }
+  margin-right: @sp2;
+  max-width: 75px;
 
   + * {
     width: 100%;
@@ -32,7 +30,15 @@ label {
   }
 }
 
+button {
+  white-space: nowrap;
+}
+
 input {
   width: inherit;
   padding: @sp1;
+}
+
+[data-type=boolean] {
+  display: flex;
 }
