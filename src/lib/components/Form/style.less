@@ -15,7 +15,9 @@ fieldset {
 }
 
 summary {
+  color: @error;
   padding: 0 @sp1;
+  font-size: 12px;
   white-space: nowrap;
 }
 
@@ -25,6 +27,7 @@ ul {
 
 li {
   border-bottom: 1px dashed @light;
+  min-height: 13px + (@sp2 + @sp1);
   padding-bottom: @sp2;
   margin-bottom: @sp2;
   position: relative;
