@@ -1,11 +1,11 @@
 <fieldset>
   <ul>
     {#each fields as [name, schema]}
-      <li>
+      <li data-type={schema.type || 'object'}>
         <label for={getId(name, true)}>{name}</label>
-        <p>
+        <div>
           <Field {name} props={schema} bind:result="values[name]" />
-        </p>
+        </div>
       </li>
     {:else}
       <li>NO PROPS</li>

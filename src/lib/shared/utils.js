@@ -10,6 +10,8 @@ export const loader = (Component, selector) => [].slice.call(document.querySelec
 
   if (node.tagName === 'SCRIPT') {
     target = document.createElement('div');
+    target.className = data.className || 'json-schema-formalizer';
+
     node.parentNode.insertBefore(target, node);
     node.parentNode.removeChild(node);
   } else {

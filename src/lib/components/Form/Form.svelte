@@ -1,4 +1,4 @@
-<div class="json-schema-formalizer">
+<slot>
   {#if actions}
     <form on:submit="save(event)" {...props}>
       <Field name='root' bind:result="value" props={schema} />
@@ -8,7 +8,7 @@
   {:else}
     <Field name='root' bind:result="value" props={schema} />
   {/if}
-</div>
+</slot>
 
 <script>
 const ACTION_MAP = {
