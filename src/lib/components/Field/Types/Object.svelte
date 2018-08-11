@@ -1,10 +1,10 @@
 <fieldset>
   <ul>
-    {#each fields as [name, props]}
+    {#each fields as [name, schema]}
       <li>
         <label for={getId(name, true)}>{name}</label>
         <p>
-          <Field bind:result="values[name]" {name} {props} />
+          <Field {name} props={schema} bind:result="values[name]" />
         </p>
       </li>
     {:else}
@@ -29,8 +29,12 @@ export default {
     values({ result }) {
       return result || {};
     },
-    fields({ props }) {
-      return Object.entries(props.properties);
+    fields({ schema }) {
+      if (!(schema && schema.properties)) {
+        return [];
+      }
+
+      return Object.entries(schema.properties);
     },
   },
 };

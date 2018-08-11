@@ -1,42 +1,36 @@
-<svelte:component bind:result this={propType} {name} {props} />
+<svelte:component {name} {schema} bind:result this={propType} />
 
 <script>
 import Utils from './Utils';
-
-const {
-  ErrorType,
-  LoaderType,
-} = Utils;
+import getTypes from './Types/getTypes'; // eslint-disable-line
 
 export default {
   oncreate() {
-    import('./Types').then(components => {
+    getTypes().then(components => {
       this.set({ components });
     });
 
-    const { name, props: { $ref } } = this.options.data;
     const { refs } = this.root.options.data;
+    const { name, props } = this.options.data;
+
+    let schema = props;
+
+    if (props.$ref) {
+      schema = refs[props.$ref];
+    }
 
     if (refs[name]) {
-      console.log('REF', refs[name]);
+      const { model, through } = refs[name];
+
+      console.log('REF', [name, refs[through] || refs[model]]);
     }
 
-    if ($ref) {
-      if ($ref.indexOf('#/') !== -1) {
-        this.set({ err: true })
-      } else {
-        this.set({ props: refs[$ref] });
-      }
-    }
+    this.set({ schema });
   },
   computed: {
-    propType({ err, props, components }) {
-      if (err) {
-        return ErrorType;
-      }
-
+    propType({ props, components }) {
       if (!props) {
-        return LoaderType;
+        return Utils.LoaderType;
       }
 
       if (components) {
