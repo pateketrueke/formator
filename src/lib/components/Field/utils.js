@@ -32,6 +32,14 @@ export function defaultValue(schema, refs) {
     type = refs[schema.$ref].type || type;
   }
 
+  if (schema.properties) {
+    return Object.keys(schema.properties).reduce((prev, cur) => {
+      prev[cur] = defaultValue(schema.properties[cur], refs);
+
+      return prev;
+    }, {});
+  }
+
   return VALUES[type]();
 }
 
