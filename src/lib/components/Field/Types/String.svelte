@@ -12,7 +12,7 @@ export default {
     };
   },
   computed: {
-    id: ({ name }) => getId(name),
+    id: ({ rootId, name }) => getId(rootId, name),
   },
 };
 </script>

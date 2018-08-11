@@ -1,10 +1,10 @@
 <fieldset>
   <ul>
-    {#each fields as [name, schema]}
-      <li data-type={schema.type || 'object'}>
-        <label for={getId(name, true)}>{name}</label>
+    {#each fields as { id, name, props }}
+      <li data-type={props.type || 'object'}>
+        <label for={id}>{name}</label>
         <div>
-          <Field {name} props={schema} bind:result="values[name]" />
+          <Field {name} {props} bind:result="values[name]" />
         </div>
       </li>
     {:else}
@@ -22,7 +22,6 @@ export default {
   },
   data() {
     return {
-      getId,
       result: null,
     };
   },
@@ -30,12 +29,13 @@ export default {
     values({ result }) {
       return result || {};
     },
-    fields({ schema }) {
+    fields({ rootId, schema }) {
       if (!(schema && schema.properties)) {
         return [];
       }
 
-      return Object.entries(schema.properties);
+      return Object.entries(schema.properties)
+        .map(([name, props]) => ({ id: getId(rootId, name, true), name, props }));
     },
   },
 };

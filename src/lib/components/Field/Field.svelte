@@ -1,4 +1,4 @@
-<svelte:component {err} {name} {props} {schema} bind:result this={propType} />
+<svelte:component {err} {name} {props} {schema} {rootId} bind:result this={propType} />
 
 <script>
 import utils from './utils';
@@ -17,7 +17,7 @@ export default {
       this.set({ components });
     });
 
-    const { refs } = this.root.get();
+    const { refs, rootId } = this.root.get();
     const { name, props } = this.get();
 
     if (!props) {
@@ -55,7 +55,7 @@ export default {
       };
     }
 
-    this.set({ schema });
+    this.set({ rootId, schema });
   },
   computed: {
     propType({ err, props, components }) {

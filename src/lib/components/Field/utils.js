@@ -11,7 +11,7 @@ const VALUES = {
 
 const INDEX = {};
 
-export function getId(forName, isLabel) {
+export function getId(rootId, forName, isLabel) {
   if (!INDEX[forName]) {
     INDEX[forName] = 0;
   }
@@ -22,7 +22,11 @@ export function getId(forName, isLabel) {
 
   const offset = INDEX[forName];
 
-  return `${forName}-field-${offset}`;
+  return `${rootId}-${forName}-field-${offset}`;
+}
+
+export function randId() {
+  return `_${Math.random().toString(36).substr(2, 9)}`;
 }
 
 export function defaultValue(schema, refs) {
@@ -46,6 +50,8 @@ export function defaultValue(schema, refs) {
 }
 
 export default {
+  getId,
+  randId,
   ErrorType,
   LoaderType,
   defaultValue,

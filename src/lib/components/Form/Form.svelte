@@ -11,6 +11,8 @@
 </slot>
 
 <script>
+import { randId } from '../Field/utils';
+
 const ACTION_MAP = {
   new: 'create',
 };
@@ -22,12 +24,17 @@ export default {
   data() {
     return {
       refs: {},
+      rootId: `_${randId()}`,
     };
+  },
+  oncreate() {
+    this.options.target.get = () => this.get().value;
   },
   methods: {
     save(e) {
-      e.preventDefault();
-      console.log(JSON.stringify(this.get().value, null, 2));
+      if (e) {
+        e.preventDefault();
+      }
     },
   },
   computed: {
