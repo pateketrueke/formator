@@ -1,5 +1,14 @@
 padding: @sp2;
 
+label,
+button,
+summary {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 fieldset {
   width: 100%;
   border: 0;
@@ -16,6 +25,7 @@ fieldset {
 }
 
 summary {
+  cursor: default;
   color: @error;
   padding: 0 @sp1;
   font-size: 12px;

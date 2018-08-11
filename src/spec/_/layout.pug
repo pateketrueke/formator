@@ -3,6 +3,18 @@ html
   head
     title json-schema-formalizer #{label ? ` (${label})`: ''}
     link(rel='stylesheet' href='/style.css')
+    style.
+      body > details {
+        box-shadow: 0 1px 2px silver;
+        margin: auto;
+        margin-top: 6px;
+        max-width: 560px;
+      }
+
+      body > details > summary {
+        cursor: default;
+        padding: 6px;
+      }
   body
     block before
     block main
