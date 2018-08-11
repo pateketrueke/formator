@@ -20,11 +20,11 @@ export default {
     },
   },
   computed: {
-    currentAction({ model, action, actions }) {
-      return actions[model][action];
+    currentAction({ schema, action, actions }) {
+      return actions[schema.id][action];
     },
-    nextAction({ model, action, actions }) {
-      return actions[model][ACTION_MAP[action]];
+    nextAction({ schema, action, actions }) {
+      return actions[schema.id][ACTION_MAP[action]];
     },
     value({ result, schema }) {
       if (!result) {

@@ -1,5 +1,4 @@
 {
-  "model": "Cart",
   "refs": {
     "Cart": {
       "model": "Cart",
