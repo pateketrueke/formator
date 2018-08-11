@@ -1,10 +1,10 @@
 <svelte:component {name} {props} {schema} bind:result this={propType} />
 
 <script>
-import Utils from './Utils';
+import utils from './utils';
 import getTypes from './Types/getTypes'; // eslint-disable-line
 
-const { ErrorType, LoaderType } = Utils;
+const { ErrorType, LoaderType } = utils;
 
 export default {
   data() {
@@ -26,10 +26,26 @@ export default {
       schema = refs[props.$ref];
     }
 
-    if (refs[name]) {
-      const { model, through } = refs[name];
+    if (refs[name] && !(props.id || props.$ref)) {
+      const { through, ...options } = refs[name];
+      const refItems = props.items;
+      const refSchema = refs[through];
+      const propSchema = refs[refItems.$ref];
 
-      console.log('REF', [name, refs[through] || refs[model]]);
+      this.set({
+        through,
+        options,
+      });
+
+      schema = {
+        ...refSchema,
+        [name]: {
+          type: 'object',
+          properties: {
+            [refItems.$ref]: propSchema,
+          },
+        },
+      };
     }
 
     this.set({ schema });
