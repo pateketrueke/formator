@@ -26,8 +26,8 @@ export default {
   },
   methods: {
     append() {
+      const { refs } = this.root.get();
       const { result, schema } = this.get();
-      const { refs } = this.root.options.data;
 
       const value = defaultValue(schema.items, refs);
 

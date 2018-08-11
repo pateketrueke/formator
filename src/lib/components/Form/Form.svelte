@@ -1,8 +1,14 @@
-<form class="json-schema-formalizer" on:submit="save(event)" {...props}>
-  <Field name='root' bind:result="value" props={schema} />
-  <button type="submit">Save</button>
-  <input type="hidden" name="_method" value={nextAction.verb}/>
-</form>
+<div class="json-schema-formalizer">
+  {#if actions}
+    <form on:submit="save(event)" {...props}>
+      <Field name='root' bind:result="value" props={schema} />
+      <button type="submit">Save</button>
+      <input type="hidden" name="_method" value={nextAction.verb}/>
+    </form>
+  {:else}
+    <Field name='root' bind:result="value" props={schema} />
+  {/if}
+</div>
 
 <script>
 const ACTION_MAP = {
@@ -13,20 +19,33 @@ export default {
   components: {
     Field: '../Field',
   },
+  data() {
+    return {
+      refs: {},
+    };
+  },
   methods: {
     save(e) {
       e.preventDefault();
-      console.log(this.get().value);
+      console.log(JSON.stringify(this.get().value, null, 2));
     },
   },
   computed: {
     currentAction({ schema, action, actions }) {
-      return actions[schema.id][action];
+      if (schema && actions) {
+        return actions[schema.id][action];
+      }
     },
     nextAction({ schema, action, actions }) {
-      return actions[schema.id][ACTION_MAP[action]];
+      if (schema && actions) {
+        return actions[schema.id][ACTION_MAP[action]];
+      }
     },
     value({ result, schema }) {
+      if (!schema) {
+        return null;
+      }
+
       if (!result) {
         return schema.type === 'array' ? [] : {};
       }
@@ -34,10 +53,12 @@ export default {
       return result;
     },
     props({ nextAction }) {
-      return {
-        method: 'post',
-        action: nextAction.path,
-      };
+      if (nextAction) {
+        return {
+          method: 'post',
+          action: nextAction.path,
+        };
+      }
     },
   },
 };
