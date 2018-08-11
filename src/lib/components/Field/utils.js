@@ -26,10 +26,8 @@ export function getId(forName, isLabel) {
 }
 
 export function defaultValue(schema, refs) {
-  let type = schema.type || 'object';
-
-  if (schema.$ref && refs[schema.$ref]) {
-    type = refs[schema.$ref].type || type;
+  if (schema.$ref) {
+    return refs[schema.$ref] ? defaultValue(refs[schema.$ref], refs) : null;
   }
 
   if (schema.properties) {
@@ -40,7 +38,7 @@ export function defaultValue(schema, refs) {
     }, {});
   }
 
-  return VALUES[type]();
+  return VALUES[schema.type || 'object']();
 }
 
 export default {
