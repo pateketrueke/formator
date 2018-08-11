@@ -1,6 +1,4 @@
-<span>
-  <input type="text" bind:value="result" {id} {name} />
-</span>
+<input type="text" bind:value="result" {id} {name} />
 
 <script>
 import { getId } from '../Utils';

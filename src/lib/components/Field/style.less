@@ -18,15 +18,14 @@ label {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  margin-right: @sp2;
   max-width: 75px;
 
-  + * {
+  ~ * {
     width: 100%;
+  }
 
-    @media @sm {
-      margin-left: @sp2;
-    }
+  @media @sm {
+    margin-right: @sp2;
   }
 }
 
