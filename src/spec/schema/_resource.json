@@ -61,6 +61,14 @@
         "name",
         "price"
       ]
+    },
+    "CartItem": {
+      "id": "CartItem",
+      "properties": {
+        "qty": {
+          "type": "integer"
+        }
+      }
     }
   },
   "schema": {

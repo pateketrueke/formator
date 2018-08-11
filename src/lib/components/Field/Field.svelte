@@ -38,11 +38,11 @@ export default {
       });
 
       schema = {
-        ...refSchema,
         [name]: {
-          type: 'object',
+          ...refSchema,
           properties: {
             [refItems.$ref]: propSchema,
+            ...(refSchema && refSchema.properties),
           },
         },
       };
