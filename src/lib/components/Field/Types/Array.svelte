@@ -7,7 +7,7 @@
             <Field {props} bind:result="value[offset]" name={`${name}[${offset}]`} />
           </div>
           <div>
-            <button type="button" on:click="remove(offset)">Remove item</button>
+            <button data-remove="&times;" type="button" on:click="remove(offset)"><span>Remove item</span></button>
           </div>
         </div>
       </li>
@@ -17,7 +17,7 @@
   </ul>
 </fieldset>
 
-<button type="button" on:click="append()">Add item</button>
+<button data-append="&plus;" type="button" on:click="append()"><span>Add item</span></button>
 
 <script>
 import { defaultValue } from '../Utils';

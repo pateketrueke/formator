@@ -1,0 +1,25 @@
+[data-remove] {
+  > span {
+    display: none;
+  }
+}
+
+[data-remove] {
+  &::before {
+    content: attr(data-remove) ' ';
+  }
+}
+
+[data-append] {
+  &::before {
+    content: attr(data-append) ' ';
+  }
+}
+
+@media @md {
+  [data-remove] {
+    > span {
+      display: inline-block;
+    }
+  }
+}

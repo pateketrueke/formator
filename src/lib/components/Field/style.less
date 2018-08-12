@@ -34,22 +34,18 @@ li {
       }
     }
 
-    &[data-type=array],
-    &[data-type=object] {
-      > [data-field] {
-        &::before {
-          content: '— ';
-        }
-
-        > label {
-          font-weight: bold;
-        }
-      }
-    }
-
     [data-type=object] {
       > [data-field] {
         padding-bottom: 0;
+      }
+    }
+  }
+
+  &[data-type=array],
+  &[data-type=object] {
+    > [data-field] {
+      > label {
+        font-weight: bold;
       }
     }
   }
