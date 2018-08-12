@@ -13,6 +13,17 @@ input[type=password] {
   }
 }
 
+textarea,
+input[type=text],
+input[type=number],
+input[type=search],
+input[type=password] {
+  &:focus,
+  &:hover {
+    background-color: @white;
+  }
+}
+
 label {
   width: 100%;
   overflow: hidden;
@@ -25,17 +36,17 @@ label {
   }
 
   @media @sm {
-    margin-right: @sp2;
+    margin-right: @sp1;
   }
-}
-
-button {
-  white-space: nowrap;
 }
 
 input {
   width: inherit;
   padding: @sp1;
+
+  ~ button {
+    margin-top: @sp1;
+  }
 }
 
 [data-type=boolean] {
