@@ -29,18 +29,14 @@ export function randId() {
   return `_${Math.random().toString(36).substr(2, 9)}`;
 }
 
-export function defaultValue(schema, refs) {
+export function defaultValue(schema) {
   if (!schema) {
     return null;
   }
 
-  if (schema.$ref) {
-    return refs[schema.$ref] ? defaultValue(refs[schema.$ref], refs) : null;
-  }
-
   if (schema.properties) {
     return Object.keys(schema.properties).reduce((prev, cur) => {
-      prev[cur] = defaultValue(schema.properties[cur], refs);
+      prev[cur] = defaultValue(schema.properties[cur]);
 
       return prev;
     }, {});
