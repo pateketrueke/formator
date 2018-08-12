@@ -21,8 +21,9 @@ export function getId(rootId, forName, isLabel) {
   }
 
   const offset = INDEX[forName];
+  const prefix = rootId ? `${rootId}-` : '';
 
-  return `${rootId}-${forName}-field-${offset}`;
+  return `${prefix}${forName}-field-${offset}`;
 }
 
 export function randId() {
