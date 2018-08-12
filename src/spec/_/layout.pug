@@ -4,28 +4,33 @@ html
     title json-schema-formalizer #{label ? ` (${label})`: ''}
     link(rel='stylesheet' href='/style.css')
     style.
-      body > details {
+      body > div > details {
         box-shadow: 0 1px 2px silver;
         margin: auto;
-        margin-top: 6px;
         max-width: 560px;
+        margin-bottom: 6px;
       }
 
-      body > details > summary {
+      body > div > details:last-child {
+        margin: 0;
+      }
+
+      body > div > details > summary {
         cursor: default;
         padding: 6px;
       }
 
       @media screen and (max-width: 572px) {
-        body > details {
-          margin: 6px;
+        body > div {
+          padding: 6px;
         }
       }
   body
     block before
     block main
-      each test, i in tests
-        details
-          summary Test ##{i + 1} &mdash; #{(test && test.description) || ''}
-          script(type='application/json' rel='resource') !{JSON.stringify(test, null, 2)}
+      div
+        each test, i in tests
+          details
+            summary Test ##{i + 1} &mdash; #{(test && test.description) || ''}
+            script(type='application/json' rel='resource') !{JSON.stringify(test, null, 2)}
       script(src='/main.js')
