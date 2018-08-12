@@ -19,6 +19,7 @@ fieldset {
 
   ~ div {
     padding: @sp2;
+    border-top: 1px dashed @light;
   }
 }
 
@@ -62,6 +63,15 @@ li {
 
     > * {
       overflow: auto;
+    }
+  }
+
+  &[data-type] {
+    [data-type=object] {
+      > [data-item] {
+        padding-left: @sp2;
+        border-left: 1px dashed @light;
+      }
     }
   }
 

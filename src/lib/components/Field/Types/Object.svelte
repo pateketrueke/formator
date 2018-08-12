@@ -2,7 +2,7 @@
   <ul>
     {#each fields as { id, name, props }}
       <li data-type={props.type || 'object'}>
-        <div>
+        <div data-field>
           <label for={id}>{name}</label>
           <div>
             <Field {name} {props} bind:result="values[name]" />

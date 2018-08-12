@@ -4,9 +4,12 @@ li {
       padding: @sp2;
 
       > div:first-child {
-        margin-right: @sp2;
         position: relative;
         flex: 1 1 auto;
+
+        @media @sm {
+          margin-right: @sp2;
+        }
 
         > select,
         > textarea,
@@ -28,6 +31,12 @@ li {
         > div {
           padding-top: 0;
         }
+      }
+    }
+
+    [data-type=object] {
+      > [data-field] {
+        padding-bottom: 0;
       }
     }
   }
@@ -58,6 +67,10 @@ input[type=password] {
   &:hover {
     background-color: @white;
   }
+}
+
+button {
+  border-style: dashed;
 }
 
 label {
