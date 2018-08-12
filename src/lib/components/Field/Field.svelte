@@ -3,6 +3,7 @@
 <script>
 import utils from './utils';
 import getTypes from './Types/getTypes'; // eslint-disable-line
+import { reduceRefs } from '../../shared/utils';
 
 const { ErrorType, LoaderType } = utils;
 
@@ -27,29 +28,25 @@ export default {
       return;
     }
 
-    let schema = props;
+    let schema = reduceRefs(props, refs);
 
-    if (props.$ref) {
-      schema = refs[props.$ref];
-    }
-
-    if (refs[name] && !(props.id || props.$ref)) {
-      const { through, ...options } = refs[name];
+    if (refs[name] && !props.id) {
+      const { through, ...association } = refs[name];
       const refItems = props.items;
       const refSchema = refs[through];
-      const propSchema = refs[refItems.$ref];
+      const propSchema = refs[refItems.id];
 
       this.set({
         through,
-        options,
+        association,
       });
 
       schema = {
         [name]: {
           ...refSchema,
           properties: {
-            [refItems.$ref]: propSchema,
             ...(refSchema && refSchema.properties),
+            [refItems.id]: reduceRefs(propSchema, refs),
           },
         },
       };
@@ -65,12 +62,6 @@ export default {
 
       if (!props) {
         return LoaderType;
-      }
-
-      const { $ref } = props;
-
-      if ($ref && $ref.indexOf('#/') !== -1) {
-        return ErrorType;
       }
 
       if (components) {

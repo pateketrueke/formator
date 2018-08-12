@@ -24,11 +24,11 @@ export default {
   data() {
     return {
       refs: {},
-      rootId: `_${randId()}`,
+      rootId: randId(),
     };
   },
   oncreate() {
-    this.options.target.get = () => this.get().value;
+    this.options.target.get = () => this.get();
   },
   methods: {
     save(e) {
