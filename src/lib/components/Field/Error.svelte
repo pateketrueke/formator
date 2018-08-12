@@ -1,6 +1,6 @@
 <details>
   <summary>{errorMessage}</summary>
-  <pre>{JSON.stringify(props, null, 2)}</pre>
+  <pre>{jsonProps}</pre>
 </details>
 
 <script>
@@ -16,6 +16,9 @@ export default {
       }
 
       return 'Unknown error';
+    },
+    jsonProps({ props }) {
+      return JSON.stringify(props, null, 2);
     },
   },
 };
