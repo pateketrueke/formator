@@ -3,6 +3,7 @@
     {#each items as props, offset}
       <li>
         <Field {props} bind:result="value[offset]" name={`${name}[${offset}]`} />
+        <button type="button" on:click="remove(offset)">Remove item</button>
       </li>
     {:else}
       <li>NO ITEMS</li>
@@ -39,6 +40,13 @@ export default {
           result: result.concat(value),
         });
       }
+    },
+    remove(offset) {
+      const { result } = this.get();
+
+      result.splice(offset, 1);
+
+      this.set({ result });
     },
   },
   computed: {
