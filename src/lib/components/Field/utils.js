@@ -27,7 +27,7 @@ export function getId(rootId, forName, isLabel) {
 }
 
 export function randId() {
-  return `_${Math.random().toString(36).substr(2, 9)}`;
+  return `_${Date.now().toString(36)}`;
 }
 
 export function defaultValue(schema) {

@@ -1,7 +1,7 @@
 <fieldset>
   <ul>
     {#each items as { key, props, offset } (key)}
-      <li data-type={props || 'object'}>
+      <li data-type={props.type || 'object'}>
         <div data-item>
           <div>
             <Field {props} bind:result="value[offset]" name={`${name}[${offset}]`} />
@@ -44,12 +44,12 @@ export default {
 
       if (!result) {
         this.set({
-          keys: (keys || []).concat(key),
+          keys: [key].concat(keys),
           result: [value],
         });
       } else {
         this.set({
-          keys: (keys || []).concat(key),
+          keys: [key].concat(keys),
           result: result.concat(value),
         });
       }
