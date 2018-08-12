@@ -1,6 +1,6 @@
 <fieldset>
   <ul>
-    {#each fields as { id, name, props }}
+    {#each fields as { id, name, props } (name)}
       <li data-type={props.type || 'object'}>
         <div data-field>
           <label for={id}>{name}</label>
