@@ -19,12 +19,23 @@ fieldset {
 
   ~ div {
     padding: @sp2;
-    border-top: 1px dashed @light;
   }
 }
 
-> fieldset {
-  border: 1px dashed @light;
+> details {
+  border: 1px dashed @error;
+
+  summary {
+    padding: @sp1;
+  }
+}
+
+> fieldset,
+form > fieldset {
+  &:first-child {
+    border-top: 1px dashed @light;
+    border-bottom: 1px dashed @light;
+  }
 }
 
 summary {
