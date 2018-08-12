@@ -12,8 +12,13 @@ fieldset {
   width: 100%;
   border: 0;
 
+  ~ div > button,
   ~ button {
     font-weight: bold;
+  }
+
+  ~ div {
+    padding: @sp2;
   }
 }
 
@@ -40,36 +45,23 @@ li {
   line-height: 1.5;
   width: 100%;
 
-  &:hover {
-    background-color: rgba(0, 0, 0, .1);
-  }
-
   &:last-child {
     border: 0;
   }
 
   details {
     border: 1px solid transparent;
+    position: absolute;
+    right: 0;
 
     &[open] {
       border: 1px dashed @light;
       background-color: @white;
-      position: absolute;
       z-index: 1;
     }
 
     > * {
       overflow: auto;
-    }
-  }
-
-  > div {
-    > div:first-child {
-      flex: 1 1 auto;
-
-      > * {
-        width: 100%;
-      }
     }
   }
 

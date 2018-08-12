@@ -2,8 +2,10 @@
   {#if actions}
     <form on:submit="save(event)" {...props}>
       <Field name='root' bind:result="value" props={schema} />
-      <button type="submit">Save</button>
-      <input type="hidden" name="_method" value={nextAction.verb}/>
+      <div>
+        <button type="submit">Save</button>
+        <input type="hidden" name="_method" value={nextAction.verb}/>
+      </div>
     </form>
   {:else}
     <Field name='root' bind:result="value" props={schema} />

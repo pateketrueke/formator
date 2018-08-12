@@ -1,7 +1,7 @@
 <fieldset>
   <ul>
     {#each items as props, offset}
-      <li>
+      <li data-type={(props && props.type) || 'object'}>
         <div>
           <div>
             <Field {props} bind:result="value[offset]" name={`${name}[${offset}]`} />
