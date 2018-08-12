@@ -2,9 +2,13 @@
   <ul>
     {#each items as props, offset}
       <li>
-        <Field {props} bind:result="value[offset]" name={`${name}[${offset}]`} />
         <div>
-          <button type="button" on:click="remove(offset)">Remove item</button>
+          <div>
+            <Field {props} bind:result="value[offset]" name={`${name}[${offset}]`} />
+          </div>
+          <div>
+            <button type="button" on:click="remove(offset)">Remove item</button>
+          </div>
         </div>
       </li>
     {:else}

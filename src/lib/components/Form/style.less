@@ -30,7 +30,7 @@ summary {
 }
 
 ul {
-  list-style-position: inside;
+  list-style-type: none;
 }
 
 li {
@@ -38,7 +38,6 @@ li {
   min-height: 12px * 2;
   position: relative;
   line-height: 1.5;
-  display: block;
   width: 100%;
 
   &:hover {
@@ -51,28 +50,32 @@ li {
 
   details {
     border: 1px solid transparent;
-    position: absolute;
-    right: 0;
-    top: 0;
 
     &[open] {
       border: 1px dashed @light;
       background-color: @white;
+      position: absolute;
       z-index: 1;
     }
 
     > * {
       overflow: auto;
-      max-width: 260px;
     }
   }
 
   > div {
-    display: inline-block;
-    vertical-align: middle;
+    > div:first-child {
+      flex: 1 1 auto;
+
+      > * {
+        width: 100%;
+      }
+    }
   }
 
   @media @sm {
-    display: flex;
+    > div {
+      display: flex;
+    }
   }
 }
