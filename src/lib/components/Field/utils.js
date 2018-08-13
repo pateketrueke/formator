@@ -1,3 +1,4 @@
+import RefType from './Ref.svelte';
 import ErrorType from './Error.svelte';
 import LoaderType from './Loader.svelte';
 
@@ -45,6 +46,7 @@ export function defaultValue(schema) {
 
 export default {
   getId,
+  RefType,
   ErrorType,
   LoaderType,
   defaultValue,

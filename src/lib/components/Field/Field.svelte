@@ -1,11 +1,13 @@
-<svelte:component {err} {name} {props} {schema} {rootId} bind:result this={propType} />
+<svelte:component
+  {err} {name} {props} {schema} {rootId} {through} {association} bind:result this={propType}
+/>
 
 <script>
 import utils from './utils';
 import getTypes from './Types/getTypes'; // eslint-disable-line
 import { reduceRefs } from '../../shared/utils';
 
-const { ErrorType, LoaderType } = utils;
+const { RefType, ErrorType, LoaderType } = utils;
 
 export default {
   data() {
@@ -55,13 +57,19 @@ export default {
     this.set({ rootId, schema });
   },
   computed: {
-    propType({ err, props, components }) {
+    propType({
+      err, props, through, components,
+    }) {
       if (err) {
         return ErrorType;
       }
 
       if (!props) {
         return LoaderType;
+      }
+
+      if (through) {
+        return RefType;
       }
 
       if (components) {
