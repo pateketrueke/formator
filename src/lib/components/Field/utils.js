@@ -5,8 +5,8 @@ const VALUES = {
   object: () => ({}),
   array: () => [],
   string: () => '',
-  integer: () => 0.0,
-  number: () => 0,
+  integer: () => null,
+  number: () => null,
   boolean: () => false,
 };
 
