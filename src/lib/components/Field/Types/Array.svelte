@@ -1,30 +1,34 @@
-<fieldset>
-  <ul>
-    {#each items as { key, props, offset, isFixed } (key)}
-      <li data-type={props.type || 'object'}>
-        <div data-item>
-          <div>
-            <Field {props} bind:result="value[offset]" name={`${name}[${offset}]`} />
-          </div>
-          {#if !isFixed}
+{#if items.length}
+  <fieldset>
+    <ul>
+      {#each items as { key, props, offset, isFixed } (key)}
+        <li data-type={props.type || 'object'}>
+          <div data-item>
             <div>
-              <button data-remove="&times;" type="button" on:click="remove(offset)">
-                <span>Remove item</span>
-              </button>
+              <Field {props} bind:result="value[offset]" name={`${name}[${offset}]`} />
             </div>
-          {/if}
-        </div>
-      </li>
-    {:else}
-      <li data-empty>NO ITEMS</li>
-    {/each}
-  </ul>
-</fieldset>
+            {#if !isFixed}
+              <div>
+                <button data-remove="&times;" type="button" on:click="remove(offset)">
+                  <span>Remove item</span>
+                </button>
+              </div>
+            {/if}
+          </div>
+        </li>
+      {/each}
+    </ul>
+  </fieldset>
+{:else}
+  <div data-empty>NO ITEMS</div>
+{/if}
+{#if schema.additionalItems !== false}
 <div>
   <button data-append="&plus;" type="button" on:click="append()">
     <span>Add item</span>
   </button>
 </div>
+{/if}
 
 <script>
 import { defaultValue } from '../Utils';
@@ -34,6 +38,7 @@ function getProps(schema, offset) {
   return (Array.isArray(schema.items)
     ? schema.items[offset]
     : schema.items)
+  || schema.additionalItems
   || {};
 }
 

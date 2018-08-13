@@ -1,5 +1,5 @@
 {
-  "description": "Using array types",
+  "description": "Fixed array types",
   "schema": {
     "type": "array",
     "items": [
@@ -21,6 +21,7 @@
       {
         "type": "object"
       }
-    ]
+    ],
+    "additionalItems": false
   }
 }

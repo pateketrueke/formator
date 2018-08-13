@@ -1,19 +1,21 @@
-<fieldset>
-  <ul>
-    {#each fields as { id, name, props } (name)}
-      <li data-type={props.type || 'object'}>
-        <div data-field>
-          <label for={id}>{name}</label>
-          <div>
-            <Field {name} {props} bind:result="values[name]" />
+{#if fields.length}
+  <fieldset>
+    <ul>
+      {#each fields as { id, name, props } (name)}
+        <li data-type={props.type || 'object'}>
+          <div data-field>
+            <label for={id}>{name}</label>
+            <div>
+              <Field {name} {props} bind:result="values[name]" />
+            </div>
           </div>
-        </div>
-      </li>
-    {:else}
-      <li data-empty>NO PROPS</li>
-    {/each}
-  </ul>
-</fieldset>
+        </li>
+      {/each}
+    </ul>
+  </fieldset>
+{:else}
+  <div data-empty>NO PROPS</div>
+{/if}
 
 <script>
 import { getId } from '../Utils';
