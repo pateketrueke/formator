@@ -1,4 +1,4 @@
-<input type="checkbox" bind:value="result" {id} {name} />
+<input type="checkbox" bind:checked="result" {id} {name} />
 
 <script>
 import { getId } from '../Utils';
