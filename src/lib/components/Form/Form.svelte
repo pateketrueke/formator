@@ -1,14 +1,14 @@
 <slot>
   {#if actions}
     <form on:submit="save(event)" {...props}>
-      <Field name='root' bind:result="value" props={schema} />
+      <Field name='__ROOT__' bind:result="value" props={schema} />
       <div>
         <button type="submit">Save</button>
         <input type="hidden" name="_method" value={nextAction.verb}/>
       </div>
     </form>
   {:else}
-    <Field name='root' bind:result="value" props={schema} />
+    <Field name='__ROOT__' bind:result="value" props={schema} />
   {/if}
 </slot>
 
@@ -37,6 +37,8 @@ export default {
       if (e) {
         e.preventDefault();
       }
+
+      console.log(JSON.stringify(this.get().value, null, 2));
     },
   },
   computed: {
