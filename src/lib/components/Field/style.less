@@ -1,4 +1,8 @@
 li {
+  &[data-empty] {
+    padding: @sp2;
+  }
+
   &[data-type] {
     > div {
       padding: @sp2;
@@ -20,6 +24,16 @@ li {
           width: 100%;
         }
       }
+    }
+
+    fieldset {
+      ~ div {
+        padding: 0;
+      }
+    }
+
+    [data-empty] {
+      padding: 0;
     }
 
     [data-type] {

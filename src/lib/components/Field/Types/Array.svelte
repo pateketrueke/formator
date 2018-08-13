@@ -14,14 +14,15 @@
         </div>
       </li>
     {:else}
-      <li>NO ITEMS</li>
+      <li data-empty>NO ITEMS</li>
     {/each}
   </ul>
 </fieldset>
-
-<button data-append="&plus;" type="button" on:click="append()">
-  <span>Add item</span>
-</button>
+<div>
+  <button data-append="&plus;" type="button" on:click="append()">
+    <span>Add item</span>
+  </button>
+</div>
 
 <script>
 import { defaultValue, randId } from '../Utils';

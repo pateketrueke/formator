@@ -10,7 +10,7 @@
         </div>
       </li>
     {:else}
-      <li>NO PROPS</li>
+      <li data-empty>NO PROPS</li>
     {/each}
   </ul>
 </fieldset>
