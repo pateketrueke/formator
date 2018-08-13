@@ -1,6 +1,10 @@
 li {
-  &[data-empty] {
+  [data-empty] {
     padding: @sp2;
+
+    ~ div {
+      margin-top: @sp2;
+    }
   }
 
   &[data-type] {
