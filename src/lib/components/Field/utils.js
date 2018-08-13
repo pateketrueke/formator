@@ -27,10 +27,6 @@ export function getId(rootId, forName, isLabel) {
   return `${prefix}${forName}-field-${offset}`;
 }
 
-export function randId() {
-  return `_${Date.now().toString(36)}`;
-}
-
 export function defaultValue(schema) {
   if (!schema) {
     return null;
@@ -49,7 +45,6 @@ export function defaultValue(schema) {
 
 export default {
   getId,
-  randId,
   ErrorType,
   LoaderType,
   defaultValue,

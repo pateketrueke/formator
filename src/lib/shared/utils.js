@@ -1,3 +1,7 @@
+export function randId() {
+  return `_${Math.random().toString(36).substr(2)}`;
+}
+
 export function findRef(id, refs) {
   if (refs[id]) {
     return refs[id];
@@ -77,5 +81,6 @@ export const loader = (Component, selector) => [].slice.call(document.querySelec
 export default {
   reduceRefs,
   findRef,
+  randId,
   loader,
 };
