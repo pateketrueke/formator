@@ -1,10 +1,10 @@
 {#if fields.length}
   <fieldset>
     <ul>
-      {#each fields as { id, name, props } (name)}
+      {#each fields as { id, name, field, props } (name)}
         <li data-type={props.type || 'object'}>
           <div data-field>
-            <label for={id}>{name}</label>
+            <label for={id}>{field}</label>
             <div>
               <Field {name} {props} bind:result="values[name]" />
             </div>
@@ -42,6 +42,7 @@ export default {
         .map(([key, props]) => ({
           id: getId(rootId, name !== '__ROOT__' ? `${name}[${key}]` : key, true),
           name: name !== '__ROOT__' ? `${name}[${key}]` : key,
+          field: key,
           props,
         }));
     },
