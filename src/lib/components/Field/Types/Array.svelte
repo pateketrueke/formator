@@ -1,16 +1,18 @@
 <fieldset>
   <ul>
-    {#each items as { key, props, offset } (key)}
+    {#each items as { key, props, offset, isFixed } (key)}
       <li data-type={props.type || 'object'}>
         <div data-item>
           <div>
             <Field {props} bind:result="value[offset]" name={`${name}[${offset}]`} />
           </div>
-          <div>
-            <button data-remove="&times;" type="button" on:click="remove(offset)">
-              <span>Remove item</span>
-            </button>
-          </div>
+          {#if !isFixed}
+            <div>
+              <button data-remove="&times;" type="button" on:click="remove(offset)">
+                <span>Remove item</span>
+              </button>
+            </div>
+          {/if}
         </div>
       </li>
     {:else}
@@ -25,7 +27,8 @@
 </div>
 
 <script>
-import { defaultValue, randId } from '../Utils';
+import { defaultValue } from '../Utils';
+import { randId } from '../../../shared/utils';
 
 function getProps(schema, offset) {
   return (Array.isArray(schema.items)
@@ -40,8 +43,24 @@ export default {
   },
   data() {
     return {
+      keys: [],
       result: null,
     };
+  },
+  oncreate() {
+    const { value, schema } = this.get();
+
+    if (schema && Array.isArray(schema.items)) {
+      const keys = [];
+      const result = [];
+
+      schema.items.forEach((props, offset) => {
+        keys.push(randId());
+        result.push(value[offset] || defaultValue(props));
+      });
+
+      this.set({ result, keys });
+    }
   },
   methods: {
     append() {
@@ -58,7 +77,7 @@ export default {
         });
       } else {
         this.set({
-          keys: (keys || []).concat(key),
+          keys: keys.concat(key),
           result: result.concat(Array.isArray(value) ? [value] : value),
         });
       }
@@ -77,11 +96,15 @@ export default {
       return result || [];
     },
     items({ schema, value, keys }) {
+      const isFixed = Array.isArray(schema.items);
+
       return value.map((_, offset) => {
         const props = getProps(schema, offset);
-        const key = keys[offset];
+        const key = keys[offset] || (keys[offset] = randId());
 
-        return { key, props, offset };
+        return {
+          key, props, offset, isFixed: isFixed && offset < schema.items.length,
+        };
       });
     },
   },
