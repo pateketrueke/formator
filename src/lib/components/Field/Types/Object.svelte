@@ -33,13 +33,17 @@ export default {
     values({ result }) {
       return result || {};
     },
-    fields({ rootId, schema }) {
+    fields({ rootId, schema, name }) {
       if (!(schema && schema.properties)) {
         return [];
       }
 
       return Object.entries(schema.properties)
-        .map(([name, props]) => ({ id: getId(rootId, name, true), name, props }));
+        .map(([key, props]) => ({
+          id: getId(rootId, name !== '__ROOT__' ? `${name}[${key}]` : key, true),
+          name: name !== '__ROOT__' ? `${name}[${key}]` : key,
+          props,
+        }));
     },
   },
 };
