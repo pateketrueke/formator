@@ -7,6 +7,7 @@ const VALUES = {
   string: () => '',
   integer: () => 0.0,
   number: () => 0,
+  boolean: () => false,
 };
 
 const INDEX = {};

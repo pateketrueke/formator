@@ -27,6 +27,13 @@
 <script>
 import { defaultValue, randId } from '../Utils';
 
+function getProps(schema, offset) {
+  return (Array.isArray(schema.items)
+    ? schema.items[offset]
+    : schema.items)
+  || {};
+}
+
 export default {
   components: {
     Field: '../Field',
@@ -41,17 +48,18 @@ export default {
       const { result, schema, keys } = this.get();
 
       const key = randId();
-      const value = defaultValue(schema.items);
+      const next = keys ? keys.length : 0;
+      const value = defaultValue(getProps(schema, next));
 
       if (!result) {
         this.set({
-          keys: [key].concat(keys),
+          keys: [key],
           result: [value],
         });
       } else {
         this.set({
-          keys: [key].concat(keys),
-          result: result.concat(value),
+          keys: (keys || []).concat(key),
+          result: result.concat(Array.isArray(value) ? [value] : value),
         });
       }
     },
@@ -70,11 +78,7 @@ export default {
     },
     items({ schema, value, keys }) {
       return value.map((_, offset) => {
-        const props = (Array.isArray(schema.items)
-          ? schema.items[offset]
-          : schema.items)
-        || {};
-
+        const props = getProps(schema, offset);
         const key = keys[offset];
 
         return { key, props, offset };
