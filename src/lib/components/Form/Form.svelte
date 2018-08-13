@@ -13,7 +13,7 @@
 </slot>
 
 <script>
-import { randId } from '../Field/utils';
+import { randId } from '../../shared/utils';
 
 const ACTION_MAP = {
   new: 'create',
