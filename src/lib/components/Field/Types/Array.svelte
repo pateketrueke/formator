@@ -5,7 +5,7 @@
         <li data-type={props.type || 'object'}>
           <div data-item>
             <div>
-              <Field {props} bind:result="value[offset]" name={`${name}[${offset}]`} />
+              <Field {props} bind:result="result[offset]" name={`${name}[${offset}]`} />
             </div>
             {#if !isFixed}
               <div>
@@ -22,12 +22,13 @@
 {:else}
   <div data-empty>NO ITEMS</div>
 {/if}
+
 {#if schema.additionalItems !== false}
-<div>
-  <button data-append="&plus;" type="button" on:click="append()">
-    <span>Add item</span>
-  </button>
-</div>
+  <div>
+    <button data-append="&plus;" type="button" on:click="append()">
+      <span>Add item</span>
+    </button>
+  </div>
 {/if}
 
 <script>
@@ -49,22 +50,22 @@ export default {
   data() {
     return {
       keys: [],
-      result: null,
+      result: [],
     };
   },
   oncreate() {
-    const { value, schema } = this.get();
+    const { result, schema } = this.get();
 
     if (schema && Array.isArray(schema.items)) {
       const keys = [];
-      const result = [];
+      const values = [];
 
       schema.items.forEach((props, offset) => {
         keys.push(randId());
-        result.push(value[offset] || defaultValue(props));
+        values.push(result[offset] || defaultValue(props));
       });
 
-      this.set({ result, keys });
+      this.set({ result: values, keys });
     }
   },
   methods: {
@@ -97,13 +98,10 @@ export default {
     },
   },
   computed: {
-    value({ result }) {
-      return result || [];
-    },
-    items({ schema, value, keys }) {
+    items({ schema, result, keys }) {
       const isFixed = Array.isArray(schema.items);
 
-      return value.map((_, offset) => {
+      return result.map((_, offset) => {
         const props = getProps(schema, offset);
         const key = keys[offset] || (keys[offset] = randId());
 

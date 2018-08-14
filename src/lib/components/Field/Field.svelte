@@ -1,16 +1,6 @@
-{#if through}
-  <button type="button" on:click="toggle()">Add item</button>
-
-  {#if visible}
-    <div data-modal on:click="toggle(event)">
-      <div data-content>
-        <svelte:component {err} {name} {props} {schema} {rootId} bind:result this={propType} />
-      </div>
-    </div>
-  {/if}
-{:else}
-  <svelte:component {err} {name} {props} {schema} {rootId} bind:result this={propType} />
-{/if}
+<svelte:component
+  {err} {name} {props} {schema} {rootId} {through} {association} bind:result this={propType}
+/>
 
 <script>
 import utils from './utils';
@@ -18,22 +8,6 @@ import getTypes from './Types/getTypes'; // eslint-disable-line
 import { reduceRefs } from '../../shared/utils';
 
 const { ErrorType, LoaderType } = utils;
-
-const STACK = [];
-
-function onClose() {
-  const last = STACK.pop();
-
-  if (last) {
-    last.pop();
-  }
-}
-
-window.addEventListener('keyup', e => {
-  if (e.keyCode === 27) {
-    onClose();
-  }
-});
 
 export default {
   data() {
@@ -81,35 +55,6 @@ export default {
     }
 
     this.set({ rootId, schema });
-  },
-  ondestroy() {
-    const offset = STACK.indexOf(this);
-
-    if (offset !== -1) {
-      STACK.splice(offset, 1);
-    }
-  },
-  methods: {
-    pop() {
-      this.toggle();
-    },
-    toggle(e) {
-      if (e && e.target && !e.target.dataset.modal) {
-        return;
-      }
-
-      const { visible } = this.get();
-
-      if (!visible) {
-        STACK.push(this);
-      } else {
-        STACK.pop();
-      }
-
-      this.set({
-        visible: !visible,
-      });
-    },
   },
   computed: {
     propType({ err, props, components }) {

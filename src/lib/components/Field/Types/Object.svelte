@@ -1,12 +1,12 @@
 {#if fields.length}
   <fieldset>
     <ul>
-      {#each fields as { id, name, field, props } (name)}
+      {#each fields as { id, name, field, props } (field)}
         <li data-type={props.type || 'object'}>
           <div data-field>
             <label for={id}>{field}</label>
             <div>
-              <Field {name} {props} bind:result="values[name]" />
+              <Field {name} {props} bind:result="values[field]" />
             </div>
           </div>
         </li>
