@@ -1,11 +1,16 @@
 {#if items.length}
   {#if through}
-    <table>
+    <table border>
       {#each items as { key, props, offset, isFixed } (key)}
         <tr>
-          <td>{JSON.stringify(values[offset])}</td>
+          <td>
+            <span>{JSON.stringify(values[offset])}</span>
+          </td>
           <td>
             {#if !isFixed}
+              <button data-remove="&#9998;" type="button" on:click="edit(offset)">
+                <span>Edit item</span>
+              </button>
               <button data-remove="&times;" type="button" on:click="remove(offset)">
                 <span>Remove item</span>
               </button>
@@ -43,7 +48,9 @@
 {#if schema.additionalItems !== false}
   <div>
     {#if through}
-      <button type="button" on:click="open(event)">Add {association.singular}</button>
+      <button type="button" on:click="open()">
+        <span>Add {association.singular}</span>
+      </button>
       <Modal bind:visible="isOpen" on:save="sync()">
         <Field {...nextProps} bind:result="nextValue" name={`${name}[${nextOffset}]`} />
       </Modal>
@@ -107,12 +114,8 @@ export default {
 
       this.set({ result, keys });
     },
-    open(e) {
+    open() {
       const { schema, nextOffset } = this.get();
-
-      if (e) {
-        e.target.blur();
-      }
 
       this.set({
         isOpen: true,
@@ -121,6 +124,9 @@ export default {
     },
     sync() {
       this.add(this.get().nextValue);
+    },
+    edit(offset) {
+      console.log(offset);
     },
     add(value) {
       const { result, keys } = this.get();

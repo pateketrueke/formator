@@ -3,8 +3,12 @@
     <div data-content>
       <slot></slot>
       <div>
-        <button type="button" on:click="save()">Save</button>
-        <button type="button" on:click="close(event)">Cancel</button>
+        <button type="button" on:click="save()">
+          <span>Save</span>
+        </button>
+        <button type="button" on:click="close(event)">
+          <span>Cancel</span>
+        </button>
       </div>
     </div>
   </div>

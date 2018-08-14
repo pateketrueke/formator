@@ -3,7 +3,9 @@
     <form on:submit="save(event)" {...props}>
       <Field name='__ROOT__' bind:result="value" props={schema} />
       <div>
-        <button type="submit">Save</button>
+        <button type="submit">
+          <span>Save</span>
+        </button>
         <input type="hidden" name="_method" value={nextAction.verb}/>
       </div>
     </form>
