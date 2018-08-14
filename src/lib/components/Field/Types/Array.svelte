@@ -43,14 +43,14 @@
 {#if schema.additionalItems !== false}
   <div>
     {#if through}
-      <button type="button" on:click="open()">Add {association.singular}</button>
+      <button type="button" on:click="open(event)">Add {association.singular}</button>
       <Modal bind:visible="isOpen" on:save="sync()">
         <Field {...nextProps} bind:result="nextValue" name={`${name}[${nextOffset}]`} />
       </Modal>
     {:else}
-    <button data-append="&plus;" type="button" on:click="append()">
-      <span>Add item</span>
-    </button>
+      <button data-append="&plus;" type="button" on:click="append()">
+        <span>Add item</span>
+      </button>
     {/if}
   </div>
 {/if}
@@ -107,8 +107,12 @@ export default {
 
       this.set({ result, keys });
     },
-    open() {
+    open(e) {
       const { schema, nextOffset } = this.get();
+
+      if (e) {
+        e.target.blur();
+      }
 
       this.set({
         isOpen: true,
