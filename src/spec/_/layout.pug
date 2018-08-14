@@ -18,6 +18,14 @@ html
       body > div > details > summary {
         cursor: default;
         padding: 6px;
+        opacity: .5;
+        color: gray;
+        user-select: none;
+      }
+
+      body > div > details[open] > summary {
+        opacity: 1;
+        color: black;
       }
 
       body > div {
@@ -32,3 +40,14 @@ html
             summary Test ##{i + 1} &mdash; #{(test && test.description) || ''}
             script(type='application/json' rel='resource') !{JSON.stringify(test, null, 2)}
       script(src='/main.js')
+      script.
+        const details = [].slice.call(document.querySelectorAll('details'));
+        const summaries = [].slice.call(document.querySelectorAll('summary'));
+
+        window.addEventListener('click', e => {
+          if (summaries.indexOf(e.target) !== -1) {
+            summaries.forEach((node, offset) => {
+              details[offset].removeAttribute('open');
+            });
+          }
+        });
