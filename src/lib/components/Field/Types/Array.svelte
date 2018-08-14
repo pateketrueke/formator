@@ -1,11 +1,16 @@
 {#if items.length}
   {#if through}
     <table border>
+      <tr>
+        {#each headers as k}
+          <th>{k}</th>
+        {/each}
+      </tr>
       {#each items as { key, props, offset, isFixed } (key)}
         <tr>
-          <td>
-            <span>{JSON.stringify(values[offset])}</span>
-          </td>
+          {#each headers as k}
+            <td>{JSON.stringify(values[offset][k])}</td>
+          {/each}
           <td>
             {#if !isFixed}
               <button data-remove="&#9998;" type="button" on:click="edit(offset)">
@@ -154,6 +159,15 @@ export default {
       return {
         props: getProps(schema, nextOffset),
       };
+    },
+    headers({ schema }) {
+      const propSchema = getProps(schema, 0);
+
+      if (propSchema.properties) {
+        return Object.keys(propSchema.properties);
+      }
+
+      return [];
     },
     values({ result }) {
       return result || [];
