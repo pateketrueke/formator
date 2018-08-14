@@ -1,6 +1,19 @@
 {#if items.length}
   {#if through}
-    <pre>{JSON.stringify(items, null, 2)}</pre>
+    <table>
+      {#each items as { key, props, offset, isFixed } (key)}
+        <tr>
+          <td>{JSON.stringify(values[offset])}</td>
+          <td>
+            {#if !isFixed}
+              <button data-remove="&times;" type="button" on:click="remove(offset)">
+                <span>Remove item</span>
+              </button>
+            {/if}
+          </td>
+        </tr>
+      {/each}
+    </table>
   {:else}
     <fieldset>
       <ul>
@@ -27,18 +40,18 @@
   <div data-empty>NO ITEMS</div>
 {/if}
 
-{#if through}
+{#if schema.additionalItems !== false}
   <div>
-    <button type="button" on:click="open()">Add {association.singular}</button>
-    <Modal bind:visible="isOpen" on:save="sync()">
-      <Field {...nextProps} bind:result="nextValue" name={`${name}[${nextOffset}]`} />
-    </Modal>
-  </div>
-{:elseif schema.additionalItems !== false}
-  <div>
+    {#if through}
+      <button type="button" on:click="open()">Add {association.singular}</button>
+      <Modal bind:visible="isOpen" on:save="sync()">
+        <Field {...nextProps} bind:result="nextValue" name={`${name}[${nextOffset}]`} />
+      </Modal>
+    {:else}
     <button data-append="&plus;" type="button" on:click="append()">
       <span>Add item</span>
     </button>
+    {/if}
   </div>
 {/if}
 
