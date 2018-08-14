@@ -2,9 +2,10 @@
   <div data-modal on:click="cancel(event)">
     <div data-content>
       <slot></slot>
-      <button type="button" on:click="save()">Save</button>
-      or
-      <a href="#" on:click="close(event)">Cancel</a>
+      <div>
+        <button type="button" on:click="save()">Save</button>
+        <button type="button" on:click="close(event)">Cancel</button>
+      </div>
     </div>
   </div>
 {/if}
