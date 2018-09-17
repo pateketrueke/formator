@@ -1,6 +1,6 @@
 {#if items.length}
   {#if through}
-    <table border>
+    <table>
       <tr>
         {#each headers as k}
           <th>{k}</th>
@@ -8,8 +8,10 @@
       </tr>
       {#each items as { key, props, offset, isFixed } (key)}
         <tr>
-          {#each headers as k}
-            <td>{JSON.stringify(values[offset][k])}</td>
+          {#each headers as field}
+            <td>
+              <Widget {field} value={values[offset][field]} />
+            </td>
           {/each}
           <td>
             {#if !isFixed}
@@ -83,6 +85,7 @@ export default {
   components: {
     Field: '../Field',
     Modal: '../../Modal',
+    Widget: '../../Widget',
   },
   data() {
     return {

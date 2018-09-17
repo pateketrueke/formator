@@ -8,6 +8,12 @@ help: Makefile
 dev: src docker ## Start dev tasks
 	@docker-compose $(BASE_COMPOSE) up
 
+dev-node: npm ## Start dev tasks with nodejs
+	@npm run dev
+
+dev-down: ## Clean up test environment
+	@docker-compose $(BASE_COMPOSE) down
+
 test: src docker ## Run tests for CI
 	@docker-compose $(BASE_COMPOSE) up -d chrome
 	@docker exec web_app_test /home/docker/run-tests.sh
@@ -21,5 +27,13 @@ logs: ## Display docker logs
 build: ## Build image for docker
 	@docker-compose $(BASE_COMPOSE) build
 
-clean: ## Clean up test environment
-	@docker-compose $(BASE_COMPOSE) down
+clean: ## Remove all from node_modules/*
+	@rm -rf node_modules/*
+
+install: ## Setup user dependencies
+	@npm i
+
+# Ensure dependencies are installed before
+npm: node_modules
+node_modules: package*.json
+	@make -s install

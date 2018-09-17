@@ -16,7 +16,7 @@ export default {
     };
   },
   oncreate() {
-    getTypes().then(components => {
+    getTypes().then(({ default: components }) => {
       this.set({ components });
     });
 
