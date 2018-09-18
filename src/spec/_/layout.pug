@@ -41,7 +41,7 @@ html
             script(type='application/json' rel='resource') !{JSON.stringify(test, null, 2)}
 
       script.
-        function shimport(src) {
+        !(function shimport(src) {
           try {
             new Function('import("' + src + '")')();
           } catch (e) {
@@ -50,9 +50,7 @@ html
             s.dataset.main = src;
             document.head.appendChild(s);
           }
-        }
-
-        shimport('../main.js');
+        }('../main.js'));
 
       script.
         const details = [].slice.call(document.querySelectorAll('details'));

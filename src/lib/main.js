@@ -1,5 +1,4 @@
 import { loader } from './shared/utils';
+import Form from './components/Form';
 
-import('./components/Form').then(({ default: Form }) => {
-  loader(Form, 'script[rel=resource],div[data-resource]');
-});
+loader(Form, 'script[rel=resource],div[data-resource]');

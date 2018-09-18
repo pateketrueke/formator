@@ -1,7 +1,7 @@
 <slot>
   {#if actions}
     <form on:submit="save(event)" {...props}>
-      <Field name='__ROOT__' bind:result="value" props={schema} />
+      <Field name='__ROOT__' bind:result="value" props={schema} {uiSchema} />
       <div>
         <button type="submit">
           <span>Save</span>
@@ -33,6 +33,7 @@ export default {
   },
   oncreate() {
     this.options.target.get = () => this.get();
+    console.log(this.get().uiSchema);
   },
   methods: {
     save(e) {

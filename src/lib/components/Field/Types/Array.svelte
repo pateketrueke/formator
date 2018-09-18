@@ -10,7 +10,7 @@
         <tr>
           {#each headers as field}
             <td>
-              <Widget {field} value={values[offset][field]} />
+              <Value {props} {field} value={values[offset][field]} />
             </td>
           {/each}
           <td>
@@ -84,8 +84,8 @@ function getProps(schema, offset) {
 export default {
   components: {
     Field: '../Field',
+    Value: '../Value',
     Modal: '../../Modal',
-    Widget: '../../Widget',
   },
   data() {
     return {
@@ -175,7 +175,9 @@ export default {
     values({ result }) {
       return result || [];
     },
-    items({ schema, values, keys }) {
+    items({
+      schema, uiSchema, values, keys,
+    }) {
       const isFixed = Array.isArray(schema.items);
 
       return values.map((_, offset) => {
@@ -183,7 +185,11 @@ export default {
         const key = keys[offset] || (keys[offset] = randId());
 
         return {
-          key, props, offset, isFixed: isFixed && offset < schema.items.length,
+          key,
+          props,
+          offset,
+          uiSchema: uiSchema ? uiSchema[key] : {},
+          isFixed: isFixed && offset < schema.items.length,
         };
       });
     },
