@@ -70,7 +70,7 @@
 {/if}
 
 <script>
-import { defaultValue } from '../Utils';
+import { defaultValue } from '../utils';
 import { randId } from '../../../shared/utils';
 
 function getProps(schema, offset) {

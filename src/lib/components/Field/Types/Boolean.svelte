@@ -1,7 +1,7 @@
 <input type="checkbox" bind:checked="result" {id} {name} />
 
 <script>
-import { getId } from '../Utils';
+import { getId } from '../utils';
 
 export default {
   data() {

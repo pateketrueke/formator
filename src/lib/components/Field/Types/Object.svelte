@@ -18,7 +18,7 @@
 {/if}
 
 <script>
-import { getId } from '../Utils';
+import { getId } from '../utils';
 
 export default {
   components: {
