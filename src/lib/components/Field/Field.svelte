@@ -4,7 +4,7 @@
 
 <script>
 import utils from './utils';
-import getTypes from './Types/getTypes'; // eslint-disable-line
+import getTypes from './Types'; // eslint-disable-line
 import { reduceRefs } from '../../shared/utils';
 
 const { ErrorType, LoaderType } = utils;
@@ -16,9 +16,7 @@ export default {
     };
   },
   oncreate() {
-    getTypes().then(({ default: components }) => {
-      this.set({ components });
-    });
+    getTypes().then(components => this.set({ components }));
 
     const { refs, rootId } = this.root.get();
     const { name, props } = this.get();

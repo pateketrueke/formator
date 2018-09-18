@@ -28,12 +28,9 @@ build: ## Build image for docker
 	@docker-compose $(BASE_COMPOSE) build
 
 clean: ## Remove all from node_modules/*
-	@rm -rf node_modules/*
-
-install: ## Setup user dependencies
-	@npm i
+	@rm -rf node_modules
 
 # Ensure dependencies are installed before
 npm: node_modules
 node_modules: package*.json
-	@make -s install
+	@npm i

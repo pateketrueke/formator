@@ -1,0 +1,24 @@
+description: Type definitions
+schema:
+  properties:
+    intValue:
+      type: integer
+    numValue:
+      type: number
+    boolValue:
+      type: boolean
+    strValue:
+      type: string
+    arrValue:
+      type: array
+    objValue:
+      type: object
+    arrValues:
+      type: array
+      items:
+        type: string
+    objValues:
+      type: object
+      properties:
+        strValue:
+          type: string

@@ -1,4 +1,4 @@
-src/lib/components/Field/Types/getTypes.js
+src/lib/components/Field/Types/index.js
 src/lib/main.js
 public
 dist

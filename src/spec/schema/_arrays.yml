@@ -1,0 +1,11 @@
+description: Fixed array types
+schema:
+  type: array
+  items:
+  - type: integer
+  - type: number
+  - type: boolean
+  - type: string
+  - type: array
+  - type: object
+  additionalItems: false

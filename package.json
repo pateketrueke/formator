@@ -7,7 +7,7 @@
   ],
   "scripts": {
     "dev": "tarima watch -p 3001",
-    "dist": "rm -rf dist && tarima -fqe production",
+    "dist": "tarima -fqe production",
     "lint": "eslint src test",
     "test": "npm run lint",
     "test-e2e": "BASE_URL=http://localhost:3001 testcafe",
@@ -70,7 +70,7 @@
     "rollup": "^0.66.0",
     "shimport": "0.0.11",
     "svelte": "^2.9.11",
-    "tarima": "^4.2.1",
+    "tarima": "^4.2.2",
     "tarima-lr": "^0.4.3",
     "testcafe": "^0.22.0"
   }
