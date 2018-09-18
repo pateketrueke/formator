@@ -5,13 +5,13 @@ BASE_COMPOSE=-f $(CURRENT_DIRECTORY)/docker/docker-compose.yml
 help: Makefile
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-10s\033[0m %s\n", $$1, $$2}'
 
-dev: src docker ## Start dev tasks
+dev: src docker ## Start dev tasks (docker)
 	@docker-compose $(BASE_COMPOSE) up
 
-dev-node: npm ## Start dev tasks with nodejs
+dev-node: npm ## Start dev tasks (nodejs)
 	@npm run dev
 
-dev-down: ## Clean up test environment
+dev-down: ## Clean up environment
 	@docker-compose $(BASE_COMPOSE) down
 
 test: src docker ## Run tests for CI
@@ -27,8 +27,11 @@ logs: ## Display docker logs
 build: ## Build image for docker
 	@docker-compose $(BASE_COMPOSE) build
 
-clean: ## Remove all from node_modules/*
-	@rm -rf node_modules
+clean: ## Remove unwanted artifacts
+	@rm -rf dist node_modules
+
+dist: clean npm ## Build final output for production
+	@npm run dist
 
 # Ensure dependencies are installed before
 npm: node_modules
