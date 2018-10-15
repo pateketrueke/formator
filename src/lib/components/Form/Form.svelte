@@ -1,7 +1,7 @@
 <slot>
   {#if actions}
-    <form on:submit="save(event)" {...props}>
-      <Field name='__ROOT__' bind:result="value" props={schema} {uiSchema} />
+    <form on:submit="save(event)" {...formProps}>
+      <Field name='__ROOT__' bind:result="value" {...fieldProps} />
       <div>
         <button type="submit">
           <span>Save</span>
@@ -10,7 +10,7 @@
       </div>
     </form>
   {:else}
-    <Field name='__ROOT__' bind:result="value" props={schema} />
+    <Field name='__ROOT__' bind:result="value" {...fieldProps} />
   {/if}
 </slot>
 
@@ -33,7 +33,6 @@ export default {
   },
   oncreate() {
     this.options.target.get = () => this.get();
-    console.log(this.get().uiSchema);
   },
   methods: {
     save(e) {
@@ -66,7 +65,10 @@ export default {
 
       return result;
     },
-    props({ nextAction }) {
+    fieldProps({ schema, uiSchema }) {
+      return { props: schema, uiSchema };
+    },
+    formProps({ nextAction }) {
       if (nextAction) {
         return {
           method: 'post',

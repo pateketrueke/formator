@@ -1,5 +1,5 @@
 <svelte:component
-  {err} {name} {props} {schema} {rootId} {through} {association} bind:result this={propType}
+  {err} {name} {props} {schema} {uiSchema} {rootId} {through} {association} bind:result this={propType}
 />
 
 <script>
@@ -29,12 +29,15 @@ export default {
     }
 
     let schema = reduceRefs(props, refs);
+    let uiSchema = {};
 
     if (refs[name] && !props.id) {
       const { through, ...association } = refs[name];
       const refItems = props.items;
       const refSchema = refs[through];
       const propSchema = refs[refItems.id];
+
+      uiSchema = refItems.uiSchema || {};
 
       this.set({
         through,
@@ -52,7 +55,7 @@ export default {
       };
     }
 
-    this.set({ rootId, schema });
+    this.set({ rootId, schema, uiSchema });
   },
   computed: {
     propType({ err, props, components }) {

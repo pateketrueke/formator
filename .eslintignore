@@ -1,4 +1,5 @@
 src/lib/components/Field/Types/index.js
 src/lib/main.js
+*.svelte
 public
 dist

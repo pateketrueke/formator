@@ -29,6 +29,10 @@ export default {
       result: null,
     };
   },
+  oncreate() {
+    const { uiSchema, name } = this.get();
+    console.log('OBJECT', uiSchema, name);
+  },
   computed: {
     values({ result }) {
       return result || {};

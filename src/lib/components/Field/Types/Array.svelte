@@ -94,7 +94,7 @@ export default {
     };
   },
   oncreate() {
-    const { values, schema } = this.get();
+    const { values, schema, uiSchema } = this.get();
 
     if (schema && Array.isArray(schema.items)) {
       const keys = [];
@@ -107,6 +107,8 @@ export default {
 
       this.set({ result, keys });
     }
+
+    console.log('ARRAY', uiSchema);
   },
   methods: {
     append() {
@@ -175,9 +177,7 @@ export default {
     values({ result }) {
       return result || [];
     },
-    items({
-      schema, uiSchema, values, keys,
-    }) {
+    items({ schema, values, keys }) {
       const isFixed = Array.isArray(schema.items);
 
       return values.map((_, offset) => {
@@ -188,7 +188,6 @@ export default {
           key,
           props,
           offset,
-          uiSchema: uiSchema ? uiSchema[key] : {},
           isFixed: isFixed && offset < schema.items.length,
         };
       });
