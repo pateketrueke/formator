@@ -256,6 +256,14 @@ export function getId(rootId, forName, isLabel) {
   return `${prefix}${forName}-field-${offset}`;
 }
 
+export function getItems(schema, offset) {
+  return (Array.isArray(schema.items)
+    ? schema.items[offset]
+    : schema.items)
+  || schema.additionalItems
+  || {};
+}
+
 export function defaultValue(schema) {
   if (!schema) {
     return null;
@@ -275,6 +283,7 @@ export function defaultValue(schema) {
 export default {
   getId,
   getProp,
+  getItems,
   ErrorType,
   LoaderType,
   renderValue,

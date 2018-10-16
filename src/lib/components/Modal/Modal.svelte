@@ -3,11 +3,13 @@
     <div data-content>
       <slot></slot>
       <div>
-        <button type="button" on:click="close(event)">
+        <button type="button" on:click="close()">
           <span>{uiSchema['ui:cancel'] || 'Cancel'}</span>
         </button>
         <button type="button" on:click="save()">
-          <span>{uiSchema['ui:save'] || 'Save'}</span>
+          <span>{updating
+            ? uiSchema['ui:update'] || `Update ${resource}`
+            : uiSchema['ui:save'] || `Save ${resource}`}</span>
         </button>
       </div>
     </div>

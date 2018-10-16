@@ -72,6 +72,7 @@ uiSchema:
     ui:empty: Cart is empty
     ui:append: Find or create product
     ui:headers: [Quantity, Product info.]
+    ui:update: Update product
     ui:save: Add product
     qty:
       ui:label: Count
