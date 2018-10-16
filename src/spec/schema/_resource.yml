@@ -75,6 +75,7 @@ uiSchema:
     qty:
       ui:label: Count
     Product:
+      ui:template: "{name!N/A} ${price!0.00}"
       ui:label: Product's
       id:
         ui:hidden: true

@@ -1,27 +1,33 @@
-{fixedValue}
+{#each fixedNodes as value}{value}{/each}
 
 <script>
+import { renderValue } from './utils';
+
 export default {
   computed: {
-    fixedUISchema({ field, uiSchema }) {
+    fixedSchema({ field, uiSchema }) {
       return uiSchema[field] || {};
     },
-    fixedValue: ({ value, field, props }) => {
+    fixedNodes: ({ value, field, props, fixedSchema }) => {
       const { type, default: defaultValue } = props.properties[field];
 
       if (type === 'number' || type === 'integer') {
-        return value || defaultValue || 0;
+        return [value || defaultValue || 0];
       }
 
       if (type === 'string') {
-        return value || defaultValue || '';
+        return [value || defaultValue || ''];
       }
 
       if (typeof defaultValue === 'undefined') {
-        return JSON.stringify(value);
+        if (fixedSchema['ui:template']) {
+          return renderValue(value, fixedSchema['ui:template']);
+        }
+
+        return [JSON.stringify(value)];
       }
 
-      return defaultValue;
+      return [defaultValue];
     },
   },
 };
