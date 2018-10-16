@@ -91,66 +91,66 @@ actions:
   Cart:
     index:
       verb: GET
-      path: "/db/Cart"
+      path: /db/Cart
     new:
       verb: GET
-      path: "/db/Cart/new"
+      path: /db/Cart/new
     create:
       verb: PUT
-      path: "/db/Cart"
+      path: /db/Cart
     edit:
       verb: GET
-      path: "/db/Cart/:id/edit"
+      path: /db/Cart/:id/edit
     show:
       verb: GET
-      path: "/db/Cart/:id"
+      path: /db/Cart/:id
     update:
       verb: PATCH
-      path: "/db/Cart/:id"
+      path: /db/Cart/:id
     destroy:
       verb: DELETE
-      path: "/db/Cart/:id"
+      path: /db/Cart/:id
   CartItem:
     index:
       verb: GET
-      path: "/db/CartItem"
+      path: /db/CartItem
     new:
       verb: GET
-      path: "/db/CartItem/new"
+      path: /db/CartItem/new
     create:
       verb: PUT
-      path: "/db/CartItem"
+      path: /db/CartItem
     edit:
       verb: GET
-      path: "/db/CartItem/:CartId/:ProductId/edit"
+      path: /db/CartItem/:CartId/:ProductId/edit
     show:
       verb: GET
-      path: "/db/CartItem/:CartId/:ProductId"
+      path: /db/CartItem/:CartId/:ProductId
     update:
       verb: PATCH
-      path: "/db/CartItem/:CartId/:ProductId"
+      path: /db/CartItem/:CartId/:ProductId
     destroy:
       verb: DELETE
-      path: "/db/CartItem/:CartId/:ProductId"
+      path: /db/CartItem/:CartId/:ProductId
   Product:
     index:
       verb: GET
-      path: "/db/Product"
+      path: /db/Product
     new:
       verb: GET
-      path: "/db/Product/new"
+      path: /db/Product/new
     create:
       verb: PUT
-      path: "/db/Product"
+      path: /db/Product
     edit:
       verb: GET
-      path: "/db/Product/:id/edit"
+      path: /db/Product/:id/edit
     show:
       verb: GET
-      path: "/db/Product/:id"
+      path: /db/Product/:id
     update:
       verb: PATCH
-      path: "/db/Product/:id"
+      path: /db/Product/:id
     destroy:
       verb: DELETE
-      path: "/db/Product/:id"
+      path: /db/Product/:id

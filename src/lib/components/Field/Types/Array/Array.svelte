@@ -16,10 +16,10 @@
           <th>
             {#if !isFixed}
               <button data-remove="&#9998;" type="button" on:click="edit(offset)">
-                <span>Edit item</span>
+                <span>{fixedSchema['ui:edit'] || `Edit ${association.singular}`}</span>
               </button>
               <button data-remove="&times;" type="button" on:click="remove(offset)">
-                <span>Remove item</span>
+                <span>{fixedSchema['ui:remove'] || `Remove ${association.singular}`}</span>
               </button>
             {/if}
           </th>
@@ -38,7 +38,7 @@
               {#if !isFixed}
                 <div>
                   <button data-remove="&times;" type="button" on:click="remove(offset)">
-                    <span>Remove item</span>
+                    <span>{fixedSchema['ui:remove'] || 'Remove item'}</span>
                   </button>
                 </div>
               {/if}

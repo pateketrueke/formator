@@ -129,7 +129,7 @@ const VALUES = {
 
 const INDEX = {};
 
-export function getProperty(from, key) {
+export function getProp(from, key) {
   if (!key) {
     return null;
   }
@@ -150,7 +150,7 @@ export function getProperty(from, key) {
 
       if (Array.isArray(o)) {
         if (keys[i] === '*') {
-          return o.map(y => getProperty(y, keys.slice(i + 1).join('.')));
+          return o.map(y => getProp(y, keys.slice(i + 1).join('.')));
         }
         o = o[0];
       }
@@ -205,16 +205,16 @@ export function renderValue(data, template) {
         if (cur.expression.charAt() === '@') {
           try {
             retval = OTHER_TYPES[cur.expression.substr(1)](data,
-              cur.property.map(x => getProperty(data, x) || cur.value), document.body);
+              cur.property.map(x => getProp(data, x) || cur.value), document.body);
           } catch (e) {
             prev.push(`Error in expression: ${JSON.stringify(cur)} (${e.message})`);
           }
         } else {
-          retval = getProperty(data, cur.expression);
+          retval = getProp(data, cur.expression);
         }
 
         if (typeof retval === 'undefined' && cur.operator === '|') {
-          retval = getProperty(data, cur.value);
+          retval = getProp(data, cur.value);
         } else if (!retval && cur.operator === '!') {
           prev.push(cur.value);
 
@@ -274,7 +274,9 @@ export function defaultValue(schema) {
 
 export default {
   getId,
+  getProp,
   ErrorType,
   LoaderType,
+  renderValue,
   defaultValue,
 };
