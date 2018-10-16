@@ -1,14 +1,13 @@
-{#each fixedNodes as value}{value}{/each}
-
-<script>
-import { renderValue } from './utils';
+import { renderValue } from '../utils';
 
 export default {
   computed: {
     fixedSchema({ field, uiSchema }) {
       return uiSchema[field] || {};
     },
-    fixedNodes: ({ value, field, props, fixedSchema }) => {
+    fixedNodes: ({
+      value, field, props, fixedSchema,
+    }) => {
       const { type, default: defaultValue } = props.properties[field];
 
       if (type === 'number' || type === 'integer') {
@@ -31,4 +30,3 @@ export default {
     },
   },
 };
-</script>

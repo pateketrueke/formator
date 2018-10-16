@@ -1,9 +1,3 @@
-<details>
-  <summary>{errorMessage}</summary>
-  <pre>{jsonProps}</pre>
-</details>
-
-<script>
 export default {
   computed: {
     errorMessage({ err, schema }) {
@@ -22,4 +16,3 @@ export default {
     },
   },
 };
-</script>

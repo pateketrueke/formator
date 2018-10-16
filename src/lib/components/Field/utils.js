@@ -1,5 +1,5 @@
-import ErrorType from './Error.svelte';
-import LoaderType from './Loader.svelte';
+import ErrorType from './Error';
+import LoaderType from './Loader';
 
 const VALUES = {
   object: () => ({}),
@@ -81,7 +81,7 @@ export function renderValue(data, template) {
       result.push(values.shift());
     }
 
-    return result.filter(x => x).reduce((prev, cur, i) => {
+    return result.filter(x => x).reduce((prev, cur) => {
       if (typeof cur === 'string') {
         prev.push(cur);
       } else {

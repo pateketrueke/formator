@@ -1,7 +1,4 @@
-<input type="text" bind:value="result" {id} {name} />
-
-<script>
-import { getId } from '../utils';
+import { getId } from '../../utils';
 
 export default {
   data() {
@@ -11,10 +8,9 @@ export default {
   },
   oncreate() {
     const { uiSchema, name } = this.get();
-    console.log('STRING', uiSchema, name);
+    console.log('BOOLEAN', uiSchema, name);
   },
   computed: {
     id: ({ rootId, name }) => getId(rootId, name),
   },
 };
-</script>

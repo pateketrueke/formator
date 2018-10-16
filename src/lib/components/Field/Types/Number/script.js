@@ -1,7 +1,4 @@
-<input type="number" bind:value="result" {id} {name} />
-
-<script>
-import { getId } from '../utils';
+import { getId } from '../../utils';
 
 export default {
   data() {
@@ -17,4 +14,3 @@ export default {
     id: ({ rootId, name }) => getId(rootId, name),
   },
 };
-</script>
