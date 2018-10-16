@@ -13,7 +13,7 @@
               <Value {props} {field} {uiSchema} value={values[offset][field]} />
             </td>
           {/each}
-          <td>
+          <th>
             {#if !isFixed}
               <button data-remove="&#9998;" type="button" on:click="edit(offset)">
                 <span>Edit item</span>
@@ -22,7 +22,7 @@
                 <span>Remove item</span>
               </button>
             {/if}
-          </td>
+          </th>
         </tr>
       {/each}
     </table>

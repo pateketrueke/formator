@@ -10,8 +10,8 @@
     "dist": "tarima -fqe production",
     "lint": "eslint src test",
     "test": "npm run lint",
-    "test-e2e": "BASE_URL=http://localhost:3001 testcafe",
-    "test-e2e-ci": "npm run test-e2e -- --ports 9505,9506 remote:1"
+    "test:e2e": "BASE_URL=http://localhost:3001 testcafe",
+    "test:e2e:ci": "npm run test:e2e -- --ports 9505,9506 remote:1"
   },
   "author": "Alvaro Cabrera <pateketrueke@gmail.com>",
   "license": "MIT",
