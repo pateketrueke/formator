@@ -1,31 +1,11 @@
-const STACK = [];
-
-window.addEventListener('keyup', e => {
-  if (e.keyCode === 27) {
-    const last = STACK.pop();
-
-    if (last) {
-      last.close();
-    }
-  }
-});
+import { destroy, update } from './stacked';
 
 export default {
   ondestroy() {
-    const offset = STACK.indexOf(this);
-
-    if (offset !== -1) {
-      STACK.splice(offset, 1);
-    }
+    destroy(this);
   },
   onupdate() {
-    const { visible } = this.get();
-
-    if (visible) {
-      STACK.push(this);
-    } else {
-      STACK.splice(STACK.indexOf(this), 1);
-    }
+    update(this, this.get().visible);
   },
   methods: {
     cancel(e) {

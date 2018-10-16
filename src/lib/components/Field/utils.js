@@ -1,5 +1,122 @@
+import LinkType from './Link';
 import ErrorType from './Error';
 import LoaderType from './Loader';
+
+import { destroy, update } from '../Modal/stacked';
+
+const RE_PLACEHOLDER = /\{(?:(@?[\w.]+)(?::([\w*,.]+))?([|?!])?(.*?))\}/;
+const RE_DATA_BASE64 = /^data:(.+?);base64,/;
+
+const OTHER_TYPES = {
+  media(data, values, parentNode) {
+    let fileName;
+
+    if (!values.length) {
+      return 'NOIMG';
+    }
+
+    if (values[0].indexOf('data:') > -1) {
+      fileName = values[0].match(RE_DATA_BASE64)[1].split(';')[1].split('name=')[1];
+    } else {
+      fileName = values[0];
+    }
+
+    if (values[1]) {
+      fileName = values[1];
+    }
+
+    return {
+      component: LinkType,
+      options: {
+        text: fileName || values[0],
+        href: values[0],
+      },
+      onClick(e) {
+        if (e.metaKey || e.ctrlKey) {
+          return;
+        }
+
+        e.preventDefault();
+
+        const target = document.createElement('div');
+
+        parentNode.appendChild(target);
+
+        // FIXME: reuse [data-modal] or viceversa?
+        target.setAttribute('data-title', fileName || values[0]);
+        target.classList.add('json-schema-formalizer-layer');
+        target.classList.add('overlay');
+
+        function closeMe(el) {
+          if (el && (el.target !== target)) {
+            return;
+          }
+
+          destroy(closeMe);
+          parentNode.removeChild(target);
+        }
+
+        target.addEventListener('click', closeMe);
+        closeMe.close = closeMe;
+        update(closeMe, true);
+
+        setTimeout(() => {
+          target.classList.add('active');
+
+          setTimeout(() => {
+            const display = !values[0].match(/\.(svg|gif|png|jpe?g)$/)
+              ? document.createElement('iframe')
+              : document.createElement('img');
+
+            if (display.tagName === 'IFRAME') {
+              display.setAttribute('width', 853);
+              display.setAttribute('height', 505);
+            }
+
+            display.style.opacity = 0;
+            display.src = values[0];
+
+            target.appendChild(display);
+
+            setTimeout(() => {
+              display.style.opacity = 1;
+            }, 100);
+          }, 100);
+        });
+      },
+    };
+  },
+  sum(data, values) {
+    return values.map(x => x.reduce((prev, cur) => prev + cur, 0).toFixed(2).replace('.00', '')).join(', ');
+  },
+  mul(data, values) {
+    const isMixed = Array.isArray(values[0]);
+    const length = isMixed ? values[0].length : 1;
+
+    if (isMixed) {
+      values = values.map(x => x.map(Number).reduce((prev, cur) => prev + cur, 0));
+    }
+
+    return (values.reduce((prev, cur) => {
+      if (cur !== 0 && cur !== Infinity) {
+        prev *= cur;
+      }
+      return prev || cur;
+    }, 0) / length).toFixed(2).replace('.00', '');
+  },
+  uniq(data, values) {
+    return (this.value(data, values) || [])
+      .reduce((prev, cur) => {
+        if (prev.indexOf(cur) === -1) {
+          prev.push(cur);
+        }
+        return prev;
+      }, []).join(', ');
+  },
+  value(data, values) {
+    return values.filter(Boolean)[0] || null;
+  },
+};
 
 const VALUES = {
   object: () => ({}),
@@ -11,8 +128,6 @@ const VALUES = {
 };
 
 const INDEX = {};
-
-const RE_PLACEHOLDER = /\{(?:([\w.]+)(?::([\w*,.]+))?([|?!])?(.*?))\}/;
 
 export function getProperty(from, key) {
   if (!key) {
@@ -85,7 +200,18 @@ export function renderValue(data, template) {
       if (typeof cur === 'string') {
         prev.push(cur);
       } else {
-        let retval = getProperty(data, cur.expression);
+        let retval;
+
+        if (cur.expression.charAt() === '@') {
+          try {
+            retval = OTHER_TYPES[cur.expression.substr(1)](data,
+              cur.property.map(x => getProperty(data, x) || cur.value), document.body);
+          } catch (e) {
+            prev.push(`Error in expression: ${JSON.stringify(cur)} (${e.message})`);
+          }
+        } else {
+          retval = getProperty(data, cur.expression);
+        }
 
         if (typeof retval === 'undefined' && cur.operator === '|') {
           retval = getProperty(data, cur.value);
@@ -100,7 +226,7 @@ export function renderValue(data, template) {
             retval = cur.value;
           }
 
-          if (typeof retval === 'object') {
+          if (typeof retval === 'object' && typeof retval.component !== 'function') {
             retval = JSON.stringify(retval);
           }
 
