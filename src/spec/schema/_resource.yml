@@ -26,8 +26,6 @@ refs:
     requiredProps:
     - name
     - price
-    uiSchema:
-      template: ["Example"]
   Product:
     id: Product
     properties:
@@ -41,11 +39,6 @@ refs:
     required:
     - name
     - price
-    uiSchema:
-      name:
-        label: Product's name
-      price:
-        label: Product's price
   CartItem:
     id: CartItem
     properties:
@@ -71,7 +64,15 @@ schema:
   type: object
 uiSchema:
   items:
-    label: Items label
+    ui:template: ["Example"]
+    ui:label: Items label
+    ui:empty: Without items
+    ui:headers: [Quantity, Product info.]
+    Product:
+      name:
+        ui:label: Product's name
+      price:
+        ui:label: Product's price
 attributes: {}
 isNew: true
 action: new

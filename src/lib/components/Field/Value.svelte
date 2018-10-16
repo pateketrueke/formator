@@ -1,8 +1,12 @@
 <p>{field}: {fixedValue}</p>
+{JSON.stringify(fixedUISchema)}
 
 <script>
 export default {
   computed: {
+    fixedUISchema({ field, uiSchema }) {
+      return uiSchema[field] || {};
+    },
     fixedValue: ({ value, field, props }) => {
       const { type, default: defaultValue } = props.properties[field];
 

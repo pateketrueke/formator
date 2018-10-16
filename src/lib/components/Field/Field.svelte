@@ -28,8 +28,7 @@ export default {
       return;
     }
 
-    let schema = reduceRefs(props, refs);
-    let uiSchema = {};
+    let _schema = reduceRefs(props, refs);
 
     if (refs[name] && !props.id) {
       const { through, ...association } = refs[name];
@@ -37,14 +36,12 @@ export default {
       const refSchema = refs[through];
       const propSchema = refs[refItems.id];
 
-      uiSchema = refItems.uiSchema || {};
-
       this.set({
         through,
         association,
       });
 
-      schema = {
+      _schema = {
         [name]: {
           ...refSchema,
           properties: {
@@ -55,7 +52,10 @@ export default {
       };
     }
 
-    this.set({ rootId, schema, uiSchema });
+    this.set({
+      rootId,
+      schema: _schema,
+    });
   },
   computed: {
     propType({ err, props, components }) {

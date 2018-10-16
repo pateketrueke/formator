@@ -2,15 +2,15 @@
   {#if through}
     <table>
       <tr>
-        {#each headers as k}
-          <th>{k}</th>
+        {#each headers as { label }}
+          <th>{label}</th>
         {/each}
       </tr>
-      {#each items as { key, props, offset, isFixed } (key)}
+      {#each items as { key, props, offset, isFixed, uiSchema } (key)}
         <tr>
-          {#each headers as field}
+          {#each headers as { field }}
             <td>
-              <Value {props} {field} value={values[offset][field]} />
+              <Value {props} {field} {uiSchema} value={values[offset][field]} />
             </td>
           {/each}
           <td>
@@ -29,11 +29,11 @@
   {:else}
     <fieldset>
       <ul>
-        {#each items as { key, props, offset, isFixed } (key)}
+        {#each items as { key, props, offset, isFixed, uiSchema } (key)}
           <li data-type={props.type || 'object'}>
             <div data-item>
               <div>
-                <Field {props} bind:result="values[offset]" name={`${name}[${offset}]`} />
+                <Field {props} {uiSchema} bind:result="values[offset]" name={`${name}[${offset}]`} />
               </div>
               {#if !isFixed}
                 <div>
@@ -49,7 +49,7 @@
     </fieldset>
   {/if}
 {:else}
-  <div data-empty>NO ITEMS</div>
+  <div data-empty>{fixedSchema['ui:empty'] || 'No items found'}</div>
 {/if}
 
 {#if schema.additionalItems !== false}
@@ -94,7 +94,7 @@ export default {
     };
   },
   oncreate() {
-    const { values, schema, uiSchema } = this.get();
+    const { values, schema } = this.get();
 
     if (schema && Array.isArray(schema.items)) {
       const keys = [];
@@ -107,8 +107,6 @@ export default {
 
       this.set({ result, keys });
     }
-
-    console.log('ARRAY', uiSchema);
   },
   methods: {
     append() {
@@ -157,6 +155,13 @@ export default {
     },
   },
   computed: {
+    fixedSchema({ field, isFixed, uiSchema }) {
+      if (!uiSchema) {
+        return isFixed ? [] : {};
+      }
+
+      return uiSchema;
+    },
     nextOffset({ result }) {
       return result ? result.length : 0;
     },
@@ -165,21 +170,24 @@ export default {
         props: getProps(schema, nextOffset),
       };
     },
-    headers({ schema }) {
+    isFixed({ schema }) {
+      return Array.isArray(schema.items);
+    },
+    headers({ fixedSchema, schema }) {
       const propSchema = getProps(schema, 0);
+      const props = propSchema.properties
+        ? Object.keys(propSchema.properties)
+        : [];
 
-      if (propSchema.properties) {
-        return Object.keys(propSchema.properties);
-      }
-
-      return [];
+      return props.map((key, offset) => ({
+        label: (fixedSchema['ui:headers'] && fixedSchema['ui:headers'][offset]) || key,
+        field: key,
+      }));
     },
     values({ result }) {
       return result || [];
     },
-    items({ schema, values, keys }) {
-      const isFixed = Array.isArray(schema.items);
-
+    items({ fixedSchema, isFixed, schema, values, keys }) {
       return values.map((_, offset) => {
         const props = getProps(schema, offset);
         const key = keys[offset] || (keys[offset] = randId());
@@ -189,6 +197,7 @@ export default {
           props,
           offset,
           isFixed: isFixed && offset < schema.items.length,
+          uiSchema: isFixed ? fixedSchema[offset] || {} : fixedSchema,
         };
       });
     },

@@ -1,12 +1,12 @@
 {#if fields.length}
   <fieldset>
     <ul>
-      {#each fields as { id, name, field, props } (field)}
+      {#each fields as { id, name, field, props, uiSchema } (field)}
         <li data-type={props.type || 'object'}>
           <div data-field>
             <label for={id}>{field}</label>
             <div>
-              <Field {name} {props} bind:result="values[field]" />
+              <Field {name} {field} {props} {uiSchema} bind:result="values[field]" />
             </div>
           </div>
         </li>
@@ -29,15 +29,11 @@ export default {
       result: null,
     };
   },
-  oncreate() {
-    const { uiSchema, name } = this.get();
-    console.log('OBJECT', uiSchema, name);
-  },
   computed: {
     values({ result }) {
       return result || {};
     },
-    fields({ rootId, schema, name }) {
+    fields({ name, rootId, schema, uiSchema }) {
       if (!(schema && schema.properties)) {
         return [];
       }
@@ -46,6 +42,7 @@ export default {
         .map(([key, props]) => ({
           id: getId(rootId, name !== '__ROOT__' ? `${name}[${key}]` : key, true),
           name: name !== '__ROOT__' ? `${name}[${key}]` : key,
+          uiSchema: (uiSchema && uiSchema[key]) || {},
           field: key,
           props,
         }));
