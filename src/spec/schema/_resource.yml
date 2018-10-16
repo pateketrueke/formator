@@ -63,18 +63,25 @@ schema:
   - items
   type: object
 uiSchema:
+  ui:title: Shopping Cart
+  ui:save: Save cart
   id:
     ui:hidden: true
   items:
     ui:append: Add product to cart
-    ui:label: Cart items
+    ui:label: Products
     ui:empty: Cart is empty
     ui:headers: [Quantity, Product info.]
+    qty:
+      ui:label: Count
     Product:
+      ui:label: Product's
+      id:
+        ui:hidden: true
       name:
-        ui:label: Product's name
+        ui:label: name
       price:
-        ui:label: Product's price
+        ui:label: price
 attributes: {}
 isNew: true
 action: new

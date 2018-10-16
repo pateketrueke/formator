@@ -1,10 +1,13 @@
 <slot>
+  {#if fixedSchema['ui:title']}
+    <h2>{fixedSchema['ui:title']}</h2>
+  {/if}
   {#if actions}
     <form on:submit="save(event)" {...formProps}>
       <Field name='__ROOT__' bind:result="value" {...fieldProps} />
       <div>
         <button type="submit">
-          <span>Save</span>
+          <span>{fixedSchema['ui:save'] || 'Save'}</span>
         </button>
         <input type="hidden" name="_method" value={nextAction.verb}/>
       </div>
@@ -64,6 +67,9 @@ export default {
       }
 
       return result;
+    },
+    fixedSchema({ uiSchema }) {
+      return uiSchema || {};
     },
     fieldProps({ schema, uiSchema }) {
       return { props: schema, uiSchema };

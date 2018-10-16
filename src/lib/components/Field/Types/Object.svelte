@@ -4,14 +4,14 @@
       {#each fields as { id, name, field, props, uiSchema } (field)}
         {#if uiSchema['ui:hidden']}
           <li style="display:none">
-            <input type="hidden" {name} bind:value="values[field]" />
+            <input type="hidden" {name} bind:value="fixedValues[field]" />
           </li>
         {:else}
           <li data-type={props.type || 'object'}>
             <div data-field>
               <label for={id}>{uiSchema['ui:label'] || field}</label>
               <div>
-                <Field {name} {field} {props} {uiSchema} bind:result="values[field]" />
+                <Field {name} {field} {props} {uiSchema} bind:result="fixedValues[field]" />
               </div>
             </div>
           </li>
@@ -20,7 +20,7 @@
     </ul>
   </fieldset>
 {:else}
-  <div data-empty>NO PROPS</div>
+  <div data-empty>{fixedSchema['ui:empty'] || 'No props'}</div>
 {/if}
 
 <script>
@@ -36,10 +36,13 @@ export default {
     };
   },
   computed: {
-    values({ result }) {
+    fixedSchema({ uiSchema }) {
+      return uiSchema || {};
+    },
+    fixedValues({ result }) {
       return result || {};
     },
-    fields({ name, rootId, schema, uiSchema }) {
+    fields({ name, rootId, schema, fixedSchema }) {
       if (!(schema && schema.properties)) {
         return [];
       }
@@ -48,7 +51,7 @@ export default {
         .map(([key, props]) => ({
           id: getId(rootId, name !== '__ROOT__' ? `${name}[${key}]` : key, true),
           name: name !== '__ROOT__' ? `${name}[${key}]` : key,
-          uiSchema: (uiSchema && uiSchema[key]) || {},
+          uiSchema: fixedSchema[key] || {},
           field: key,
           props,
         }), []);

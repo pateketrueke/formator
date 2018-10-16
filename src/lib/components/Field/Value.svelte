@@ -1,5 +1,4 @@
-<p>{field}: {fixedValue}</p>
-{JSON.stringify(fixedUISchema)}
+{fixedValue}
 
 <script>
 export default {
@@ -16,6 +15,10 @@ export default {
 
       if (type === 'string') {
         return value || defaultValue || '';
+      }
+
+      if (typeof defaultValue === 'undefined') {
+        return JSON.stringify(value);
       }
 
       return defaultValue;

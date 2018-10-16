@@ -49,7 +49,7 @@
     </fieldset>
   {/if}
 {:else}
-  <div data-empty>{fixedSchema['ui:empty'] || 'No items found'}</div>
+  <div data-empty>{fixedSchema['ui:empty'] || 'No items'}</div>
 {/if}
 
 {#if schema.additionalItems !== false}
@@ -165,9 +165,10 @@ export default {
     nextOffset({ result }) {
       return result ? result.length : 0;
     },
-    nextProps({ schema, nextOffset }) {
+    nextProps({ fixedSchema, isFixed, schema, nextOffset }) {
       return {
         props: getProps(schema, nextOffset),
+        uiSchema: isFixed ? fixedSchema[nextOffset] || {} : fixedSchema,
       };
     },
     isFixed({ schema }) {
