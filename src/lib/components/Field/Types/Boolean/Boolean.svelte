@@ -1,3 +1,3 @@
-<input type="checkbox" bind:checked="result" {id} {name} />
+<input type="checkbox" bind:checked="result" {id} {name} {...props} />
 
-<script src="script.js"></script>
+<script src="../String/script.js"></script>

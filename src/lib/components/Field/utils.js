@@ -118,7 +118,7 @@ const OTHER_TYPES = {
   },
 };
 
-const VALUES = {
+const DEFAULT_VALUES = {
   object: () => ({}),
   array: () => [],
   string: () => '',
@@ -277,7 +277,7 @@ export function defaultValue(schema) {
     }, {});
   }
 
-  return VALUES[schema.type || 'object']();
+  return DEFAULT_VALUES[schema.type || 'object']();
 }
 
 export default {

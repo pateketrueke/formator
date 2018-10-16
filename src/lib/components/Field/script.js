@@ -1,8 +1,6 @@
 import utils from './utils';
-import getTypes from './Types'; // eslint-disable-line
+import { getTypes } from '../../shared/deps'; // eslint-disable-line
 import { reduceRefs } from '../../shared/utils';
-
-const { ErrorType, LoaderType } = utils;
 
 export default {
   data() {
@@ -55,11 +53,11 @@ export default {
   computed: {
     propType({ err, props, components }) {
       if (err) {
-        return ErrorType;
+        return utils.ErrorType;
       }
 
       if (!props) {
-        return LoaderType;
+        return utils.LoaderType;
       }
 
       if (components) {

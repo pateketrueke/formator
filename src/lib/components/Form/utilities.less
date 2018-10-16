@@ -1,23 +1,23 @@
-[data-remove] {
+[data-content] {
   > span {
     display: none;
   }
 }
 
-[data-remove] {
+[data-content] {
   &::before {
-    content: attr(data-remove) ' ';
+    content: attr(data-content) ' ';
   }
 }
 
-[data-append] {
+[data-content] {
   &::before {
-    content: attr(data-append) ' ';
+    content: attr(data-content) ' ';
   }
 }
 
 @media @md {
-  [data-remove] {
+  [data-content] {
     > span {
       display: inline-block;
     }
@@ -25,7 +25,7 @@
 }
 
 @media @smx {
-  [data-remove] {
+  [data-content] {
     > span {
       display: inline-block;
     }

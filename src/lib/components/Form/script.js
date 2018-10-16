@@ -1,8 +1,11 @@
-import { randId } from '../../shared/utils';
+import { randId, clean } from '../../shared/utils';
+import { getAjv } from '../../shared/deps'; // eslint-disable-line
 
 const ACTION_MAP = {
   new: 'create',
 };
+
+/* global Ajv */
 
 export default {
   components: {
@@ -15,7 +18,22 @@ export default {
     };
   },
   oncreate() {
-    this.options.target.get = () => this.get();
+    getAjv().then(() => {
+      this.ajv = new Ajv({
+        validateSchema: false,
+        jsonPointers: true,
+        allErrors: true,
+        logger: false,
+      });
+
+      const { refs } = this.get();
+
+      Object.keys(refs).forEach(ref => {
+        if (refs[ref].id || refs[ref].definitions) {
+          this.ajv.addSchema(refs[ref], ref);
+        }
+      });
+    });
   },
   methods: {
     save(e) {
@@ -23,7 +41,12 @@ export default {
         e.preventDefault();
       }
 
-      console.log(JSON.stringify(this.get().value, null, 2));
+      const { value, schema } = this.get();
+
+      const data = clean(value);
+      const pass = this.ajv.validate(schema, data);
+
+      console.log(pass, this.ajv.errors);
     },
   },
   computed: {
@@ -39,7 +62,7 @@ export default {
     },
     value({ result, schema }) {
       if (!schema) {
-        return null;
+        return undefined;
       }
 
       if (!result) {

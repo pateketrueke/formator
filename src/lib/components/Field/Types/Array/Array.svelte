@@ -15,10 +15,10 @@
           {/each}
           <th>
             {#if !isFixed}
-              <button data-remove="&#9998;" type="button" on:click="edit(offset)">
+              <button data-content="&#9998;" type="button" on:click="edit(offset)">
                 <span>{fixedSchema['ui:edit'] || `Edit ${association.singular}`}</span>
               </button>
-              <button data-remove="&times;" type="button" on:click="remove(offset)">
+              <button data-content="&times;" type="button" on:click="remove(offset)">
                 <span>{fixedSchema['ui:remove'] || `Remove ${association.singular}`}</span>
               </button>
             {/if}
@@ -37,7 +37,7 @@
               </div>
               {#if !isFixed}
                 <div>
-                  <button data-remove="&times;" type="button" on:click="remove(offset)">
+                  <button data-content="&times;" type="button" on:click="remove(offset)">
                     <span>{fixedSchema['ui:remove'] || 'Remove item'}</span>
                   </button>
                 </div>
@@ -62,7 +62,7 @@
         <Field {...nextProps} bind:result="nextValue" name={`${name}[${nextOffset}]`} />
       </Modal>
     {:else}
-      <button data-append="&plus;" type="button" on:click="append()">
+      <button data-content="&plus;" type="button" on:click="append()">
         <span>{uiSchema['ui:append'] || 'Add item'}</span>
       </button>
     {/if}

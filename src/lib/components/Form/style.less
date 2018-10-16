@@ -6,11 +6,9 @@ form > fieldset {
 }
 
 form {
-  > fieldset {
-    ~ div {
-      padding: @sp2;
-      border-top: 1px dashed @light;
-    }
+  > div {
+    padding: @sp2;
+    border-top: 1px dashed @light;
   }
 }
 
@@ -51,7 +49,6 @@ fieldset {
   border: 0;
 
   ~ div {
-    padding-top: @sp2;
     overflow: hidden;
 
     > button {

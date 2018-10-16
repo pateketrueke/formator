@@ -1,3 +1,5 @@
+import { defaultValue } from '../components/Field/utils';
+
 export function randId() {
   return `_${Math.random().toString(36).substr(2)}`;
 }
@@ -50,37 +52,60 @@ export function reduceRefs(schema, refs) {
   return copy;
 }
 
-export const loader = (Component, selector) => [].slice.call(document.querySelectorAll(selector)).map(node => {
-  let target;
-  let data;
+export function loader(Component, selector) {
+  return [].slice.call(document.querySelectorAll(selector)).map(node => {
+    let target;
+    let data;
 
-  try {
-    data = JSON.parse(node.dataset.resource || node.innerText);
-  } catch (e) {
-    data = {};
+    try {
+      data = JSON.parse(node.dataset.resource || node.innerText);
+    } catch (e) {
+      data = {};
+    }
+
+    if (node.tagName === 'SCRIPT') {
+      target = document.createElement('div');
+      target.className = data.className || 'json-schema-formalizer';
+
+      node.parentNode.insertBefore(target, node);
+      node.parentNode.removeChild(node);
+    } else {
+      target = node;
+    }
+
+    const instance = new Component({
+      target,
+      data,
+    });
+
+    return instance;
+  });
+}
+
+export function clean(value) {
+  if (!value || typeof value !== 'object') {
+    return value;
   }
 
-  if (node.tagName === 'SCRIPT') {
-    target = document.createElement('div');
-    target.className = data.className || 'json-schema-formalizer';
-
-    node.parentNode.insertBefore(target, node);
-    node.parentNode.removeChild(node);
-  } else {
-    target = node;
+  if (Array.isArray(value)) {
+    return value.map(clean).filter(x => typeof x !== 'undefined');
   }
 
-  const instance = new Component({
-    target,
-    data,
+  const copy = {};
+
+  Object.keys(value).forEach(key => {
+    if (value[key] !== null) {
+      copy[key] = clean(value[key]);
+    }
   });
 
-  return instance;
-});
+  return copy;
+}
 
 export default {
   reduceRefs,
   findRef,
   randId,
   loader,
+  clean,
 };
