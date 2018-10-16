@@ -56,14 +56,14 @@
   <div>
     {#if through}
       <button type="button" on:click="open()">
-        <span>Add {association.singular}</span>
+        <span>{uiSchema['ui:append'] || `Add ${association.singular}`}</span>
       </button>
       <Modal bind:visible="isOpen" on:save="sync()">
         <Field {...nextProps} bind:result="nextValue" name={`${name}[${nextOffset}]`} />
       </Modal>
     {:else}
       <button data-append="&plus;" type="button" on:click="append()">
-        <span>Add item</span>
+        <span>{uiSchema['ui:append'] || 'Add item'}</span>
       </button>
     {/if}
   </div>

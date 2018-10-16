@@ -2,14 +2,20 @@
   <fieldset>
     <ul>
       {#each fields as { id, name, field, props, uiSchema } (field)}
-        <li data-type={props.type || 'object'}>
-          <div data-field>
-            <label for={id}>{field}</label>
-            <div>
-              <Field {name} {field} {props} {uiSchema} bind:result="values[field]" />
+        {#if uiSchema['ui:hidden']}
+          <li style="display:none">
+            <input type="hidden" {name} bind:value="values[field]" />
+          </li>
+        {:else}
+          <li data-type={props.type || 'object'}>
+            <div data-field>
+              <label for={id}>{uiSchema['ui:label'] || field}</label>
+              <div>
+                <Field {name} {field} {props} {uiSchema} bind:result="values[field]" />
+              </div>
             </div>
-          </div>
-        </li>
+          </li>
+        {/if}
       {/each}
     </ul>
   </fieldset>
@@ -45,7 +51,7 @@ export default {
           uiSchema: (uiSchema && uiSchema[key]) || {},
           field: key,
           props,
-        }));
+        }), []);
     },
   },
 };
