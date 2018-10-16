@@ -8,6 +8,7 @@ form > fieldset {
 form {
   > fieldset {
     ~ div {
+      padding: @sp2;
       border-top: 1px dashed @light;
     }
   }
@@ -51,6 +52,23 @@ fieldset {
 
   ~ div {
     padding-top: @sp2;
+    overflow: hidden;
+
+    > button {
+      float: left;
+
+      + button  {
+        margin-left: @sp2;
+      }
+
+      &:last-child {
+        float: right;
+
+        + button {
+          margin-left: 0;
+        }
+      }
+    }
   }
 }
 

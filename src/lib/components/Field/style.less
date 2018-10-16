@@ -5,6 +5,12 @@ li {
     }
   }
 
+  [data-item] > div {
+    + div {
+      margin-left: @sp2;
+    }
+  }
+
   &[data-type] {
     padding-bottom: @sp2;
 
