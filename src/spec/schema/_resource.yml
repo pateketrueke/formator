@@ -76,6 +76,7 @@ uiSchema:
     ui:save: Add product
     qty:
       ui:label: Count
+      ui:focus: true
     Product:
       ui:template: "{name!N/A} ${price!0.00}"
       ui:label: Product's

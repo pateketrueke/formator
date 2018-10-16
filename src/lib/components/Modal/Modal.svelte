@@ -1,5 +1,5 @@
 {#if visible}
-  <div data-modal on:click="cancel(event)">
+  <div data-modal ref:modal on:click="cancel(event)">
     <div data-content>
       <slot></slot>
       <div>

@@ -1,3 +1,3 @@
-<input type="text" bind:value="result" {id} {name} />
+<input type="text" bind:value="result" {id} {name} {...props} />
 
-<script src="script.js"></script>
+<script src="../Number/script.js"></script>

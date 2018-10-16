@@ -5,7 +5,17 @@ export default {
     destroy(this);
   },
   onupdate() {
-    update(this, this.get().visible);
+    const { visible: isVisible } = this.get();
+
+    update(this, isVisible);
+
+    if (isVisible) {
+      const focusField = this.refs.modal.querySelector('[autofocus]');
+
+      if (focusField && 'focus' in focusField) {
+        focusField.focus();
+      }
+    }
   },
   methods: {
     cancel(e) {
