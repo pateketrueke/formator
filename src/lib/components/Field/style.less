@@ -1,22 +1,28 @@
 li {
   [data-empty] {
-    padding: @sp2;
-
     ~ div {
       margin-top: @sp2;
     }
   }
 
   &[data-type] {
-    > div {
-      padding: @sp2;
+    padding-bottom: @sp2;
 
+    &:last-child {
+      padding-bottom: 0;
+    }
+
+    + [data-type] {
+      margin-top: @sp2;
+    }
+
+    > div {
       > div:first-child {
         position: relative;
         flex: 1 1 auto;
 
         @media @sm {
-          margin-right: @sp2;
+          xmargin-right: @sp2;
         }
 
         > select,
@@ -35,34 +41,6 @@ li {
 
       ~ div {
         margin-top: @sp2;
-      }
-    }
-
-    fieldset {
-      ~ div {
-        padding: 0;
-      }
-    }
-
-    [data-empty] {
-      padding: 0;
-    }
-
-    [data-type] {
-      > div {
-        padding: @sp2 0 @sp2 0;
-      }
-
-      &:first-child {
-        > div {
-          padding-top: 0;
-        }
-      }
-    }
-
-    [data-type=object] {
-      > [data-field] {
-        padding-bottom: 0;
       }
     }
   }
@@ -111,7 +89,9 @@ label {
   }
 
   @media @sm {
-    margin-right: @sp2;
+    ~ * {
+      margin-left: @sp2;
+    }
   }
 }
 

@@ -1,11 +1,21 @@
 @import './utilities';
 
+> fieldset,
+form > fieldset {
+  padding: @sp2;
+}
+
 form {
   > fieldset {
     ~ div {
       border-top: 1px dashed @light;
     }
   }
+}
+
+h2 {
+  padding: @sp2;
+  border-bottom: 1px dashed @light;
 }
 
 a {
@@ -38,7 +48,7 @@ fieldset {
   border: 0;
 
   ~ div {
-    padding: @sp2;
+    padding-top: @sp2;
   }
 }
 
