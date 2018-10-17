@@ -6,8 +6,8 @@
           <th>{label}</th>
         {/each}
       </tr>
-      {#each items as { key, props, offset, isFixed, uiSchema } (key)}
-        <tr>
+      {#each items as { key, path, props, offset, isFixed, uiSchema } (key)}
+        <tr data-field={`/${path.join('/')}`}>
           {#each headers as { field }}
             <td>
               <Value {props} {field} {uiSchema} value={values[offset][field]} />
@@ -15,10 +15,10 @@
           {/each}
           <th>
             {#if !isFixed}
-              <button data-content="&#9998;" type="button" on:click="edit(offset)">
+              <button data-before="&#9998;" type="button" on:click="edit(offset)">
                 <span>{fixedSchema['ui:edit'] || `Edit ${association.singular}`}</span>
               </button>
-              <button data-content="&times;" type="button" on:click="remove(offset)">
+              <button data-before="&times;" type="button" on:click="remove(offset)">
                 <span>{fixedSchema['ui:remove'] || `Remove ${association.singular}`}</span>
               </button>
             {/if}
@@ -37,7 +37,7 @@
               </div>
               {#if !isFixed}
                 <div>
-                  <button data-content="&times;" type="button" on:click="remove(offset)">
+                  <button data-before="&times;" type="button" on:click="remove(offset)">
                     <span>{fixedSchema['ui:remove'] || 'Remove item'}</span>
                   </button>
                 </div>
@@ -62,7 +62,7 @@
         <Field {...nextProps} bind:result="nextValue" name={`${name}[${nextOffset}]`} />
       </Modal>
     {:else}
-      <button data-content="&plus;" type="button" on:click="append()">
+      <button data-before="&plus;" type="button" on:click="append()">
         <span>{uiSchema['ui:append'] || 'Add item'}</span>
       </button>
     {/if}

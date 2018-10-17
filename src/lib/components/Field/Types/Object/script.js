@@ -17,7 +17,7 @@ export default {
       return result || {};
     },
     fields({
-      name, rootId, schema, fixedSchema,
+      path, name, rootId, schema, fixedSchema,
     }) {
       if (!(schema && schema.properties)) {
         return [];
@@ -28,6 +28,7 @@ export default {
           id: getId(rootId, name !== '__ROOT__' ? `${name}[${key}]` : key, true),
           name: name !== '__ROOT__' ? `${name}[${key}]` : key,
           uiSchema: fixedSchema[key] || {},
+          path: (path || []).concat(key),
           field: key,
           props,
         }), []);

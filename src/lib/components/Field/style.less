@@ -11,6 +11,24 @@ li {
     }
   }
 
+  [data-field] {
+    &.invalid {
+      > td:first-child,
+      > label + div {
+        position: relative;
+
+        &::before {
+          left: -(@sp2 + 2px);
+          width: 2px;
+          height: 100%;
+          content: ' ';
+          position: absolute;
+          background-color: @error;
+        }
+      }
+    }
+  }
+
   &[data-type] {
     padding-bottom: @sp2;
 
@@ -44,6 +62,10 @@ li {
 
     table {
       width: 100%;
+
+      td ~ th {
+        width: 1%;
+      }
 
       ~ div {
         margin-top: @sp2;

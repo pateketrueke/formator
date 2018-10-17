@@ -5,6 +5,15 @@ const ACTION_MAP = {
   new: 'create',
 };
 
+function showError(field, target) {
+  const selector = `[data-field="${field}"]`;
+  const el = target.querySelector(selector);
+
+  if (el) {
+    el.classList.add('invalid');
+  }
+}
+
 /* global Ajv */
 
 export default {
@@ -42,11 +51,24 @@ export default {
       }
 
       const { value, schema } = this.get();
+      const { target } = this.options;
 
       const data = clean(value);
-      const pass = this.ajv.validate(schema, data);
 
-      console.log(pass, this.ajv.errors);
+      [].slice.call(target.querySelectorAll('[data-field]'))
+        .forEach(node => {
+          node.classList.remove('invalid');
+        });
+
+      this.ajv.validate(schema, data);
+
+      (this.ajv.errors || []).forEach(error => {
+        showError(error.dataPath || `/${error.params.missingProperty}`, target);
+
+        if (error.dataPath) {
+          showError(`${error.dataPath}/${error.params.missingProperty}`, target);
+        }
+      });
     },
   },
   computed: {

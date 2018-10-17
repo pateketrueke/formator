@@ -103,9 +103,10 @@ export default {
       return result ? result.length : 0;
     },
     nextProps({
-      fixedSchema, isFixed, schema, nextOffset,
+      fixedSchema, isFixed, path, schema, nextOffset,
     }) {
       return {
+        path: (path || []).concat(nextOffset),
         props: getItems(schema, nextOffset),
         uiSchema: isFixed ? fixedSchema[nextOffset] || {} : fixedSchema,
       };
@@ -131,7 +132,7 @@ export default {
       return result || [];
     },
     items({
-      fixedSchema, isFixed, schema, values, keys,
+      fixedSchema, isFixed, path, schema, values, keys,
     }) {
       return values.map((_, offset) => {
         const props = getItems(schema, offset);
@@ -141,6 +142,7 @@ export default {
           key,
           props,
           offset,
+          path: (path || []).concat(offset),
           isFixed: isFixed && offset < schema.items.length,
           uiSchema: isFixed ? fixedSchema[offset] || {} : fixedSchema,
         };

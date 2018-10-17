@@ -61,7 +61,7 @@ export default {
       }
 
       if (components) {
-        return components[props.type || 'object'] || ErrorType;
+        return components[props.type || 'object'] || utils.ErrorType;
       }
     },
   },
