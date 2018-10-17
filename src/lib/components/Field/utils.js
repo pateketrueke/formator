@@ -122,8 +122,8 @@ const DEFAULT_VALUES = {
   object: () => ({}),
   array: () => [],
   string: () => '',
-  integer: () => undefined,
-  number: () => undefined,
+  integer: () => 0,
+  number: () => 0.0,
   boolean: () => false,
 };
 
@@ -241,6 +241,18 @@ export function renderValue(data, template) {
   return template;
 }
 
+export function sync() {
+  const { path } = this.get();
+
+  if (!path || path.length === 1) {
+    this.on('update', ({ changed }) => {
+      if (changed.result) {
+        this.fire('sync');
+      }
+    });
+  }
+}
+
 export function getId(rootId, forName, isLabel) {
   if (!INDEX[forName]) {
     INDEX[forName] = 0;
@@ -281,6 +293,7 @@ export function defaultValue(schema) {
 }
 
 export default {
+  sync,
   getId,
   getProp,
   getItems,

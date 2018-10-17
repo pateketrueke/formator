@@ -26,8 +26,15 @@ export default {
       rootId: randId(),
     };
   },
+  oncreate() {
+    this.on('update', ({ changed, current }) => {
+      if (changed.value && current.schema) {
+        this.validate(current);
+      }
+    });
+  },
   methods: {
-    validate(field) {
+    validate(subSchema) {
       if (this._locked) return;
       this._locked = true;
 
@@ -60,14 +67,14 @@ export default {
 
         let _schema = schema;
 
-        if (field.through) {
+        if (subSchema.through) {
           _schema = {
             ...schema,
             properties: {
               ...schema.properties,
-              [field.name]: {
-                ...field.props,
-                ...field.schema,
+              [subSchema.field]: {
+                ...subSchema.props,
+                ...subSchema.schema,
               },
             },
           };

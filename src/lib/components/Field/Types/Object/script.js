@@ -1,4 +1,4 @@
-import { getId } from '../../utils';
+import { getId, sync } from '../../utils';
 
 export default {
   components: {
@@ -9,13 +9,7 @@ export default {
       result: null,
     };
   },
-  oncreate() {
-    this.on('update', ({ changed }) => {
-      if (changed.result) {
-        this.fire('sync');
-      }
-    });
-  },
+  oncreate: sync,
   computed: {
     fixedSchema({ uiSchema }) {
       return uiSchema || {};

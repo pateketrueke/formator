@@ -41,6 +41,7 @@ export default {
       keys.splice(offset, 1);
 
       this.set({ result, keys });
+      this.fire('sync');
     },
     open() {
       const { schema, nextOffset } = this.get();
