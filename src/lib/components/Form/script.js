@@ -27,15 +27,15 @@ export default {
     };
   },
   methods: {
-    validate() {
+    validate(field) {
       if (this._locked) return;
       this._locked = true;
 
-      const {
-        schema, value, props, refs,
-      } = this.get();
-
       const { target } = this.options;
+
+      const {
+        schema, value, refs,
+      } = this.get();
 
       getAjv().then(() => {
         if (!this.ajv) {
@@ -58,30 +58,44 @@ export default {
             node.classList.remove('invalid');
           });
 
+        let _schema = schema;
+
+        if (field.through) {
+          _schema = {
+            ...schema,
+            properties: {
+              ...schema.properties,
+              [field.name]: {
+                ...field.props,
+                ...field.schema,
+              },
+            },
+          };
+        }
+
         this.set({
-          isValid: this.ajv.validate({ ...props, ...schema }, clean(value)),
+          isValid: this.ajv.validate(_schema, clean(value)),
         });
 
         (this.ajv.errors || []).forEach(error => {
-          // FIXME: this is working... but MUST be implemented at Field level?
-          console.log({ ...props, schema });
-          console.log(clean(value));
           console.log(error);
 
           if (error.dataPath) {
             showError(error.dataPath, target);
 
-            const field = error.params.missingProperty;
+            const prop = error.params.missingProperty;
 
-            if (field) {
-              showError(`${error.dataPath}/${field}`, target);
+            if (prop) {
+              showError(`${error.dataPath}/${prop}`, target);
             }
           } else {
             showError(`/${error.params.missingProperty}`, target);
           }
         });
 
-        this._locked = false;
+        setTimeout(() => {
+          this._locked = false;
+        }, 100);
       });
     },
     save(e) {

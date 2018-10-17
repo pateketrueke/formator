@@ -17,26 +17,6 @@ li {
         padding-top: @sp2;
       }
     }
-
-    &.invalid {
-      > td:first-child,
-      > label + div {
-        position: relative;
-
-        &::before {
-          left: -(@sp2 + 2px);
-          width: 2px;
-          height: 100%;
-          content: ' ';
-          position: absolute;
-          background-color: @error;
-        }
-      }
-
-      > div:only-child {
-        outline: 1px solid @error;
-      }
-    }
   }
 
   &[data-type] {

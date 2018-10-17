@@ -1,5 +1,26 @@
 @import './utilities';
 
+.invalid > td:first-child,
+.invalid > label + div,
+td.invalid  {
+  position: relative;
+
+  &::before {
+    left: -(@sp2 + 2px);
+    width: 2px;
+    height: 100%;
+    content: ' ';
+    position: absolute;
+    background-color: @error;
+  }
+}
+
+.invalid{
+  > div:only-child {
+    outline: 1px solid @error;
+  }
+}
+
 > fieldset,
 form > fieldset {
   padding: @sp2;

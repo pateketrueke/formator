@@ -9,7 +9,7 @@
       {#each items as { key, path, props, offset, isFixed, uiSchema } (key)}
         <tr data-field={`/${path.join('/')}`}>
           {#each headers as { field }}
-            <td>
+            <td data-field={`/${path.concat(field).join('/')}`}>
               <Value {props} {field} {uiSchema} value={values[offset][field]} />
             </td>
           {/each}

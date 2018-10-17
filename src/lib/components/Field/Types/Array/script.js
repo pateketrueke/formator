@@ -28,11 +28,6 @@ export default {
       this.set({ result, keys });
     }
   },
-  onupdate({ changed }) {
-    if (changed.result) {
-      this.fire('sync');
-    }
-  },
   methods: {
     append() {
       const { nextOffset, schema } = this.get();
@@ -68,6 +63,8 @@ export default {
           result,
         });
       }
+
+      this.fire('sync');
     },
     edit(offset) {
       const { values } = this.get();
@@ -104,8 +101,12 @@ export default {
 
       return uiSchema;
     },
-    nextOffset({ result }) {
-      return result ? result.length : 0;
+    nextOffset({ result, currentOffset }) {
+      if (typeof currentOffset === 'undefined') {
+        return result ? result.length : 0;
+      }
+
+      return currentOffset;
     },
     nextProps({
       fixedSchema, isFixed, path, schema, nextOffset,
