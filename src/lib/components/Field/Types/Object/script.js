@@ -9,6 +9,11 @@ export default {
       result: null,
     };
   },
+  onupdate({ changed }) {
+    if (changed.result) {
+      this.fire('sync');
+    }
+  },
   computed: {
     fixedSchema({ uiSchema }) {
       return uiSchema || {};

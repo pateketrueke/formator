@@ -49,21 +49,9 @@ fieldset {
   border: 0;
 
   ~ div {
-    overflow: hidden;
-
     > button {
-      float: left;
-
-      + button  {
-        margin-left: @sp2;
-      }
-
-      &:last-child {
+      &:nth-child(2) {
         float: right;
-
-        + button {
-          margin-left: 0;
-        }
       }
     }
   }

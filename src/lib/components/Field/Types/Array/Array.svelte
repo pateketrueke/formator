@@ -29,9 +29,9 @@
   {:else}
     <fieldset>
       <ul>
-        {#each items as { key, props, offset, isFixed, uiSchema } (key)}
+        {#each items as { key, path, props, offset, isFixed, uiSchema } (key)}
           <li data-type={props.type || 'object'}>
-            <div data-item>
+            <div data-field={`/${path.join('/')}`}>
               <div>
                 <Field {props} {uiSchema} bind:result="values[offset]" name={`${name}[${offset}]`} />
               </div>

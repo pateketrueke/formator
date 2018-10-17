@@ -88,7 +88,7 @@ export function clean(value) {
   }
 
   if (Array.isArray(value)) {
-    return value.map(clean).filter(x => typeof x !== 'undefined');
+    return value.map(clean);
   }
 
   const copy = {};

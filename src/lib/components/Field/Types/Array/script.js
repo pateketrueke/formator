@@ -28,6 +28,11 @@ export default {
       this.set({ result, keys });
     }
   },
+  onupdate({ changed }) {
+    if (changed.result) {
+      this.fire('sync');
+    }
+  },
   methods: {
     append() {
       const { nextOffset, schema } = this.get();

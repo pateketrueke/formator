@@ -1,10 +1,6 @@
 import { randId, clean } from '../../shared/utils';
 import { getAjv } from '../../shared/deps'; // eslint-disable-line
 
-const ACTION_MAP = {
-  new: 'create',
-};
-
 function showError(field, target) {
   const selector = `[data-field="${field}"]`;
   const el = target.querySelector(selector);
@@ -13,6 +9,10 @@ function showError(field, target) {
     el.classList.add('invalid');
   }
 }
+
+const ACTION_MAP = {
+  new: 'create',
+};
 
 /* global Ajv */
 
@@ -26,49 +26,68 @@ export default {
       rootId: randId(),
     };
   },
-  oncreate() {
-    getAjv().then(() => {
-      this.ajv = new Ajv({
-        validateSchema: false,
-        jsonPointers: true,
-        allErrors: true,
-        logger: false,
-      });
-
-      const { refs } = this.get();
-
-      Object.keys(refs).forEach(ref => {
-        if (refs[ref].id || refs[ref].definitions) {
-          this.ajv.addSchema(refs[ref], ref);
-        }
-      });
-    });
-  },
   methods: {
-    save(e) {
-      if (e) {
-        e.preventDefault();
-      }
+    validate() {
+      if (this._locked) return;
+      this._locked = true;
 
-      const { value, schema } = this.get();
+      const {
+        schema, value, props, refs,
+      } = this.get();
+
       const { target } = this.options;
 
-      const data = clean(value);
+      getAjv().then(() => {
+        if (!this.ajv) {
+          this.ajv = new Ajv({
+            validateSchema: false,
+            jsonPointers: true,
+            allErrors: true,
+            logger: false,
+          });
 
-      [].slice.call(target.querySelectorAll('[data-field]'))
-        .forEach(node => {
-          node.classList.remove('invalid');
+          Object.keys(refs).forEach(ref => {
+            if (refs[ref].id || refs[ref].definitions) {
+              this.ajv.addSchema(refs[ref], ref);
+            }
+          });
+        }
+
+        [].slice.call(target.querySelectorAll('[data-field]'))
+          .forEach(node => {
+            node.classList.remove('invalid');
+          });
+
+        this.set({
+          isValid: this.ajv.validate({ ...props, ...schema }, clean(value)),
         });
 
-      this.ajv.validate(schema, data);
+        (this.ajv.errors || []).forEach(error => {
+          // FIXME: this is working... but MUST be implemented at Field level?
+          console.log({ ...props, schema });
+          console.log(clean(value));
+          console.log(error);
 
-      (this.ajv.errors || []).forEach(error => {
-        showError(error.dataPath || `/${error.params.missingProperty}`, target);
+          if (error.dataPath) {
+            showError(error.dataPath, target);
 
-        if (error.dataPath) {
-          showError(`${error.dataPath}/${error.params.missingProperty}`, target);
-        }
+            const field = error.params.missingProperty;
+
+            if (field) {
+              showError(`${error.dataPath}/${field}`, target);
+            }
+          } else {
+            showError(`/${error.params.missingProperty}`, target);
+          }
+        });
+
+        this._locked = false;
       });
+    },
+    save(e) {
+      e.preventDefault();
+
+      console.log('IS_VALID?', this.get());
     },
   },
   computed: {

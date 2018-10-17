@@ -5,13 +5,19 @@ li {
     }
   }
 
-  [data-item] > div {
+  [data-field] > div {
     + div {
       margin-left: @sp2;
     }
   }
 
   [data-field] {
+    > div > fieldset {
+      + div {
+        padding-top: @sp2;
+      }
+    }
+
     &.invalid {
       > td:first-child,
       > label + div {
@@ -25,6 +31,10 @@ li {
           position: absolute;
           background-color: @error;
         }
+      }
+
+      > div:only-child {
+        outline: 1px solid @error;
       }
     }
   }

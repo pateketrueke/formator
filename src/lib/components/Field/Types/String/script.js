@@ -6,6 +6,11 @@ export default {
       result: null,
     };
   },
+  onupdate({ changed }) {
+    if (changed.result) {
+      this.fire('sync');
+    }
+  },
   computed: {
     id: ({ rootId, name }) => getId(rootId, name),
     props: ({ uiSchema }) => ({

@@ -65,4 +65,9 @@ export default {
       }
     },
   },
+  methods: {
+    validate() {
+      this.root.validate();
+    },
+  },
 };
