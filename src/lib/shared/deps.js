@@ -7,8 +7,10 @@ export async function getTypes() {
     object: import('../components/Field/Types/Object'),
   };
 
-  await Object.keys(deps).reduce((prev, cur) => prev.then(() => deps[cur])
-    .then(({ default: defaultValue }) => { deps[cur] = defaultValue; }), Promise.resolve());
+  await Promise.all(Object.keys(deps).map(x =>
+    deps[x].then(({ default: defaultValue }) => {
+      deps[x] = defaultValue;
+    })));
 
   deps.integer = deps.number;
 
