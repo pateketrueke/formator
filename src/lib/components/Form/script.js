@@ -119,8 +119,10 @@ export default {
     },
     nextAction({ schema, action, actions }) {
       if (schema && actions) {
-        return actions[schema.id][ACTION_MAP[action]];
+        return actions[schema.id][ACTION_MAP[action]] || {};
       }
+
+      return {};
     },
     value({ result, schema }) {
       if (!schema) {
