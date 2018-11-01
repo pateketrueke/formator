@@ -1,4 +1,9 @@
 description: Shopping Cart example
+result:
+- id: 1
+  items: []
+- id: 2
+  items: [{ id: 1, CartId: 1, ProductId: 1, qty: 2, Product: { id: 1, name: 'TEST', price: 99.0 } }]
 refs:
   Cart:
     model: Cart

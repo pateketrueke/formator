@@ -1,4 +1,4 @@
-import { renderValue } from '../utils';
+import { renderValue } from '../Field/utils';
 
 export default {
   computed: {

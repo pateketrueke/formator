@@ -1,6 +1,6 @@
-import LinkType from './Link';
-import ErrorType from './Error';
-import LoaderType from './Loader';
+import LinkType from '../Link';
+import ErrorType from '../Error';
+import LoaderType from '../Loader';
 
 import { destroy, update } from '../Modal/stacked';
 

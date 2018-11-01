@@ -2,7 +2,7 @@ import { randId } from '../../shared/utils';
 
 export default {
   components: {
-    Value: '../Field/Value',
+    Value: '../Value',
   },
   data() {
     return {

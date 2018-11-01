@@ -4,7 +4,7 @@ import { randId } from '../../../../shared/utils';
 export default {
   components: {
     Field: '../../Field',
-    Value: '../../Value',
+    Value: '../../../Value',
     Modal: '../../../Modal',
   },
   data() {
