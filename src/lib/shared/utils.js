@@ -1,5 +1,3 @@
-import { defaultValue } from '../components/Field/utils';
-
 export function randId() {
   return `_${Math.random().toString(36).substr(2)}`;
 }
@@ -52,7 +50,7 @@ export function reduceRefs(schema, refs) {
   return copy;
 }
 
-export function loader(Component, selector) {
+export function loader(components, selector) {
   return [].slice.call(document.querySelectorAll(selector)).map(node => {
     let target;
     let data;
@@ -72,6 +70,10 @@ export function loader(Component, selector) {
     } else {
       target = node;
     }
+
+    const Component = data.action === 'index'
+      ? components.Table
+      : components.Form;
 
     const instance = new Component({
       target,

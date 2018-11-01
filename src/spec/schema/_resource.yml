@@ -87,8 +87,8 @@ uiSchema:
       price:
         ui:label: price
 attributes: {}
-isNew: true
-action: new
+#isNew: true
+action: index
 actions:
   Cart:
     index:

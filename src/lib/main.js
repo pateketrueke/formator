@@ -1,4 +1,6 @@
-import { loader } from './shared/utils';
 import Form from './components/Form';
+import Table from './components/Table';
 
-loader(Form, 'script[rel=resource],div[data-resource]');
+import { loader } from './shared/utils';
+
+loader({ Form, Table }, 'script[rel=resource],div[data-resource]');

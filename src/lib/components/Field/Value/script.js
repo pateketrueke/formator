@@ -8,7 +8,7 @@ export default {
     fixedNodes: ({
       value, field, props, fixedSchema,
     }) => {
-      const { type, default: defaultValue } = props.properties[field];
+      const { type, default: defaultValue } = props.properties[field] || {};
 
       if (type === 'number' || type === 'integer') {
         return [value || defaultValue || 0];
