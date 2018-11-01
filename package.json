@@ -73,6 +73,6 @@
     "svelte": "^2.9.11",
     "tarima": "^4.2.2",
     "tarima-lr": "^0.4.3",
-    "testcafe": "^0.22.0"
+    "testcafe": "^0.23.0"
   }
 }
