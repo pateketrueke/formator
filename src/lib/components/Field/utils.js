@@ -7,7 +7,7 @@ import { destroy, update } from '../Modal/stacked';
 const RE_PLACEHOLDER = /\{(?:(@?[\w.]+)(?::([\w*,.]+))?([|?!])?(.*?))\}/;
 const RE_DATA_BASE64 = /^data:(.+?);base64,/;
 
-const OTHER_TYPES = {
+const FIXED_TYPES = {
   media(data, values, parentNode) {
     let fileName;
 
@@ -134,6 +134,10 @@ export function getProp(from, key) {
     return null;
   }
 
+  if (Array.isArray(from)) {
+    return getProp({ from }, `from.${key}`);
+  }
+
   const keys = key.split('.');
 
   let o = from;
@@ -204,7 +208,7 @@ export function renderValue(data, template) {
 
         if (cur.expression.charAt() === '@') {
           try {
-            retval = OTHER_TYPES[cur.expression.substr(1)](data,
+            retval = FIXED_TYPES[cur.expression.substr(1)](data,
               cur.property.map(x => getProp(data, x) || cur.value), document.body);
           } catch (e) {
             prev.push(`Error in expression: ${JSON.stringify(cur)} (${e.message})`);
