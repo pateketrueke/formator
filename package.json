@@ -46,7 +46,11 @@
     },
     "bundleOptions": {
       "rollup": {
-        "format": "esm"
+        "format": "esm",
+        "plugins": [
+          "rollup-plugin-node-resolve",
+          "rollup-plugin-commonjs"
+        ]
       },
       "extensions": {
         "js": "es6",
@@ -69,7 +73,10 @@
     "less-plugin-autoprefix": "^2.0.0",
     "pug": "^2.0.3",
     "rollup": "^0.66.0",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-node-resolve": "^3.4.0",
     "shimport": "0.0.11",
+    "somedom": "0.0.5",
     "svelte": "^2.9.11",
     "tarima": "^4.2.2",
     "tarima-lr": "^0.4.3",

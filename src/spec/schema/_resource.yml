@@ -3,7 +3,9 @@ result:
 - id: 1
   items: []
 - id: 2
-  items: [{ id: 1, CartId: 1, ProductId: 1, qty: 2, Product: { id: 1, name: 'TEST', price: 99.0 } }]
+  items:
+    - { id: 1, CartId: 1, ProductId: 1, qty: 2, Product: { id: 1, name: 'TEST', price: 99.0 } }
+    - { id: 2, CartId: 1, ProductId: 2, qty: 1, Product: { id: 2, name: 'TEST II', price: 12.3 } }
 refs:
   Cart:
     model: Cart
@@ -79,6 +81,7 @@ uiSchema:
     ui:headers: [Quantity, Product info.]
     ui:update: Update product
     ui:save: Add product
+    ui:template: ["small", [ ["span", "Products bought: {@sum:*.qty}"], ["span", { "style": "float:right" }, "Total: ${@sum:*.Product.price}"] ]]
     qty:
       ui:label: Count
       ui:focus: true

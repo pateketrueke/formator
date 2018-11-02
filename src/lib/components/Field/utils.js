@@ -1,3 +1,4 @@
+import DOMType from '../HTML';
 import LinkType from '../Link';
 import ErrorType from '../Error';
 import LoaderType from '../Loader';
@@ -243,6 +244,39 @@ export function renderValue(data, template) {
   }
 
   return template;
+}
+
+export function renderNode(data, template) {
+  // walk n' render text-nodes only
+  function walk(tpl) {
+    let vnode = tpl.slice();
+
+    // FIXME: properly map vnodes?
+    if (Array.isArray(vnode[0])) {
+      vnode = vnode.map(x => walk(x));
+    } else if (typeof vnode[0] === 'string') {
+      if (typeof vnode[1] !== 'object') {
+        vnode[1] = renderValue(data, vnode[1]);
+      } else if (Array.isArray(vnode[1])) {
+        vnode[1] = walk(vnode[1]);
+      } else if (vnode[2]) {
+        if (Array.isArray(vnode[2])) {
+          vnode[2] = [].concat(...vnode[2].map(x => renderValue(data, x)));
+        } else {
+          vnode[2] = renderValue(data, vnode[2]);
+        }
+      }
+    }
+
+    return vnode;
+  }
+
+  return [{
+    component: DOMType,
+    options: {
+      markup: walk(template),
+    },
+  }];
 }
 
 export function sync() {
