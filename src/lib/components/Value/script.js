@@ -1,4 +1,4 @@
-import { renderValue, renderNode } from '../Field/utils';
+import { render } from './utils';
 
 export default {
   computed: {
@@ -20,9 +20,7 @@ export default {
 
       if (typeof defaultValue === 'undefined') {
         if (fixedSchema['ui:template']) {
-          return Array.isArray(fixedSchema['ui:template'])
-            ? renderNode(value, fixedSchema['ui:template'])
-            : renderValue(value, fixedSchema['ui:template']);
+          return render(value, fixedSchema['ui:template']);
         }
 
         return [JSON.stringify(value)];

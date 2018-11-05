@@ -1,4 +1,6 @@
-import utils from './utils';
+import ErrorType from '../Error';
+import LoaderType from '../Loader';
+
 import { getTypes } from '../../shared/deps'; // eslint-disable-line
 import { reduceRefs } from '../../shared/utils';
 
@@ -53,15 +55,15 @@ export default {
   computed: {
     propType({ err, props, components }) {
       if (err) {
-        return utils.ErrorType;
+        return ErrorType;
       }
 
       if (!props) {
-        return utils.LoaderType;
+        return LoaderType;
       }
 
       if (components) {
-        return components[props.type || 'object'] || utils.ErrorType;
+        return components[props.type || 'object'] || ErrorType;
       }
     },
   },
