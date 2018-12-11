@@ -3,6 +3,8 @@ import { destroy, update } from '../Modal/stacked';
 
 import HTML from '../HTML';
 
+const $ = bind(render, listeners());
+
 const RE_PLACEHOLDER = /\{(?:(@?[\w.]+)(?::([\w*,.]+))?([|?!])?(.*?))\}/;
 const RE_DATA_BASE64 = /^data:(.+?);base64,/;
 
@@ -247,8 +249,6 @@ export function reduce(value, template) {
 
   return template;
 }
-
-const $ = bind(render, listeners());
 
 export function renderDOM(value, template) {
   return [{
