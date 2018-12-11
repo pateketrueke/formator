@@ -1,13 +1,15 @@
-import { render } from 'somedom';
-
 export default {
   oncreate() {
-    const { markup } = this.get();
+    const { element, markup } = this.get();
     const { target } = this.refs;
 
-    // FIXME: consider vnode-patching on updates?
-    const html = render(markup);
+    if (element instanceof Element) {
+      target.parentNode.insertBefore(element, target);
+      target.parentNode.removeChild(target);
+    }
 
-    target.appendChild(html);
+    if (typeof markup === 'string') {
+      target.innerHTML = markup;
+    }
   },
 };

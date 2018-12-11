@@ -1,20 +1,20 @@
-import DOMType from '../HTML';
-import LinkType from '../Link';
-
+import { bind, render, listeners } from 'somedom';
 import { destroy, update } from '../Modal/stacked';
+
+import HTML from '../HTML';
 
 const RE_PLACEHOLDER = /\{(?:(@?[\w.]+)(?::([\w*,.]+))?([|?!])?(.*?))\}/;
 const RE_DATA_BASE64 = /^data:(.+?);base64,/;
 
 const FIXED_TYPES = {
-  media(data, values, parentNode) {
+  embed(data, values, parentNode) {
     let fileName;
 
     if (!values.length) {
       return 'NOIMG';
     }
 
-    if (values[0].indexOf('data:') > -1) {
+    if (String(values[0]).indexOf('data:') === 0) {
       fileName = values[0].match(RE_DATA_BASE64)[1].split(';')[1].split('name=')[1];
     } else {
       fileName = values[0];
@@ -24,17 +24,14 @@ const FIXED_TYPES = {
       fileName = values[1];
     }
 
-    return {
-      component: LinkType,
-      options: {
-        text: fileName || values[0],
-        href: values[0],
-      },
-      onClick(e) {
+    return ['a', {
+      href: values[0],
+      onclick(e) {
         if (e.metaKey || e.ctrlKey) {
           return;
         }
 
+        // FIXME: migrate from vanilla to somedom?
         e.preventDefault();
 
         const target = document.createElement('div');
@@ -83,7 +80,7 @@ const FIXED_TYPES = {
           }, 100);
         });
       },
-    };
+    }, fileName || values[0]];
   },
   sum(data, values) {
     return values.map(x => x.reduce((prev, cur) => prev + cur, 0).toFixed(2).replace('.00', '')).join(', ');
@@ -218,7 +215,7 @@ export function renderValue(data, template) {
             retval = cur.value;
           }
 
-          if (typeof retval === 'object' && typeof retval.component !== 'function') {
+          if (typeof retval === 'object' && !Array.isArray(retval)) {
             retval = JSON.stringify(retval);
           }
 
@@ -233,45 +230,31 @@ export function renderValue(data, template) {
   return template;
 }
 
-export function renderNode(data, template) {
-  // walk n' render text-nodes only
-  function walk(tpl) {
-    let vnode = tpl.slice();
-
-    // FIXME: properly map vnodes?
-    if (Array.isArray(vnode[0])) {
-      vnode = vnode.map(x => walk(x));
-    } else if (typeof vnode[0] === 'string') {
-      if (typeof vnode[1] !== 'object') {
-        vnode[1] = renderValue(data, vnode[1]);
-      } else if (Array.isArray(vnode[1])) {
-        vnode[1] = walk(vnode[1]);
-      } else if (vnode[2]) {
-        if (Array.isArray(vnode[2])) {
-          vnode[2] = [].concat(...vnode[2].map(x => renderValue(data, x)));
-        } else {
-          vnode[2] = renderValue(data, vnode[2]);
-        }
-      }
-    }
-
-    return vnode;
+export function reduce(value, template) {
+  if (Array.isArray(template[1])) {
+    return [template[0], null, template[1].map(x => reduce(value, x))];
   }
 
-  return [{
-    component: DOMType,
-    options: {
-      markup: walk(template),
-    },
-  }];
+  if (Array.isArray(template[2])) {
+    return [template[0], template[1], template[2].map(x => reduce(value, x))];
+  }
+
+  const text = template[template.length - 1];
+
+  if (typeof text === 'string' && RE_PLACEHOLDER.test(text)) {
+    return [template[0], template[2] ? template[1] : null, renderValue(value, text)];
+  }
+
+  return template;
 }
 
-// FIXME: <Value /> is used to render all given values, from scalars to mixed objects; it will mount
-// a generic component for render them all, i.e. to render embedded links, or even other components, etc.
-// the trick is very simple, we just provide an AST and then render recursively on the DOM, either Svelte or somedom
+const $ = bind(render, listeners());
 
-export function render(data, template) {
-  console.log(data, template);
-
-  return 'WIP';
+export function renderDOM(value, template) {
+  return [{
+    component: HTML,
+    options: {
+      element: $(reduce(value, template)),
+    },
+  }];
 }

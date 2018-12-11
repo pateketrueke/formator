@@ -1,4 +1,4 @@
-import { render } from './utils';
+import { renderDOM } from './helpers';
 
 export default {
   computed: {
@@ -20,7 +20,7 @@ export default {
 
       if (typeof defaultValue === 'undefined') {
         if (fixedSchema['ui:template']) {
-          return render(value, fixedSchema['ui:template']);
+          return renderDOM(value, fixedSchema['ui:template']);
         }
 
         return [JSON.stringify(value)];
