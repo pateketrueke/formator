@@ -5,12 +5,20 @@ import HTML from '../HTML';
 
 const $ = bind(render, listeners());
 
-const RE_PLACEHOLDER = /\{(?:(@?[\w.]+)(?::([\w*,.]+))?([|?!])?(.*?))\}/;
+const RE_PLACEHOLDER = /\{(?:(@?[\w.]+)(?::([\w*,.]+))?([|?!])?(.*?)|)\}/;
 const RE_DATA_BASE64 = /^data:(.+?);base64,/;
+const RE_IDENTITY = /\{\}/g;
 
-const FIXED_TYPES = {
+const BUILTIN_TYPES = {
   embed(data, values, parentNode) {
     let fileName;
+
+    // FIXME: handle multiple embeds?
+    if (Array.isArray(values[0])) {
+      console.log(values[0]);
+
+      return ['span', 'WIP'];
+    }
 
     if (!values.length) {
       return 'NOIMG';
@@ -156,6 +164,10 @@ export function getProp(from, key) {
 }
 
 export function renderValue(data, template) {
+  if (typeof data !== 'object') {
+    return template.replace(RE_IDENTITY, data);
+  }
+
   if (typeof template === 'string') {
     let copy = template;
     let matches;
@@ -195,7 +207,13 @@ export function renderValue(data, template) {
 
         if (cur.expression.charAt() === '@') {
           try {
-            retval = FIXED_TYPES[cur.expression.substr(1)](data,
+            const method = cur.expression.substr(1);
+
+            if (typeof BUILTIN_TYPES[method] !== 'function') {
+              throw new Error(`Unknown helper ${method}`);
+            }
+
+            retval = BUILTIN_TYPES[method](data,
               cur.property.map(x => getProp(data, x) || cur.value), document.body);
           } catch (e) {
             prev.push(`Error in expression: ${JSON.stringify(cur)} (${e.message})`);
