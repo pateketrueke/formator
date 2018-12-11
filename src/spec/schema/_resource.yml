@@ -4,8 +4,8 @@ result:
   items: []
 - id: 2
   items:
-    - { id: 1, CartId: 1, ProductId: 1, qty: 2, Product: { id: 1, name: 'TEST', price: 99.0 } }
-    - { id: 2, CartId: 1, ProductId: 2, qty: 1, Product: { id: 2, name: 'TEST II', price: 12.3 } }
+    - { id: 1, CartId: 1, ProductId: 1, qty: 2, Product: { id: 1, name: 'TEST', price: 99.0, image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Candle_%28Slava_celebration%29.jpg/220px-Candle_%28Slava_celebration%29.jpg' } }
+    - { id: 2, CartId: 1, ProductId: 2, qty: 1, Product: { id: 2, name: 'TEST II', price: 12.3, image: 'https://www.ikea.com/ca/en/images/products/fenomen-unscented-block-candle-beige__0432192_PE586207_S4.JPG' } }
 refs:
   Cart:
     model: Cart
@@ -74,6 +74,7 @@ uiSchema:
   ui:save: Save cart
   id:
     ui:hidden: true
+    ui:template: ["small", { "style": "display:block;text-align:center" }, "{}"]
   items:
     ui:label: Products
     ui:empty: Cart is empty
@@ -81,7 +82,7 @@ uiSchema:
     ui:headers: [Quantity, Product info.]
     ui:update: Update product
     ui:save: Add product
-    ui:template: ["small", [ ["span", "Products bought: {@sum:*.qty}"], ["span", { "style": "float:right" }, "Total: ${@sum:*.Product.price}"] ]]
+    ui:template: ["small", [ ["span", "Products bought: {@sum:*.qty} (preview: {@embed:*.Product.image})"], ["span", { "style": "float:right" }, "Total: ${@sum:*.Product.price}"] ]]
     qty:
       ui:label: Count
       ui:focus: true
