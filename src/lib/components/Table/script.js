@@ -1,4 +1,4 @@
-import { randId } from '../../shared/utils';
+import { API, randId } from '../../shared/utils';
 import { defaultValue } from '../Field/utils';
 
 export default {
@@ -24,12 +24,15 @@ export default {
       });
     },
     add() {
-      const { value, values } = this.get();
+      const {
+        value, values, model, actions,
+      } = this.get();
 
-      this.set({
-        result: values.concat(value),
-        value: {},
-      });
+      API.call(actions[model].create, value)
+        .then(() => this.set({
+          result: values.concat(value),
+          value: {},
+        }));
     },
   },
   computed: {

@@ -75,7 +75,6 @@ uiSchema:
   ui:save: Save cart
   id:
     ui:hidden: true
-    ui:template: ["small", { "style": "display:block;text-align:center" }, "{}"]
   items:
     ui:label: Products
     ui:empty: Cart is empty

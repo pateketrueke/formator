@@ -104,10 +104,28 @@ export function clean(value) {
   return copy;
 }
 
+export const API = {
+  call(action, data) {
+    const url = `http://localhost:8081${action.path}`;
+
+    return fetch(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      method: action.verb,
+      body: action.verb !== 'GET'
+        ? JSON.stringify({ payload: data })
+        : undefined,
+    }).then(resp => resp.json());
+  },
+};
+
 export default {
   reduceRefs,
   findRef,
   randId,
   loader,
   clean,
+  API,
 };
