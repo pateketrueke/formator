@@ -14,6 +14,20 @@ export default {
       keys: [],
     };
   },
+  oncreate() {
+    const { model, result, actions } = this.get();
+
+    // FIXME: remove `!result ||` once it's finished!
+    if (!result || typeof result === 'undefined') {
+      API.call(actions[model].index).then(data => {
+        if (data.status === 'ok') {
+          this.set({
+            result: data.result,
+          });
+        }
+      });
+    }
+  },
   methods: {
     append() {
       const { schema } = this.get();
