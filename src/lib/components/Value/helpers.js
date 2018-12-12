@@ -2,7 +2,7 @@ import { $ } from './widgets';
 import TYPES from './types';
 import HTML from '../HTML';
 
-const RE_PLACEHOLDER = /\{(?:(@?[\w.]+)(?::([\w*,.]+))?([|?!])?(.*?)|)\}/;
+const RE_PLACEHOLDER = /<(?:(@?[\w.]+)(?::([\w*,.]+))?([|?!])?(.*?)|)>/;
 const RE_IDENTITY = /\{\}/g;
 
 export function getProp(from, key) {
@@ -142,7 +142,7 @@ export function reduce(value, template) {
 
   const text = template[template.length - 1];
 
-  if (typeof text === 'string' && RE_PLACEHOLDER.test(text)) {
+  if (typeof text === 'string' && (RE_PLACEHOLDER.test(text) || RE_IDENTITY.test(text))) {
     return [template[0], template[2] ? template[1] : null, renderValue(value, text)];
   }
 

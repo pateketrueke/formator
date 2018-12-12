@@ -2,9 +2,7 @@ import { mount, unmount } from 'somedom';
 import { destroy, update } from '../../Modal/stacked';
 
 export default function slideShow($, data, values, parentNode) {
-  values = !Array.isArray(values[0])
-    ? [values[0]]
-    : values[0];
+  values = values.reduce((prev, cur) => prev.concat(cur), []);
 
   const fileName = values.length !== 1
     ? `${values.length} sources`

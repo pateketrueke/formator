@@ -76,7 +76,7 @@
     "rollup-plugin-commonjs": "^9.2.0",
     "rollup-plugin-node-resolve": "^4.0.0",
     "shimport": "0.0.11",
-    "somedom": "0.0.6",
+    "somedom": "0.0.7",
     "svelte": "^2.15.2",
     "tarima": "^4.2.2",
     "tarima-lr": "^0.4.3",

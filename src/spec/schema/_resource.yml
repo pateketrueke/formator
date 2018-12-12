@@ -82,7 +82,7 @@ uiSchema:
     ui:headers: [Quantity, Product info.]
     ui:update: Update product
     ui:save: Add product
-    ui:template: ["small", [ ["span", "Products bought: {@sum:*.qty} (preview: {@embed:*.Product.image})"], ["span", { "style": "float:right" }, "Total: ${@sum:*.Product.price}"] ]]
+    ui:template: ["small", [ ["span", "Products bought: <@sum:*.qty> (preview: <@embed:*.Product.image>)"], ["span", { "style": "float:right" }, "Total: $<@sum:*.Product.price>"] ]]
     qty:
       ui:label: Count
       ui:focus: true
