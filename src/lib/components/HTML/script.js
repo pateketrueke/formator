@@ -5,7 +5,7 @@ export default {
 
     if (element instanceof Element) {
       target.parentNode.insertBefore(element, target);
-      target.parentNode.removeChild(target);
+      this.on('destroy', () => element.remove());
     }
 
     if (typeof markup === 'string') {
