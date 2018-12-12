@@ -45,7 +45,7 @@ export default {
       return props.map((key, offset) => ({
         label: (fixedSchema['ui:headers'] && fixedSchema['ui:headers'][offset]) || key,
         field: key,
-      }));
+      })).filter(x => fixedSchema[x.field] && !fixedSchema[x.field]['ui:hidden']);
     },
     values({ result }) {
       return result || [];
