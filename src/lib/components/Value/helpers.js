@@ -1,57 +1,38 @@
-import { bind, render, listeners } from 'somedom';
+import {
+  bind, mount, unmount, render,
+  listeners, attributes, classes,
+} from 'somedom';
+
 import { destroy, update } from '../Modal/stacked';
 
 import HTML from '../HTML';
 
-const $ = bind(render, listeners());
+const $ = bind(render,
+  listeners(),
+  attributes({
+    class: classes,
+  }));
 
 const RE_PLACEHOLDER = /\{(?:(@?[\w.]+)(?::([\w*,.]+))?([|?!])?(.*?)|)\}/;
-const RE_DATA_BASE64 = /^data:(.+?);base64,/;
+// const RE_DATA_BASE64 = /^data:(.+?);base64,/;
 const RE_IDENTITY = /\{\}/g;
 
 const BUILTIN_TYPES = {
   embed(data, values, parentNode) {
-    let fileName;
+    values = !Array.isArray(values[0])
+      ? [values[0]]
+      : values[0];
 
-    // FIXME: handle multiple embeds?
-    if (Array.isArray(values[0])) {
-      console.log(values[0]);
-
-      return ['span', 'WIP'];
-    }
-
-    if (!values.length) {
-      return 'NOIMG';
-    }
-
-    if (String(values[0]).indexOf('data:') === 0) {
-      fileName = values[0].match(RE_DATA_BASE64)[1].split(';')[1].split('name=')[1];
-    } else {
-      fileName = values[0];
-    }
-
-    if (values[1]) {
-      fileName = values[1];
-    }
+    const fileName = values.length !== 1
+      ? `${values.length} sources`
+      : '1 source';
 
     return ['a', {
-      href: values[0],
+      href: '#',
       onclick(e) {
-        if (e.metaKey || e.ctrlKey) {
-          return;
-        }
-
-        // FIXME: migrate from vanilla to somedom?
         e.preventDefault();
 
-        const target = document.createElement('div');
-
-        parentNode.appendChild(target);
-
-        // FIXME: reuse [data-modal] or viceversa?
-        target.setAttribute('data-title', fileName || values[0]);
-        target.classList.add('json-schema-formalizer-layer');
-        target.classList.add('overlay');
+        let target;
 
         function closeMe(el) {
           if (el && (el.target !== target)) {
@@ -59,38 +40,45 @@ const BUILTIN_TYPES = {
           }
 
           destroy(closeMe);
-          parentNode.removeChild(target);
+          unmount(target);
         }
 
-        target.addEventListener('click', closeMe);
         closeMe.close = closeMe;
         update(closeMe, true);
 
+        target = mount(parentNode, ['div', {
+          onclick: closeMe,
+          data: { title: fileName },
+          class: ['json-schema-formalizer-layer', 'overlay'],
+        }, 'WIP'], $);
+
+        // FIXME: migrate from vanilla to somedom?
         setTimeout(() => {
           target.classList.add('active');
 
           setTimeout(() => {
-            const display = !values[0].match(/\.(svg|gif|png|jpe?g)$/)
-              ? document.createElement('iframe')
-              : document.createElement('img');
+            console.log('SHOW', values);
+            // const display = !values[0].match(/\.(svg|gif|png|jpe?g)$/)
+            //   ? document.createElement('iframe')
+            //   : document.createElement('img');
 
-            if (display.tagName === 'IFRAME') {
-              display.setAttribute('width', 853);
-              display.setAttribute('height', 505);
-            }
+            // if (display.tagName === 'IFRAME') {
+            //   display.setAttribute('width', 853);
+            //   display.setAttribute('height', 505);
+            // }
 
-            display.style.opacity = 0;
-            display.src = values[0];
+            // display.style.opacity = 0;
+            // display.src = values[0];
 
-            target.appendChild(display);
+            // target.appendChild(display);
 
-            setTimeout(() => {
-              display.style.opacity = 1;
-            }, 100);
+            // setTimeout(() => {
+            //   display.style.opacity = 1;
+            // }, 100);
           }, 100);
         });
       },
-    }, fileName || values[0]];
+    }, fileName];
   },
   sum(data, values) {
     return values.map(x => x.reduce((prev, cur) => prev + cur, 0).toFixed(2).replace('.00', '')).join(', ');
