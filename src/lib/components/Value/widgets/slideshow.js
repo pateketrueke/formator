@@ -4,7 +4,7 @@ import { destroy, update } from '../../Modal/stacked';
 export default function slideShow($, data, values, parentNode) {
   values = values.reduce((prev, cur) => prev.concat(cur), []);
 
-  const fileName = values.length !== 1
+  const prefix = values.length !== 1
     ? `${values.length} sources`
     : '1 source';
 
@@ -12,12 +12,22 @@ export default function slideShow($, data, values, parentNode) {
     return 'N/A';
   }
 
+  let ref;
+
   return ['a', {
     href: '#',
+    oncreate(self) {
+      ref = self;
+      ref.href = values[0];
+    },
     onclick(e) {
+      if (e.metaKey || e.ctrlKey) {
+        return;
+      }
+
       e.preventDefault();
 
-      let offset = 0;
+      let offset = Math.max(0, values.indexOf(ref.href));
       let target;
       let node;
 
@@ -35,18 +45,18 @@ export default function slideShow($, data, values, parentNode) {
           target.removeChild(node);
         }
 
-        node = !values[offset].match(/\.(svg|gif|png|jpe?g)$/)
-          ? document.createElement('iframe')
-          : document.createElement('img');
-
-        if (node.tagName === 'IFRAME') {
-          node.setAttribute('width', 853);
-          node.setAttribute('height', 505);
-        }
+        node = $(!values[offset].match(/\.(svg|gif|png|jpe?g)/i)
+          ? ['iframe', { width: 853, height: 505 }]
+          : ['img']);
 
         node.style.opacity = 0;
-        node.src = values[offset];
+        node.src = ref.href = values[offset];
 
+        const count = values.length > 1
+          ? `(${offset + 1}/${values.length}) `
+          : '';
+
+        target.dataset.title = `${count}${ref.href.split('/').pop()}`;
         target.appendChild(node);
 
         setTimeout(() => {
@@ -76,7 +86,7 @@ export default function slideShow($, data, values, parentNode) {
 
       target = mount(parentNode, ['div', {
         onclick: closeMe,
-        data: { title: fileName },
+        data: { title: prefix },
         class: ['json-schema-formalizer-layer', 'overlay'],
       }], $);
 
@@ -85,5 +95,5 @@ export default function slideShow($, data, values, parentNode) {
         setTimeout(showMe, 60);
       });
     },
-  }, fileName];
+  }, prefix];
 }
