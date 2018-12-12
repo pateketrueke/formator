@@ -1,116 +1,9 @@
-import {
-  bind, mount, unmount, render,
-  listeners, attributes, classes,
-} from 'somedom';
-
-import { destroy, update } from '../Modal/stacked';
-
+import { $ } from './widgets';
+import TYPES from './types';
 import HTML from '../HTML';
 
-const $ = bind(render,
-  listeners(),
-  attributes({
-    class: classes,
-  }));
-
 const RE_PLACEHOLDER = /\{(?:(@?[\w.]+)(?::([\w*,.]+))?([|?!])?(.*?)|)\}/;
-// const RE_DATA_BASE64 = /^data:(.+?);base64,/;
 const RE_IDENTITY = /\{\}/g;
-
-const BUILTIN_TYPES = {
-  embed(data, values, parentNode) {
-    values = !Array.isArray(values[0])
-      ? [values[0]]
-      : values[0];
-
-    const fileName = values.length !== 1
-      ? `${values.length} sources`
-      : '1 source';
-
-    return ['a', {
-      href: '#',
-      onclick(e) {
-        e.preventDefault();
-
-        let target;
-
-        function closeMe(el) {
-          if (el && (el.target !== target)) {
-            return;
-          }
-
-          destroy(closeMe);
-          unmount(target);
-        }
-
-        closeMe.close = closeMe;
-        update(closeMe, true);
-
-        target = mount(parentNode, ['div', {
-          onclick: closeMe,
-          data: { title: fileName },
-          class: ['json-schema-formalizer-layer', 'overlay'],
-        }, 'WIP'], $);
-
-        // FIXME: migrate from vanilla to somedom?
-        setTimeout(() => {
-          target.classList.add('active');
-
-          setTimeout(() => {
-            console.log('SHOW', values);
-            // const display = !values[0].match(/\.(svg|gif|png|jpe?g)$/)
-            //   ? document.createElement('iframe')
-            //   : document.createElement('img');
-
-            // if (display.tagName === 'IFRAME') {
-            //   display.setAttribute('width', 853);
-            //   display.setAttribute('height', 505);
-            // }
-
-            // display.style.opacity = 0;
-            // display.src = values[0];
-
-            // target.appendChild(display);
-
-            // setTimeout(() => {
-            //   display.style.opacity = 1;
-            // }, 100);
-          }, 100);
-        });
-      },
-    }, fileName];
-  },
-  sum(data, values) {
-    return values.map(x => x.reduce((prev, cur) => prev + cur, 0).toFixed(2).replace('.00', '')).join(', ');
-  },
-  mul(data, values) {
-    const isMixed = Array.isArray(values[0]);
-    const length = isMixed ? values[0].length : 1;
-
-    if (isMixed) {
-      values = values.map(x => x.map(Number).reduce((prev, cur) => prev + cur, 0));
-    }
-
-    return (values.reduce((prev, cur) => {
-      if (cur !== 0 && cur !== Infinity) {
-        prev *= cur;
-      }
-      return prev || cur;
-    }, 0) / length).toFixed(2).replace('.00', '');
-  },
-  uniq(data, values) {
-    return (this.value(data, values) || [])
-      .reduce((prev, cur) => {
-        if (prev.indexOf(cur) === -1) {
-          prev.push(cur);
-        }
-        return prev;
-      }, []).join(', ');
-  },
-  value(data, values) {
-    return values.filter(Boolean)[0] || null;
-  },
-};
 
 export function getProp(from, key) {
   if (!key) {
@@ -197,11 +90,11 @@ export function renderValue(data, template) {
           try {
             const method = cur.expression.substr(1);
 
-            if (typeof BUILTIN_TYPES[method] !== 'function') {
+            if (typeof TYPES[method] !== 'function') {
               throw new Error(`Unknown helper ${method}`);
             }
 
-            retval = BUILTIN_TYPES[method](data,
+            retval = TYPES[method](data,
               cur.property.map(x => getProp(data, x) || cur.value), document.body);
           } catch (e) {
             prev.push(`Error in expression: ${JSON.stringify(cur)} (${e.message})`);

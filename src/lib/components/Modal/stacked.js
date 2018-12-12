@@ -1,12 +1,15 @@
 const STACK = [];
 
 window.addEventListener('keyup', e => {
-  if (e.keyCode === 27) {
-    const last = STACK.pop();
+  const last = STACK[STACK.length - 1];
 
-    if (last) {
-      last.close();
-    }
+  if (last && typeof last.keyup === 'function') {
+    if (last.keyup(e) === false) return;
+  }
+
+  if (last && e.keyCode === 27) {
+    STACK.pop();
+    last.close();
   }
 });
 
