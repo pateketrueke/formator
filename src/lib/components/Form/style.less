@@ -13,8 +13,10 @@ table {
     width: 1%;
   }
 
-  td, td ~ th {
-    padding: @sp2 / 2;
+  td,
+  td ~ th,
+  thead th {
+    padding: @sp2;
   }
 
   thead {
@@ -24,18 +26,16 @@ table {
   }
 
   tbody {
-    tr:nth-child(even) { background-color: lighten(@light, 30); }
-    tr:nth-child(odd) { background-color: lighten(@light, 32); }
+    tr:nth-child(even) { background-color: lighten(@light, 32); }
+    tr:nth-child(odd) { background-color: lighten(@light, 30); }
     tr:hover { background-color: @hover; }
   }
+}
 
-  tfoot {
-    border-top: 1px dashed @light;
-
-    > tr > th {
-      padding: @sp2 @sp2 / 2;
-    }
-  }
+> table ~ div {
+  border-top: 1px dashed @light;
+  padding: @sp2;
+  margin: 0;
 }
 
 .invalid > td:first-child,
