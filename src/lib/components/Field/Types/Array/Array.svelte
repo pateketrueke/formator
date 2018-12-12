@@ -6,25 +6,27 @@
           <th>{label}</th>
         {/each}
       </tr>
-      {#each items as { key, path, props, offset, isFixed, uiSchema } (key)}
-        <tr data-field={`/${path.join('/')}`}>
-          {#each headers as { field }}
-            <td data-field={`/${path.concat(field).join('/')}`}>
-              <Value {props} {field} {uiSchema} value={values[offset][field]} />
-            </td>
-          {/each}
-          <th>
-            {#if !isFixed}
-              <button data-before="&#9998;" type="button" on:click="edit(offset)">
-                <span>{fixedSchema['ui:edit'] || `Edit ${association.singular}`}</span>
-              </button>
-              <button data-before="&times;" type="button" on:click="remove(offset)">
-                <span>{fixedSchema['ui:remove'] || `Remove ${association.singular}`}</span>
-              </button>
-            {/if}
-          </th>
-        </tr>
-      {/each}
+      <tbody>
+        {#each items as { key, path, props, offset, isFixed, uiSchema } (key)}
+          <tr data-field={`/${path.join('/')}`}>
+            {#each headers as { field }}
+              <td data-field={`/${path.concat(field).join('/')}`}>
+                <Value {props} {field} {uiSchema} value={values[offset][field]} />
+              </td>
+            {/each}
+            <th>
+              {#if !isFixed}
+                <button data-before="&#9998;" type="button" on:click="edit(offset)">
+                  <span>{fixedSchema['ui:edit'] || `Edit ${association.singular}`}</span>
+                </button>
+                <button data-before="&times;" type="button" on:click="remove(offset)">
+                  <span>{fixedSchema['ui:remove'] || `Remove ${association.singular}`}</span>
+                </button>
+              {/if}
+            </th>
+          </tr>
+        {/each}
+      </tbody>
     </table>
   {:else}
     <fieldset>

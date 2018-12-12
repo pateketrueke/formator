@@ -1,14 +1,40 @@
 @import './utilities';
 
 table {
+  border-collapse: collapse;
+  border-spacing: 0;
   width: 100%;
+
+  ~ div {
+    margin-top: @sp2;
+  }
 
   td ~ th {
     width: 1%;
   }
 
-  ~ div {
-    margin-top: @sp2;
+  td, td ~ th {
+    padding: @sp2 / 2;
+  }
+
+  thead {
+    th {
+      background-color: lighten(@light, 20);
+    }
+  }
+
+  tbody {
+    tr:nth-child(even) { background-color: lighten(@light, 30); }
+    tr:nth-child(odd) { background-color: lighten(@light, 32); }
+    tr:hover { background-color: @hover; }
+  }
+
+  tfoot {
+    border-top: 1px dashed @light;
+
+    > tr > th {
+      padding: @sp2 @sp2 / 2;
+    }
   }
 }
 

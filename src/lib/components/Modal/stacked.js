@@ -8,7 +8,6 @@ window.addEventListener('keyup', e => {
   }
 
   if (last && e.keyCode === 27) {
-    STACK.pop();
     last.close();
   }
 });

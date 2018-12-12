@@ -40,6 +40,8 @@ export default {
 
       const { target } = this.options;
 
+      if (!target) return;
+
       const {
         schema, value, refs,
       } = this.get();
@@ -62,7 +64,7 @@ export default {
 
         [].slice.call(target.querySelectorAll('[data-field]'))
           .forEach(node => {
-            node.classList.remove('invalid');
+            if (node) node.classList.remove('invalid');
           });
 
         let _schema = schema;

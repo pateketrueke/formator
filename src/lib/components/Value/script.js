@@ -10,7 +10,7 @@ export default {
     }) => {
       const { type, default: defaultValue } = props.properties[field] || {};
 
-      if (fixedSchema['ui:template']) {
+      if (typeof value !== 'undefined' && fixedSchema['ui:template']) {
         return renderDOM(value, fixedSchema['ui:template']);
       }
 
@@ -23,7 +23,9 @@ export default {
       }
 
       if (typeof defaultValue === 'undefined') {
-        return [JSON.stringify(value)];
+        return [typeof value !== 'undefined'
+          ? JSON.stringify(value)
+          : 'N/A'];
       }
 
       return [defaultValue];

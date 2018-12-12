@@ -1,4 +1,5 @@
 description: Shopping Cart example
+model: Cart
 result:
 - id: 1
   items: []
