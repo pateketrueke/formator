@@ -3,7 +3,6 @@ import { defaultValue } from '../Field/utils';
 
 export default {
   components: {
-    Form: '../Form',
     Field: '../Field',
     Value: '../Value',
     Modal: '../Modal',
@@ -37,6 +36,9 @@ export default {
     fixedSchema({ uiSchema }) {
       return uiSchema || {};
     },
+    fieldProps({ schema, uiSchema }) {
+      return { props: schema, uiSchema };
+    },
     headers({ fixedSchema, schema }) {
       const props = schema.properties
         ? Object.keys(schema.properties)
@@ -49,9 +51,6 @@ export default {
     },
     values({ result }) {
       return result || [];
-    },
-    fieldProps({ schema, uiSchema }) {
-      return { props: schema, uiSchema };
     },
     items({
       fixedSchema, path, schema, values, keys,
