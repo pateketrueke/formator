@@ -1,9 +1,8 @@
-CURRENT_DIRECTORY=./
-
-BASE_COMPOSE=-f $(CURRENT_DIRECTORY)/docker/docker-compose.yml
+PWD=$(shell pwd)
+BASE_COMPOSE=-f $(PWD)/docker/docker-compose.yml
 
 help: Makefile
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-10s\033[0m %s\n", $$1, $$2}'
+	@awk -F':.*?##' '/[a-z]+:.*##/{printf "\033[36m%-13s\033[0m %s\n",$$1,$$2}' $<
 
 lint: src ## Lint all sources
 	@npm run lint
@@ -11,11 +10,14 @@ lint: src ## Lint all sources
 dev: src docker ## Start dev tasks (docker)
 	@docker-compose $(BASE_COMPOSE) up
 
-dev-node: npm ## Start dev tasks (nodejs)
-	@npm run dev
-
 dev-down: ## Clean up environment
 	@docker-compose $(BASE_COMPOSE) down
+
+node: deps ## Start dev tasks (nodejs)
+	@npm run dev
+
+dist: deps ## Build final output for production
+	@npm run dist
 
 test: src docker ## Run tests for CI
 	@docker-compose $(BASE_COMPOSE) up -d chrome
@@ -31,12 +33,13 @@ build: ## Build image for docker
 	@docker-compose $(BASE_COMPOSE) build
 
 clean: ## Remove unwanted artifacts
-	@rm -rf dist node_modules
-
-dist: clean npm ## Build final output for production
-	@npm run dist
+	@rm -rf dist node_modules/*
+	@touch package-lock.json
 
 # Ensure dependencies are installed before
-npm: node_modules
-node_modules: package*.json
+.PHONY: help lint dev node dev-down test bash logs build clean dist
+deps: node_modules
+
+node_modules: package-lock.json
+	@touch $<
 	@npm i
