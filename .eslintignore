@@ -1,4 +1,4 @@
-src/lib/sahred/deps.js
+src/lib/shared/deps.js
 src/lib/main.js
 *.svelte
 public
