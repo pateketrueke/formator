@@ -63,7 +63,7 @@ export function loader(components, selector) {
 
     if (node.tagName === 'SCRIPT') {
       target = document.createElement('div');
-      target.className = data.className || 'json-schema-formalizer';
+      target.className = data.className || 'formator';
 
       node.parentNode.insertBefore(target, node);
       node.parentNode.removeChild(node);

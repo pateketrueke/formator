@@ -87,7 +87,7 @@ export default function slideShow($, data, values, parentNode) {
       target = mount(parentNode, ['div', {
         onclick: closeMe,
         data: { title: prefix },
-        class: ['json-schema-formalizer-layer', 'overlay'],
+        class: ['formator-layer', 'overlay'],
       }], $);
 
       setTimeout(() => {
