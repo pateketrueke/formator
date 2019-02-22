@@ -13,10 +13,10 @@ dev: src docker ## Start dev tasks (docker)
 dev-down: ## Clean up environment
 	@docker-compose $(BASE_COMPOSE) down
 
-node: deps ## Start dev tasks (nodejs)
+node: ## Start dev tasks (nodejs)
 	@npm run dev
 
-dist: deps ## Build final output for production
+dist: ## Build final output for production
 	@npm run dist
 
 test: src docker ## Run tests for CI
@@ -34,12 +34,6 @@ build: ## Build image for docker
 
 clean: ## Remove unwanted artifacts
 	@rm -rf dist node_modules/*
-	@touch package-lock.json
 
 # Ensure dependencies are installed before
 .PHONY: help lint dev node dev-down test bash logs build clean dist
-deps: node_modules
-
-node_modules: package-lock.json
-	@touch $<
-	@npm i
