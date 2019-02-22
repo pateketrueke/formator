@@ -1,6 +1,6 @@
 description: Shopping Cart example
 model: Cart
-_result:
+result:
 - id: 1
   items: []
 - id: 2
@@ -73,6 +73,7 @@ schema:
 uiSchema:
   ui:title: Shopping Cart
   ui:save: Save cart
+  ui:new: Add cart
   id:
     ui:hidden: true
   items:

@@ -1,29 +1,10 @@
 //--
   ---
-  features:
-    schema:
-      - index
+  tests:
+  - !include schema/_empty.yml
+  - !include schema/_types.yml
+  - !include schema/_arrays.yml
+  - !include schema/_resource.yml
   ---
 
 extend _/layout
-
-block main
-  div
-    h2.form-title It works!
-    ul.reset
-      li
-        each tests, feature in features
-          h3 #{feature}
-          ul
-            each test in tests
-              li
-                a(href=`/${feature}/${test}.html` target='_frame') #{test}
-
-  iframe(name='_frame' src='about:blank' frameborder=0)
-  style.
-    iframe {
-      width: 100%;
-      height: 100%;
-      padding: 5px 0;
-      box-shadow: inset 0 0 5px rgba(0, 0, 0, .5);
-    }
