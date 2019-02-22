@@ -1,5 +1,5 @@
 {
-  "name": "json-schema-formalizer",
+  "name": "json-schema-formator",
   "version": "0.0.0",
   "main": "lib/index.js",
   "files": [
@@ -78,7 +78,7 @@
     "shimport": "0.0.14",
     "somedom": "0.0.7",
     "svelte": "^2.15.2",
-    "tarima": "^4.2.9",
+    "tarima": "^4.3.1",
     "tarima-lr": "^0.4.3",
     "testcafe": "^1.0.1"
   }
