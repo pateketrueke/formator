@@ -13,9 +13,19 @@
               <div>
                 {#if through && field === props.id}
                   <input type="search" placeholder="{uiSchema['ui:find'] || `Find ${field}`}" on:input="input(event)" on:keydown="keydown(event)" />
+                  {#if isOpen}
+                    <div data-autocomplete>
+                      <ul ref:options>
+                        {#each items as value (value)}
+                          <li>Result #{value}</li>
+                        {/each}
+                      </ul>
+                    </div>
+                  {/if}
                   <div data-separator>
                     <span>{uiSchema['ui:create'] || 'or create'}</span>
                   </div>
+                  {#if items}<pre>{JSON.stringify(selected)}</pre>{/if}
                 {/if}
                 <Field {path} {name} {field} {props} {uiSchema} bind:result="fixedValues[field]" />
               </div>

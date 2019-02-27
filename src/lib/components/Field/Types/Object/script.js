@@ -1,13 +1,19 @@
 import { API, throttle } from '../../../../shared/utils';
 import { getId, sync } from '../../utils';
 
+// FIXME: move autocomplete to a separated component!!!
 export default {
   components: {
     Field: '../../Field',
   },
   data() {
     return {
+      items: [1, 2, 3],
       result: null,
+      isOpen: false,
+      active: -1,
+      current: -1,
+      selected: -1,
     };
   },
   oncreate: sync,
@@ -16,7 +22,7 @@ export default {
     input: throttle(function $onInput(e) {
       if (!e.target.value) {
         // FIXME: hide dropdown, set form as invalid...
-        console.log('CLEAR', e);
+        this.clear();
         return;
       }
 
@@ -25,28 +31,78 @@ export default {
 
       API.call(actions[association.model].index).then(data => {
         if (data.status === 'ok') {
-          // FIXME: open dropdown?
-          // if empty, set form as invalid...
-          console.log('SET', data.result);
+          // if data.result empty, set form as invalid...
+          this.set({
+            items: [1, 2, 3],
+            isOpen: true,
+            active: -1,
+            current: -1,
+            selected: -1,
+          });
         }
       });
     }, 260),
+    clear() {
+      this.set({
+        items: [],
+        isOpen: false,
+        active: -1,
+        current: -1,
+        selected: -1,
+      });
+    },
+    select(offset) {
+      const { current, isOpen } = this.get();
+
+      // FIXME: simplify add/remove methods
+      if (!isOpen) {
+        this.set({ isOpen: true });
+        if (current >= 0) this.refs.options.children[current].classList.add('active');
+        return;
+      }
+
+      this.set({ current: offset, active: offset });
+
+      if (offset >= 0 && this.refs.options.children[offset]) this.refs.options.children[offset].classList.add('active');
+      if (current >= 0 && this.refs.options.children[current]) this.refs.options.children[current].classList.remove('active');
+    },
     keydown(e) {
       if (e.keyCode === 27 || e.keyCode === 38 || e.keyCode === 40) {
-        if (e.keyCode === 27) this.input(e);
+        if (e.keyCode === 27) this.clear();
         e.preventDefault();
       }
 
       if (e.keyCode === 13) {
-        this.input(e);
+        const { active, items, isOpen } = this.get();
+
+        if (isOpen && active >= 0) {
+          this.set({
+            isOpen: false,
+            selected: items[active],
+          });
+        } else {
+          this.input(e);
+        }
       }
 
       if (e.keyCode === 38) {
-        console.log('MOVE UP');
+        const { active, items } = this.get();
+
+        if (active > 0) {
+          this.select(active - 1);
+        } else {
+          this.select(items.length - 1);
+        }
       }
 
       if (e.keyCode === 40) {
-        console.log('MOVE DOWN');
+        const { active, items } = this.get();
+
+        if (active < items.length - 1) {
+          this.select(active + 1);
+        } else {
+          this.select(0);
+        }
       }
     },
   },
