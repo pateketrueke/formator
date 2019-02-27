@@ -1,6 +1,6 @@
 description: Shopping Cart example
 model: Cart
-result:
+_result:
 - id: 1
   items: []
 - id: 2

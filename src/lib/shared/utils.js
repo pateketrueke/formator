@@ -1,3 +1,11 @@
+export function throttle(fn, ms) {
+  let t;
+  return function $fn(...args) {
+    clearTimeout(t);
+    t = setTimeout(() => fn.apply(this, args), ms || 100);
+  };
+}
+
 export function randId() {
   return `_${Math.random().toString(36).substr(2)}`;
 }
@@ -122,6 +130,7 @@ export const API = {
 };
 
 export default {
+  throttle,
   reduceRefs,
   findRef,
   randId,
