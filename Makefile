@@ -7,17 +7,17 @@ help: Makefile
 lint: src ## Lint all sources
 	@npm run lint
 
-dev: src docker ## Start dev tasks (docker)
-	@docker-compose $(BASE_COMPOSE) up
-
-dev-down: ## Clean up environment
-	@docker-compose $(BASE_COMPOSE) down
-
 node: ## Start dev tasks (nodejs)
 	@npm run dev
 
 dist: ## Build final output for production
 	@npm run dist
+
+dev: src docker ## Start dev tasks (docker)
+	@docker-compose $(BASE_COMPOSE) up
+
+dev-down: ## Clean up environment
+	@docker-compose $(BASE_COMPOSE) down
 
 test: src docker ## Run tests for CI
 	@docker-compose $(BASE_COMPOSE) up -d chrome

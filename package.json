@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "tarima watch -p 3001",
     "dist": "tarima -fqe production",
-    "lint": "eslint src test",
+    "lint": "eslint lib src tests",
     "test": "npm run lint",
     "test:e2e": "BASE_URL=http://localhost:3001 testcafe",
     "test:e2e:ci": "npm run test:e2e -- --ports 9505,9506 remote:1"
