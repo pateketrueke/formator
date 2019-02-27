@@ -61,7 +61,7 @@
         <span>{uiSchema['ui:append'] || `Add ${association.singular}`}</span>
       </button>
       <Modal {uiSchema} updating={isUpdate} resource={association.singular} bind:visible="isOpen" on:save="sync()">
-        <Field {...nextProps} bind:result="nextValue" name={`${name}[${nextOffset}]`} />
+        <Field {...nextProps} {association} {through} bind:result="nextValue" name={`${name}[${nextOffset}]`} />
       </Modal>
     {:else}
       <button data-before="&plus;" type="button" on:click="append()">

@@ -11,6 +11,12 @@
             <div data-field={`/${path.join('/')}`}>
               <label for={id}>{uiSchema['ui:label'] || field}</label>
               <div>
+                {#if through && field === props.id}
+                  <input type="search" placeholder="{uiSchema['ui:find'] || `Find ${field}`}" />
+                  <div data-separator>
+                    <span>{uiSchema['ui:create'] || 'or create'}</span>
+                  </div>
+                {/if}
                 <Field {path} {name} {field} {props} {uiSchema} bind:result="fixedValues[field]" />
               </div>
             </div>

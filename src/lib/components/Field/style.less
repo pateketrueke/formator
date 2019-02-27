@@ -90,12 +90,12 @@ label {
   text-overflow: ellipsis;
   max-width: 75px;
 
-  ~ * {
+  ~ div {
     width: 100%;
   }
 
   @media @sm {
-    ~ * {
+    ~ div {
       margin-left: @sp2;
     }
   }
@@ -104,6 +104,29 @@ label {
 input {
   width: inherit;
   padding: @sp1;
+}
+
+[data-separator] {
+  position: relative;
+  margin: @sp1 auto;
+  text-align: center;
+  font-size: 85%;
+
+  > span {
+    position: relative;
+    z-index: 1;
+    padding: 0 @sp2;
+    background-color: white;
+  }
+
+  &::before {
+    position: absolute;
+    content: ' ';
+    left: 0;
+    right: 0;
+    bottom: .7em;
+    border-bottom: 1px dashed @light;
+  }
 }
 
 [data-type=boolean] {
