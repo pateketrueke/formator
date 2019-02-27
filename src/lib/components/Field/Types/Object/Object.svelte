@@ -15,7 +15,7 @@
                   <input type="search" placeholder="{uiSchema['ui:find'] || `Find ${field}`}" on:input="input(event)" on:keydown="keydown(event)" />
                   {#if isOpen}
                     <div data-autocomplete>
-                      <ul ref:options>
+                      <ul ref:options on:click="select(event)">
                         {#each items as value (value)}
                           <li>Result #{value}</li>
                         {/each}

@@ -51,10 +51,24 @@ export default {
         selected: -1,
       });
     },
-    select(offset) {
+    select(event) {
+      for (let i = 0; i < this.refs.options.children.length; i += 1) {
+        if (this.refs.options.children[i] === event.target) {
+          const { items } = this.get();
+
+          this.change(i);
+          this.set({
+            isOpen: false,
+            selected: items[i],
+          });
+          break;
+        }
+      }
+    },
+    change(offset) {
       const { current, isOpen } = this.get();
 
-      // FIXME: simplify add/remove methods
+      // FIXME: simplify add/remove methods?
       if (!isOpen) {
         this.set({ isOpen: true });
         if (current >= 0) this.refs.options.children[current].classList.add('active');
@@ -89,9 +103,9 @@ export default {
         const { active, items } = this.get();
 
         if (active > 0) {
-          this.select(active - 1);
+          this.change(active - 1);
         } else {
-          this.select(items.length - 1);
+          this.change(items.length - 1);
         }
       }
 
@@ -99,9 +113,9 @@ export default {
         const { active, items } = this.get();
 
         if (active < items.length - 1) {
-          this.select(active + 1);
+          this.change(active + 1);
         } else {
-          this.select(0);
+          this.change(0);
         }
       }
     },
