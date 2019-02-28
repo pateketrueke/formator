@@ -8,7 +8,7 @@ export default {
   },
   data() {
     return {
-      items: [1, 2, 3],
+      items: [],
       result: null,
       isOpen: false,
       active: -1,
@@ -42,6 +42,18 @@ export default {
         }
       });
     }, 260),
+    open() {
+      const { items } = this.get();
+
+      if (items.length) {
+        this.set({ isOpen: true });
+      }
+    },
+    close() {
+      setTimeout(() => {
+        this.set({ isOpen: false });
+      }, 120);
+    },
     clear() {
       this.set({
         items: [],

@@ -12,7 +12,14 @@
               <label for={id}>{uiSchema['ui:label'] || field}</label>
               <div>
                 {#if through && field === props.id}
-                  <input type="search" placeholder="{uiSchema['ui:find'] || `Find ${field}`}" on:input="input(event)" on:keydown="keydown(event)" />
+                  <input
+                    type="search"
+                    placeholder="{uiSchema['ui:find'] || `Find ${field}`}"
+                    on:click="open(event)"
+                    on:blur="close(event)"
+                    on:input="input(event)"
+                    on:keydown="keydown(event)"
+                  />
                   {#if isOpen}
                     <div data-autocomplete>
                       <ul ref:options on:click="select(event)">
