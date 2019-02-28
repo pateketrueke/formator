@@ -1,6 +1,5 @@
-import { getId, sync } from '../../utils';
+import { defaultValue, getId, sync } from '../../utils';
 
-// FIXME: move autocomplete to a separated component!!!
 export default {
   components: {
     Field: '../../Field',
@@ -17,8 +16,9 @@ export default {
       if (typeof value !== 'undefined') {
         console.log('SYNC OBJECT', value);
       } else {
-        console.log('CLEAR OBJECT');
-        this.set({ result: null });
+        const { schema } = this.get();
+
+        this.set({ result: defaultValue(schema) });
       }
     },
   },

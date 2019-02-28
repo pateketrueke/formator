@@ -6,6 +6,7 @@ export default {
     return {
       items: [],
       isOpen: false,
+      status: 'empty',
       active: -1,
       current: -1,
       selected: -1,
@@ -16,7 +17,6 @@ export default {
     // FIXME: implement search and autocomplete?
     input: throttle(function $onInput(e) {
       if (!e.target.value) {
-        // FIXME: hide dropdown, set form as invalid...
         this.clear();
         return;
       }
@@ -26,10 +26,10 @@ export default {
 
       API.call(actions[association.model].index).then(data => {
         if (data.status === 'ok') {
-          // if data.result empty, set form as invalid...
           this.set({
-            items: [1, 2, 3],
+            items: data.result,
             isOpen: true,
+            status: 'ready',
             active: -1,
             current: -1,
             selected: -1,
@@ -38,9 +38,9 @@ export default {
       });
     }, 260),
     open() {
-      const { items } = this.get();
+      const { items = [] } = this.get();
 
-      if (items && items.length) {
+      if (items.length) {
         this.set({ isOpen: true });
       }
     },
@@ -53,6 +53,7 @@ export default {
       this.set({
         items: [],
         isOpen: false,
+        status: 'empty',
         active: -1,
         current: -1,
         selected: -1,
@@ -77,7 +78,6 @@ export default {
     change(offset) {
       const { current, isOpen } = this.get();
 
-      // FIXME: simplify add/remove methods?
       if (!isOpen) {
         this.set({ isOpen: true });
         if (current >= 0) this.refs.options.children[current].classList.add('active');
@@ -95,9 +95,9 @@ export default {
         e.preventDefault();
       }
 
-      if (e.keyCode === 13) {
-        const { active, items, isOpen } = this.get();
+      const { active, isOpen, items } = this.get();
 
+      if (e.keyCode === 13) {
         if (isOpen && active >= 0) {
           this.set({
             isOpen: false,
@@ -109,9 +109,7 @@ export default {
         }
       }
 
-      if (e.keyCode === 38) {
-        const { active, items } = this.get();
-
+      if (isOpen && e.keyCode === 38) {
         if (active > 0) {
           this.change(active - 1);
         } else {
@@ -119,9 +117,7 @@ export default {
         }
       }
 
-      if (e.keyCode === 40) {
-        const { active, items } = this.get();
-
+      if (isOpen && e.keyCode === 40) {
         if (active < items.length - 1) {
           this.change(active + 1);
         } else {
