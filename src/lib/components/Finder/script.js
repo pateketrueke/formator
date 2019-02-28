@@ -2,6 +2,9 @@ import { API, throttle } from '../../shared/utils';
 import { sync } from '../Field/utils';
 
 export default {
+  components: {
+    Value: '../Value',
+  },
   data() {
     return {
       items: [],

@@ -1,11 +1,10 @@
 <div data-finder class={status}>
-  <input
-    type="search"
-    placeholder="{uiSchema['ui:find'] || `Find ${association.singular}`}"
+  <input {id} type="search"
     on:click="open(event)"
     on:blur="close(event)"
     on:input="input(event)"
     on:keydown="keydown(event)"
+    placeholder="{uiSchema['ui:find'] || `Find ${association.singular}`}"
   />
   {#if status === 'ready' && !items.length}
     <small>{uiSchema['ui:empty'] || `${association.plural} were not found`}</small>
@@ -14,7 +13,7 @@
     <div data-autocomplete>
       <ul ref:options on:click="select(event)">
         {#each items as value (value)}
-          <li>Result #{value}</li>
+          <li><Value {value} {props} {field} {uiSchema} /></li>
         {/each}
       </ul>
     </div>
