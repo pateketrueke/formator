@@ -6,6 +6,7 @@ export default {
     Field: '../Field',
     Value: '../Value',
     Modal: '../Modal',
+    Catch: '../Catch',
   },
   data() {
     return {
@@ -19,12 +20,12 @@ export default {
 
     // FIXME: remove `!result ||` once it's finished!
     if (!result || typeof result === 'undefined') {
-      API.call(actions[model].index).then(data => {
-        if (data.status === 'ok') {
-          this.set({
-            result: data.result,
-          });
-        }
+      this.set({
+        payload: API.call(actions[model].index).then(data => {
+          if (data.status === 'ok') {
+            return data.result;
+          }
+        }),
       });
     }
   },

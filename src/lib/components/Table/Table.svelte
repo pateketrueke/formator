@@ -8,7 +8,18 @@
     </tr>
   </thead>
   <tbody>
-    {#each items as { key, path, props, offset, uiSchema } (key)}
+
+    {#if payload}
+      {#await payload}
+        <p>Loading data...</p>
+      {:then items}
+        {typeof items}
+      {:catch error}
+        <Catch {error} />
+      {/await}
+    {/if}
+
+    <!-- {#each items as { key, path, props, offset, uiSchema } (key)}
       <tr data-field={`/${path.join('/')}`}>
         {#each headers as { field }}
           <td data-field={`/${path.concat(field).join('/')}`}>
@@ -28,7 +39,7 @@
       <tr>
         <td colspan="99" data-empty>{fixedSchema['ui:empty'] || 'No items'}</td>
       </tr>
-    {/each}
+    {/each} -->
   </tbody>
 </table>
 
