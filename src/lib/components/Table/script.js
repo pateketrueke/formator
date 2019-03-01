@@ -1,5 +1,5 @@
-import { API, randId } from '../../shared/utils';
 import { defaultValue } from '../Field/utils';
+import { API, randId } from '../../shared/utils';
 
 export default {
   components: {
@@ -28,6 +28,7 @@ export default {
       });
     }
   },
+  // FIXME: generalize all API methods, reuse then!
   methods: {
     update() {
       const {
@@ -46,6 +47,19 @@ export default {
             value: {},
           }));
       }
+    },
+    remove(offset) {
+      const {
+        actions, values, model, keys,
+      } = this.get();
+
+      API.call(actions[model].destroy, values[offset]).then(data => {
+        if (data.status === 'ok') {
+          values.splice(offset, 1);
+          keys.splice(offset, 1);
+          this.set({ values, keys });
+        }
+      });
     },
     edit(offset) {
       const { schema, values } = this.get();

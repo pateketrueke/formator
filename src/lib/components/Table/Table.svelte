@@ -19,6 +19,9 @@
           <button data-before="&#9998;" type="button" on:click="edit(offset)">
             <span>{fixedSchema['ui:edit'] || 'Edit'}</span>
           </button>
+          <button data-before="&times;" type="button" on:click="remove(offset)">
+            <span>{fixedSchema['ui:remove'] || 'Remove'}</span>
+          </button>
         </th>
       </tr>
     {:else}

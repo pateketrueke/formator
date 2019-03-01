@@ -1,5 +1,5 @@
 import { getItems, defaultValue } from '../../utils';
-import { randId } from '../../../../shared/utils';
+import { API, randId } from '../../../../shared/utils';
 
 export default {
   components: {
@@ -35,13 +35,23 @@ export default {
       this.add(defaultValue(getItems(schema, nextOffset)));
     },
     remove(offset) {
-      const { result, keys } = this.get();
+      const {
+        result, through, keys,
+      } = this.get();
 
-      result.splice(offset, 1);
-      keys.splice(offset, 1);
+      const {
+        actions, model,
+      } = this.root.get();
 
-      this.set({ result, keys });
-      this.fire('sync');
+      // FIXME: generalize these methods, reuse then?
+      API.call(actions[through || model].destroy, result[offset]).then(data => {
+        if (data.status === 'ok') {
+          result.splice(offset, 1);
+          keys.splice(offset, 1);
+          this.set({ result, keys });
+          this.fire('sync');
+        }
+      });
     },
     open() {
       const { schema, nextOffset } = this.get();

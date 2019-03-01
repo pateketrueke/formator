@@ -127,16 +127,16 @@ actions:
       path: /db/CartItem
     edit:
       verb: GET
-      path: /db/CartItem/:CartId/:ProductId/edit
+      path: /db/CartItem/:id/edit
     show:
       verb: GET
-      path: /db/CartItem/:CartId/:ProductId
+      path: /db/CartItem/:id
     update:
       verb: PATCH
-      path: /db/CartItem/:CartId/:ProductId
+      path: /db/CartItem/:id
     destroy:
       verb: DELETE
-      path: /db/CartItem/:CartId/:ProductId
+      path: /db/CartItem/:id
   Product:
     index:
       verb: GET
