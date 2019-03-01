@@ -15,8 +15,15 @@ export default {
       keys: [],
     };
   },
+  // FIXME: cleanup this hooks, e.g.
+  // - how fire("sync") events?
+  // - how load/reload through events?
   oncreate() {
-    this.load();
+    try {
+      this.load();
+    } catch (e) {
+      console.log(e);
+    }
   },
   // FIXME: generalize all API methods, reuse then!
   methods: {
@@ -61,19 +68,16 @@ export default {
       });
     },
     load() {
-      const { model, result, actions } = this.get();
+      const { model, actions } = this.get();
 
-      // FIXME: remove `!result ||` once it's finished!
-      if (!result || typeof result === 'undefined') {
-        this.set({
-          payload: API.call(actions[model].index).then(data => {
-            if (data.status === 'ok') {
-              return data.result;
-            }
-          }),
-        });
-      }
-    }
+      this.set({
+        payload: API.call(actions[model].index).then(data => {
+          if (data.status === 'ok') {
+            this.set({ values: data.result });
+          }
+        }),
+      });
+    },
   },
   computed: {
     fixedSchema({ uiSchema }) {

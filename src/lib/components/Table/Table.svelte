@@ -14,7 +14,7 @@
         <tr>
           <td colspan="99">Loading data...</td>
         </tr>
-      {:then items}
+      {:then}
         {#each items as { key, path, props, offset, uiSchema } (key)}
           <tr data-field={`/${path.join('/')}`}>
             {#each headers as { field }}
