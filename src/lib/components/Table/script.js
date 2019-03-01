@@ -29,24 +29,32 @@ export default {
     }
   },
   methods: {
-    append() {
-      const { schema } = this.get();
+    update() {
+      const {
+        hasOffset, value, values, model, actions,
+      } = this.get();
+
+      if (hasOffset) {
+        API.call(actions[model].update, value)
+          .then(result => {
+            console.log(result);
+          });
+      } else {
+        API.call(actions[model].create, value)
+          .then(() => this.set({
+            result: values.concat(value),
+            value: {},
+          }));
+      }
+    },
+    edit(offset) {
+      const { schema, values } = this.get();
 
       this.set({
         isOpen: true,
-        value: defaultValue(schema),
+        hasOffset: offset >= 0,
+        value: offset >= 0 ? values[offset] : defaultValue(schema),
       });
-    },
-    add() {
-      const {
-        value, values, model, actions,
-      } = this.get();
-
-      API.call(actions[model].create, value)
-        .then(() => this.set({
-          result: values.concat(value),
-          value: {},
-        }));
     },
   },
   computed: {

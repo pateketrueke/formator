@@ -113,10 +113,10 @@ export function clean(value) {
 }
 
 export const API = {
-  call(action, data) {
-    const url = `http://localhost:8081${action.path}`;
+  call(action, data = {}) {
+    const path = action.path.replace(/:([a-z]+)/g, (_, key) => data[key]);
 
-    return fetch(url, {
+    return fetch(`http://localhost:8081${path}`, {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',

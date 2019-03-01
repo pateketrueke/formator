@@ -1,9 +1,10 @@
 <table>
   <thead>
-      <tr>
+    <tr>
       {#each headers as { label }}
         <th>{label}</th>
       {/each}
+      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -14,6 +15,11 @@
             <Value {props} {field} {uiSchema} value={values[offset][field]} />
           </td>
         {/each}
+        <th>
+          <button data-before="&#9998;" type="button" on:click="edit(offset)">
+            <span>{fixedSchema['ui:edit'] || 'Edit'}</span>
+          </button>
+        </th>
       </tr>
     {:else}
       <tr>
@@ -24,10 +30,10 @@
 </table>
 
 <div>
-  <button type="submit" on:click="append()">
+  <button type="submit" on:click="edit()">
     <span>{fixedSchema['ui:new'] || 'New'}</span>
   </button>
-  <Modal {uiSchema} resource="test" bind:visible="isOpen" on:save="add()">
+  <Modal {uiSchema} resource={model} bind:visible="isOpen" on:save="update()">
     <Field name='__ROOT__' bind:result="value" {...fieldProps} />
   </Modal>
 </div>
