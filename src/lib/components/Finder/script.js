@@ -1,5 +1,4 @@
 import { API, throttle } from '../../shared/utils';
-import { sync } from '../Field/utils';
 
 export default {
   components: {
@@ -15,7 +14,6 @@ export default {
       selected: -1,
     };
   },
-  oncreate: sync,
   methods: {
     // FIXME: implement search and autocomplete?
     input: throttle(function $onInput(e) {

@@ -1,4 +1,4 @@
-import { defaultValue, getId, sync } from '../../utils';
+import { defaultValue, getId } from '../../utils';
 
 export default {
   components: {
@@ -10,7 +10,6 @@ export default {
       result: null,
     };
   },
-  oncreate: sync,
   methods: {
     sync(e, key) {
       const { schema, result } = this.get();

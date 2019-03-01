@@ -16,18 +16,7 @@ export default {
     };
   },
   oncreate() {
-    const { model, result, actions } = this.get();
-
-    // FIXME: remove `!result ||` once it's finished!
-    if (!result || typeof result === 'undefined') {
-      this.set({
-        payload: API.call(actions[model].index).then(data => {
-          if (data.status === 'ok') {
-            return data.result;
-          }
-        }),
-      });
-    }
+    this.load();
   },
   // FIXME: generalize all API methods, reuse then!
   methods: {
@@ -71,6 +60,20 @@ export default {
         value: offset >= 0 ? values[offset] : defaultValue(schema),
       });
     },
+    load() {
+      const { model, result, actions } = this.get();
+
+      // FIXME: remove `!result ||` once it's finished!
+      if (!result || typeof result === 'undefined') {
+        this.set({
+          payload: API.call(actions[model].index).then(data => {
+            if (data.status === 'ok') {
+              return data.result;
+            }
+          }),
+        });
+      }
+    }
   },
   computed: {
     fixedSchema({ uiSchema }) {

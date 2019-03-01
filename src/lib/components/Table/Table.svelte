@@ -11,35 +11,40 @@
 
     {#if payload}
       {#await payload}
-        <p>Loading data...</p>
+        <tr>
+          <td colspan="99">Loading data...</td>
+        </tr>
       {:then items}
-        {typeof items}
+        {#each items as { key, path, props, offset, uiSchema } (key)}
+          <tr data-field={`/${path.join('/')}`}>
+            {#each headers as { field }}
+              <td data-field={`/${path.concat(field).join('/')}`}>
+                <Value {props} {field} {uiSchema} value={values[offset][field]} />
+              </td>
+            {/each}
+            <th>
+              <button data-before="&#9998;" type="button" on:click="edit(offset)">
+                <span>{fixedSchema['ui:edit'] || 'Edit'}</span>
+              </button>
+              <button data-before="&times;" type="button" on:click="remove(offset)">
+                <span>{fixedSchema['ui:remove'] || 'Remove'}</span>
+              </button>
+            </th>
+          </tr>
+        {:else}
+          <tr>
+            <td colspan="99" data-empty>{fixedSchema['ui:empty'] || 'No items'}</td>
+          </tr>
+        {/each}
       {:catch error}
-        <Catch {error} />
+        <tr>
+          <td colspan="99">
+            <Catch {error} />
+            <button on:click="load()">Try again</button>
+          </td>
+        </tr>
       {/await}
     {/if}
-
-    <!-- {#each items as { key, path, props, offset, uiSchema } (key)}
-      <tr data-field={`/${path.join('/')}`}>
-        {#each headers as { field }}
-          <td data-field={`/${path.concat(field).join('/')}`}>
-            <Value {props} {field} {uiSchema} value={values[offset][field]} />
-          </td>
-        {/each}
-        <th>
-          <button data-before="&#9998;" type="button" on:click="edit(offset)">
-            <span>{fixedSchema['ui:edit'] || 'Edit'}</span>
-          </button>
-          <button data-before="&times;" type="button" on:click="remove(offset)">
-            <span>{fixedSchema['ui:remove'] || 'Remove'}</span>
-          </button>
-        </th>
-      </tr>
-    {:else}
-      <tr>
-        <td colspan="99" data-empty>{fixedSchema['ui:empty'] || 'No items'}</td>
-      </tr>
-    {/each} -->
   </tbody>
 </table>
 
