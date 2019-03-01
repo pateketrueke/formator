@@ -41,14 +41,18 @@ export default {
       });
     }, 260),
     open() {
-      const { items = [] } = this.get();
+      clearTimeout(this.t);
+      this.t = setTimeout(() => {
+        const { items = [] } = this.get();
 
-      if (items.length) {
-        this.set({ isOpen: true });
-      }
+        if (items.length) {
+          this.set({ isOpen: true });
+        }
+      }, 120);
     },
     close() {
-      setTimeout(() => {
+      clearTimeout(this.t);
+      this.t = setTimeout(() => {
         this.set({ isOpen: false });
       }, 120);
     },
@@ -63,11 +67,11 @@ export default {
       });
       this.fire('change', undefined);
     },
-    select(event) {
-      for (let i = 0; i < this.refs.options.children.length; i += 1) {
-        if (this.refs.options.children[i] === event.target) {
-          const { items } = this.get();
+    select(e) {
+      const { items } = this.get();
 
+      for (let i = 0; i < this.refs.options.children.length; i += 1) {
+        if (this.refs.options.children[i] === e.target) {
           this.change(i);
           this.set({
             isOpen: false,
@@ -112,7 +116,7 @@ export default {
         }
       }
 
-      if (isOpen && e.keyCode === 38) {
+      if (e.keyCode === 38) {
         if (active > 0) {
           this.change(active - 1);
         } else {
@@ -120,7 +124,7 @@ export default {
         }
       }
 
-      if (isOpen && e.keyCode === 40) {
+      if (e.keyCode === 40) {
         if (active < items.length - 1) {
           this.change(active + 1);
         } else {

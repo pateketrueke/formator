@@ -12,14 +12,15 @@ export default {
   },
   oncreate: sync,
   methods: {
-    test(value) {
-      if (typeof value !== 'undefined') {
-        console.log('SYNC OBJECT', value);
-      } else {
-        const { schema } = this.get();
+    sync(e, key) {
+      const { schema, result } = this.get();
 
-        this.set({ result: defaultValue(schema) });
-      }
+      this.set({
+        result: {
+          ...result,
+          [key]: e || defaultValue(schema)[key],
+        },
+      });
     },
   },
   computed: {

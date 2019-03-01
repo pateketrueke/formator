@@ -12,7 +12,7 @@
               <label for={id}>{uiSchema['ui:label'] || field}</label>
               <div>
                 {#if through && field === props.id}
-                  <Finder {id} {field} {props} {uiSchema} {association} on:change="test(event)" />
+                  <Finder {id} {field} {props} {uiSchema} {association} on:change="sync(event, field)" />
                 {/if}
                 <Field {path} {name} {field} {props} {uiSchema} bind:result="fixedValues[field]" />
               </div>
