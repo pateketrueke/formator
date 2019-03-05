@@ -9,7 +9,7 @@ export default function slideShow($, data, values, parentNode) {
     : '1 source';
 
   if (!values.length) {
-    return 'N/A';
+    return null;
   }
 
   let ref;

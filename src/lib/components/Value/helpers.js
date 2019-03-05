@@ -2,7 +2,7 @@ import { $ } from './widgets';
 import TYPES from './types';
 import HTML from '../HTML';
 
-const RE_PLACEHOLDER = /<(?:(@?[\w.]+)(?::([\w*,.]+))?([|?!])?(.*?)|)>/;
+const RE_PLACEHOLDER = /<(?:(@?[\w.]+)(?::([\w*,.]+))?([|?!:])?(.*?)|)>/;
 const RE_IDENTITY = /\{\}/g;
 
 export function getProp(from, key) {
@@ -30,7 +30,15 @@ export function getProp(from, key) {
 
       if (Array.isArray(o)) {
         if (keys[i] === '*') {
-          return o.map(y => getProp(y, keys.slice(i + 1).join('.')));
+          return o.reduce((prev, y) => {
+            const sub = getProp(y, keys.slice(i + 1).join('.'));
+
+            if (typeof sub !== 'undefined') {
+              prev.push(sub);
+            }
+
+            return prev;
+          }, []);
         }
         o = o[0];
       }
@@ -95,9 +103,9 @@ export function renderValue(data, template) {
             }
 
             retval = TYPES[method](data,
-              cur.property.map(x => getProp(data, x) || cur.value), document.body);
+              cur.property.map(x => getProp(data, x) || cur.value, []), document.body);
           } catch (e) {
-            prev.push(`Error in expression: ${JSON.stringify(cur)} (${e.message})`);
+            prev.push(`Error: ${e.message} in ${JSON.stringify(cur)}`);
           }
         } else {
           retval = getProp(data, cur.expression);

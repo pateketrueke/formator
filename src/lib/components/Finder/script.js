@@ -68,8 +68,14 @@ export default {
     select(e) {
       const { items } = this.get();
 
+      let item = e.target;
+
+      while (item.tagName !== 'LI') {
+        item = item.parentNode;
+      }
+
       for (let i = 0; i < this.refs.options.children.length; i += 1) {
-        if (this.refs.options.children[i] === e.target) {
+        if (this.refs.options.children[i] === item) {
           this.change(i);
           this.set({
             isOpen: false,
@@ -96,7 +102,6 @@ export default {
     },
     keydown(e) {
       if (e.keyCode === 27 || e.keyCode === 38 || e.keyCode === 40) {
-        if (e.keyCode === 27) this.clear();
         e.preventDefault();
       }
 

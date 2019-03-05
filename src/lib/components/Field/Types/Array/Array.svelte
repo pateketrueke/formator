@@ -1,11 +1,13 @@
 {#if items.length}
   {#if through}
     <table>
-      <tr>
-        {#each headers as { label }}
-          <th>{label}</th>
-        {/each}
-      </tr>
+      <thead>
+        <tr>
+          {#each headers as { label }}
+            <th>{label}</th>
+          {/each}
+        </tr>
+      </thead>
       <tbody>
         {#each items as { key, path, props, offset, isFixed, uiSchema } (key)}
           <tr data-field={`/${path.join('/')}`}>

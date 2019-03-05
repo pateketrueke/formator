@@ -11,7 +11,6 @@ window.addEventListener('keyup', e => {
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
       if (e.target.type === 'search' && e.target.value) {
         e.target.value = '';
-        return;
       }
 
       e.target.blur();

@@ -76,19 +76,19 @@ uiSchema:
     ui:headers: [Quantity, Product info.]
     ui:update: Update product
     ui:save: Add product
-    ui:template: ["small", [ ["span", "Products bought: <@sum:*.qty> (preview: <@embed:*.Product.image>)"], ["span", { "style": "float:right" }, "Total: $<@sum:*.Product.price>"] ]]
+    ui:template: ["span.flex", [["span.auto", "Products bought: <@sum:*.qty> <@embed:*.Product.image:(preview: ?)>"], ["span.margin-left", "Total: $<@sum:*.Product.price>"]]]
     qty:
       ui:label: Quantity
       ui:focus: true
     Product:
-      ui:template: "{name!N/A} ${price!0.00}"
+      ui:template: ["span.flex", [["span.auto", "<name!N/A>"], ["span.margin-left", "$<price!0.00>"]]]
       ui:label: Product's
       id:
         ui:hidden: true
       name:
-        ui:label: name
+        ui:label: Name
       price:
-        ui:label: price
+        ui:label: Price
 attributes: {}
 #isNew: true
 action: index
