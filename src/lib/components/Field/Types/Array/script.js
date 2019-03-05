@@ -63,20 +63,29 @@ export default {
     },
     sync() {
       const {
-        values, nextValue, currentOffset,
+        values, nextValue, currentOffset, through,
       } = this.get();
+
+      const {
+        actions, model,
+      } = this.root.get();
 
       if (typeof currentOffset === 'undefined') {
         this.add(nextValue);
         this.fire('sync');
       } else {
         // FIXME: current result is not being reflected on the UI
-        values[currentOffset] = {};
-        this.set({ currentOffset: undefined, result: values.slice() });
+        API.call(actions[through || model].update, nextValue)
+          .then(data => {
+            if (data.status === 'ok') {
+              values[currentOffset] = {};
+              this.set({ currentOffset: undefined, result: values.slice() });
 
-        values[currentOffset] = nextValue;
-        this.set({ result: values.slice() });
-        this.fire('sync');
+              values[currentOffset] = nextValue;
+              this.set({ result: values.slice() });
+              this.fire('sync');
+            }
+          });
       }
     },
     edit(offset) {
