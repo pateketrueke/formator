@@ -46,6 +46,7 @@
     },
     "bundleOptions": {
       "rollup": {
+        "inlineDynamicImports": true,
         "format": "esm",
         "plugins": [
           "rollup-plugin-node-resolve",
