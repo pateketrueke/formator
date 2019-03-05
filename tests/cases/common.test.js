@@ -15,30 +15,24 @@ test('should display a "Missing props" error', async t => {
 fixture('Test #2 - Type definitions')
   .page(defaultPage.url('#test2'));
 
-test('should handle integer types', async t => {
+test('should handle standard types', async t => {
   await t.expect($('test2').field('/intValue').visible).ok();
-});
-
-test('should handle number types', async t => {
   await t.expect($('test2').field('/numValue').visible).ok();
-});
-
-test('should handle boolean types', async t => {
   await t.expect($('test2').field('/boolValue').visible).ok();
-});
-
-test('should handle string types', async t => {
   await t.expect($('test2').field('/strValue').visible).ok();
-});
-
-test('should handle array types', async t => {
   await t.expect($('test2').field('/arrValue').visible).ok();
-});
-
-test('should handle object types', async t => {
   await t.expect($('test2').field('/objValue').visible).ok();
+  await t.expect($('test2').field('/objValues/strValue').visible).ok();
 });
 
-test('should handle nested types', async t => {
-  await t.expect($('test2').field('/objValues/strValue').visible).ok();
+fixture('Test #3 - Fixed array types')
+  .page(defaultPage.url('#test3'));
+
+test('should handle static types per item', async t => {
+  await t.expect($('test3').type('integer', '/0').visible).ok();
+  await t.expect($('test3').type('number', '/1').visible).ok();
+  await t.expect($('test3').type('boolean', '/2').visible).ok();
+  await t.expect($('test3').type('string', '/3').visible).ok();
+  await t.expect($('test3').type('array', '/4').visible).ok();
+  await t.expect($('test3').type('object', '/5').visible).ok();
 });

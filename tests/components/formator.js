@@ -19,6 +19,10 @@ export default class Formator {
   field(propName) {
     return this._get(`[data-field="${propName}"]`);
   }
+
+  type(typeName, subField) {
+    return this._get(`[data-type="${typeName}"]${subField ? ` > [data-field="${subField}"]` : ''}`);
+  }
 }
 
 export function getForm(formId) {
