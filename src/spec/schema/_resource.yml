@@ -76,13 +76,14 @@ uiSchema:
     ui:headers: [Quantity, Product info.]
     ui:update: Update product
     ui:save: Add product
+    ui:order: [Product]
     ui:template: ["span.flex", [["span.auto", "Products bought: <@sum:*.qty> <@embed:*.Product.image:(preview: ?)>"], ["span.margin-left", "Total: $<@mul:*.qty,*.Product.price>"]]]
     qty:
       ui:label: Quantity
-      ui:focus: true
     Product:
       ui:template: ["span.flex", [["span.auto", "<name!N/A>"], ["span.margin-left", "$<price!0.00>"]]]
       ui:label: Product's
+      ui:focus: true
       id:
         ui:hidden: true
       name:

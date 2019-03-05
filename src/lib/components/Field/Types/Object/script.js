@@ -39,6 +39,13 @@ export default {
       }
 
       return Object.entries(schema.properties)
+        .sort((a, b) => {
+          if (!fixedSchema['ui:order']) {
+            return 0;
+          }
+
+          return fixedSchema['ui:order'].indexOf(b[0]) - fixedSchema['ui:order'].indexOf(a[0]);
+        })
         .map(([key, props]) => ({
           id: getId(rootId, name !== '__ROOT__' ? `${name}[${key}]` : key, true),
           name: name !== '__ROOT__' ? `${name}[${key}]` : key,
