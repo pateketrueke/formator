@@ -1,8 +1,0 @@
-description:
-  ui:widget: textarea
-score:
-  ui:widget: updown
-ui:order:
-  - status
-  - title
-  - '*'

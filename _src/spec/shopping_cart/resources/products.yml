@@ -1,7 +1,0 @@
-result:
-  - id: 1
-    name: Item
-    price: 1.23
-  - id: 2
-    name: Test
-    price: 99.90
