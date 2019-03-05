@@ -76,7 +76,7 @@ uiSchema:
     ui:headers: [Quantity, Product info.]
     ui:update: Update product
     ui:save: Add product
-    ui:template: ["span.flex", [["span.auto", "Products bought: <@sum:*.qty> <@embed:*.Product.image:(preview: ?)>"], ["span.margin-left", "Total: $<@sum:*.Product.price>"]]]
+    ui:template: ["span.flex", [["span.auto", "Products bought: <@sum:*.qty> <@embed:*.Product.image:(preview: ?)>"], ["span.margin-left", "Total: $<@mul:*.qty,*.Product.price>"]]]
     qty:
       ui:label: Quantity
       ui:focus: true

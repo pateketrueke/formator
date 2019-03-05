@@ -20,6 +20,8 @@ export default {
           [key]: e || defaultValue(schema)[key],
         },
       });
+
+      this.fire('sync');
     },
   },
   computed: {

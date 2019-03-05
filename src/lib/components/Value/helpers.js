@@ -73,7 +73,7 @@ export function renderValue(data, template) {
             .split(',')
             .filter(x => x),
           operator: matches[3],
-          value: matches[4],
+          value: matches[4].trim(),
         });
 
         copy = copy.replace(matches[0], '\0');

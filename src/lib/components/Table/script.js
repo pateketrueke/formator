@@ -1,4 +1,4 @@
-import { defaultValue } from '../Field/utils';
+import { defaultValue, sync } from '../Field/utils';
 import { API, randId } from '../../shared/utils';
 
 export default {
@@ -15,34 +15,37 @@ export default {
       keys: [],
     };
   },
-  // FIXME: cleanup this hooks, e.g.
-  // - how fire("sync") events?
-  // - how load/reload through events?
-  oncreate() {
-    try {
-      this.load();
-    } catch (e) {
-      console.log(e);
-    }
-  },
+  oncreate: sync,
   // FIXME: generalize all API methods, reuse then!
   methods: {
-    update() {
+    sync() {
       const {
-        hasOffset, value, values, model, actions,
+        offset, value, values, model, actions,
       } = this.get();
 
-      if (hasOffset) {
+      if (offset >= 0) {
         API.call(actions[model].update, value)
-          .then(result => {
-            console.log(result);
+          .then(data => {
+            if (data.status === 'ok') {
+              // FIXME: UI is not being synced...
+              values[offset] = {};
+              this.set({ result: values.slice() });
+
+              values[offset] = data.result;
+              this.set({ result: values.slice(), value: {} });
+              this.fire('sync');
+            }
           });
       } else {
         API.call(actions[model].create, value)
-          .then(() => this.set({
-            result: values.concat(value),
-            value: {},
-          }));
+          .then(() => {
+            this.set({
+              result: values.concat(value),
+              value: {},
+            });
+
+            this.fire('sync');
+          });
       }
     },
     remove(offset) {
@@ -62,8 +65,8 @@ export default {
       const { schema, values } = this.get();
 
       this.set({
+        offset,
         isOpen: true,
-        hasOffset: offset >= 0,
         value: offset >= 0 ? values[offset] : defaultValue(schema),
       });
     },
@@ -73,7 +76,7 @@ export default {
       this.set({
         payload: API.call(actions[model].index).then(data => {
           if (data.status === 'ok') {
-            this.set({ values: data.result });
+            this.set({ result: data.result });
           }
         }),
       });

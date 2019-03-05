@@ -62,20 +62,22 @@ export default {
       });
     },
     sync() {
-      const { result, nextValue, currentOffset } = this.get();
+      const {
+        values, nextValue, currentOffset,
+      } = this.get();
 
       if (typeof currentOffset === 'undefined') {
         this.add(nextValue);
+        this.fire('sync');
       } else {
-        result[currentOffset] = nextValue;
+        // FIXME: current result is not being reflected on the UI
+        values[currentOffset] = {};
+        this.set({ currentOffset: undefined, result: values.slice() });
 
-        this.set({
-          currentOffset: undefined,
-          result,
-        });
+        values[currentOffset] = nextValue;
+        this.set({ result: values.slice() });
+        this.fire('sync');
       }
-
-      this.fire('sync');
     },
     edit(offset) {
       const { values } = this.get();

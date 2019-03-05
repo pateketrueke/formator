@@ -19,6 +19,10 @@ export function sync() {
       }
     });
   }
+
+  if (typeof this.load === 'function') {
+    this.load();
+  }
 }
 
 export function getId(rootId, forName, isLabel) {
