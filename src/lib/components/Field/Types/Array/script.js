@@ -75,7 +75,7 @@ export default {
         this.fire('sync');
       } else {
         // FIXME: PK is being the same...?
-        console.log(currentOffset, nextValue);
+        console.log('>>>', currentOffset, nextValue);
 
         // FIXME: current result is not being reflected on the UI
         API.call(actions[through || model].update, nextValue)

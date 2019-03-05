@@ -11,6 +11,10 @@ export default {
     const isMixed = Array.isArray(values[0]);
     const length = isMixed ? values[0].length : 1;
 
+    if (!length) {
+      return 0;
+    }
+
     if (isMixed) {
       values = values.map(x => x.map(Number).reduce((prev, cur) => prev + cur, 0));
     }

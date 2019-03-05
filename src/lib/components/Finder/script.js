@@ -102,6 +102,7 @@ export default {
     },
     keydown(e) {
       if (e.keyCode === 27 || e.keyCode === 38 || e.keyCode === 40) {
+        if (e.keyCode === 27) this.clear();
         e.preventDefault();
       }
 
