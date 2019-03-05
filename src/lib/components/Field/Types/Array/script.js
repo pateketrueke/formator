@@ -43,15 +43,24 @@ export default {
         actions, model,
       } = this.root.get();
 
+      // FIXME: clean this!!!
+      const next = () => {
+        result.splice(offset, 1);
+        keys.splice(offset, 1);
+        this.set({ result, keys });
+        this.fire('sync');
+      };
+
       // FIXME: generalize these methods, reuse then?
-      API.call(actions[through || model].destroy, result[offset]).then(data => {
-        if (data.status === 'ok') {
-          result.splice(offset, 1);
-          keys.splice(offset, 1);
-          this.set({ result, keys });
-          this.fire('sync');
-        }
-      });
+      if (actions) {
+        API.call(actions[through || model].destroy, result[offset]).then(data => {
+          if (data.status === 'ok') {
+            next();
+          }
+        });
+      } else {
+        next();
+      }
     },
     open() {
       const { schema, nextOffset } = this.get();

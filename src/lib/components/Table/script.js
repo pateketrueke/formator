@@ -53,13 +53,22 @@ export default {
         actions, values, model, keys,
       } = this.get();
 
-      API.call(actions[model].destroy, values[offset]).then(data => {
-        if (data.status === 'ok') {
-          values.splice(offset, 1);
-          keys.splice(offset, 1);
-          this.set({ values, keys });
-        }
-      });
+      // FIXME: clean this!!!
+      const next = () => {
+        values.splice(offset, 1);
+        keys.splice(offset, 1);
+        this.set({ values, keys });
+      };
+
+      if (actions) {
+        API.call(actions[model].destroy, values[offset]).then(data => {
+          if (data.status === 'ok') {
+            next();
+          }
+        });
+      } else {
+        next();
+      }
     },
     edit(offset) {
       const { schema, values } = this.get();

@@ -1,3 +1,3 @@
-<input type="number" bind:value="result" {id} {name} {...props} />
+<input type="number" bind:value="fixedValue" {id} {name} {...props} />
 
 <script src="../String/script.js"></script>
