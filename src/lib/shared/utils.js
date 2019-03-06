@@ -88,6 +88,9 @@ export function loader(components, selector) {
       data,
     });
 
+    // expose getter as only public API method
+    target.get = () => instance.get()[data.action === 'index' ? 'result' : 'value'];
+
     return instance;
   });
 }
