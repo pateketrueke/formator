@@ -52,7 +52,7 @@
   <button type="submit" on:click="edit()">
     <span>{fixedSchema['ui:new'] || 'New'}</span>
   </button>
-  <Modal {uiSchema} resource={model} bind:visible="isOpen" on:save="sync()">
+  <Modal {uiSchema} updating={isUpdate} resource={model} bind:visible="isOpen" on:save="sync()">
     <Field name='__ROOT__' bind:result="value" {...fieldProps} />
   </Modal>
 </div>

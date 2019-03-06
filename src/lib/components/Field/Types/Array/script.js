@@ -90,6 +90,8 @@ export default {
         API.call(actions[through || model].update, nextValue)
           .then(data => {
             if (data.status === 'ok') {
+              Object.assign(nextValue, data.result);
+
               values[currentOffset] = {};
               this.set({ currentOffset: undefined, result: values.slice() });
 

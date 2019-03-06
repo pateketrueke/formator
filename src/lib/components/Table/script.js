@@ -27,24 +27,30 @@ export default {
         API.call(actions[model].update, value)
           .then(data => {
             if (data.status === 'ok') {
+              Object.assign(value, data.result);
+
               // FIXME: UI is not being synced...
               values[offset] = {};
               this.set({ result: values.slice() });
 
-              values[offset] = data.result;
+              values[offset] = value;
               this.set({ result: values.slice(), value: {} });
               this.fire('sync');
             }
           });
       } else {
         API.call(actions[model].create, value)
-          .then(() => {
-            this.set({
-              result: values.concat(value),
-              value: {},
-            });
+          .then(data => {
+            if (data.status === 'ok') {
+              Object.assign(value, data.result);
 
-            this.fire('sync');
+              this.set({
+                result: values.concat(value),
+                value: {},
+              });
+
+              this.fire('sync');
+            }
           });
       }
     },
@@ -97,6 +103,9 @@ export default {
     },
     fieldProps({ schema, uiSchema }) {
       return { props: schema, uiSchema };
+    },
+    isUpdate({ offset }) {
+      return typeof offset !== 'undefined';
     },
     headers({ fixedSchema, schema }) {
       const props = schema.properties
