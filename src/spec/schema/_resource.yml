@@ -77,7 +77,7 @@ uiSchema:
     ui:update: Update product
     ui:save: Add product
     ui:order: [Product]
-    ui:template: ["span.flex", [["span.auto", "Products bought: <@sum:*.qty> <@embed:*.Product.image:(preview: ?)>"], ["span.margin-left", "Total: $<@mul:*.qty,*.Product.price>"]]]
+    ui:template: ["span.flex", [["span.auto", "#<id>. Products bought: <@sum:*.qty> <@embed:*.Product.image:(preview: ?)>"], ["span.margin-left", "Total: $<@mul:*.qty,*.Product.price>"]]]
     qty:
       ui:label: Quantity
     Product:
