@@ -1,6 +1,7 @@
 <div data-finder class={status}>
   <input {id}
     type="search"
+    data-is="finder"
     on:focus="open(event)"
     on:blur="close(event)"
     on:input="input(event)"

@@ -23,10 +23,10 @@
               </td>
             {/each}
             <th>
-              <button data-before="&#9998;" type="button" on:click="edit(offset)">
+              <button data-is="edit" data-before="&#9998;" type="button" on:click="edit(offset)">
                 <span>{fixedSchema['ui:edit'] || 'Edit'}</span>
               </button>
-              <button data-before="&times;" type="button" on:click="remove(offset)">
+              <button data-is="remove" data-before="&times;" type="button" on:click="remove(offset)">
                 <span>{fixedSchema['ui:remove'] || 'Remove'}</span>
               </button>
             </th>
@@ -40,7 +40,7 @@
         <tr>
           <td colspan="99">
             <Catch {error} />
-            <button on:click="load()">Try again</button>
+            <button data-is="reload" on:click="load()">Try again</button>
           </td>
         </tr>
       {/await}
@@ -49,7 +49,7 @@
 </table>
 
 <div>
-  <button type="submit" on:click="edit()">
+  <button data-is="new" type="submit" on:click="edit()">
     <span>{fixedSchema['ui:new'] || 'New'}</span>
   </button>
   <Modal {uiSchema} updating={isUpdate} resource={model} bind:visible="isOpen" on:save="sync()">

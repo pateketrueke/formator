@@ -6,7 +6,7 @@
     <form on:submit="save(event)" {...formProps}>
       <Field name='__ROOT__' bind:result="value" {...fieldProps} />
       <div>
-        <button type="submit">
+        <button data-is="save" type="submit">
           <span>{fixedSchema['ui:save'] || 'Save'}</span>
         </button>
         <input type="hidden" name="_method" value={nextAction.verb}/>

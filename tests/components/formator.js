@@ -3,10 +3,11 @@ import { Selector } from 'testcafe';
 export default class Formator {
   constructor(rootId) {
     this.jsonForm = Selector(`#${rootId} + .formator`);
-    this.failure = this._get('[data-failure]');
+    this.failure = this.get('[data-failure]');
+    this.empty = this.get('[data-empty]');
   }
 
-  _get(selector) {
+  get(selector) {
     this._cache = this._cache || {};
 
     if (!this._cache[selector]) {
@@ -17,11 +18,15 @@ export default class Formator {
   }
 
   field(propName) {
-    return this._get(`[data-field="${propName}"]`);
+    return this.get(`[data-field="${propName}"]`);
   }
 
   type(typeName, subField) {
-    return this._get(`[data-type="${typeName}"]${subField ? ` > [data-field="${subField}"]` : ''}`);
+    return this.get(`[data-type="${typeName}"]${subField ? ` > [data-field="${subField}"]` : ''}`);
+  }
+
+  is(actionName) {
+    return this.get(`[data-is="${actionName}"]`);
   }
 }
 
