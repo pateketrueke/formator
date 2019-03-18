@@ -12,13 +12,7 @@ test('should start with an empty list', async t => {
   await t.expect($('test4').empty.visible).ok();
 });
 
-// FIXME:
-// - create a new Cart, [OK]
-// - add a single Product, [OK]
-// - without reloading edit the cart and save it...
-// - freshly added CartItems are added again!
-
-test.only('should create Cart(s) with Product(s)-as-items', async t => {
+test('should create Cart(s) with Product(s)-as-items', async t => {
   // FIXME: simplify DSL for testing...
   await t.click($('test4').is('new'));
   await t.click($('test4').is('append'));
@@ -29,4 +23,6 @@ test.only('should create Cart(s) with Product(s)-as-items', async t => {
   await t.click($('test4').is('save')).wait(150);
   await t.click($('test4').is('save'));
   await t.expect($('test4').field('/0/items').visible).ok();
+  await t.expect($('test4').field('/0/items').textContent).contains('Products bought');
+  await t.click($('test4').is('remove'));
 });
