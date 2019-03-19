@@ -14,8 +14,7 @@ table {
   }
 
   td,
-  td ~ th,
-  thead th {
+  td ~ th {
     padding: @sp2;
   }
 
@@ -23,6 +22,7 @@ table {
     th {
       background-color: lighten(@light, 20);
       text-align: left;
+      padding: 0 @sp2;
     }
   }
 
@@ -78,8 +78,11 @@ pre {
   }
 }
 
-h2 {
-  padding: @sp2;
+caption, h2 {
+  padding: @sp1 @sp2;
+  text-align: left;
+  font-size: 1.5em;
+  font-weight: bold;
   border-bottom: 1px dashed @light;
 }
 

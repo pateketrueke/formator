@@ -1,4 +1,8 @@
 <table>
+  {#if uiSchema['ui:title']}
+    <caption>{uiSchema['ui:title']}</caption>
+  {/if}
+
   <thead>
     <tr>
       {#each headers as { label }}

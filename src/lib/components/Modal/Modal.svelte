@@ -1,6 +1,9 @@
 {#if visible}
   <div data-modal ref:modal on:click="cancel(event)">
     <div data-content>
+      {#if uiSchema['ui:caption']}
+        <h2>{uiSchema['ui:caption']}</h2>
+      {/if}
       <slot></slot>
       <div>
         <button data-is="close" type="button" on:click="close()">
