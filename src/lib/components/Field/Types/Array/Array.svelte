@@ -11,11 +11,17 @@
       <tbody>
         {#each items as { key, path, props, offset, isFixed, uiSchema } (key)}
           <tr data-field={`/${path.join('/')}`}>
-            {#each headers as { field }}
-              <td data-field={`/${path.concat(field).join('/')}`}>
-                <Value {props} {field} uiSchema={uiSchema[field]} value={values[offset][field]} />
+            {#if uiSchema['ui:template']}
+              <td>
+                <Value {props} {uiSchema} value={values[offset]} />
               </td>
-            {/each}
+            {:else}
+              {#each headers as { field }}
+                <td data-field={`/${path.concat(field).join('/')}`}>
+                  <Value {props} {field} uiSchema={uiSchema[field]} value={values[offset][field]} />
+                </td>
+              {/each}
+            {/if}
             <th>
               {#if !isFixed}
                 <button data-is="edit" data-before="&#9998;" type="button" on:click="edit(offset)">
