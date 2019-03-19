@@ -33,12 +33,16 @@
               {/each}
             {/if}
             <th>
-              <button data-is="edit" data-before="&#9998;" type="button" on:click="edit(offset)">
-                <span>{fixedSchema['ui:edit'] || 'Edit'}</span>
-              </button>
-              <button data-is="remove" data-before="&times;" type="button" on:click="remove(offset)">
-                <span>{fixedSchema['ui:remove'] || 'Remove'}</span>
-              </button>
+              {#if fixedSchema['ui:edit'] !== false}
+                <button data-is="edit" data-before="&#9998;" type="button" on:click="edit(offset)">
+                  <span>{fixedSchema['ui:edit'] || 'Edit'}</span>
+                </button>
+              {/if}
+              {#if fixedSchema['ui:edit'] !== false}
+                <button data-is="remove" data-before="&times;" type="button" on:click="remove(offset)">
+                  <span>{fixedSchema['ui:remove'] || 'Remove'}</span>
+                </button>
+              {/if}
             </th>
           </tr>
         {:else}
@@ -59,9 +63,11 @@
 </table>
 
 <div>
-  <button data-is="new" type="submit" on:click="edit()">
-    <span>{fixedSchema['ui:new'] || `New ${association.singular}`}</span>
-  </button>
+  {#if fixedSchema['ui:new'] !== false}
+    <button data-is="new" type="submit" on:click="edit()">
+      <span>{fixedSchema['ui:new'] || `New ${association.singular}`}</span>
+    </button>
+  {/if}
   <Modal {uiSchema} updating={isUpdate} resource={model} bind:visible="isOpen" on:save="sync()">
     <Field name='__ROOT__' bind:result="value" {...fieldProps} />
   </Modal>

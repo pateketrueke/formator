@@ -18,12 +18,16 @@
             {/each}
             <th>
               {#if !isFixed}
-                <button data-is="edit" data-before="&#9998;" type="button" on:click="edit(offset)">
-                  <span>{fixedSchema['ui:edit'] || `Edit ${association.singular}`}</span>
-                </button>
-                <button data-is="remove" data-before="&times;" type="button" on:click="remove(offset)">
-                  <span>{fixedSchema['ui:remove'] || `Remove ${association.singular}`}</span>
-                </button>
+                {#if fixedSchema['ui:edit'] !== false}
+                  <button data-is="edit" data-before="&#9998;" type="button" on:click="edit(offset)">
+                    <span>{fixedSchema['ui:edit'] || `Edit ${association.singular}`}</span>
+                  </button>
+                {/if}
+                {#if fixedSchema['ui:remove'] !== false}
+                  <button data-is="remove" data-before="&times;" type="button" on:click="remove(offset)">
+                    <span>{fixedSchema['ui:remove'] || `Remove ${association.singular}`}</span>
+                  </button>
+                {/if}
               {/if}
             </th>
           </tr>
@@ -39,7 +43,7 @@
               <div>
                 <Field {props} {uiSchema} bind:result="values[offset]" name={`${name}[${offset}]`} />
               </div>
-              {#if !isFixed}
+              {#if !isFixed && fixedSchema['ui:remove'] !== false}
                 <div>
                   <button data-is="remove" data-before="&times;" type="button" on:click="remove(offset)">
                     <span>{fixedSchema['ui:remove'] || 'Remove item'}</span>
@@ -59,13 +63,15 @@
 {#if schema.additionalItems !== false}
   <div>
     {#if through}
-      <button data-is="append" type="button" on:click="open()">
-        <span>{uiSchema['ui:append'] || `Add ${association.singular}`}</span>
-      </button>
+      {#if fixedSchema['ui:append'] !== false}
+        <button data-is="append" type="button" on:click="open()">
+          <span>{uiSchema['ui:append'] || `Add ${association.singular}`}</span>
+        </button>
+      {/if}
       <Modal {uiSchema} updating={isUpdate} resource={association.singular} bind:visible="isOpen" on:save="sync()">
         <Field {...nextProps} {association} {through} bind:result="nextValue" name={`${name}[${nextOffset}]`} />
       </Modal>
-    {:else}
+    {:elseif uiSchema['ui:append'] !== false}
       <button data-is="append" data-before="&plus;" type="button" on:click="append()">
         <span>{uiSchema['ui:append'] || 'Add item'}</span>
       </button>
