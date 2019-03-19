@@ -7,21 +7,23 @@ import { getForm as $ } from '../components/formator';
 fixture('Test #4 - Shopping Cart example')
   .page('http://localhost:8081/db/Cart');
 
+const m = $('body>');
+
 test('should start with an empty list', async t => {
-  await t.expect($('main').empty.visible).ok();
+  await t.expect(m.empty.visible).ok();
 });
 
 test('should create Cart(s) with Product(s)-as-items', async t => {
   // FIXME: simplify DSL for testing...
-  await t.click($('main').is('new'));
-  await t.click($('main').is('append'));
-  await t.typeText($('main').is('finder'), 'abc', { replace: true });
-  await t.wait(150).click($('main').get('[data-autocomplete] li').nth(0));
-  await t.expect($('main').get('[name="items[0][Product][name]"]').value).contains('Some product');
-  await t.typeText($('main').get('[name="items[0][qty]"]'), '1', { replace: true });
-  await t.click($('main').is('save')).wait(150);
-  await t.click($('main').is('save'));
-  await t.expect($('main').field('/0/items').visible).ok();
-  await t.expect($('main').field('/0/items').textContent).contains('Products bought');
-  await t.click($('main').is('remove'));
+  await t.click(m.is('new'));
+  await t.click(m.is('append'));
+  await t.typeText(m.is('finder'), 'abc', { replace: true });
+  await t.wait(150).click(m.get('[data-autocomplete] li').nth(0));
+  await t.expect(m.get('[name="items[0][Product][name]"]').value).contains('Some product');
+  await t.typeText(m.get('[name="items[0][qty]"]'), '1', { replace: true });
+  await t.click(m.is('save')).wait(150);
+  await t.click(m.is('save'));
+  await t.expect(m.field('/0/items').visible).ok();
+  await t.expect(m.field('/0/items').textContent).contains('Products bought');
+  await t.click(m.is('remove'));
 });

@@ -1,8 +1,8 @@
 import { Selector } from 'testcafe';
 
 export default class Formator {
-  constructor(rootId) {
-    this.jsonForm = Selector(`#${rootId} + .formator`);
+  constructor(selector) {
+    this.jsonForm = Selector(`${selector} .formator`);
     this.failure = this.get('[data-failure]');
     this.empty = this.get('[data-empty]');
   }
