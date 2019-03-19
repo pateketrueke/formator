@@ -41,10 +41,14 @@ export default {
     open() {
       clearTimeout(this.t);
       this.t = setTimeout(() => {
-        const { items = [] } = this.get();
+        const { items = [], active } = this.get();
 
         if (items.length) {
-          this.set({ isOpen: true });
+          if (active >= 0) {
+            this.change(active);
+          } else {
+            this.set({ isOpen: true });
+          }
         }
       }, 120);
     },
