@@ -52,7 +52,9 @@ export function reduceRefs(schema, refs) {
   const copy = {};
 
   Object.keys(schema).forEach(prop => {
-    copy[prop] = reduceRefs(schema[prop], refs);
+    if (prop !== 'definitions') {
+      copy[prop] = reduceRefs(schema[prop], refs);
+    }
   });
 
   return copy;
