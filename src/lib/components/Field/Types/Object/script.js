@@ -31,6 +31,24 @@ export default {
     fixedValues({ result }) {
       return result || {};
     },
+    hidden({
+      path, name, rootId, schema, fixedSchema,
+    }) {
+      if (!(schema && schema.properties)) {
+        return [];
+      }
+
+      // FIXME: how to reuse?
+      return Object.entries(schema.properties)
+        .filter(x => fixedSchema[x[0]] && fixedSchema[x[0]]['ui:hidden'])
+        .map(([key, props]) => ({
+          id: getId(rootId, name !== '__ROOT__' ? `${name}[${key}]` : key, true),
+          name: name !== '__ROOT__' ? `${name}[${key}]` : key,
+          path: (path || []).concat(key),
+          field: key,
+          props,
+        }), []);
+    },
     fields({
       path, name, rootId, schema, fixedSchema,
     }) {
@@ -39,16 +57,8 @@ export default {
       }
 
       return Object.entries(schema.properties)
+        .filter(x => (fixedSchema[x[0]] ? !fixedSchema[x[0]]['ui:hidden'] : true))
         .sort((a, b) => {
-          if (fixedSchema[a[0]] && fixedSchema[b[0]]) {
-            const x = fixedSchema[a[0]]['ui:hidden'];
-            const y = fixedSchema[b[0]]['ui:hidden'];
-
-            if (x || y) {
-              return y - x;
-            }
-          }
-
           if (!fixedSchema['ui:order']) {
             return 0;
           }

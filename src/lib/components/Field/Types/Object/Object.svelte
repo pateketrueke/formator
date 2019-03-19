@@ -1,24 +1,28 @@
 {#if fields.length}
   <fieldset>
+    {#each hidden as { id, path, name, field, props } (field)}
+      <input
+        {id}
+        {name}
+        type="hidden"
+        data-type={props.type || 'object'}
+        data-field={`/${path.join('/')}`}
+        bind:value="fixedValues[field]"
+      />
+    {/each}
     <ul>
       {#each fields as { id, path, name, field, props, uiSchema } (field)}
-        {#if uiSchema['ui:hidden']}
-          <li style="display:none">
-            <input type="hidden" {name} bind:value="fixedValues[field]" />
-          </li>
-        {:else}
-          <li data-type={props.type || 'object'}>
-            <div data-field={`/${path.join('/')}`}>
-              <label for={id}>{uiSchema['ui:label'] || field}</label>
-              <div>
-                {#if through && field === props.id}
-                  <Finder {id} {field} {props} {uiSchema} {association} on:change="sync(event, field)" />
-                {/if}
-                <Field {path} {name} {field} {props} {uiSchema} bind:result="fixedValues[field]" />
-              </div>
+        <li data-type={props.type || 'object'}>
+          <div data-field={`/${path.join('/')}`}>
+            <label for={id}>{uiSchema['ui:label'] || field}</label>
+            <div>
+              {#if through && field === props.id}
+                <Finder {id} {field} {props} {uiSchema} {association} on:change="sync(event, field)" />
+              {/if}
+              <Field {path} {name} {field} {props} {uiSchema} bind:result="fixedValues[field]" />
             </div>
-          </li>
-        {/if}
+          </div>
+        </li>
       {/each}
     </ul>
   </fieldset>
