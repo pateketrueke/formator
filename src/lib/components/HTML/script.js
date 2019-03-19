@@ -1,12 +1,19 @@
 export default {
   oncreate() {
-    const { element, markup } = this.get();
+    const { children, markup } = this.get();
     const { target } = this.refs;
 
-    if (element instanceof Element) {
-      target.parentNode.insertBefore(element, target);
-      this.on('destroy', () => element.remove());
+    if (Array.isArray(children)) {
+      children.forEach(element => {
+        if (element instanceof Element) {
+          target.appendChild(element);
+        }
+      });
     }
+
+    this.on('destroy', () => {
+      while (target.firstChild) target.removeChild(target.firstChild);
+    });
 
     if (typeof markup === 'string') {
       target.innerHTML = markup;
