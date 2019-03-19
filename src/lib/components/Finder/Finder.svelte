@@ -16,7 +16,7 @@
     <div data-autocomplete>
       <ul ref:options on:click="select(event)">
         {#each items as value (value)}
-          <li><Value {value} {props} {field} uiSchema={fixedSchema} /></li>
+          <li><Value {value} {props} {field} {uiSchema} /></li>
         {/each}
       </ul>
     </div>

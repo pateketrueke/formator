@@ -137,9 +137,4 @@ export default {
       }
     },
   },
-  computed: {
-    fixedSchema: ({ field, uiSchema }) => ({
-      [field]: uiSchema,
-    }),
-  },
 };

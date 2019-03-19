@@ -13,7 +13,7 @@
           <tr data-field={`/${path.join('/')}`}>
             {#each headers as { field }}
               <td data-field={`/${path.concat(field).join('/')}`}>
-                <Value {props} {field} {uiSchema} value={values[offset][field]} />
+                <Value {props} {field} uiSchema={uiSchema[field]} value={values[offset][field]} />
               </td>
             {/each}
             <th>

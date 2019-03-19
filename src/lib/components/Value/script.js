@@ -2,14 +2,13 @@ import { renderDOM } from './helpers';
 
 export default {
   computed: {
-    fixedSchema: ({ field, uiSchema }) => uiSchema[field] || {},
     fixedNodes: ({
-      value, field, props, fixedSchema,
+      value, field, props, uiSchema,
     }) => {
       const { type, default: defaultValue } = props.properties[field] || {};
 
-      if (typeof value !== 'undefined' && fixedSchema['ui:template']) {
-        return renderDOM(value, fixedSchema['ui:template']);
+      if (typeof value !== 'undefined' && uiSchema['ui:template']) {
+        return renderDOM(value, uiSchema['ui:template']);
       }
 
       if (type === 'number' || type === 'integer') {
