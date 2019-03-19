@@ -12,14 +12,15 @@
 @sp2: 10px;
 
 @smp: 72px;
-@smw: 360px;
+@smw: 420px;
 
 @mdp: 96px;
-@mdw: 560px;
+@mdw: 620px;
 
 @mdp: 120px;
 @lgw: 768px;
+@smn: @smw - 1px;
 
 @sm: ~"screen and (min-width: @{smw})";
 @md: ~"screen and (min-width: @{mdw})";
-@smx: ~"screen and (max-width: 359px)";
+@smx: ~"screen and (max-width: @{smn})";
