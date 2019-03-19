@@ -10,6 +10,10 @@ export default {
   },
   data() {
     return {
+      association: {
+        singular: 'Item',
+        plural: 'Items',
+      },
       result: null,
       value: {},
       keys: [],
@@ -112,10 +116,12 @@ export default {
         ? Object.keys(schema.properties)
         : [];
 
-      return props.map((key, offset) => ({
-        label: (fixedSchema['ui:headers'] && fixedSchema['ui:headers'][offset]) || key,
-        field: key,
-      })).filter(x => fixedSchema[x.field] && !fixedSchema[x.field]['ui:hidden']);
+      return props
+        .filter(x => (fixedSchema[x] ? !fixedSchema[x]['ui:hidden'] : true))
+        .map((key, offset) => ({
+          label: (fixedSchema['ui:headers'] && fixedSchema['ui:headers'][offset]) || key,
+          field: key,
+        }));
     },
     values({ result }) {
       return result || [];

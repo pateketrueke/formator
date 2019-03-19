@@ -50,7 +50,7 @@
 
 <div>
   <button data-is="new" type="submit" on:click="edit()">
-    <span>{fixedSchema['ui:new'] || 'New'}</span>
+    <span>{fixedSchema['ui:new'] || `New ${association.singular}`}</span>
   </button>
   <Modal {uiSchema} updating={isUpdate} resource={model} bind:visible="isOpen" on:save="sync()">
     <Field name='__ROOT__' bind:result="value" {...fieldProps} />
