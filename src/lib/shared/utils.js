@@ -81,6 +81,19 @@ export function loader(components, selector) {
       target = node;
     }
 
+    // assume resource listing by default
+    if (!data.model && Array.isArray(data.result)) {
+      data = {
+        result: data.result,
+        schema: { type: 'array' },
+        uiSchema: {
+          'ui:template': [['a', { href: `${document.location.href}/{}` }, '{}']],
+          'ui:title': data.description || 'Resources',
+          'ui:append': false,
+        },
+      };
+    }
+
     const Component = data.action === 'index'
       ? components.Table
       : components.Form;

@@ -14,6 +14,8 @@ export default {
         singular: 'Item',
         plural: 'Items',
       },
+      refs: {},
+      uiSchema: {},
       result: null,
       value: {},
       keys: [],
@@ -27,35 +29,37 @@ export default {
         offset, value, values, model, actions,
       } = this.get();
 
-      if (offset >= 0) {
-        API.call(actions[model].update, value)
-          .then(data => {
-            if (data.status === 'ok') {
-              Object.assign(value, data.result);
+      if (actions) {
+        if (offset >= 0) {
+          API.call(actions[model].update, value)
+            .then(data => {
+              if (data.status === 'ok') {
+                Object.assign(value, data.result);
 
-              // FIXME: UI is not being synced...
-              values[offset] = {};
-              this.set({ result: values.slice() });
+                // FIXME: UI is not being synced...
+                values[offset] = {};
+                this.set({ result: values.slice() });
 
-              values[offset] = value;
-              this.set({ result: values.slice(), value: {} });
-              this.fire('sync');
-            }
-          });
-      } else {
-        API.call(actions[model].create, value)
-          .then(data => {
-            if (data.status === 'ok') {
-              Object.assign(value, data.result);
+                values[offset] = value;
+                this.set({ result: values.slice(), value: {} });
+                this.fire('sync');
+              }
+            });
+        } else {
+          API.call(actions[model].create, value)
+            .then(data => {
+              if (data.status === 'ok') {
+                Object.assign(value, data.result);
 
-              this.set({
-                result: values.concat(value),
-                value: {},
-              });
+                this.set({
+                  result: values.concat(value),
+                  value: {},
+                });
 
-              this.fire('sync');
-            }
-          });
+                this.fire('sync');
+              }
+            });
+        }
       }
     },
     remove(offset) {
@@ -92,13 +96,15 @@ export default {
     load() {
       const { model, actions } = this.get();
 
-      this.set({
-        payload: API.call(actions[model].index).then(data => {
-          if (data.status === 'ok') {
-            this.set({ result: data.result });
-          }
-        }),
-      });
+      if (actions) {
+        this.set({
+          payload: API.call(actions[model].index).then(data => {
+            if (data.status === 'ok') {
+              this.set({ result: data.result });
+            }
+          }),
+        });
+      }
     },
   },
   computed: {

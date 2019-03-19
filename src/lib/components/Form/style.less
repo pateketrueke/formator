@@ -119,9 +119,25 @@ fieldset {
   border: 0;
 
   ~ div {
+    padding: 0 @sp2;
+
     > button {
       &:nth-child(2) {
         float: right;
+      }
+    }
+  }
+
+  > ul {
+    > [data-type=array] {
+      > div {
+        display: block;
+      }
+
+      @media @sm {
+        > div {
+          display: flex;
+        }
       }
     }
   }
@@ -182,9 +198,7 @@ li {
     }
   }
 
-  @media @sm {
-    > div {
-      display: flex;
-    }
+  > div {
+    display: flex;
   }
 }

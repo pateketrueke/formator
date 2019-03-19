@@ -25,18 +25,20 @@ export default {
       const { actions } = this.root.get();
       const { association } = this.get();
 
-      API.call(actions[association.model].index).then(data => {
-        if (data.status === 'ok') {
-          this.set({
-            items: data.result,
-            isOpen: true,
-            status: 'ready',
-            active: -1,
-            current: -1,
-            selected: -1,
-          });
-        }
-      });
+      if (actions) {
+        API.call(actions[association.model].index).then(data => {
+          if (data.status === 'ok') {
+            this.set({
+              items: data.result,
+              isOpen: true,
+              status: 'ready',
+              active: -1,
+              current: -1,
+              selected: -1,
+            });
+          }
+        });
+      }
     }, 260),
     open() {
       clearTimeout(this.t);

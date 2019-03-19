@@ -39,18 +39,22 @@
       <ul>
         {#each items as { key, path, props, offset, isFixed, uiSchema } (key)}
           <li data-type={props.type || 'object'}>
-            <div data-field={`/${path.join('/')}`}>
-              <div>
-                <Field {props} {uiSchema} bind:result="values[offset]" name={`${name}[${offset}]`} />
-              </div>
-              {#if !isFixed && fixedSchema['ui:remove'] !== false}
+            {#if fixedSchema['ui:template']}
+              <Value {uiSchema} value={values[offset]} />
+            {:else}
+              <div data-field={`/${path.join('/')}`}>
                 <div>
-                  <button data-is="remove" data-before="&times;" type="button" on:click="remove(offset)">
-                    <span>{fixedSchema['ui:remove'] || 'Remove item'}</span>
-                  </button>
+                  <Field {props} {uiSchema} bind:result="values[offset]" name={`${name}[${offset}]`} />
                 </div>
-              {/if}
-            </div>
+                {#if !isFixed && fixedSchema['ui:remove'] !== false}
+                  <div>
+                    <button data-is="remove" data-before="&times;" type="button" on:click="remove(offset)">
+                      <span>{fixedSchema['ui:remove'] || 'Remove item'}</span>
+                    </button>
+                  </div>
+                {/if}
+              </div>
+            {/if}
           </li>
         {/each}
       </ul>

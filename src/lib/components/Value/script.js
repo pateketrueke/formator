@@ -5,7 +5,7 @@ export default {
     fixedNodes: ({
       value, field, props, uiSchema,
     }) => {
-      const { type, default: defaultValue } = props.properties[field] || {};
+      const { type, default: defaultValue } = (field && props.properties[field]) || {};
 
       if (typeof value !== 'undefined' && uiSchema['ui:template']) {
         return renderDOM(value, uiSchema['ui:template']);

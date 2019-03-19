@@ -23,6 +23,7 @@ export default {
   data() {
     return {
       refs: {},
+      uiSchema: {},
       rootId: randId(),
     };
   },

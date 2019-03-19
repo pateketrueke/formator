@@ -10,7 +10,9 @@ const DEFAULT_VALUES = {
 const INDEX = {};
 
 export function sync() {
-  const { path, refs, model } = this.get();
+  const {
+    path, refs, model, association,
+  } = this.get();
 
   if (!path || path.length === 1) {
     this.on('update', ({ changed }) => {
@@ -21,7 +23,7 @@ export function sync() {
   }
 
   this.set({
-    association: refs[model],
+    association: refs[model] || association || {},
   });
 
   if (typeof this.load === 'function') {

@@ -54,11 +54,19 @@ export function getProp(from, key) {
 }
 
 export function renderValue(data, template) {
-  if (typeof data !== 'object') {
-    return template.replace(RE_IDENTITY, data);
+  if (typeof template === 'object') {
+    return Object.keys(template).reduce((prev, cur) => {
+      prev[cur] = renderValue(data, template[cur]);
+
+      return prev;
+    }, {});
   }
 
   if (typeof template === 'string') {
+    if (typeof data !== 'object') {
+      return template.replace(RE_IDENTITY, data);
+    }
+
     let copy = template;
     let matches;
 
@@ -153,12 +161,12 @@ export function reduce(value, template) {
     return [template[0], template[1], template[2].map(x => reduce(value, x))];
   }
 
-  const offset = Math.max(1, template.findIndex(x => typeof x === 'string'));
+  const offset = Math.min(2, template.findIndex((x, i) => i !== 0 && typeof x === 'string'));
 
   const text = template.slice(offset);
   const node = template.slice(0, offset);
 
-  return [node[0], node[1] || null].concat(text.map(x => renderValue(value, x)));
+  return [node[0], node[1] ? renderValue(value, node[1]) : null].concat(text.map(x => renderValue(value, x)));
 }
 
 export function renderDOM(value, template) {
