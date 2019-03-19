@@ -3,7 +3,7 @@ import { renderDOM } from './helpers';
 export default {
   computed: {
     fixedSchema({ field, uiSchema }) {
-      return uiSchema[field] || uiSchema || {};
+      return uiSchema[field] || {};
     },
     fixedNodes: ({
       value, field, props, fixedSchema,
