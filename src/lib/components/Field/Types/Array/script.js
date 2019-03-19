@@ -165,10 +165,12 @@ export default {
         ? Object.keys(propSchema.properties)
         : [];
 
-      return props.map((key, offset) => ({
-        label: (fixedSchema['ui:headers'] && fixedSchema['ui:headers'][offset]) || key,
-        field: key,
-      }));
+      return props
+        .filter(x => (fixedSchema[x] ? !fixedSchema[x]['ui:hidden'] : true))
+        .map((key, offset) => ({
+          label: (fixedSchema['ui:headers'] && fixedSchema['ui:headers'][offset]) || key,
+          field: key,
+        }));
     },
     values({ result }) {
       return result || [];

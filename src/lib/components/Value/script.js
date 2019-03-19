@@ -2,9 +2,7 @@ import { renderDOM } from './helpers';
 
 export default {
   computed: {
-    fixedSchema({ field, uiSchema }) {
-      return uiSchema[field] || {};
-    },
+    fixedSchema: ({ field, uiSchema }) => uiSchema[field] || {},
     fixedNodes: ({
       value, field, props, fixedSchema,
     }) => {

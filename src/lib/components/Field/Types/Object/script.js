@@ -40,6 +40,15 @@ export default {
 
       return Object.entries(schema.properties)
         .sort((a, b) => {
+          if (fixedSchema[a[0]] && fixedSchema[b[0]]) {
+            const x = fixedSchema[a[0]]['ui:hidden'];
+            const y = fixedSchema[b[0]]['ui:hidden'];
+
+            if (x || y) {
+              return y - x;
+            }
+          }
+
           if (!fixedSchema['ui:order']) {
             return 0;
           }
