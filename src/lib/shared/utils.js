@@ -134,7 +134,7 @@ export const API = {
   call(action, data = {}) {
     const path = action.path.replace(/:(\w+)/g, (_, key) => data[key]);
 
-    return fetch(`http://localhost:8081${path}`, {
+    return fetch(path, {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
