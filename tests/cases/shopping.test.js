@@ -24,6 +24,6 @@ test('should create Cart(s) with Product(s)-as-items', async t => {
   await t.click(m.is('save')).wait(150);
   await t.click(m.is('save'));
   await t.expect(m.field('/0/items').visible).ok();
-  await t.expect(m.field('/0/items').textContent).contains('Products bought');
+  await t.expect(m.field('/0/items').textContent).contains('1 product(s)');
   await t.click(m.is('remove'));
 });
