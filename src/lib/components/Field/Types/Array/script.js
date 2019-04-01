@@ -70,6 +70,11 @@ export default {
         nextValue: defaultValue(getItems(schema, nextOffset)),
       });
     },
+    reset() {
+      this.set({
+        currentOffset: undefined,
+      });
+    },
     sync() {
       const {
         values, nextValue, currentOffset, through,
@@ -114,21 +119,33 @@ export default {
       });
     },
     add(value) {
-      const { result, keys } = this.get();
+      const { through, result, keys } = this.get();
+      const { actions, model } = this.root.get();
 
       const key = randId();
 
-      if (!result) {
-        this.set({
-          keys: [key],
-          result: [value],
+      // FIXME: invoke sync otherwise, cleanup!
+      Promise.resolve()
+        .then(() => {
+          if (actions) {
+            API.call(actions[through || model].create, value)
+              .then(data => {
+                if (data.status === 'ok') {
+                  if (!result) {
+                    this.set({
+                      keys: [key],
+                      result: [value],
+                    });
+                  } else {
+                    this.set({
+                      keys: keys.concat(key),
+                      result: result.concat(Array.isArray(value) ? [value] : value),
+                    });
+                  }
+                }
+              });
+          }
         });
-      } else {
-        this.set({
-          keys: keys.concat(key),
-          result: result.concat(Array.isArray(value) ? [value] : value),
-        });
-      }
     },
   },
   computed: {
@@ -147,9 +164,10 @@ export default {
       return currentOffset;
     },
     nextProps({
-      fixedSchema, isFixed, path, schema, nextOffset,
+      fixedSchema, isFixed, path, schema, nextOffset, parent,
     }) {
       return {
+        parent,
         path: (path || []).concat(nextOffset),
         props: getItems(schema, nextOffset),
         uiSchema: isFixed ? fixedSchema[nextOffset] || {} : fixedSchema,

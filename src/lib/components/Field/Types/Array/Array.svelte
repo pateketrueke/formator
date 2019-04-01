@@ -72,7 +72,7 @@
           <span>{uiSchema['ui:append'] || `Add ${association.singular}`}</span>
         </button>
       {/if}
-      <Modal {uiSchema} updating={isUpdate} resource={association.singular} bind:visible="isOpen" on:save="sync()">
+      <Modal {uiSchema} updating={isUpdate} resource={association.singular} bind:visible="isOpen" on:save="sync()" on:close="reset()">
         <Field {...nextProps} {association} {through} bind:result="nextValue" name={`${name}[${nextOffset}]`} />
       </Modal>
     {:elseif uiSchema['ui:append'] !== false}

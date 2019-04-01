@@ -19,7 +19,7 @@
               {#if through && field === props.id}
                 <Finder {id} {field} {props} {uiSchema} {association} on:change="sync(event, field)" />
               {/if}
-              <Field {path} {name} {field} {props} {uiSchema} bind:result="fixedValues[field]" />
+              <Field {path} {name} {field} {props} {uiSchema} parent={fixedResult} bind:result="fixedValues[field]" />
             </div>
           </div>
         </li>

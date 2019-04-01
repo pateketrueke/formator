@@ -24,6 +24,11 @@ export default {
   oncreate: sync,
   // FIXME: generalize all API methods, reuse then!
   methods: {
+    reset() {
+      this.set({
+        offset: undefined,
+      });
+    },
     sync() {
       const {
         offset, value, values, model, actions,
@@ -94,9 +99,14 @@ export default {
       });
     },
     load() {
-      const { model, actions } = this.get();
+      const { model, result, actions } = this.get();
 
-      if (actions) {
+      if (result) {
+        this.set({
+          payload: Promise.resolve()
+            .then(() => this.set({ result })),
+        });
+      } else if (actions) {
         this.set({
           payload: API.call(actions[model].index).then(data => {
             if (data.status === 'ok') {

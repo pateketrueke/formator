@@ -10,6 +10,17 @@ export default {
       result: null,
     };
   },
+  onupdate() {
+    const { parent, fixedValues } = this.get();
+
+    if (parent) {
+      Object.assign(fixedValues, parent);
+
+      this.set({
+        fixedValues,
+      });
+    }
+  },
   methods: {
     sync(e, key) {
       const { schema, result } = this.get();
@@ -30,6 +41,17 @@ export default {
     },
     fixedValues({ result }) {
       return result || {};
+    },
+    fixedResult({ fixedValues, schema }) {
+      const out = {};
+
+      Object.keys(fixedValues).forEach(k => {
+        if (fixedValues[k] && typeof fixedValues[k] !== 'object') {
+          out[`${schema.id}${k[0].toUpperCase() + k.substr(1)}`] = fixedValues[k];
+        }
+      });
+
+      return out;
     },
     hidden({
       path, name, rootId, schema, fixedSchema,
