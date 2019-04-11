@@ -4,7 +4,7 @@ import { getForm as $ } from '../components/formator';
 
 /* global fixture, test */
 
-fixture('Test #4 - Shopping Cart example')
+fixture.only('Test #4 - Shopping Cart example')
   .page('http://localhost:8081/db/Cart');
 
 const m = $('body>');
@@ -26,4 +26,8 @@ test('should create Cart(s) with Product(s)-as-items', async t => {
   await t.expect(m.field('/0/items').visible).ok();
   await t.expect(m.field('/0/items').textContent).contains('1 product(s)');
   await t.click(m.is('remove'));
+});
+
+test('should end with an empty list', async t => {
+  await t.expect(m.empty.visible).ok();
 });

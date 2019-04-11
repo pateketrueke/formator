@@ -31,16 +31,16 @@ export default {
     },
     sync() {
       const {
-        offset, value, values, model, actions,
+        offset, value, values, model, actions, refs,
       } = this.get();
+
+      const pk = refs[model].references.primaryKeys[0].prop;
 
       if (actions) {
         if (offset >= 0) {
           API.call(actions[model].update, value)
             .then(data => {
               if (data.status === 'ok') {
-                Object.assign(value, data.result);
-
                 // FIXME: UI is not being synced...
                 values[offset] = {};
                 this.set({ result: values.slice() });
@@ -54,7 +54,7 @@ export default {
           API.call(actions[model].create, value)
             .then(data => {
               if (data.status === 'ok') {
-                Object.assign(value, data.result);
+                value[pk] = data.result;
 
                 this.set({
                   result: values.concat(value),
