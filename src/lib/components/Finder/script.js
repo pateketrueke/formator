@@ -14,6 +14,13 @@ export default {
       selected: -1,
     };
   },
+  oncreate() {
+    // FIXME: initial value is not being reflected on the UI!
+    this.set({
+      current: 0,
+      selected: { name: 'OK', price: 12.3 },
+    });
+  },
   methods: {
     // FIXME: implement search and autocomplete?
     input: throttle(function $onInput(e) {
@@ -126,8 +133,14 @@ export default {
         }
       }
 
+      if (!items.length) return;
+
       if (e.keyCode === 38) {
-        if (active > 0) {
+        if (!isOpen) {
+          this.set({
+            isOpen: true,
+          });
+        } else if (active > 0) {
           this.change(active - 1);
         } else {
           this.change(items.length - 1);
@@ -135,7 +148,11 @@ export default {
       }
 
       if (e.keyCode === 40) {
-        if (active < items.length - 1) {
+        if (!isOpen) {
+          this.set({
+            isOpen: true,
+          });
+        } else if (active < items.length - 1) {
           this.change(active + 1);
         } else {
           this.change(0);
