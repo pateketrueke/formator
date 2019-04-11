@@ -11,8 +11,12 @@ const INDEX = {};
 
 export function sync() {
   const {
-    path, refs, model, association,
+    path, name, association,
   } = this.get();
+
+  const {
+    refs,
+  } = this.root.get();
 
   if (!path || path.length === 1) {
     this.on('update', ({ changed }) => {
@@ -23,7 +27,7 @@ export function sync() {
   }
 
   this.set({
-    association: refs[model] || association || {},
+    association: refs[name] || association || {},
   });
 
   if (typeof this.load === 'function') {

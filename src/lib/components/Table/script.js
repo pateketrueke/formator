@@ -21,7 +21,9 @@ export default {
       keys: [],
     };
   },
-  oncreate: sync,
+  oncreate() {
+    sync.call(this);
+  },
   // FIXME: generalize all API methods, reuse then!
   methods: {
     reset() {
@@ -47,7 +49,6 @@ export default {
 
                 values[offset] = value;
                 this.set({ result: values.slice(), value: {} });
-                this.fire('sync');
               }
             });
         } else {
@@ -60,8 +61,6 @@ export default {
                   result: values.concat(value),
                   value: {},
                 });
-
-                this.fire('sync');
               }
             });
         }

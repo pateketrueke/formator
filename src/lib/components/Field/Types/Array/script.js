@@ -54,7 +54,6 @@ export default {
       keys.splice(offset, 1);
 
       this.set({ result, keys });
-      this.fire('sync');
     },
     remove(offset) {
       const {
@@ -96,7 +95,6 @@ export default {
 
       values[offset] = value;
       this.set({ result: values.slice() });
-      this.fire('sync');
     },
     sync() {
       const {
