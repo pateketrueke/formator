@@ -1,4 +1,5 @@
 import { renderDOM } from './helpers';
+import { isScalar } from '../../shared/utils';
 
 export default {
   computed: {
@@ -23,9 +24,7 @@ export default {
       }
 
       if (typeof defaultValue === 'undefined') {
-        return [typeof value !== 'undefined'
-          ? JSON.stringify(value)
-          : 'N/A'];
+        return [(!isScalar(value) && JSON.stringify(value)) || (value === '' ? 'N/A' : value)];
       }
 
       return [defaultValue];

@@ -11,6 +11,17 @@ li {
     }
   }
 
+  [data-field] > span {
+    margin-right: @sp2;
+    max-width: 50px;
+    color: @dark;
+    width: 100%;
+
+    &::after {
+      content: ': ';
+    }
+  }
+
   [data-field] {
     > div > fieldset {
       + div {
@@ -131,6 +142,8 @@ input {
   [data-content] {
     box-shadow: 0 1px 2px rgba(0, 0, 0, .5);
     background-color: @white;
+    max-width: 420px;
+    width: 100%;
 
     > fieldset {
       padding: @sp2;

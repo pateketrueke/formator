@@ -1,7 +1,6 @@
 import { $ } from './widgets';
 import TYPES from './types';
 import HTML from '../HTML';
-import ERROR from '../Error';
 
 const RE_PLACEHOLDER = /<(?:(@?[\w.]+)(?::([\w*,.]+))?([|?!:])?(.*?)|)>/;
 const RE_IDENTITY = /\{\}/g;

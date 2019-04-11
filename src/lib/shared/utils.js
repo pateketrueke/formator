@@ -60,6 +60,10 @@ export function reduceRefs(schema, refs) {
   return copy;
 }
 
+export function isScalar(value) {
+  return value === null || ['string', 'number', 'boolean'].includes(typeof value);
+}
+
 export function loader(components, selector) {
   return [].slice.call(document.querySelectorAll(selector)).map(node => {
     let target;
@@ -150,6 +154,7 @@ export const API = {
 export default {
   throttle,
   reduceRefs,
+  isScalar,
   findRef,
   randId,
   loader,
