@@ -14,7 +14,18 @@ export default {
     };
   },
   oncreate() {
-    const { values, schema } = this.get();
+    const { values, schema, name } = this.get();
+    const { actions, refs } = this.root.get();
+
+    // FIXME: make a helper of this, also retrieve model from refs[name] is the right path!
+    const ref = refs[name];
+    const pk = ref && ref.references && ref.references.primaryKeys[0].prop;
+
+    this.set({
+      actions: actions[ref.through || ref.model],
+      ref,
+      pk,
+    });
 
     if (schema && Array.isArray(schema.items)) {
       const keys = [];
@@ -47,16 +58,12 @@ export default {
     },
     remove(offset) {
       const {
-        result, through,
+        result, actions, pk,
       } = this.get();
 
-      const {
-        actions, model,
-      } = this.root.get();
-
       // FIXME: generalize these methods, reuse then?
-      if (actions) {
-        API.call(actions[through || model].destroy, result[offset]).then(data => {
+      if (actions && result[offset][pk]) {
+        API.call(actions.destroy, result[offset]).then(data => {
           if (data.status === 'ok') {
             this.splice(offset);
           }
@@ -93,31 +100,20 @@ export default {
     },
     sync() {
       const {
-        nextValue, currentOffset, name,
+        nextValue, currentOffset, actions, pk,
       } = this.get();
 
       if (typeof currentOffset === 'undefined') {
         this.add(nextValue);
-        this.fire('sync');
+      } else if (nextValue[pk] && actions) {
+        API.call(actions.update, nextValue)
+          .then(data => {
+            if (data.status === 'ok') {
+              this.update(currentOffset, nextValue);
+            }
+          });
       } else {
-        const {
-          actions, refs,
-        } = this.root.get();
-
-        // FIXME: make a helper of this, also retrieve model from refs[name] is the right path!
-        const ref = refs[name];
-        const pk = ref.references.primaryKeys[0].prop;
-
-        if (nextValue[pk] && actions) {
-          API.call(actions[ref.through || ref.model].update, nextValue)
-            .then(data => {
-              if (data.status === 'ok') {
-                this.update(currentOffset, nextValue);
-              }
-            });
-        } else {
-          this.update(currentOffset, nextValue);
-        }
+        this.update(currentOffset, nextValue);
       }
     },
     edit(offset) {
@@ -129,8 +125,8 @@ export default {
         nextValue: values[offset],
       });
     },
-    push(key, value, result) {
-      const { keys } = this.get();
+    push(key, value) {
+      const { result, keys } = this.get();
 
       if (!result) {
         this.set({
@@ -145,23 +141,21 @@ export default {
       }
     },
     add(value) {
-      const { through, result } = this.get();
-
       const {
-        actions, action, model, isNew,
-      } = this.root.get();
+        actions, parent, pk,
+      } = this.get();
 
       const key = randId();
 
-      if (actions && (isNew || action === 'edit')) {
-        API.call(actions[through || model].create, value)
+      if (actions && Object.values(parent).filter(Boolean).length > 0) {
+        API.call(actions.create, value)
           .then(data => {
             if (data.status === 'ok') {
-              this.push(key, value, result);
+              this.push(key, value);
             }
           });
       } else {
-        this.push(key, value, result);
+        this.push(key, value);
       }
     },
   },
