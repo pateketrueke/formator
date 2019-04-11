@@ -19,7 +19,7 @@ test('should create Cart(s) with Product(s)-as-items', async t => {
   await t.click(m.is('append'));
   await t.typeText(m.is('finder'), 'abc', { replace: true });
   await t.wait(150).click(m.get('[data-autocomplete] li').nth(0));
-  await t.expect(m.get('[name="items[0][Product][name]"]').value).contains('Some product');
+  await t.expect(m.field('/items/0/Product/name').textContent).contains('Some product');
   await t.typeText(m.get('[name="items[0][qty]"]'), '1', { replace: true });
   await t.click(m.is('save')).wait(150);
   await t.click(m.is('save'));
