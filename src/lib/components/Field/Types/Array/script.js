@@ -34,32 +34,35 @@ export default {
 
       this.add(defaultValue(getItems(schema, nextOffset)));
     },
+    splice(offset) {
+      const {
+        result, keys,
+      } = this.get();
+
+      result.splice(offset, 1);
+      keys.splice(offset, 1);
+
+      this.set({ result, keys });
+      this.fire('sync');
+    },
     remove(offset) {
       const {
-        result, through, keys,
+        result, through,
       } = this.get();
 
       const {
         actions, model,
       } = this.root.get();
 
-      // FIXME: clean this!!!
-      const next = () => {
-        result.splice(offset, 1);
-        keys.splice(offset, 1);
-        this.set({ result, keys });
-        this.fire('sync');
-      };
-
       // FIXME: generalize these methods, reuse then?
       if (actions) {
         API.call(actions[through || model].destroy, result[offset]).then(data => {
           if (data.status === 'ok') {
-            next();
+            this.splice(offset);
           }
         });
       } else {
-        next();
+        this.splice(offset);
       }
     },
     open() {
@@ -75,37 +78,45 @@ export default {
         currentOffset: undefined,
       });
     },
-    sync() {
+    update(offset, value) {
       const {
-        values, nextValue, currentOffset, through,
+        values,
       } = this.get();
 
+      // FIXME: current result is not being reflected on the UI
+      values[offset] = {};
+      this.set({ currentOffset: undefined, result: values.slice() });
+
+      values[offset] = value;
+      this.set({ result: values.slice() });
+      this.fire('sync');
+    },
+    sync() {
       const {
-        actions, model,
-      } = this.root.get();
+        nextValue, currentOffset, name,
+      } = this.get();
 
       if (typeof currentOffset === 'undefined') {
         this.add(nextValue);
         this.fire('sync');
       } else {
-        // FIXME: PK is being the same...?
-        console.log('>>>', currentOffset, nextValue);
+        const {
+          actions, refs,
+        } = this.root.get();
 
-        // FIXME: current result is not being reflected on the UI
-        if (actions) {
-          API.call(actions[through || model].update, nextValue)
+        // FIXME: make a helper of this, also retrieve model from refs[name] is the right path!
+        const ref = refs[name];
+        const pk = ref.references.primaryKeys[0].prop;
+
+        if (nextValue[pk] && actions) {
+          API.call(actions[ref.through || ref.model].update, nextValue)
             .then(data => {
               if (data.status === 'ok') {
-                Object.assign(nextValue, data.result);
-
-                values[currentOffset] = {};
-                this.set({ currentOffset: undefined, result: values.slice() });
-
-                values[currentOffset] = nextValue;
-                this.set({ result: values.slice() });
-                this.fire('sync');
+                this.update(currentOffset, nextValue);
               }
             });
+        } else {
+          this.update(currentOffset, nextValue);
         }
       }
     },
