@@ -54,7 +54,9 @@ export default {
 
       if (ref && ref.references) {
         ref.references.primaryKeys.forEach(key => {
-          out[`${schema.id}${key.prop[0].toUpperCase() + key.prop.substr(1)}`] = fixedValues[key.prop];
+          const fk = `${schema.id}${key.prop[0].toUpperCase() + key.prop.substr(1)}`;
+
+          out[fk] = out[fk] || fixedValues[key.prop];
         });
       }
 
