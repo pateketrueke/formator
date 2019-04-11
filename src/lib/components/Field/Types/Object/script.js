@@ -21,6 +21,14 @@ export default {
       });
     }
   },
+  oncreate() {
+    const { refs } = this.root.get();
+    const { schema } = this.get();
+
+    this.set({
+      ref: refs[schema.id],
+    });
+  },
   methods: {
     sync(e, key) {
       const { schema, result } = this.get();
@@ -42,14 +50,14 @@ export default {
     fixedValues({ result }) {
       return result || {};
     },
-    fixedResult({ fixedValues, schema }) {
+    fixedResult({ fixedValues, schema, ref }) {
       const out = {};
 
-      Object.keys(fixedValues).forEach(k => {
-        if (fixedValues[k] && typeof fixedValues[k] !== 'object') {
-          out[`${schema.id}${k[0].toUpperCase() + k.substr(1)}`] = fixedValues[k];
-        }
-      });
+      if (ref && ref.references) {
+        ref.references.primaryKeys.forEach(key => {
+          out[`${schema.id}${key.prop[0].toUpperCase() + key.prop.substr(1)}`] = fixedValues[key.prop];
+        });
+      }
 
       return out;
     },
