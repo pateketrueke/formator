@@ -11,20 +11,31 @@
       />
     {/each}
     <ul>
-      {#each fields as { id, path, name, field, props, uiSchema } (field)}
-        <li data-type={props.type || 'object'}>
-          <div data-field={`/${path.join('/')}`}>
-            <label for={id}>{uiSchema['ui:label'] || field}</label>
-            <div>
-              {#if through && field === props.id}
-                <Finder {id} {field} {props} {uiSchema} {association} value={value} on:change="sync(event, field)" />
-              {:else}
-                <Field {path} {name} {field} {props} {uiSchema} parent={fixedResult} bind:result="fixedValues[field]" />
-              {/if}
+      {#if through && through !== props.id}
+        {#each fields as { path, field, props, uiSchema } (field)}
+          <li data-type={props.type || 'object'}>
+            <div data-field={`/${path.join('/')}`}>
+              <span>{uiSchema['ui:label'] || field}</span>
+              <Value {uiSchema} value={fixedValues[field]} />
             </div>
-          </div>
-        </li>
-      {/each}
+          </li>
+        {/each}
+      {:else}
+        {#each fields as { id, path, name, field, props, uiSchema } (field)}
+          <li data-type={props.type || 'object'}>
+            <div data-field={`/${path.join('/')}`}>
+              <label for={id}>{uiSchema['ui:label'] || field}</label>
+              <div>
+                {#if through && field === props.id}
+                  <Finder {id} {field} {props} {uiSchema} {association} on:change="sync(event, field)" />
+                {/if}
+
+                <Field {path} {name} {field} {props} {through} {uiSchema} parent={fixedResult} bind:result="fixedValues[field]" />
+              </div>
+            </div>
+          </li>
+        {/each}
+      {/if}
     </ul>
   </fieldset>
 {:else}

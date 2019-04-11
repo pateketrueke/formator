@@ -14,13 +14,6 @@ export default {
       selected: -1,
     };
   },
-  oncreate() {
-    // FIXME: initial value is not being reflected on the UI!
-    this.set({
-      current: 0,
-      selected: { name: 'OK', price: 12.3 },
-    });
-  },
   methods: {
     // FIXME: implement search and autocomplete?
     input: throttle(function $onInput(e) {

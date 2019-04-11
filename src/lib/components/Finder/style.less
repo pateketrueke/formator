@@ -1,32 +1,29 @@
 [data-finder] {
-  position: relative;
-
-  &:hover > [data-value] {
-    border-color: @dark;
-  }
-
-  > [data-value] {
-    border: 1px solid @light;
-    background-color: @white;
-    pointer-events: none;
-    position: absolute;
-    padding: 0 @sp1;
-    width: 100%;
-    left: 0;
-    top: 0;
-  }
-
   > input {
     width: 100%;
-    opacity: 0;
+  }
+}
 
-    &:focus {
-      opacity: 1;
+[data-separator] {
+  position: relative;
+  margin: @sp1 auto;
+  text-align: center;
+  font-size: 85%;
 
-      ~ [data-value] {
-        display: none;
-      }
-    }
+  > span {
+    position: relative;
+    z-index: 1;
+    padding: 0 @sp2;
+    background-color: white;
+  }
+
+  &::before {
+    position: absolute;
+    content: ' ';
+    left: 0;
+    right: 0;
+    bottom: .7em;
+    border-bottom: 1px dashed @light;
   }
 }
 

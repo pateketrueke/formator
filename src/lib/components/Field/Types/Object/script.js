@@ -3,6 +3,7 @@ import { defaultValue, getId } from '../../utils';
 export default {
   components: {
     Field: '../../Field',
+    Value: '../../../Value',
     Finder: '../../../Finder',
   },
   data() {

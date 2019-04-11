@@ -20,11 +20,10 @@
         {/each}
       </ul>
     </div>
-  {:else}
-    {#if current !== -1}
-      <Value {props} {field} {uiSchema} value={selected} />
-    {/if}
   {/if}
+  <div data-separator>
+    <span>{uiSchema['ui:details'] || `${association.singular} details`}</span>
+  </div>
 </div>
 
 <script src="script.js"></script>
