@@ -118,34 +118,40 @@ export default {
         nextValue: values[offset],
       });
     },
+    push(key, value, result) {
+      const { keys } = this.get();
+
+      if (!result) {
+        this.set({
+          keys: [key],
+          result: [value],
+        });
+      } else {
+        this.set({
+          keys: keys.concat(key),
+          result: result.concat(Array.isArray(value) ? [value] : value),
+        });
+      }
+    },
     add(value) {
-      const { through, result, keys } = this.get();
-      const { actions, model } = this.root.get();
+      const { through, result } = this.get();
+
+      const {
+        actions, action, model, isNew,
+      } = this.root.get();
 
       const key = randId();
 
-      // FIXME: invoke sync otherwise, cleanup!
-      Promise.resolve()
-        .then(() => {
-          if (actions) {
-            API.call(actions[through || model].create, value)
-              .then(data => {
-                if (data.status === 'ok') {
-                  if (!result) {
-                    this.set({
-                      keys: [key],
-                      result: [value],
-                    });
-                  } else {
-                    this.set({
-                      keys: keys.concat(key),
-                      result: result.concat(Array.isArray(value) ? [value] : value),
-                    });
-                  }
-                }
-              });
-          }
-        });
+      if (actions && (isNew || action === 'edit')) {
+        API.call(actions[through || model].create, value)
+          .then(data => {
+            if (data.status === 'ok') {
+              this.push(key, value, result);
+            }
+          });
+      } else {
+        this.push(key, value, result);
+      }
     },
   },
   computed: {
