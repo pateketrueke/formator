@@ -58,7 +58,7 @@ export default {
       clearTimeout(this.t);
       this.t = setTimeout(() => {
         this.set({ isOpen: false });
-      }, 120);
+      }, 190);
     },
     clear() {
       this.set({

@@ -2,7 +2,7 @@ import { $ } from './widgets';
 import TYPES from './types';
 import HTML from '../HTML';
 
-const RE_PLACEHOLDER = /<(?:(@?[\w.]+)(?::([\w*,.]+))?([|?!:])?(.*?)|)>/;
+const RE_PLACEHOLDER = /<(?:(@?[^|?!:@]*)(?::([\w*,.]+))?([|?!:])?(.*?)|)>/;
 const RE_IDENTITY = /\{\}/g;
 
 export function getProp(from, key) {
@@ -102,7 +102,7 @@ export function renderValue(data, template) {
       } else {
         let retval;
 
-        if (cur.expression.charAt() === '@') {
+        if (cur.expression.charAt() === '@' && cur.expression.length > 1) {
           try {
             const method = cur.expression.substr(1);
 
@@ -116,11 +116,11 @@ export function renderValue(data, template) {
             prev.push(`Error: ${e.message} in ${JSON.stringify(cur)}`);
           }
         } else {
-          retval = getProp(data, cur.expression);
+          retval = typeof data === 'object' ? getProp(data, cur.expression) : data;
         }
 
         if (typeof retval === 'undefined' && cur.operator === '|') {
-          retval = getProp(data, cur.value);
+          retval = typeof data === 'object' ? getProp(data, cur.value) : cur.value;
         } else if (!retval && cur.operator === '!') {
           prev.push(cur.value);
 
