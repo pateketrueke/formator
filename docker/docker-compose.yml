@@ -15,7 +15,7 @@ services:
     build:
       context: ../
       dockerfile: ./docker/Dockerfile
-    image: jsonschema-form-mw/app
+    image: formator/web-app
     container_name: web_app_test
     command: sleep infinity
     entrypoint: /home/docker/startup.dev.sh

@@ -9,6 +9,7 @@ WORKDIR /var/lib/app
 RUN npm ci
 
 COPY ./ /var/lib/app
+RUN make clean
 RUN npm run dist
 
 COPY ./docker/scripts /home/docker/
