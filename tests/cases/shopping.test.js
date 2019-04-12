@@ -4,7 +4,7 @@ import { getForm as $ } from '../components/formator';
 
 /* global fixture, test */
 
-fixture.only('Test #4 - Shopping Cart example')
+fixture.skip('Test #4 - Shopping Cart example')
   .page('http://localhost:8081/db/Cart');
 
 const m = $('body>');
