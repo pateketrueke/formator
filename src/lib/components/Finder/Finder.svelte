@@ -6,7 +6,6 @@
     on:blur="close(event)"
     on:input="input(event)"
     on:keydown="keydown(event)"
-    autofocus="{uiSchema['ui:focus']}"
     placeholder="{uiSchema['ui:find'] || `Find ${association.singular}`}"
   />
   {#if status === 'ready' && !items.length}
