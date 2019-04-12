@@ -142,8 +142,11 @@ input {
   [data-content] {
     box-shadow: 0 1px 2px rgba(0, 0, 0, .5);
     background-color: @white;
-    max-width: 420px;
+    max-width: @smw;
     width: 100%;
+
+    @media @sm { max-width: @mdw; }
+    @media @md { max-width: @lgw; }
 
     > fieldset {
       padding: @sp2;
