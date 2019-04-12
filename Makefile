@@ -19,7 +19,7 @@ dev: src node_modules ## Start dev tasks (nodejs)
 dist: src node_modules ## Build final output for production
 	@(git worktree remove $(src) --force > /dev/null 2>&1) || true
 	@git worktree add $(src) $(target)
-	@cd $(src) && rm -rf *
+	@cd $(src) && git clean -fdx
 	@npm run dist
 
 push: $(src) ## Push built artifacts to github!
