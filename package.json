@@ -8,7 +8,8 @@
   ],
   "scripts": {
     "dev": "tarima watch -p 3001",
-    "dist": "tarima -fqe production",
+    "dist": "tarima -mqe $NODE_ENV",
+    "postdist": "cp node_modules/ajv/dist/ajv.min.js dist/ajv.js",
     "lint": "eslint lib src tests",
     "test": "npm run lint",
     "test:e2e": "BASE_URL=http://localhost:3001 testcafe",
@@ -46,8 +47,8 @@
     },
     "bundleOptions": {
       "rollup": {
-        "inlineDynamicImports": true,
-        "format": "umd",
+        "_inlineDynamicImports": true,
+        "format": "es",
         "plugins": [
           "rollup-plugin-node-resolve",
           "rollup-plugin-commonjs"
@@ -81,6 +82,7 @@
     "svelte": "^2.15.2",
     "tarima": "^4.4.0",
     "tarima-lr": "^0.4.3",
+    "terser": "^3.17.0",
     "testcafe": "^1.0.1"
   }
 }
