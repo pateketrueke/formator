@@ -22,7 +22,7 @@ export default {
     const pk = ref && ref.references && ref.references.primaryKeys[0].prop;
 
     this.set({
-      actions: actions[ref.through || ref.model],
+      actions: ref ? actions[ref.through || ref.model] : false,
       ref,
       pk,
     });
