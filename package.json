@@ -9,7 +9,9 @@
   "scripts": {
     "dev": "tarima watch -p 3001",
     "dist": "tarima -mqe $NODE_ENV",
-    "postdist": "cp node_modules/ajv/dist/ajv.min.js dist/ajv.js",
+    "copy:ajv": "cp node_modules/ajv/dist/ajv.min.js dist/ajv.js",
+    "copy:shimport": "cp node_modules/shimport/index.js dist/shimport.js",
+    "postdist": "npm run copy:ajv && npm run copy:shimport",
     "lint": "eslint lib src tests",
     "test": "npm run lint",
     "test:e2e": "BASE_URL=http://localhost:3001 testcafe",
@@ -68,6 +70,7 @@
   },
   "devDependencies": {
     "buble": "^0.19.3",
+    "csso": "^3.5.1",
     "eslint": "^5.14.1",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.10.0",

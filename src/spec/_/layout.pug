@@ -40,17 +40,7 @@ html
             summary(id=`test${i + 1}`) Test ##{i + 1} &mdash; #{(test && test.description) || ''}
             script(type='application/json' rel='resource') !{JSON.stringify(test, null, 2)}
 
-      script.
-        !(function(src) {
-          try {
-            new Function('import("' + src + '")')();
-          } catch (e) {
-            const s = document.createElement('script');
-            s.src = 'https://unpkg.com/shimport';
-            s.dataset.main = src;
-            document.head.appendChild(s);
-          }
-        }('../main.js'));
+      script(src='../shimport.js' data-main='../main.js')
 
       script.
         const details = [].slice.call(document.querySelectorAll('details'));

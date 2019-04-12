@@ -1,5 +1,3 @@
-export const BASE_URL = document.currentScript.src.replace('/main.js', '');
-
 export async function getTypes() {
   const deps = {
     string: import('../components/Field/Types/String'),
@@ -19,13 +17,6 @@ export async function getTypes() {
   return deps;
 }
 
-export async function getAjv() {
-  if (typeof window.Ajv === 'undefined') {
-    await import(`${BASE_URL}/ajv.js`);
-  }
-}
-
 export default {
   getTypes,
-  getAjv,
 };

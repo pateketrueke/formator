@@ -24,7 +24,7 @@ build: ## Build image for docker
 	@docker-compose $(BASE_COMPOSE) build
 
 clean: ## Remove unwanted artifacts
-	@rm -rf dist
+	@rm -rf dist .tarima
 
 purge: ## Delete all installed modules
 	@rm -rf node_modules/*

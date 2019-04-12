@@ -1,5 +1,4 @@
 import { randId, clean } from '../../shared/utils';
-import { getAjv } from '../../shared/deps'; // eslint-disable-line
 
 function showError(field, target) {
   const selector = `[data-field="${field}"]`;
@@ -47,7 +46,7 @@ export default {
         schema, value, refs,
       } = this.get();
 
-      getAjv().then(() => {
+      if (typeof window.Ajv !== 'undefined') {
         if (!this.ajv) {
           this.ajv = new Ajv({
             validateSchema: false,
@@ -106,7 +105,7 @@ export default {
         setTimeout(() => {
           this._locked = false;
         }, 100);
-      });
+      }
     },
     save(e) {
       e.preventDefault();
