@@ -1,7 +1,7 @@
 {
   "name": "formator",
   "version": "0.0.0",
-  "main": "lib/index.js",
+  "main": "index.js",
   "files": [
     "lib",
     "dist"
