@@ -110,8 +110,6 @@ export default {
               this.update(currentOffset, nextValue);
             }
           });
-      } else {
-        this.update(currentOffset, nextValue);
       }
     },
     edit(offset) {

@@ -31,6 +31,23 @@ export default {
         offset: undefined,
       });
     },
+    fetch(offset, value) {
+      const {
+        actions, values, model,
+      } = this.get();
+
+      API.call(actions[model].show, value)
+        .then(data => {
+          if (data.status === 'ok') {
+            // FIXME: UI is not being synced...
+            values[offset] = {};
+            this.set({ result: values.slice() });
+
+            values[offset] = Object.assign(value, data.result);
+            this.set({ result: values.slice(), value: {} });
+          }
+        });
+    },
     sync() {
       const {
         offset, value, values, model, actions, refs,
@@ -43,12 +60,7 @@ export default {
           API.call(actions[model].update, value)
             .then(data => {
               if (data.status === 'ok') {
-                // FIXME: UI is not being synced...
-                values[offset] = {};
-                this.set({ result: values.slice() });
-
-                values[offset] = value;
-                this.set({ result: values.slice(), value: {} });
+                this.fetch(offset, value);
               }
             });
         } else {
@@ -61,6 +73,8 @@ export default {
                   result: values.concat(value),
                   value: {},
                 });
+
+                this.fetch(offset, value);
               }
             });
         }
