@@ -23,7 +23,7 @@ dist: src node_modules ## Build final output for production
 	@npm run dist
 	@mkdir $(src)/dist
 	@mv $(src)/*.* $(src)/dist
-	@cp -r lib package*.json $(src)
+	@cp -r lib index.js package*.json $(src)
 
 push: $(src) ## Push built artifacts to github!
 	@cd $(src) && git add . && git commit -m "$(message)"
