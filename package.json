@@ -84,7 +84,7 @@
     "shimport": "0.0.16",
     "somedom": "^0.1.2",
     "svelte": "^2.16.1",
-    "tarima": "^4.4.4",
+    "tarima": "^4.4.7",
     "tarima-lr": "^0.4.3",
     "terser": "^3.17.0",
     "testcafe": "^1.0.1"
