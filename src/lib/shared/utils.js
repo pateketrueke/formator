@@ -1,3 +1,16 @@
+export const ACTION_MAP = {
+  new: 'create',
+};
+
+export function showError(field, target) {
+  const selector = `[data-field="${field}"]`;
+  const el = target.querySelector(selector);
+
+  if (el) {
+    el.classList.add('invalid');
+  }
+}
+
 export function throttle(fn, ms) {
   let t;
   return function $fn(...args) {
@@ -102,15 +115,21 @@ export function loader(components, selector) {
       ? components.Table
       : components.Form;
 
+    let result = undefined;
+
     const instance = new Component({
       target,
       props: {
         ...data,
+        update(e, value) {
+          result = value;
+          return true;
+        },
       },
     });
 
     // expose getter as only public API method
-    // target.get = () => instance.get()[data.action === 'index' ? 'result' : 'value'];
+    target.get = () => result;
 
     return instance;
   });
@@ -154,6 +173,8 @@ export const API = {
 };
 
 export default {
+  ACTION_MAP,
+  showError,
   throttle,
   reduceRefs,
   isScalar,

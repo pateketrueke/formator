@@ -1,0 +1,3 @@
+description: Integer types
+schema:
+  type: integer

@@ -1,0 +1,3 @@
+description: Boolean types
+schema:
+  type: boolean

@@ -13,7 +13,6 @@
   };
 
   let refs = {};
-  let rootId = -1;
   let model = {};
   let uiSchema = {};
   let result = null;
@@ -42,6 +41,8 @@
   function sync() {}
   function fetch() {}
   function reset() {}
+
+  const rootId = randId();
 
   setContext('__ROOT__', {
     refs,

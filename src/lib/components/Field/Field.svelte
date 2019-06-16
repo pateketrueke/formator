@@ -7,20 +7,21 @@
 </script>
 
 <script>
-  import { onMount } from 'svelte';
+  import { onMount, getContext } from 'svelte';
 
-  export let err = null;
   export let path = [];
   export let name = 'field';
   export let props = {};
   export let parent = null;
   export let schema = {};
   export let uiSchema = {};
-  export let rootId = '?';
   export let through = null;
   export let association = {};
   export let result = undefined;
 
+  const { refs, rootId } = getContext('__ROOT__');
+
+  let err = null;
   let propType = null;
 
   onMount(() => {
@@ -28,34 +29,29 @@
       err = 'Missing props';
     }
 
-    // let _schema = reduceRefs(props, refs);
+    let _schema = reduceRefs(props, refs);
 
-    // if (refs[name] && !props.id) {
-    //   const { through, ...association } = refs[name];
-    //   const refItems = props.items;
-    //   const refSchema = refs[through];
-    //   const propSchema = refs[refItems.id];
+    if (refs[name] && !props.id) {
+      const { through: through$, ...association$ } = refs[name];
+      const refItems = props.items;
+      const refSchema = refs[through];
+      const propSchema = refs[refItems.id];
 
-    //   this.set({
-    //     through,
-    //     association,
-    //   });
+      through = through$;
+      association = association$;
 
-    //   _schema = {
-    //     [name]: {
-    //       ...refSchema,
-    //       properties: {
-    //         ...(refSchema && refSchema.properties),
-    //         [refItems.id]: reduceRefs(propSchema, refs),
-    //       },
-    //     },
-    //   };
-    // }
+      _schema = {
+        [name]: {
+          ...refSchema,
+          properties: {
+            ...(refSchema && refSchema.properties),
+            [refItems.id]: reduceRefs(propSchema, refs),
+          },
+        },
+      };
+    }
 
-    // this.set({
-    //   rootId,
-    //   schema: _schema,
-    // });
+    schema = _schema;
   });
 
   $: {

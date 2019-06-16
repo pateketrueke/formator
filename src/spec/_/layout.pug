@@ -43,22 +43,22 @@ html
       script(src='./main.umd.js')
 
       script.
-        const details = [].slice.call(document.querySelectorAll('details'));
-        const summaries = [].slice.call(document.querySelectorAll('summary'));
+        //- const details = [].slice.call(document.querySelectorAll('details'));
+        //- const summaries = [].slice.call(document.querySelectorAll('summary'));
 
-        window.addEventListener('click', e => {
-          const index = summaries.indexOf(e.target);
+        //- window.addEventListener('click', e => {
+        //-   const index = summaries.indexOf(e.target);
 
-          if (index !== -1) {
-            summaries.forEach((node, offset) => {
-              details[offset].removeAttribute('open');
+        //-   if (index !== -1) {
+        //-     summaries.forEach((node, offset) => {
+        //-       details[offset].removeAttribute('open');
 
-              if (offset === index) {
-                history.replaceState(null, document.title, `#${summaries[offset].id}`);
-              }
-            });
-          }
-        });
+        //-       if (offset === index) {
+        //-         history.replaceState(null, document.title, `#${summaries[offset].id}`);
+        //-       }
+        //-     });
+        //-   }
+        //- });
 
         setTimeout(() => {
           if (location.hash) {
