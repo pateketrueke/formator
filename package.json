@@ -51,13 +51,15 @@
     },
     "bundleOptions": {
       "rollup": {
-        "_inlineDynamicImports": true,
         "format": "es",
         "plugins": [
           "rollup-plugin-node-resolve",
           "rollup-plugin-commonjs",
           "rollup-plugin-svelte"
         ]
+      },
+      "buble": {
+        "objectAssign": "Object.assign"
       },
       "extensions": {
         "js": "es6",
@@ -87,6 +89,7 @@
     "rollup-plugin-svelte": "^5.1.0",
     "somedom": "^0.1.2",
     "svelte": "^3.5.1",
+    "svql": "0.0.5",
     "tarima": "^4.5.0",
     "tarima-lr": "^0.4.3",
     "terser": "^3.17.0",

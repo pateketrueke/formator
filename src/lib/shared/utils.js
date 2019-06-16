@@ -104,11 +104,13 @@ export function loader(components, selector) {
 
     const instance = new Component({
       target,
-      data,
+      props: {
+        ...data,
+      },
     });
 
     // expose getter as only public API method
-    target.get = () => instance.get()[data.action === 'index' ? 'result' : 'value'];
+    // target.get = () => instance.get()[data.action === 'index' ? 'result' : 'value'];
 
     return instance;
   });

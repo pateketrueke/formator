@@ -1,3 +1,11 @@
-<input type="checkbox" bind:checked="result" {id} {name} {...props} />
+<script>
+  import { getId } from '../../utils';
 
-<script src="../String/script.js"></script>
+  export let name = 'boolean';
+  export let result = false;
+  export let rootId = '?';
+
+  $: id = getId(rootId, name);
+</script>
+
+<input type="checkbox" bind:checked={result} {id} {name} />

@@ -1,3 +1,11 @@
-<input type="text" bind:value="result" {id} {name} {...props} />
+<script>
+  import { getId } from '../../utils';
 
-<script src="script.js"></script>
+  export let name = 'string';
+  export let result = '';
+  export let rootId = '?';
+
+  $: id = getId(rootId, name);
+</script>
+
+<input type="text" bind:value={result} {id} {name} />

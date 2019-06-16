@@ -1,6 +1,55 @@
-TABLE
+<script>
+  import { setContext } from 'svelte';
 
-<!-- <table>
+  import Modal from '../Modal';
+  import Field from '../Field';
+
+  import { defaultValue } from '../Field/utils';
+  import { API, randId } from '../../shared/utils';
+
+  let association = {
+    singular: 'Item',
+    plural: 'Items',
+  };
+
+  let refs = {};
+  let rootId = -1;
+  let model = {};
+  let uiSchema = {};
+  let result = null;
+  let value = {};
+  let keys = [];
+
+  let offset = -1;
+  let items = [];
+  let schema = {};
+  let values = [];
+  let headers = [];
+  let isUpdate = false;
+  let isOpen = false;
+  let payload = null;
+  let fieldProps = {};
+  let fixedSchema = {};
+
+  function edit(newOffset) {
+    isOpen = true;
+    offset = newOffset;
+    value =  offset >= 0 ? values[offset] : defaultValue(schema);
+  }
+
+  function load() {}
+  function remove() {}
+  function sync() {}
+  function fetch() {}
+  function reset() {}
+
+  setContext('__ROOT__', {
+    refs,
+    rootId,
+  });
+</script>
+
+<table>
   {#if uiSchema['ui:title']}
     <caption>{uiSchema['ui:title']}</caption>
   {/if}
@@ -36,12 +85,12 @@ TABLE
             {/if}
             <th>
               {#if fixedSchema['ui:edit'] !== false}
-                <button data-is="edit" data-before="&#9998;" type="button" on:click="edit(offset)">
+                <button data-is="edit" data-before="&#9998;" type="button" on:click={() => edit(offset)}>
                   <span>{fixedSchema['ui:edit'] || 'Edit'}</span>
                 </button>
               {/if}
               {#if fixedSchema['ui:edit'] !== false}
-                <button data-is="remove" data-before="&times;" type="button" on:click="remove(offset)">
+                <button data-is="remove" data-before="&times;" type="button" on:click={() => remove(offset)}>
                   <span>{fixedSchema['ui:remove'] || 'Remove'}</span>
                 </button>
               {/if}
@@ -56,7 +105,7 @@ TABLE
         <tr>
           <td colspan="99">
             <Catch {error} />
-            <button data-is="reload" on:click="load()">Try again</button>
+            <button data-is="reload" on:click={load}>Try again</button>
           </td>
         </tr>
       {/await}
@@ -66,14 +115,12 @@ TABLE
 
 <div>
   {#if fixedSchema['ui:new'] !== false}
-    <button data-is="new" type="submit" on:click="edit()">
+    <button data-is="new" type="submit" on:click={edit}>
       <span>{fixedSchema['ui:new'] || `New ${association.singular}`}</span>
     </button>
   {/if}
-  <Modal {uiSchema} updating={isUpdate} resource={model} bind:visible="isOpen" on:save="sync()" on:close="reset()">
-    <Field name="__ROOT__" bind:result="value" {...fieldProps} />
+  <Modal {uiSchema} updating={isUpdate} resource={model} bind:visible={isOpen} on:save={sync} on:close={reset}>
+    <Field name="__ROOT__" bind:result={value} {...fieldProps} />
   </Modal>
 </div>
 
-<script src="script.js"></script>
- -->

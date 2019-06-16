@@ -40,7 +40,7 @@ html
             summary(id=`test${i + 1}`) Test ##{i + 1} &mdash; #{(test && test.description) || ''}
             script(type='application/json' rel='resource') !{JSON.stringify(test, null, 2)}
 
-      script(src='../shimport.js' data-main='../main.js')
+      script(src='./main.umd.js')
 
       script.
         const details = [].slice.call(document.querySelectorAll('details'));
