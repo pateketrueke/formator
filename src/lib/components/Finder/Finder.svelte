@@ -1,4 +1,5 @@
-<div data-finder class={status}>
+FINDER
+<!-- <div data-finder class={status}>
   <input {id}
     type="search"
     data-is="finder"
@@ -26,3 +27,4 @@
 </div>
 
 <script src="script.js"></script>
+ -->

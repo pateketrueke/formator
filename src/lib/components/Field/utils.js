@@ -35,12 +35,12 @@ export function sync() {
   }
 }
 
-export function getId(rootId, forName, isLabel) {
+export function getId(rootId, forName, incOffset) {
   if (!INDEX[forName]) {
     INDEX[forName] = 0;
   }
 
-  if (isLabel) {
+  if (incOffset) {
     INDEX[forName] += 1;
   }
 

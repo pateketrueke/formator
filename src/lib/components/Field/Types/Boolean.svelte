@@ -1,6 +1,6 @@
 <script>
   import { getContext } from 'svelte';
-  import { getId } from '../utils';
+  import { defaultValue, getId } from '../utils';
 
   export let name = 'boolean';
   export let schema = { type: 'boolean' };

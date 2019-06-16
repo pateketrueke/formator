@@ -1,4 +1,4 @@
-description: Fixed array types
+description: Fixed array types/items
 schema:
   type: array
   items:
