@@ -1,10 +1,22 @@
+FORM
+
+<!-- <script>
+  export let value = null;
+  export let actions = null;
+  export let fixedSchema = {};
+
+  $: formProps = {};
+  $: fieldProps = {};
+  $: nextAction = {};
+</script>
+
 <slot>
   {#if fixedSchema['ui:title']}
     <h2>{fixedSchema['ui:title']}</h2>
   {/if}
   {#if actions}
-    <form on:submit="save(event)" {...formProps}>
-      <Field name='__ROOT__' bind:result="value" {...fieldProps} />
+    <form on:submit{save} {...formProps}>
+      <Field name='__ROOT__' bind:result={value} {...fieldProps} />
       <div>
         <button data-is="save" type="submit">
           <span>{fixedSchema['ui:save'] || 'Save'}</span>
@@ -13,8 +25,7 @@
       </div>
     </form>
   {:else}
-    <Field name='__ROOT__' bind:result="value" {...fieldProps} />
+    <Field name='__ROOT__' bind:result={value} {...fieldProps} />
   {/if}
 </slot>
-
-<script src="script.js"></script>
+ -->

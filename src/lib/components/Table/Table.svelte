@@ -1,4 +1,6 @@
-<table>
+TABLE
+
+<!-- <table>
   {#if uiSchema['ui:title']}
     <caption>{uiSchema['ui:title']}</caption>
   {/if}
@@ -74,3 +76,4 @@
 </div>
 
 <script src="script.js"></script>
+ -->
