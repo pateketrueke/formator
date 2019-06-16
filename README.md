@@ -47,4 +47,4 @@ app.use('/db', formator(db, { attributes: false }));
 app.listen(8080);
 ```
 
-> Please refer to [modelorama](https://github.com/agave/modelorama) for an complete example of the above^
+> Please refer to [modelorama](https://modelorama.glitch.me/) for an complete example of the above^
