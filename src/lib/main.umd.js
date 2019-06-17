@@ -1,7 +1,7 @@
 /**
 ---
 $format: umd
-$name: Formator
+$bundle: Formator
 ---
 */
 
