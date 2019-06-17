@@ -67,8 +67,8 @@
   function validate() {}
 </script>
 
-{#if propType}
-  <svelte:component
-    {err} {path} {name} {props} {parent} {schema} {uiSchema} {rootId} {through} {association} on:sync={validate} bind:result this={propType}
-  />
-{/if}
+<svelte:component
+  {err} {path} {name} {props} {parent} {schema} {uiSchema} {rootId} {through} {association}
+  on:change on:sync={validate} bind:result
+  this={propType}
+/>

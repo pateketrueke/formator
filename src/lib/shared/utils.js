@@ -121,11 +121,11 @@ export function loader(components, selector) {
       target,
       props: {
         ...data,
-        update(e, value) {
-          result = value;
-          return true;
-        },
       },
+    });
+
+    instance.$on('change', e => {
+      result = e.detail;
     });
 
     // expose getter as only public API method

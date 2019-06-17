@@ -1,5 +1,5 @@
 <script>
-  import { setContext } from 'svelte';
+  import { onMount, setContext, createEventDispatcher } from 'svelte';
   import { defaultValue } from '../Field/utils';
   import { ACTION_MAP, randId, clean } from '../../shared/utils';
 
@@ -14,13 +14,14 @@
   export let schema = {};
   export let uiSchema = {};
 
+  const dispatch = createEventDispatcher();
+  const rootId = randId();
+
   $: currentAction = (schema.id && actions) ? actions[schema.id][action] : null;
   $: nextAction = (schema.id && actions) ? actions[schema.id][ACTION_MAP[action]] || {} : {};
   $: value = value || (typeof result === 'undefined' ? defaultValue(schema) : result);
   $: formProps = nextAction ? { method: 'post', action: nextAction.path || '' } : {};
   $: fieldProps = { props: { ...schema }, uiSchema };
-
-  const rootId = randId();
 
   setContext('__ROOT__', {
     refs,
@@ -30,13 +31,20 @@
     uiSchema,
   });
 
+  onMount(() => {
+    setTimeout(() => dispatch('change', value));
+  });
+
   function save(e) {
     if (typeof update === 'function') {
       if (update(e, value) !== true) return;
     }
 
     e.preventDefault();
+    dispatch('change', value);
   }
+
+  $: dispatch('change', value);
 </script>
 
 <slot>

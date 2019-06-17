@@ -1,5 +1,5 @@
 <script>
-  import { getContext } from 'svelte';
+  import { getContext, createEventDispatcher } from 'svelte';
   import { defaultValue, getId } from '../utils';
 
   import Field from '../../Field';
@@ -8,11 +8,13 @@
 
   export let schema = { type: 'object' };
   export let uiSchema = {};
+  export let association = {};
   export let through = null;
   export let result = {};
   export let path = [];
 
   const { refs, rootId } = getContext('__ROOT__');
+  const dispatch = createEventDispatcher();
 
   let ref = refs[schema.id];
   let fixedResult = {};
@@ -65,6 +67,11 @@
   }
 
   function sync() {}
+
+  function set(key, value) {
+    result[key] = value;
+    dispatch('change', result);
+  }
 </script>
 
 {#if fields.length}
@@ -99,7 +106,12 @@
                   <Finder {id} {field} {props} {uiSchema} {association} on:change={e => sync(e, field)} />
                 {/if}
 
-                <Field {path} {name} {field} {props} {through} {uiSchema} parent={fixedResult} bind:result={fixedResult[field]} />
+                <Field
+                  {path} {name} {field} {props} {through} {uiSchema}
+                  on:change={e => set(field, e.detail)}
+                  parent={fixedResult}
+                  result={result[field]}
+                />
               </div>
             </div>
           </li>
