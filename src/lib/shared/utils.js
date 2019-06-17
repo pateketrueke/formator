@@ -115,14 +115,14 @@ export function loader(components, selector) {
       ? components.Table
       : components.Form;
 
-    let result = undefined;
-
     const instance = new Component({
       target,
       props: {
         ...data,
       },
     });
+
+    let result = undefined;
 
     instance.$on('change', e => {
       result = e.detail;

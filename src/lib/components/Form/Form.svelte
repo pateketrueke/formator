@@ -6,7 +6,7 @@
   import Field from '../Field';
 
   export let result = undefined;
-  export let update = undefined;
+  export let onsubmit = undefined;
   export let actions = null;
   export let name = null;
 
@@ -36,8 +36,8 @@
   });
 
   function save(e) {
-    if (typeof update === 'function') {
-      if (update(e, value) !== true) return;
+    if (typeof onsubmit === 'function') {
+      if (onsubmit(e, value) !== true) return;
     }
 
     e.preventDefault();
