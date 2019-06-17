@@ -10,6 +10,7 @@
   export let uiSchema = {};
   export let association = {};
   export let through = null;
+  export let name = 'object';
   export let result = {};
   export let path = [];
 
