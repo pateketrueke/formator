@@ -1,7 +1,3 @@
-export const ACTION_MAP = {
-  new: 'create',
-};
-
 export function showError(field, target) {
   const selector = `[data-field="${field}"]`;
   const el = target.querySelector(selector);
@@ -170,17 +166,4 @@ export const API = {
         : undefined,
     }).then(resp => resp.json());
   },
-};
-
-export default {
-  ACTION_MAP,
-  showError,
-  throttle,
-  reduceRefs,
-  isScalar,
-  findRef,
-  randId,
-  loader,
-  clean,
-  API,
 };

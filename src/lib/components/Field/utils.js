@@ -7,44 +7,18 @@ const DEFAULT_VALUES = {
   boolean: () => false,
 };
 
-const INDEX = {};
-
-export function sync() {
-  const {
-    path, name, association,
-  } = this.get();
-
-  const {
-    refs,
-  } = this.root.get();
-
-  if (!path || path.length === 1) {
-    this.on('update', ({ changed }) => {
-      if (changed.result) {
-        this.fire('sync');
-      }
-    });
-  }
-
-  this.set({
-    association: refs[name] || association || {},
-  });
-
-  if (typeof this.load === 'function') {
-    this.load();
-  }
-}
+const SHARED_INDEX = {};
 
 export function getId(rootId, forName, incOffset) {
-  if (!INDEX[forName]) {
-    INDEX[forName] = 0;
+  if (!SHARED_INDEX[forName]) {
+    SHARED_INDEX[forName] = 0;
   }
 
   if (incOffset) {
-    INDEX[forName] += 1;
+    SHARED_INDEX[forName] += 1;
   }
 
-  const offset = INDEX[forName];
+  const offset = SHARED_INDEX[forName];
   const prefix = rootId ? `${rootId}-` : '';
 
   return `${prefix}${forName}-field-${offset}`;
@@ -73,10 +47,3 @@ export function defaultValue(schema) {
 
   return DEFAULT_VALUES[schema.type || 'object']();
 }
-
-export default {
-  sync,
-  getId,
-  getItems,
-  defaultValue,
-};

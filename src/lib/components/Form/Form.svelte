@@ -1,7 +1,7 @@
 <script>
   import { onMount, setContext, createEventDispatcher } from 'svelte';
   import { defaultValue } from '../Field/utils';
-  import { ACTION_MAP, randId, clean } from '../../shared/utils';
+  import { randId, clean } from '../../shared/utils';
 
   import Field from '../Field';
 
@@ -16,6 +16,10 @@
 
   const dispatch = createEventDispatcher();
   const rootId = randId();
+
+  const ACTION_MAP = {
+    new: 'create',
+  };
 
   $: currentAction = (schema.id && actions) ? actions[schema.id][action] : null;
   $: nextAction = (schema.id && actions) ? actions[schema.id][ACTION_MAP[action]] || {} : {};
