@@ -77,22 +77,22 @@
   "devDependencies": {
     "buble": "^0.19.3",
     "csso": "^3.5.1",
-    "eslint": "^5.14.1",
-    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint": "^6.3.0",
+    "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.10.0",
     "less": "^3.8.1",
     "less-plugin-autoprefix": "^2.0.0",
     "pug": "^2.0.3",
     "rollup": "^1.1.2",
-    "rollup-plugin-commonjs": "^9.2.0",
-    "rollup-plugin-node-resolve": "^4.0.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-svelte": "^5.1.0",
     "somedom": "^0.1.2",
     "svelte": "^3.5.1",
     "svql": "0.0.5",
     "tarima": "^4.5.0",
-    "tarima-lr": "^0.4.3",
-    "terser": "^3.17.0",
+    "tarima-lr": "^0.5.3",
+    "terser": "^4.2.1",
     "testcafe": "^1.0.1"
   }
 }
