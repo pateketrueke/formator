@@ -1,8 +1,10 @@
 <script>
   import { setContext } from 'svelte';
+  import { Failure } from 'svql';
 
   import Modal from '../Modal';
   import Field from '../Field';
+  import Value from '../Value';
 
   import { defaultValue } from '../Field/utils';
   import { API, randId } from '../../shared/utils';
@@ -105,7 +107,7 @@
       {:catch error}
         <tr>
           <td colspan="99">
-            <Catch {error} />
+            <Failure {error} />
             <button data-is="reload" on:click={load}>Try again</button>
           </td>
         </tr>

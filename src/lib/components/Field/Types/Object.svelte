@@ -6,6 +6,7 @@
   import Value from '../../Value';
   import Finder from '../../Finder';
 
+  export let props = {};
   export let schema = { type: 'object' };
   export let uiSchema = {};
   export let association = {};

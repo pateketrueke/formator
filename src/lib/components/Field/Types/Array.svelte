@@ -7,6 +7,8 @@
   import Value from '../../Value';
   import Modal from '../../Modal';
 
+  export let association = {};
+  export let through = null;
   export let schema = { type: 'array' };
   export let uiSchema = {};
   export let result = [];
@@ -16,8 +18,11 @@
   const dispatch = createEventDispatcher();
 
   let nextValue = {};
-  let through = null;
+  let nextProps = {};
+  let nextOffset = 0;
+  let isUpdate = false;
   let isOpen = false;
+  let headers = [];
   let values = [];
   let items = [];
   let keys = [];
@@ -47,6 +52,11 @@
     }
   }
 
+  function open() {}
+  function sync() {}
+  function edit() {}
+  function reset() {}
+  function remove() {}
   function append() {}
 </script>
 
