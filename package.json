@@ -14,6 +14,12 @@
   "scripts": {
     "dev": "tarima watch -p 3001",
     "dist": "tarima -mqe $NODE_ENV",
+    "copy:ajv": "cp node_modules/ajv/dist/ajv.min.js dist/ajv.js",
+    "concat:bundle": "concat dist/ajv.js dist/main.umd.js -o dist/bundle.js",
+    "postdist": "npm run copy:ajv && npm run concat:bundle",
+    "prepublishOnly": "npm test && npm run build",
+    "lint": "eslint lib src e2e",
+    "test": "npm run lint && npm run test:e2e",
     "lint": "eslint lib src tests",
     "test": "npm run lint",
     "test:e2e": "BASE_URL=http://localhost:3001 testcafe",
@@ -24,6 +30,7 @@
   "tarima": {
     "from": "src",
     "output": ".",
+    "serve": "dist",
     "rename": [
       "**/lib/**:dist/{fullpath/2}",
       "**/spec/**:public/{fullpath/2}"
@@ -38,17 +45,9 @@
     "bundle": [
       "**/main*.js"
     ],
-    "devPlugins": [
-      "tarima-lr"
-    ],
     "ignoreFiles": [
       ".gitignore"
     ],
-    "pluginOptions": {
-      "tarima-lr": {
-        "serve": "dist"
-      }
-    },
     "bundleOptions": {
       "rollup": {
         "format": "es",
@@ -76,6 +75,7 @@
   },
   "devDependencies": {
     "buble": "^0.19.3",
+    "concat": "^1.0.3",
     "csso": "^3.5.1",
     "eslint": "^6.3.0",
     "eslint-config-airbnb-base": "^14.0.0",
@@ -89,9 +89,8 @@
     "rollup-plugin-svelte": "^5.1.0",
     "somedom": "^0.1.2",
     "svelte": "^3.5.1",
-    "svql": "0.0.5",
-    "tarima": "^4.5.0",
-    "tarima-lr": "^0.5.3",
+    "svql": "0.0.15",
+    "tarima": "^4.6.0",
     "terser": "^4.2.1",
     "testcafe": "^1.0.1"
   }
