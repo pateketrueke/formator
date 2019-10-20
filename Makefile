@@ -1,4 +1,5 @@
 PWD=$(shell pwd)
+BROWSER=chrome:headless
 BASE_COMPOSE=-f $(PWD)/docker/docker-compose.yml
 
 # defaults
@@ -10,13 +11,16 @@ message := Release: $(shell date)
 help: Makefile
 	@awk -F':.*?##' '/[a-z]+:.*##/{printf "\033[36m%-13s\033[0m %s\n",$$1,$$2}' $<
 
-lint: src lib tests node_modules ## Lint all sources
+lint: src lib tests deps ## Lint all sources
 	@npm run lint
 
-dev: src node_modules ## Start dev tasks (nodejs)
+dev: src deps ## Start dev tasks (nodejs)
 	@npm run dev
 
-dist: src node_modules ## Build final output for production
+e2e: src deps ## Run E2E locally  (nodejs)
+	@npm test $(BROWSER) e2e/cases
+
+dist: src deps ## Build final output for production
 	@(git worktree remove $(src) --force > /dev/null 2>&1) || true
 	@git worktree add $(src) $(target)
 	@cd $(src) && rm -rf *
@@ -40,11 +44,13 @@ build: ## Build image for docker
 	@docker-compose $(BASE_COMPOSE) build
 
 clean: ## Remove unwanted artifacts
-	@rm -rf dist .tarima
+	@rm -f dist/* .tarima
 
 purge: ## Delete all installed modules
 	@rm -rf node_modules/*
 
 .PHONY: help lint dev test logs build clean dist node_modules
+deps: node_modules
+	@npm run postdist
 node_modules:
 	@(((ls node_modules | grep .) > /dev/null 2>&1) || npm i) || true
