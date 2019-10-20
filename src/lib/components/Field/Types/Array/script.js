@@ -138,7 +138,7 @@ export default {
     },
     add(value) {
       const {
-        actions, parent, pk,
+        actions, parent, // pk,
       } = this.get();
 
       const key = randId();

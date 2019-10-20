@@ -1,4 +1,4 @@
-import { defaultValue, sync } from '../Field/utils';
+import { defaultValue } from '../Field/utils';
 import { API, randId } from '../../shared/utils';
 
 export default {
@@ -21,9 +21,9 @@ export default {
       keys: [],
     };
   },
-  oncreate() {
-    sync.call(this);
-  },
+  // oncreate() {
+  //   sync.call(this);
+  // },
   // FIXME: generalize all API methods, reuse then!
   methods: {
     reset() {

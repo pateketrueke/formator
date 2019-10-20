@@ -11,7 +11,7 @@ message := Release: $(shell date)
 help: Makefile
 	@awk -F':.*?##' '/[a-z]+:.*##/{printf "\033[36m%-13s\033[0m %s\n",$$1,$$2}' $<
 
-lint: src lib tests deps ## Lint all sources
+lint: src lib e2e deps ## Lint all sources
 	@npm run lint
 
 dev: src deps ## Start dev tasks (nodejs)

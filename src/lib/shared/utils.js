@@ -118,7 +118,7 @@ export function loader(components, selector) {
       },
     });
 
-    let result = undefined;
+    let result;
 
     instance.$on('change', e => {
       result = e.detail;
