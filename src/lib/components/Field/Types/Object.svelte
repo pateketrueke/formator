@@ -92,11 +92,26 @@
     const oldKey = fields.find(x => x.key === key);
     const oldValue = oldKey ? result[oldKey.field] : undefined;
 
-    fields = fields.map((x, i) => (x.key === key ? { ...getItemFor(value, i, x.schema), isFixed: true } : x));
+    let nextKey = value;
+
+    // FIXME: try other strategies?
+    if (typeof result[nextKey] !== 'undefined') {
+      let count = 0;
+
+      do {
+        count += 1;
+        nextKey = `${value}${count}`;
+        if (typeof result[nextKey] === 'undefined') break;
+      } while (true);
+
+      e.target.value = nextKey;
+    }
+
+    fields = fields.map((x, i) => (x.key === key ? { ...getItemFor(nextKey, i, x.schema), isFixed: true } : x));
 
     delete result[oldKey.field];
 
-    result[value] = oldValue;
+    result[nextKey] = oldValue;
   }
 
   function sync() {}

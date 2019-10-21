@@ -1,5 +1,9 @@
-import { getItems, defaultValue } from '../../utils';
+import { defaultValue } from '../../utils';
 import { API, randId } from '../../../../shared/utils';
+
+function getItems() {
+  // noop
+}
 
 export default {
   components: {

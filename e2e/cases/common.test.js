@@ -19,24 +19,24 @@ test.page(defaultPage.url('#test-string'))('should support strings', async t => 
 });
 
 test.page(defaultPage.url('#test-object'))('should handle objects', async t => {
-  const t6 = $('#test-object+');
+  const test = $('#test-object+');
 
-  await t.expect(t6.field('/intValue').visible).ok();
-  await t.expect(t6.field('/numValue').visible).ok();
-  await t.expect(t6.field('/boolValue').visible).ok();
-  await t.expect(t6.field('/strValue').visible).ok();
-  await t.expect(t6.field('/arrValue').visible).ok();
-  await t.expect(t6.field('/objValue').visible).ok();
-  await t.expect(t6.field('/objValues/strValue').visible).ok();
+  await t.expect(test.field('/intValue').visible).ok();
+  await t.expect(test.field('/numValue').visible).ok();
+  await t.expect(test.field('/boolValue').visible).ok();
+  await t.expect(test.field('/strValue').visible).ok();
+  await t.expect(test.field('/arrValue').visible).ok();
+  await t.expect(test.field('/objValue').visible).ok();
+  await t.expect(test.field('/objValues/strValue').visible).ok();
 });
 
-test.skip('should handle arrays', async t => {
-  const t7 = $('#test7+');
+test.page(defaultPage.url('#test-array'))('should handle arrays', async t => {
+  const test = $('#test-array+');
 
-  await t.expect(t7.type('integer', '/0').visible).ok();
-  await t.expect(t7.type('number', '/1').visible).ok();
-  await t.expect(t7.type('boolean', '/2').visible).ok();
-  await t.expect(t7.type('string', '/3').visible).ok();
-  await t.expect(t7.type('array', '/4').visible).ok();
-  await t.expect(t7.type('object', '/5').visible).ok();
+  await t.expect(test.type('integer', '/0').visible).ok();
+  await t.expect(test.type('number', '/1').visible).ok();
+  await t.expect(test.type('boolean', '/2').visible).ok();
+  await t.expect(test.type('string', '/3').visible).ok();
+  await t.expect(test.type('array', '/4').visible).ok();
+  await t.expect(test.type('object', '/5').visible).ok();
 });
