@@ -1,7 +1,7 @@
 <script>
-  import { getContext, createEventDispatcher } from 'svelte';
-  import { getItems, defaultValue } from '../utils';
+  import { onMount, getContext, createEventDispatcher } from 'svelte';
   import { API, randId } from '../../../shared/utils';
+  import { defaultValue } from '../utils';
 
   import Field from '../../Field';
   import Value from '../../Value';
@@ -18,78 +18,68 @@
   const { actions, refs } = getContext('__ROOT__');
   const dispatch = createEventDispatcher();
 
-  let nextValue = {};
-  let nextProps = {};
-  let nextOffset = 0;
-  let isUpdate = false;
-  let isOpen = false;
   let headers = [];
   let items = [];
   let keys = [];
-  let ref = null;
-  let pk = null;
 
-  $: isFixed = Array.isArray(schema.items);
+  let nextValue = {};
+  let nextProps = {};
+  let nextOffset = 0;
 
-  $: {
-    // FIXME: make a helper of this, also retrieve model from refs[name] is the right path!
-    // const ref$ = refs[name];
-    // const pk$ = ref$ && ref$.references && ref$.references.primaryKeys[0].prop;
+  let isOpen = false;
+  let isUpdate = false;
+  let isFixed;
 
-    // // actions = ref ? actions[ref.through || ref.model] : false;
-    // ref = ref$;
-    // pk = pk$;
+  function getItemBy(offset, subSchema) {
+    const key = keys[offset] || (keys[offset] = randId());
 
-    // if (isFixed) {
+    return {
+      key,
+      offset,
+      schema: subSchema,
+      uiSchema: isFixed ? uiSchema[offset] || {} : uiSchema,
+      isFixed: isFixed && offset < schema.items.length,
+      path: (path || []).concat(offset),
+    };
+  }
 
-    // }
+  function getSubSchema(offset) {
+    return (Array.isArray(schema.items)
+      ? schema.items[offset]
+      : schema.items)
+    || schema.additionalItems
+    || {};
+  }
+
+  onMount(() => {
+    isFixed = Array.isArray(schema.items);
 
     if (isFixed) {
-      // const keys$ = [];
-      // const result$ = [];
-
-      // schema.items.forEach((props, offset) => {
-      //   keys$.push(randId());
-      //   result$.push(result[offset] || defaultValue(props));
-      // });
-
-      // keys = keys$;
-      // result = result$;
-      items = schema.items.map((_, offset) => {
-        const key = keys[offset] || (keys[offset] = randId());
-
-        return {
-          key,
-          offset,
-          path: (path || []).concat(offset),
-          schema: getItems(schema, offset),
-          uiSchema: uiSchema[offset] || {},
-          isFixed: offset < schema.items.length,
-        };
-      });
-    } else {
-      // items = result.map((_, offset) => {
-      //   const props = getItems(schema, offset);
-      //   const key = keys[offset] || (keys[offset] = randId());
-
-      //   return {
-      //     key,
-      //     props,
-      //     offset,
-      //     path: (path || []).concat(offset),
-      //     isFixed: isFixed && offset < schema.items.length,
-      //     uiSchema: isFixed ? uiSchema[offset] || {} : uiSchema,
-      //   };
-      // });
+      items = schema.items.map((_, offset) => getItemBy(offset, getSubSchema(offset)));
+      keys = items.map(x => x.key);
     }
-  }
+  });
 
   function open() { console.log('open'); }
   function sync() { console.log('sync'); }
   function edit() { console.log('edit'); }
   function reset() { console.log('reset'); }
-  function remove() { console.log('remove'); }
-  function append() { console.log('append'); }
+
+  function remove(offset) {
+    keys = keys.filter((_, x) => x !== offset);
+    result = result.filter((_, x) => x !== offset);
+    items = items.filter((_, x) => x !== offset).map((sub, k) => ({ ...sub, offset: k }));
+  }
+
+  function append() {
+    const newKey = randId();
+    const offset = keys.length;
+    const subSchema = getSubSchema(offset);
+
+    keys = keys.concat(newKey);
+    result = result.concat(defaultValue(subSchema));
+    items = items.concat(getItemBy(offset, subSchema));
+  }
 </script>
 
 {#if items.length}

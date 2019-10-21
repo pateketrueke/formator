@@ -29,10 +29,18 @@
 .margin-right { margin-right: 1em; }
 .margin-bottom { margin-bottom: 1em; }
 
-@media @md {
+.show-actions() {
   [data-before] {
     > span {
       display: inline-block;
     }
   }
+}
+
+@media @sm {
+  .show-actions();
+}
+
+@media @md {
+  .show-actions();
 }

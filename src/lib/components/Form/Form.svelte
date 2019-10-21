@@ -22,7 +22,6 @@
   };
 
   $: hasChildren = schema.type === 'object' || schema.type === 'array';
-  // $: currentAction = (schema.id && actions) ? actions[schema.id][action] : null;
   $: nextAction = (schema.id && actions) ? actions[schema.id][ACTION_MAP[action]] || {} : {};
 
   $: formProps = nextAction

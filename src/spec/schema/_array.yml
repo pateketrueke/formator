@@ -8,5 +8,10 @@ schema:
   - type: boolean
   - type: string
   - type: array
+    items:
+      type: string
   - type: object
+    properties:
+      test:
+        type: string
   additionalItems: false
