@@ -65,7 +65,9 @@
   function edit() { console.log('edit'); }
   function reset() { console.log('reset'); }
 
-  function remove(offset) {
+  function remove(key) {
+    const offset = items.findIndex(x => x.key === key);
+
     keys = keys.filter((_, x) => x !== offset);
     result = result.filter((_, x) => x !== offset);
     items = items.filter((_, x) => x !== offset).map((sub, k) => ({ ...sub, offset: k }));
@@ -80,6 +82,8 @@
     result = result.concat(defaultValue(subSchema));
     items = items.concat(getItemBy(offset, subSchema));
   }
+
+  $: dispatch('change', result);
 </script>
 
 {#if items.length}
@@ -103,12 +107,12 @@
             <th>
               {#if !isFixed}
                 {#if uiSchema['ui:edit'] !== false}
-                  <button data-is="edit" data-before="&#9998;" type="button" on:click={() => edit(offset)}>
+                  <button data-is="edit" data-before="&#9998;" type="button" on:click={() => edit(key)}>
                     <span>{uiSchema['ui:edit'] || `Edit ${association.singular}`}</span>
                   </button>
                 {/if}
                 {#if uiSchema['ui:remove'] !== false}
-                  <button data-is="remove" data-before="&times;" type="button" on:click={() => remove(offset)}>
+                  <button data-is="remove" data-before="&times;" type="button" on:click={() => remove(key)}>
                     <span>{uiSchema['ui:remove'] || `Remove ${association.singular}`}</span>
                   </button>
                 {/if}
@@ -132,7 +136,7 @@
                 </div>
                 {#if !isFixed && uiSchema['ui:remove'] !== false}
                   <div>
-                    <button data-is="remove" data-before="&times;" type="button" on:click={() => remove(offset)}>
+                    <button data-is="remove" data-before="&times;" type="button" on:click={() => remove(key)}>
                       <span>{uiSchema['ui:remove'] || 'Remove item'}</span>
                     </button>
                   </div>

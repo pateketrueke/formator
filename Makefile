@@ -37,6 +37,5 @@ purge: ## Delete all installed modules
 
 .PHONY: help lint dev test logs build clean dist node_modules
 deps: node_modules
-	@npm run postdist
 node_modules:
 	@(((ls node_modules | grep .) > /dev/null 2>&1) || npm i) || true

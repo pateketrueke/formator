@@ -1,10 +1,10 @@
-li {
-  [data-empty] {
-    ~ div {
-      margin-top: @sp2;
-    }
+[data-empty] {
+  ~ div {
+    margin-top: @sp2;
   }
+}
 
+li {
   [data-field] > div {
     + div {
       margin-left: @sp2;
@@ -23,6 +23,19 @@ li {
   }
 
   [data-field] {
+    > input {
+      width: 50%;
+    }
+
+    > input ~ div {
+      width: 100%;
+      margin-left: @sp2;
+
+      ~ button {
+        margin-left: @sp2;
+      }
+    }
+
     > div > fieldset {
       + div {
         padding-top: @sp2;

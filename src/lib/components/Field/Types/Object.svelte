@@ -1,5 +1,6 @@
 <script>
   import { getContext, createEventDispatcher } from 'svelte';
+  import { randId } from '../../../shared/utils';
   import { defaultValue, getId } from '../utils';
 
   import Field from '../../Field';
@@ -21,6 +22,21 @@
   let fixedResult = {};
   let hidden = [];
   let fields = [];
+  let keys = [];
+
+  function getItemFor(field, offset, subSchema) {
+    const key = keys[offset] || (keys[offset] = randId());
+
+    return {
+      key,
+      field,
+      schema: subSchema,
+      uiSchema: uiSchema[key] || {},
+      path: (path || []).concat(key),
+      name: (name && name !== '__ROOT__') ? `${name}[${key}]` : key,
+      id: getId(rootId, (name && name !== '__ROOT__') ? `${name}[${key}]` : key),
+    };
+  }
 
   $: {
     fixedResult = {};
@@ -35,19 +51,13 @@
   }
 
   $: {
-    // FIXME: how to reuse?
     hidden = !schema.properties ? [] : Object.entries(schema.properties)
       .filter(x => uiSchema[x[0]] && uiSchema[x[0]]['ui:hidden'])
-      .map(([key, schema]) => ({
-        id: getId(rootId, (name && name !== '__ROOT__') ? `${name}[${key}]` : key),
-        name: (name && name !== '__ROOT__') ? `${name}[${key}]` : key,
-        path: (path || []).concat(key),
-        field: key,
-        schema,
-      }), []);
+      .map(([field, subSchema], offset) => getItemFor(field, offset, subSchema), []);
   }
 
   $: {
+    // FIXME: preserve added props to merge once schema changes...?
     fields = !schema.properties ? [] : Object.entries(schema.properties)
       .filter(x => (uiSchema[x[0]] ? !uiSchema[x[0]]['ui:hidden'] : true))
       .sort((a, b) => {
@@ -57,27 +67,57 @@
 
         return uiSchema['ui:order'].indexOf(b[0]) - uiSchema['ui:order'].indexOf(a[0]);
       })
-      .map(([key, schema]) => ({
-        id: getId(rootId, (name && name !== '__ROOT__') ? `${name}[${key}]` : key),
-        name: (name && name !== '__ROOT__') ? `${name}[${key}]` : key,
-        uiSchema: uiSchema[key] || {},
-        path: (path || []).concat(key),
-        field: key,
-        schema,
-      }), []);
+      .map(([field, subSchema], offset) => getItemFor(field, offset, subSchema), []);
+  }
+
+  function append() {
+    const nextSchema = (schema.additionalProperties !== true && schema.additionalProperties) || { type: 'string' };
+    const nextKey = schema.patternProperties ? 'FIXME' : '';
+
+    if (typeof result[nextKey] === 'undefined') {
+      const nextValue = getItemFor(nextKey, keys.length, nextSchema);
+
+      result[nextKey] = defaultValue(nextSchema);
+      nextValue.isFixed = true;
+
+      fields = fields.concat(nextValue);
+    }
+  }
+
+  function remove(key) {
+    const oldKey = fields.find(x => x.key === key);
+
+    fields = fields.filter(x => x.key !== key);
+    keys = keys.filter(x => x !== key);
+
+    delete result[oldKey.field];
+  }
+
+  function prop(key, value) {
+    const oldKey = fields.find(x => x.key === key);
+    const oldValue = oldKey ? result[oldKey.field] : undefined;
+
+    fields = fields.map(x => ({ ...x, field: x.key === key ? value : x.field }));
+
+    delete result[oldKey.field];
+
+    result[value] = oldValue;
   }
 
   function sync() {}
 
   function set(key, value) {
-    result[key] = value;
-    dispatch('change', result);
+    const prop = fields.find(x => x.key === key);
+
+    result[prop.field] = value;
   }
+
+  $: dispatch('change', result);
 </script>
 
 {#if fields.length}
   <fieldset>
-    {#each hidden as { id, path, name, field, schema } (field)}
+    {#each hidden as { id, key, path, name, field, schema } (key)}
       <input
         {id}
         {name}
@@ -89,8 +129,8 @@
     {/each}
     <ul>
       {#if through && through !== schema.id}
-        {#each fields as { path, field, schema, uiSchema } (field)}
-          <li data-type={schema.type || 'object'}>
+        {#each fields as { key, path, field, schema, uiSchema } (key)}
+          <li data-type={schema.type || 'objectX'}>
             <div data-field={`/${path.join('/')}`}>
               <span>{uiSchema['ui:label'] || field}</span>
               <Value {uiSchema} value={result[field]} />
@@ -98,22 +138,33 @@
           </li>
         {/each}
       {:else}
-        {#each fields as { id, path, name, field, schema, uiSchema } (field)}
-          <li data-type={schema.type || 'object'}>
+        {#each fields as { id, key, path, name, field, isFixed, schema, uiSchema } (key)}
+          <li data-type={schema.type || 'objectY'}>
             <div data-field={`/${path.join('/')}`}>
-              <label for={id}>{uiSchema['ui:label'] || field}</label>
+              {#if isFixed}
+                <input type="text" on:change={e => prop(key, e.target.value)} />
+              {:else}
+                <label for={id}>{uiSchema['ui:label'] || field}</label>
+              {/if}
+
               <div>
                 {#if through && field === schema.id}
-                  <Finder {id} {field} {schema} {uiSchema} {association} on:change={e => sync(e, field)} />
+                  <Finder {id} {field} {schema} {uiSchema} {association} on:change={e => sync(e, key)} />
                 {/if}
 
                 <Field
                   {path} {name} {field} {schema} {through} {uiSchema}
-                  on:change={e => set(field, e.detail)}
+                  on:change={e => set(key, e.detail)}
                   parent={fixedResult}
                   result={result[field]}
                 />
               </div>
+
+              {#if isFixed && uiSchema['ui:remove'] !== false}
+                <button data-is="remove" data-before="&times;" type="button" on:click={() => remove(key)}>
+                  <span>{uiSchema['ui:remove'] || 'Remove prop'}</span>
+                </button>
+              {/if}
             </div>
           </li>
         {/each}
@@ -122,4 +173,14 @@
   </fieldset>
 {:else}
   <div data-empty>{uiSchema['ui:empty'] || 'No props'}</div>
+{/if}
+
+{#if schema.additionalProperties !== false}
+  <div>
+    {#if uiSchema['ui:append'] !== false}
+      <button data-is="append" data-before="&plus;" type="button" on:click={append}>
+        <span>{uiSchema['ui:append'] || 'Add prop'}</span>
+      </button>
+    {/if}
+  </div>
 {/if}
