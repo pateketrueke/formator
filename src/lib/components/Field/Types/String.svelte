@@ -2,7 +2,7 @@
   import { getContext, createEventDispatcher } from 'svelte';
   import { defaultValue, getId } from '../utils';
 
-  export let name = 'string';
+  export let name = undefined;
   export let schema = { type: 'string' };
   export let result = defaultValue(schema);
 

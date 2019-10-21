@@ -8,11 +8,12 @@
   import Modal from '../../Modal';
 
   export let association = {};
-  export let through = null;
-  export let schema = { type: 'array' };
   export let uiSchema = {};
-  export let result = [];
-  export let name = 'array';
+  export let path = [];
+  export let through = null;
+  export let name = undefined;
+  export let schema = { type: 'array' };
+  export let result = defaultValue(schema);
 
   const { actions, refs } = getContext('__ROOT__');
   const dispatch = createEventDispatcher();
@@ -23,41 +24,72 @@
   let isUpdate = false;
   let isOpen = false;
   let headers = [];
-  let values = [];
   let items = [];
   let keys = [];
   let ref = null;
   let pk = null;
 
+  $: isFixed = Array.isArray(schema.items);
+
   $: {
     // FIXME: make a helper of this, also retrieve model from refs[name] is the right path!
-    const ref$ = refs[name];
-    const pk$ = ref$ && ref$.references && ref$.references.primaryKeys[0].prop;
+    // const ref$ = refs[name];
+    // const pk$ = ref$ && ref$.references && ref$.references.primaryKeys[0].prop;
 
-    // actions = ref ? actions[ref.through || ref.model] : false;
-    ref = ref$;
-    pk = pk$;
+    // // actions = ref ? actions[ref.through || ref.model] : false;
+    // ref = ref$;
+    // pk = pk$;
 
-    if (Array.isArray(schema.items)) {
-      const keys$ = [];
-      const result$ = [];
+    // if (isFixed) {
 
-      schema.items.forEach((props, offset) => {
-        keys$.push(randId());
-        result$.push(values[offset] || defaultValue(props));
+    // }
+
+    if (isFixed) {
+      // const keys$ = [];
+      // const result$ = [];
+
+      // schema.items.forEach((props, offset) => {
+      //   keys$.push(randId());
+      //   result$.push(result[offset] || defaultValue(props));
+      // });
+
+      // keys = keys$;
+      // result = result$;
+      items = schema.items.map((_, offset) => {
+        const key = keys[offset] || (keys[offset] = randId());
+
+        return {
+          key,
+          offset,
+          path: (path || []).concat(offset),
+          schema: getItems(schema, offset),
+          uiSchema: uiSchema[offset] || {},
+          isFixed: offset < schema.items.length,
+        };
       });
+    } else {
+      // items = result.map((_, offset) => {
+      //   const props = getItems(schema, offset);
+      //   const key = keys[offset] || (keys[offset] = randId());
 
-      keys = keys$;
-      result = result$;
+      //   return {
+      //     key,
+      //     props,
+      //     offset,
+      //     path: (path || []).concat(offset),
+      //     isFixed: isFixed && offset < schema.items.length,
+      //     uiSchema: isFixed ? uiSchema[offset] || {} : uiSchema,
+      //   };
+      // });
     }
   }
 
-  function open() {}
-  function sync() {}
-  function edit() {}
-  function reset() {}
-  function remove() {}
-  function append() {}
+  function open() { console.log('open'); }
+  function sync() { console.log('sync'); }
+  function edit() { console.log('edit'); }
+  function reset() { console.log('reset'); }
+  function remove() { console.log('remove'); }
+  function append() { console.log('append'); }
 </script>
 
 {#if items.length}
@@ -71,11 +103,11 @@
         </tr>
       </thead>
       <tbody>
-        {#each items as { key, path, props, offset, isFixed, uiSchema } (key)}
+        {#each items as { key, path, offset, isFixed, schema, uiSchema } (key)}
           <tr data-field={`/${path.join('/')}`}>
             {#each headers as { field }}
               <td data-field={`/${path.concat(field).join('/')}`}>
-                <Value {props} {field} uiSchema={uiSchema[field]} value={values[offset][field]} />
+                <Value {field} {schema} uiSchema={uiSchema[field]} value={result[offset][field]} />
               </td>
             {/each}
             <th>
@@ -99,14 +131,14 @@
   {:else}
     <fieldset>
       <ul>
-        {#each items as { key, path, props, offset, isFixed, uiSchema } (key)}
-          <li data-type={props.type || 'object'}>
+        {#each items as { key, path, offset, isFixed, schema, uiSchema } (key)}
+          <li data-type={schema.type || 'object'}>
             {#if uiSchema['ui:template']}
-              <Value {uiSchema} value={values[offset]} />
+              <Value {uiSchema} value={result[offset]} />
             {:else}
               <div data-field={`/${path.join('/')}`}>
                 <div>
-                  <Field {props} {uiSchema} bind:result={values[offset]} name={`${name}[${offset}]`} />
+                  <Field {schema} {uiSchema} bind:result={result[offset]} name={`${name}[${offset}]`} />
                 </div>
                 {#if !isFixed && uiSchema['ui:remove'] !== false}
                   <div>

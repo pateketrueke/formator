@@ -5,40 +5,38 @@ import { getForm as $ } from '../components/formator';
 
 /* global fixture, test */
 
-fixture('Test #1 - Empty config')
-  .page(defaultPage.url('#test1'));
+fixture('Empty config')
+  .page(defaultPage.url('#test-empty'));
 
-test('should display a "Missing props" error', async t => {
-  const t1 = $('#test1+');
-
-  await t.expect(t1.failure.visible).ok();
+test('should display a "No props" message', async t => {
+  await t.expect($('#test-empty+').empty.visible).ok();
 });
 
-fixture('Test #2 - Type definitions')
-  .page(defaultPage.url('#test2'));
+fixture('Type definitions');
 
-test('should handle standard types', async t => {
-  const t2 = $('#test2+');
-
-  await t.expect(t2.field('/intValue').visible).ok();
-  await t.expect(t2.field('/numValue').visible).ok();
-  await t.expect(t2.field('/boolValue').visible).ok();
-  await t.expect(t2.field('/strValue').visible).ok();
-  await t.expect(t2.field('/arrValue').visible).ok();
-  await t.expect(t2.field('/objValue').visible).ok();
-  await t.expect(t2.field('/objValues/strValue').visible).ok();
+test.page(defaultPage.url('#test-string'))('should support strings', async t => {
+  await t.expect($('#test-string+').field('/').visible).ok();
 });
 
-fixture('Test #3 - Fixed array types')
-  .page(defaultPage.url('#test3'));
+test.page(defaultPage.url('#test-object'))('should handle objects', async t => {
+  const t6 = $('#test-object+');
 
-test('should handle static types per item', async t => {
-  const t3 = $('#test3+');
+  await t.expect(t6.field('/intValue').visible).ok();
+  await t.expect(t6.field('/numValue').visible).ok();
+  await t.expect(t6.field('/boolValue').visible).ok();
+  await t.expect(t6.field('/strValue').visible).ok();
+  await t.expect(t6.field('/arrValue').visible).ok();
+  await t.expect(t6.field('/objValue').visible).ok();
+  await t.expect(t6.field('/objValues/strValue').visible).ok();
+});
 
-  await t.expect(t3.type('integer', '/0').visible).ok();
-  await t.expect(t3.type('number', '/1').visible).ok();
-  await t.expect(t3.type('boolean', '/2').visible).ok();
-  await t.expect(t3.type('string', '/3').visible).ok();
-  await t.expect(t3.type('array', '/4').visible).ok();
-  await t.expect(t3.type('object', '/5').visible).ok();
+test.skip('should handle arrays', async t => {
+  const t7 = $('#test7+');
+
+  await t.expect(t7.type('integer', '/0').visible).ok();
+  await t.expect(t7.type('number', '/1').visible).ok();
+  await t.expect(t7.type('boolean', '/2').visible).ok();
+  await t.expect(t7.type('string', '/3').visible).ok();
+  await t.expect(t7.type('array', '/4').visible).ok();
+  await t.expect(t7.type('object', '/5').visible).ok();
 });

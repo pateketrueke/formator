@@ -1,4 +1,5 @@
 description: Object types/props
+testName: object
 schema:
   properties:
     intValue:

@@ -11,7 +11,6 @@
 
   export let path = [];
   export let name = 'field';
-  export let props = {};
   export let parent = null;
   export let schema = {};
   export let uiSchema = {};
@@ -25,15 +24,11 @@
   let propType = null;
 
   onMount(() => {
-    if (!props) {
-      err = 'Missing props';
-    }
+    let _schema = reduceRefs(schema, refs);
 
-    let _schema = reduceRefs(props, refs);
-
-    if (refs[name] && !props.id) {
+    if (refs[name] && !schema.id) {
       const { through: through$, ...association$ } = refs[name];
-      const refItems = props.items;
+      const refItems = schema.items;
       const refSchema = refs[through];
       const propSchema = refs[refItems.id];
 
@@ -57,10 +52,10 @@
   $: {
     if (err) {
       propType = ErrorType;
-    } else if (!props) {
+    } else if (!schema) {
       propType = LoaderType;
     } else if (components) {
-      propType = components[props.type || 'object'] || ErrorType;
+      propType = components[schema.type || 'object'] || ErrorType;
     }
   }
 
@@ -68,7 +63,7 @@
 </script>
 
 <svelte:component
-  {err} {path} {name} {props} {parent} {schema} {uiSchema} {rootId} {through} {association}
+  {err} {path} {name} {parent} {schema} {uiSchema} {rootId} {through} {association}
   on:change on:sync={validate} bind:result
   this={propType}
 />

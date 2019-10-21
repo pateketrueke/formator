@@ -6,7 +6,6 @@
   import Value from '../../Value';
   import Finder from '../../Finder';
 
-  export let props = {};
   export let schema = { type: 'object' };
   export let uiSchema = {};
   export let association = {};
@@ -39,12 +38,12 @@
     // FIXME: how to reuse?
     hidden = !schema.properties ? [] : Object.entries(schema.properties)
       .filter(x => uiSchema[x[0]] && uiSchema[x[0]]['ui:hidden'])
-      .map(([key, props]) => ({
+      .map(([key, schema]) => ({
         id: getId(rootId, (name && name !== '__ROOT__') ? `${name}[${key}]` : key),
         name: (name && name !== '__ROOT__') ? `${name}[${key}]` : key,
         path: (path || []).concat(key),
         field: key,
-        props,
+        schema,
       }), []);
   }
 
@@ -58,13 +57,13 @@
 
         return uiSchema['ui:order'].indexOf(b[0]) - uiSchema['ui:order'].indexOf(a[0]);
       })
-      .map(([key, props]) => ({
+      .map(([key, schema]) => ({
         id: getId(rootId, (name && name !== '__ROOT__') ? `${name}[${key}]` : key),
         name: (name && name !== '__ROOT__') ? `${name}[${key}]` : key,
         uiSchema: uiSchema[key] || {},
         path: (path || []).concat(key),
         field: key,
-        props,
+        schema,
       }), []);
   }
 
@@ -78,20 +77,20 @@
 
 {#if fields.length}
   <fieldset>
-    {#each hidden as { id, path, name, field, props } (field)}
+    {#each hidden as { id, path, name, field, schema } (field)}
       <input
         {id}
         {name}
         type="hidden"
-        data-type={props.type || 'object'}
+        data-type={schema.type || 'object'}
         data-field={`/${path.join('/')}`}
         bind:value={result[field]}
       />
     {/each}
     <ul>
-      {#if through && through !== props.id}
-        {#each fields as { path, field, props, uiSchema } (field)}
-          <li data-type={props.type || 'object'}>
+      {#if through && through !== schema.id}
+        {#each fields as { path, field, schema, uiSchema } (field)}
+          <li data-type={schema.type || 'object'}>
             <div data-field={`/${path.join('/')}`}>
               <span>{uiSchema['ui:label'] || field}</span>
               <Value {uiSchema} value={result[field]} />
@@ -99,17 +98,17 @@
           </li>
         {/each}
       {:else}
-        {#each fields as { id, path, name, field, props, uiSchema } (field)}
-          <li data-type={props.type || 'object'}>
+        {#each fields as { id, path, name, field, schema, uiSchema } (field)}
+          <li data-type={schema.type || 'object'}>
             <div data-field={`/${path.join('/')}`}>
               <label for={id}>{uiSchema['ui:label'] || field}</label>
               <div>
-                {#if through && field === props.id}
-                  <Finder {id} {field} {props} {uiSchema} {association} on:change={e => sync(e, field)} />
+                {#if through && field === schema.id}
+                  <Finder {id} {field} {schema} {uiSchema} {association} on:change={e => sync(e, field)} />
                 {/if}
 
                 <Field
-                  {path} {name} {field} {props} {through} {uiSchema}
+                  {path} {name} {field} {schema} {through} {uiSchema}
                   on:change={e => set(field, e.detail)}
                   parent={fixedResult}
                   result={result[field]}

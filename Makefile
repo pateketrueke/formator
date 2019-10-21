@@ -1,7 +1,3 @@
-PWD=$(shell pwd)
-BROWSER=chrome:headless
-BASE_COMPOSE=-f $(PWD)/docker/docker-compose.yml
-
 # defaults
 src := dist
 from := master
@@ -17,8 +13,8 @@ lint: src lib e2e deps ## Lint all sources
 dev: src deps ## Start dev tasks (nodejs)
 	@npm run dev
 
-e2e: src deps ## Run E2E locally  (nodejs)
-	@npm test $(BROWSER) e2e/cases
+test: src deps ## Run E2E locally  (nodejs)
+	@npm test  -- --debug-on-fail e2e/cases
 
 dist: src deps ## Build final output for production
 	@(git worktree remove $(src) --force > /dev/null 2>&1) || true
@@ -32,16 +28,6 @@ dist: src deps ## Build final output for production
 push: $(src) ## Push built artifacts to github!
 	@cd $(src) && git add . && git commit -m "$(message)"
 	@git push origin $(target) -f
-
-test: docker ## Run tests for CI
-	@docker-compose $(BASE_COMPOSE) up -d chrome
-	@docker exec web_app_test /home/docker/run-tests.sh
-
-logs: ## Display docker logs
-	@docker-compose $(BASE_COMPOSE) logs -f
-
-build: ## Build image for docker
-	@docker-compose $(BASE_COMPOSE) build
 
 clean: ## Remove unwanted artifacts
 	@rm -f dist/* .tarima

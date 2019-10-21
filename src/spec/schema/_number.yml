@@ -1,3 +1,4 @@
 description: Number types
+testName: number
 schema:
   type: number

@@ -1,3 +1,4 @@
 description: String types
+testName: string
 schema:
   type: string

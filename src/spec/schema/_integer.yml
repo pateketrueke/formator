@@ -1,3 +1,4 @@
 description: Integer types
+testName: integer
 schema:
   type: integer

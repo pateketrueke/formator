@@ -19,9 +19,8 @@
     "postdist": "npm run copy:ajv && npm run concat:bundle",
     "prepublishOnly": "npm test && npm run build",
     "lint": "eslint lib src e2e",
-    "test": "npm run lint && npm run test:e2e",
-    "test:e2e": "BASE_URL=http://localhost:3001 testcafe",
-    "test:e2e:ci": "npm run test:e2e -- --ports 9505,9506 remote:1"
+    "test": "npm run lint && npm run test:e2e --",
+    "test:e2e": "BASE_URL=http://localhost:3001 testcafe ${BROWSER:-chrome:headless}"
   },
   "author": "Alvaro Cabrera <pateketrueke@gmail.com>",
   "license": "MIT",

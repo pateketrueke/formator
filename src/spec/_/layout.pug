@@ -37,28 +37,28 @@ html
       div
         each test, i in tests
           details
-            summary(id=`test${i + 1}`) Test ##{i + 1} &mdash; #{(test && test.description) || ''}
+            summary(id=`test-${test.testName}`) Test ##{i + 1} &mdash; #{(test && test.description) || ''}
             script(type='application/json' rel='resource') !{JSON.stringify(test, null, 2)}
 
-      script(src='bundle.js')
+      script(src='main.umd.js')
 
       script.
-        //- const details = [].slice.call(document.querySelectorAll('details'));
-        //- const summaries = [].slice.call(document.querySelectorAll('summary'));
+        const details = [].slice.call(document.querySelectorAll('details'));
+        const summaries = [].slice.call(document.querySelectorAll('summary'));
 
-        //- window.addEventListener('click', e => {
-        //-   const index = summaries.indexOf(e.target);
+        window.addEventListener('click', e => {
+          const index = summaries.indexOf(e.target);
 
-        //-   if (index !== -1) {
-        //-     summaries.forEach((node, offset) => {
-        //-       details[offset].removeAttribute('open');
+          if (index !== -1) {
+            summaries.forEach((node, offset) => {
+              details[offset].removeAttribute('open');
 
-        //-       if (offset === index) {
-        //-         history.replaceState(null, document.title, `#${summaries[offset].id}`);
-        //-       }
-        //-     });
-        //-   }
-        //- });
+              if (offset === index) {
+                history.replaceState(null, document.title, `#${summaries[offset].id}`);
+              }
+            });
+          }
+        });
 
         setTimeout(() => {
           if (location.hash) {

@@ -1,4 +1,5 @@
 description: Fixed array types/items
+testName: array
 schema:
   type: array
   items:
