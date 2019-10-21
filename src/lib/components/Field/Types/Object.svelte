@@ -121,8 +121,6 @@
 
     result[prop.field] = value;
   }
-
-  $: dispatch('change', result);
 </script>
 
 {#if fields.length}
