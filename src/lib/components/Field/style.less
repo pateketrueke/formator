@@ -23,8 +23,9 @@ li {
   }
 
   [data-field] {
-    > input {
-      width: 50%;
+    > input,
+    > label {
+      min-width: 100px;
     }
 
     > input ~ div {
@@ -53,6 +54,13 @@ li {
 
     + [data-type] {
       margin-top: @sp2;
+    }
+
+    [data-type] > [data-field] {
+      > input {
+        width: 50%;
+        min-width: auto;
+      }
     }
 
     > div {

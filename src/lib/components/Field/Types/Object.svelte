@@ -1,5 +1,5 @@
 <script>
-  import { getContext, createEventDispatcher } from 'svelte';
+  import { onMount, getContext, createEventDispatcher } from 'svelte';
   import { randId } from '../../../shared/utils';
   import { defaultValue, getId } from '../utils';
 
@@ -32,15 +32,13 @@
       field,
       schema: subSchema,
       uiSchema: uiSchema[key] || {},
-      path: (path || []).concat(key),
-      name: (name && name !== '__ROOT__') ? `${name}[${key}]` : key,
+      path: (path || []).concat(field),
+      name: (name && name !== '__ROOT__') ? `${name}[${field}]` : field,
       id: getId(rootId, (name && name !== '__ROOT__') ? `${name}[${key}]` : key),
     };
   }
 
-  $: {
-    fixedResult = {};
-
+  onMount(() => {
     if (ref && ref.references) {
       ref.references.primaryKeys.forEach(key => {
         const fk = `${schema.id}${key.prop[0].toUpperCase() + key.prop.substr(1)}`;
@@ -48,16 +46,11 @@
         fixedResult[fk] = fixedResult[fk] || result[key.prop];
       });
     }
-  }
 
-  $: {
     hidden = !schema.properties ? [] : Object.entries(schema.properties)
       .filter(x => uiSchema[x[0]] && uiSchema[x[0]]['ui:hidden'])
       .map(([field, subSchema], offset) => getItemFor(field, offset, subSchema), []);
-  }
 
-  $: {
-    // FIXME: preserve added props to merge once schema changes...?
     fields = !schema.properties ? [] : Object.entries(schema.properties)
       .filter(x => (uiSchema[x[0]] ? !uiSchema[x[0]]['ui:hidden'] : true))
       .sort((a, b) => {
@@ -68,7 +61,7 @@
         return uiSchema['ui:order'].indexOf(b[0]) - uiSchema['ui:order'].indexOf(a[0]);
       })
       .map(([field, subSchema], offset) => getItemFor(field, offset, subSchema), []);
-  }
+  });
 
   function append() {
     const nextSchema = (schema.additionalProperties !== true && schema.additionalProperties) || { type: 'string' };
@@ -93,11 +86,13 @@
     delete result[oldKey.field];
   }
 
-  function prop(key, value) {
+  function prop(e, key) {
+    const { value } = e.target;
+
     const oldKey = fields.find(x => x.key === key);
     const oldValue = oldKey ? result[oldKey.field] : undefined;
 
-    fields = fields.map(x => ({ ...x, field: x.key === key ? value : x.field }));
+    fields = fields.map((x, i) => (x.key === key ? { ...getItemFor(value, i, x.schema), isFixed: true } : x));
 
     delete result[oldKey.field];
 
@@ -142,7 +137,7 @@
           <li data-type={schema.type || 'objectY'}>
             <div data-field={`/${path.join('/')}`}>
               {#if isFixed}
-                <input type="text" on:change={e => prop(key, e.target.value)} />
+                <input type="text" on:change={e => prop(e, key)} />
               {:else}
                 <label for={id}>{uiSchema['ui:label'] || field}</label>
               {/if}
