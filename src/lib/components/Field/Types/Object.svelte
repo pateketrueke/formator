@@ -7,13 +7,14 @@
   import Value from '../../Value';
   import Finder from '../../Finder';
 
-  export let schema = { type: 'object' };
   export let uiSchema = {};
-  export let association = {};
-  export let through = null;
-  export let name = 'object';
-  export let result = {};
+  export let schema = { type: 'object' };
+  export let result = defaultValue(schema);
+
   export let path = [];
+  export let name = undefined;
+  export let through = null;
+  export let association = {};
 
   const { refs, rootId } = getContext('__ROOT__');
   const dispatch = createEventDispatcher();
@@ -34,7 +35,7 @@
       uiSchema: uiSchema[key] || {},
       path: (path || []).concat(field),
       name: (name && name !== '__ROOT__') ? `${name}[${field}]` : field,
-      id: getId(rootId, (name && name !== '__ROOT__') ? `${name}[${key}]` : key),
+      id: getId(rootId, (name && name !== '__ROOT__') ? `${name}[${field}]` : key),
     };
   }
 
@@ -83,7 +84,7 @@
     fields = fields.filter(x => x.key !== key);
     keys = keys.filter(x => x !== key);
 
-    delete result[oldKey.field];
+    result[oldKey.field] = undefined;
   }
 
   function prop(e, key) {
@@ -121,6 +122,8 @@
 
     result[prop.field] = value;
   }
+
+  $: dispatch('change', result);
 </script>
 
 {#if fields.length}

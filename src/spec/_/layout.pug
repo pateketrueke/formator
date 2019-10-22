@@ -31,6 +31,16 @@ html
       body > div {
         padding: 6px;
       }
+
+      .debug {
+        box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
+        background-color: white;
+        border: 1px dashed gray;
+        position: fixed;
+        padding: 10px;
+        right: 10px;
+        top: 10px;
+      }
   body
     block before
     block main
@@ -38,7 +48,8 @@ html
         each test, i in tests
           details
             summary(id=`test-${test.testName}`) Test ##{i + 1} &mdash; #{(test && test.description) || ''}
-            script(type='application/json' rel='resource') !{JSON.stringify(test, null, 2)}
+            script(type='application/json' rel='resource' data-debug=`#json-${i}`) !{JSON.stringify(test, null, 2)}
+            pre.debug(id=`json-${i}`)
 
       script(src='main.umd.js')
 

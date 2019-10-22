@@ -119,8 +119,21 @@ export function loader(components, selector) {
     });
 
     let result;
+    let debug;
+
+    if (node.dataset.debug) {
+      const el = document.querySelector(node.dataset.debug);
+
+      if (el) {
+        debug = el;
+      }
+    }
 
     instance.$on('change', e => {
+      if (debug) {
+        debug.innerText = JSON.stringify(e.detail, null, 2);
+      }
+
       result = e.detail;
     });
 
