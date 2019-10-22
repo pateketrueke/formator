@@ -141,7 +141,7 @@
     <ul>
       {#if through && through !== schema.id}
         {#each fields as { key, path, field, schema, uiSchema } (key)}
-          <li data-type={schema.type || 'objectX'}>
+          <li data-type={schema.type || 'object'}>
             <div data-field={`/${path.join('/')}`}>
               <span>{uiSchema['ui:label'] || field}</span>
               <Value {uiSchema} value={result[field]} />
@@ -150,7 +150,7 @@
         {/each}
       {:else}
         {#each fields as { id, key, path, name, field, isFixed, schema, uiSchema } (key)}
-          <li data-type={schema.type || 'objectY'}>
+          <li data-type={schema.type || 'object'}>
             <div data-field={`/${path.join('/')}`}>
               {#if isFixed}
                 <input type="text" on:change={e => prop(e, key)} />

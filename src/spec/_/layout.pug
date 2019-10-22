@@ -51,6 +51,7 @@ html
             script(type='application/json' rel='resource' data-debug=`#json-${i}`) !{JSON.stringify(test, null, 2)}
             pre.debug(id=`json-${i}`)
 
+      script(src='ajv.js')
       script(src='main.umd.js')
 
       script.
