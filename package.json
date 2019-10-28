@@ -18,7 +18,7 @@
     "concat:bundle": "concat dist/ajv.js dist/main.umd.js -o dist/bundle.js",
     "postdist": "npm run copy:ajv && npm run concat:bundle",
     "prepublishOnly": "npm test && npm run build",
-    "lint": "eslint lib src e2e",
+    "lint": "eslint --ext js,svelte lib src e2e *.js",
     "test": "npm run lint && npm run test:e2e --",
     "test:e2e": "BASE_URL=http://localhost:3001 testcafe ${BROWSER:-chrome:headless}"
   },
@@ -73,10 +73,15 @@
   "devDependencies": {
     "buble": "^0.19.3",
     "concat": "^1.0.3",
-    "csso": "^3.5.1",
+    "csso": "^4.0.1",
     "eslint": "^6.3.0",
     "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-plugin-import": "^2.10.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-pug": "^1.1.1",
+    "eslint-plugin-svelte3": "^2.7.3",
+    "eslint-utils": "^1.4.3",
+    "express": "^4.17.1",
+    "json-schema-sequelizer": "^0.20.5",
     "less": "^3.8.1",
     "less-plugin-autoprefix": "^2.0.0",
     "pug": "^2.0.3",
@@ -85,10 +90,11 @@
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-svelte": "^5.1.0",
     "somedom": "^0.1.2",
+    "sqlite3": "^4.1.0",
     "svelte": "^3.5.1",
-    "svql": "0.0.15",
-    "tarima": "^4.6.0",
+    "svql": "^0.0.15",
+    "tarima": "^4.6.2",
     "terser": "^4.2.1",
-    "testcafe": "^1.0.1"
+    "testcafe": "^1.6.0"
   }
 }
