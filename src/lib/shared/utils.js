@@ -98,8 +98,12 @@ export function loader(components, selector) {
     if (!data.model && Array.isArray(data.result)) {
       data = {
         result: data.result,
-        schema: { type: 'array' },
+        schema: {
+          type: 'array',
+          items: { type: 'string' },
+        },
         uiSchema: {
+          // FIXME: implements this shit...
           // 'ui:template': [['a', { href: `${document.location.href}/{}` }, '{}']],
           'ui:title': data.description || 'Resources',
           'ui:append': false,
