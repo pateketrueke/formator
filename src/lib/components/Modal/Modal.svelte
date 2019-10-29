@@ -1,10 +1,8 @@
 <script>
   import { In } from 'svql';
-  import { destroy, update } from './stacked';
 
   export let visible = false;
 
-  let modal = null;
   let uiSchema = {};
   let updating = false;
   let resource = 'input';
@@ -29,8 +27,8 @@
         </button>
         <button data-is="save" type="submit">
           <span>{updating
-            ? uiSchema['ui:update'] || `Update ${resource}`
-            : uiSchema['ui:save'] || `Save ${resource}`}</span>
+            ? uiSchema['ui:update'] || `Update ${resource}`
+            : uiSchema['ui:save'] || `Save ${resource}`}</span>
         </button>
       </div>
     </div>
