@@ -103,8 +103,7 @@ export function loader(components, selector) {
           items: { type: 'string' },
         },
         uiSchema: {
-          // FIXME: implements this shit...
-          // 'ui:template': [['a', { href: `${document.location.href}/{}` }, '{}']],
+          'ui:template': [['a', { href: `${document.location.href}/{}` }, '{}']],
           'ui:title': data.description || 'Resources',
           'ui:append': false,
         },

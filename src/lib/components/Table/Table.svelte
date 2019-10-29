@@ -82,7 +82,7 @@
             {:else}
               {#each headers as { field }}
                 <td data-field={`/${path.concat(field).join('/')}`}>
-                  <Value {props} {field} uiSchema={uiSchema[field]} value={values[offset][field]} />
+                  <Value {props} uiSchema={uiSchema[field]} value={values[offset][field]} />
                 </td>
               {/each}
             {/if}

@@ -108,7 +108,7 @@
           <tr data-field={`/${path.join('/')}`}>
             {#each headers as { field }}
               <td data-field={`/${path.concat(field).join('/')}`}>
-                <Value {field} {schema} uiSchema={uiSchema[field]} value={result[offset][field]} />
+                <Value {schema} uiSchema={uiSchema[field]} value={result[offset][field]} />
               </td>
             {/each}
             <th>
@@ -135,7 +135,7 @@
         {#each items as { key, path, offset, isFixed, schema, uiSchema } (key)}
           <li data-type={schema.type || 'object'}>
             {#if uiSchema['ui:template']}
-              <Value {uiSchema} value={result[offset]} />
+              <Value {uiSchema} {schema} value={result[offset]} />
             {:else}
               <div data-field={`/${path.join('/')}`}>
                 <div>
@@ -160,20 +160,20 @@
 {/if}
 
 {#if schema.additionalItems !== false}
-  <div>
-    {#if through}
-      {#if uiSchema['ui:append'] !== false}
+  {#if uiSchema['ui:append'] !== false}
+    <div>
+      {#if through}
         <button data-is="append" type="button" on:click={open}>
           <span>{uiSchema['ui:append'] || `Add ${association.singular}`}</span>
         </button>
+        <Modal {uiSchema} updating={isUpdate} resource={association.singular} bind:visible={isOpen} on:save={sync} on:close={reset}>
+          <Field {...nextProps} {association} {through} bind:result={nextValue} name={`${name}[${nextOffset}]`} />
+        </Modal>
+      {:else}
+        <button data-is="append" data-before="&plus;" type="button" on:click={append}>
+          <span>{uiSchema['ui:append'] || 'Add item'}</span>
+        </button>
       {/if}
-      <Modal {uiSchema} updating={isUpdate} resource={association.singular} bind:visible={isOpen} on:save={sync} on:close={reset}>
-        <Field {...nextProps} {association} {through} bind:result={nextValue} name={`${name}[${nextOffset}]`} />
-      </Modal>
-    {:else if uiSchema['ui:append'] !== false}
-      <button data-is="append" data-before="&plus;" type="button" on:click={append}>
-        <span>{uiSchema['ui:append'] || 'Add item'}</span>
-      </button>
-    {/if}
-  </div>
+    </div>
+  {/if}
 {/if}
