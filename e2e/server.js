@@ -17,6 +17,11 @@ repo.database.add({
   $attributes: {
     findAll: ['title'],
   },
+  $uiSchema: {
+    'ui:headers': [
+      "Example's title",
+    ],
+  },
   $schema: {
     id: 'Example',
     properties: {

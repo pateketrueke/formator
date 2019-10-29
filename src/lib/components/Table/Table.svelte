@@ -29,7 +29,6 @@
   let isOpen = false;
   let payload = null;
   let fieldProps = {};
-  let fixedSchema = {};
 
   function getItems() {
     return result.map((x, k) => ({
@@ -48,8 +47,8 @@
 
     return props
       .filter(x => (uiSchema[x] ? !uiSchema[x]['ui:hidden'] : true))
-      .map(key => ({
-        label: (uiSchema['ui:headers'] && uiSchema['ui:headers'][offset]) || key,
+      .map((key, i) => ({
+        label: (uiSchema['ui:headers'] && uiSchema['ui:headers'][i]) || key,
         field: key,
       }));
   }
@@ -123,21 +122,21 @@
               {/each}
             {/if}
             <th>
-              {#if fixedSchema['ui:edit'] !== false}
+              {#if uiSchema['ui:edit'] !== false}
                 <button data-is="edit" data-before="&#9998;" type="button" on:click={() => edit(offset)}>
-                  <span>{fixedSchema['ui:edit'] || 'Edit'}</span>
+                  <span>{uiSchema['ui:edit'] || 'Edit'}</span>
                 </button>
               {/if}
-              {#if fixedSchema['ui:edit'] !== false}
+              {#if uiSchema['ui:edit'] !== false}
                 <button data-is="remove" data-before="&times;" type="button" on:click={() => remove(offset)}>
-                  <span>{fixedSchema['ui:remove'] || 'Remove'}</span>
+                  <span>{uiSchema['ui:remove'] || 'Remove'}</span>
                 </button>
               {/if}
             </th>
           </tr>
         {:else}
           <tr>
-            <td colspan="99" data-empty>{fixedSchema['ui:empty'] || 'No items'}</td>
+            <td colspan="99" data-empty>{uiSchema['ui:empty'] || 'No items'}</td>
           </tr>
         {/each}
       {:catch error}
@@ -153,9 +152,9 @@
 </table>
 
 <div>
-  {#if fixedSchema['ui:new'] !== false}
+  {#if uiSchema['ui:new'] !== false}
     <button data-is="new" type="submit" on:click={edit}>
-      <span>{fixedSchema['ui:new'] || `New ${association.singular}`}</span>
+      <span>{uiSchema['ui:new'] || `New ${association.singular}`}</span>
     </button>
   {/if}
   <Modal {uiSchema} updating={isUpdate} resource={model} bind:visible={isOpen} on:save={sync} on:close={reset}>
