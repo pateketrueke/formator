@@ -3,7 +3,7 @@
   import { randId } from '../../../shared/utils';
   import { defaultValue, getId } from '../utils';
 
-  import Field from '../../Field';
+  import Field from '..';
   import Value from '../../Value';
   import Finder from '../../Finder';
 
@@ -11,8 +11,8 @@
   export let schema = { type: 'object' };
   export let result = defaultValue(schema);
 
+  export let name;
   export let path = [];
-  export let name = undefined;
   export let through = null;
   export let association = {};
 
@@ -123,6 +123,10 @@
     result[prop.field] = value;
   }
 
+  $: if (Object.prototype.toString.call(result) !== '[object Object]') {
+    result = {};
+  }
+
   $: dispatch('change', result);
 </script>
 
@@ -187,11 +191,11 @@
 {/if}
 
 {#if schema.additionalProperties !== false}
-  <div>
-    {#if uiSchema['ui:append'] !== false}
+  {#if uiSchema['ui:append'] !== false}
+    <div data-append>
       <button data-is="append" data-before="&plus;" type="button" on:click={append}>
         <span>{uiSchema['ui:append'] || 'Add prop'}</span>
       </button>
-    {/if}
-  </div>
+    </div>
+  {/if}
 {/if}

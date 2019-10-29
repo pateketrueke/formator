@@ -100,7 +100,7 @@ export function loader(components, selector) {
         result: data.result,
         schema: { type: 'array' },
         uiSchema: {
-          'ui:template': [['a', { href: `${document.location.href}/{}` }, '{}']],
+          // 'ui:template': [['a', { href: `${document.location.href}/{}` }, '{}']],
           'ui:title': data.description || 'Resources',
           'ui:append': false,
         },

@@ -1,5 +1,3 @@
-VALUE
-
 <!-- {#each fixedNodes as value}
   {#if typeof value === 'object'}
     <svelte:component {...value.options} this={value.component} callback={value.onClick} />

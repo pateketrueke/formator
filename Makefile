@@ -11,7 +11,7 @@ lint: src lib e2e deps ## Lint all sources
 	@npm run lint
 
 dev: src deps ## Start dev tasks (nodejs)
-	@npm run dev
+	@npm run watch & npm run dev
 
 test: src deps ## Run E2E locally  (nodejs)
 	@npm test  -- --debug-on-fail e2e/cases

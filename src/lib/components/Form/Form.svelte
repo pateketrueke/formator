@@ -56,25 +56,24 @@
   $: dispatch('change', result);
 </script>
 
-<slot>
-  {#if uiSchema['ui:title']}
-    <h2>{uiSchema['ui:title']}</h2>
-  {/if}
-  <form on:submit={save} {...formProps}>
-    {#if !hasChildren}
-      <div data-field="/">
-        <Field name={name || 'value'} bind:result {schema} {uiSchema} />
-      </div>
-    {:else}
+{#if uiSchema['ui:title']}
+  <h2>{uiSchema['ui:title']}</h2>
+{/if}
+
+<form on:submit={save} {...formProps}>
+  {#if !hasChildren}
+    <div data-field="/">
       <Field name={name || 'value'} bind:result {schema} {uiSchema} />
-    {/if}
-    {#if actions}
-      <div>
-        <button data-is="save" type="submit">
-          <span>{uiSchema['ui:save'] || 'Save'}</span>
-        </button>
-        <input type="hidden" name="_method" value={nextAction.verb} />
-      </div>
-    {/if}
-  </form>
-</slot>
+    </div>
+  {:else}
+    <Field name={name || 'value'} bind:result {schema} {uiSchema} />
+  {/if}
+  {#if actions}
+    <div>
+      <button data-is="save" type="submit">
+        <span>{uiSchema['ui:save'] || 'Save'}</span>
+      </button>
+      <input type="hidden" name="_method" value={nextAction.verb} />
+    </div>
+  {/if}
+</form>

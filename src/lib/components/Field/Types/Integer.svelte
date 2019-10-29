@@ -2,12 +2,16 @@
   import { getContext, createEventDispatcher } from 'svelte';
   import { defaultValue, getId } from '../utils';
 
-  export let name = undefined;
+  export let name;
   export let schema = { type: 'integer' };
   export let result = defaultValue(schema);
 
   const { rootId } = getContext('__ROOT__');
   const dispatch = createEventDispatcher();
+
+  $: if (typeof result !== 'number') {
+    result = 0;
+  }
 
   $: id = getId(rootId, name);
   $: step = schema.multipleOf || 1;

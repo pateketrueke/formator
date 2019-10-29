@@ -2,12 +2,16 @@
   import { getContext, createEventDispatcher } from 'svelte';
   import { defaultValue, getId } from '../utils';
 
-  export let name = undefined;
+  export let name;
   export let schema = { type: 'boolean' };
   export let result = defaultValue(schema);
 
   const { rootId } = getContext('__ROOT__');
   const dispatch = createEventDispatcher();
+
+  $: if (typeof result !== 'boolean') {
+    result = false;
+  }
 
   $: id = getId(rootId, name);
   $: dispatch('change', result);

@@ -1,21 +1,21 @@
 <script>
-  import { onMount, getContext, createEventDispatcher } from 'svelte';
-  import { API, randId } from '../../../shared/utils';
+  import { onMount, createEventDispatcher } from 'svelte';
+  import { randId } from '../../../shared/utils';
   import { defaultValue } from '../utils';
 
-  import Field from '../../Field';
+  import Field from '..';
   import Value from '../../Value';
   import Modal from '../../Modal';
 
-  export let association = {};
-  export let uiSchema = {};
+  export let name;
+  export let through;
+  export let association;
   export let path = [];
-  export let through = null;
-  export let name = undefined;
+  export let uiSchema = {};
   export let schema = { type: 'array' };
   export let result = defaultValue(schema);
 
-  const { actions, refs } = getContext('__ROOT__');
+  // const { actions, refs } = getContext('__ROOT__');
   const dispatch = createEventDispatcher();
 
   let headers = [];
@@ -56,8 +56,11 @@
 
     if (isFixed) {
       items = schema.items.map((_, offset) => getItemBy(offset, getSubSchema(offset)));
-      keys = items.map(x => x.key);
+    } else {
+      items = result.map((_, offset) => getItemBy(offset, schema.items || {}));
     }
+
+    keys = items.map(x => x.key);
   });
 
   function open() { console.log('open'); }
@@ -81,6 +84,10 @@
     keys = keys.concat(newKey);
     result = result.concat(defaultValue(subSchema));
     items = items.concat(getItemBy(offset, subSchema));
+  }
+
+  $: if (!Array.isArray(result)) {
+    result = [];
   }
 
   $: dispatch('change', result);
