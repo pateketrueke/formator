@@ -24,6 +24,6 @@ Promise.resolve()
   .then(() => repo.database.connect())
   .then(() => repo.database.sync())
   .then(() => {
-    app.use(repo.hook());
+    app.use('/db', repo.hook());
     app.listen(8080);
   });
