@@ -35,7 +35,7 @@
       uiSchema: uiSchema[key] || {},
       path: (path || []).concat(field),
       name: (name && name !== '__ROOT__') ? `${name}[${field}]` : field,
-      id: getId(rootId, (name && name !== '__ROOT__') ? `${name}[${field}]` : key),
+      id: getId(rootId, (name && name !== '__ROOT__') ? `${name}[${field}]` : field),
     };
   }
 
@@ -130,8 +130,8 @@
   $: dispatch('change', result);
 </script>
 
-{#if fields.length}
-  <fieldset>
+<fieldset>
+  {#if fields.length}
     {#each hidden as { id, key, path, name, field, schema } (key)}
       <input
         {id}
@@ -185,17 +185,17 @@
         {/each}
       {/if}
     </ul>
-  </fieldset>
-{:else}
-  <div data-empty>{uiSchema['ui:empty'] || 'No props'}</div>
-{/if}
-
-{#if schema.additionalProperties !== false}
-  {#if uiSchema['ui:append'] !== false}
-    <div data-append>
-      <button data-is="append" data-before="&plus;" type="button" on:click={append}>
-        <span>{uiSchema['ui:append'] || 'Add prop'}</span>
-      </button>
-    </div>
+  {:else}
+    <div data-empty>{uiSchema['ui:empty'] || 'No props'}</div>
   {/if}
-{/if}
+
+  {#if schema.additionalProperties !== false}
+    {#if uiSchema['ui:append'] !== false}
+      <div data-actions>
+        <button data-is="append" data-before="&plus;" type="button" on:click={append}>
+          <span>{uiSchema['ui:append'] || 'Add prop'}</span>
+        </button>
+      </div>
+    {/if}
+  {/if}
+</fieldset>
