@@ -28,7 +28,6 @@
   let isUpdate = false;
   let isOpen = false;
   let payload = null;
-  let fieldProps = {};
 
   function getItems() {
     return result.map((x, k) => ({
@@ -89,6 +88,9 @@
 
   $: items = getItems();
   $: headers = getHeaders();
+  $: fieldProps = {
+    schema,
+  };
 </script>
 
 <table>
@@ -155,16 +157,20 @@
       {/await}
     {/if}
   </tbody>
+
+  {#if uiSchema['ui:new'] !== false}
+    <tfoot>
+      <tr>
+        <td colspan="99">
+          <button data-is="new" type="submit" on:click={edit}>
+            <span>{uiSchema['ui:new'] || `New ${association.singular}`}</span>
+          </button>
+        </td>
+      </tr>
+    </tfoot>
+  {/if}
 </table>
 
-<div>
-  {#if uiSchema['ui:new'] !== false}
-    <button data-is="new" type="submit" on:click={edit}>
-      <span>{uiSchema['ui:new'] || `New ${association.singular}`}</span>
-    </button>
-  {/if}
-  <Modal {uiSchema} updating={isUpdate} resource={model} bind:visible={isOpen} on:save={sync} on:close={reset}>
-    <Field name="__ROOT__" bind:result={value} {...fieldProps} />
-  </Modal>
-</div>
-
+<Modal {uiSchema} updating={isUpdate} resource={model} bind:visible={isOpen} on:save={sync} on:close={reset}>
+  <Field name="__ROOT__" bind:result={value} {...fieldProps} />
+</Modal>
