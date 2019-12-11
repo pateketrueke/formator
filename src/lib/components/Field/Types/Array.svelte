@@ -119,7 +119,7 @@
                   </button>
                 {/if}
                 {#if uiSchema['ui:remove'] !== false}
-                  <button data-is="remove" data-before="&times;" type="button" on:click={() => remove(key)}>
+                  <button data-is="remove" data-before="&ndash;" type="button" on:click={() => remove(key)}>
                     <span>{uiSchema['ui:remove'] || `Remove ${association.singular}`}</span>
                   </button>
                 {/if}
@@ -143,7 +143,7 @@
                 </div>
                 {#if !isFixed && uiSchema['ui:remove'] !== false}
                   <div>
-                    <button data-is="remove" data-before="&times;" type="button" on:click={() => remove(key)}>
+                    <button data-is="remove" data-before="&ndash;" type="button" on:click={() => remove(key)}>
                       <span>{uiSchema['ui:remove'] || 'Remove item'}</span>
                     </button>
                   </div>
@@ -170,7 +170,7 @@
           <Field {...nextProps} {association} {through} bind:result={nextValue} name={`${name}[${nextOffset}]`} />
         </Modal>
       {:else}
-        <button data-is="append" data-before="&plus;" type="button" on:click={append}>
+        <button class="nobreak" data-is="append" data-before="&plus;" type="button" on:click={append}>
           <span>{uiSchema['ui:append'] || 'Add item'}</span>
         </button>
       {/if}

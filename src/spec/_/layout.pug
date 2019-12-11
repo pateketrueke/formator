@@ -2,6 +2,7 @@ doctype html
 html
   head
     title Formator #{label ? ` (${label})`: ''}
+    block head
     link(rel='stylesheet' href='style.css')
     style.
       body > div > details {
@@ -41,6 +42,10 @@ html
         right: 10px;
         top: 10px;
       }
+
+      #editor > div {
+        padding: 6px;
+      }
   body
     block before
     block main
@@ -50,6 +55,7 @@ html
             summary(id=`test-${test.testName}`) Test ##{i + 1} &mdash; #{(test && test.description) || ''}
             script(type='application/json' rel='resource' data-debug=`#json-${i}`) !{JSON.stringify(test, null, 2)}
             pre.debug(id=`json-${i}`)
+        block after
 
       script(src='ajv.js')
       script(src='main.umd.js')

@@ -6,26 +6,29 @@
   let uiSchema = {};
   let schema = {};
 
-  let value1 = `
-    {
-      "ui:empty": "Nothing to see here...",
-      "ui:append": "Add a new field",
-      "ui:remove": "DEL"
-    }
-  `;
-  let value = `
-    {
-      "type": "object",
-      "properties": {
-        "title": {
-          "type": "string"
-        },
-        "desc": {
-          "type": "string"
-        }
+  let value1 = `{
+  "ui:empty": "Nothing to see here...",
+  "ui:append": "Add a new field",
+  "ui:remove": "DEL"
+}`;
+
+  let value = `{
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "desc": {
+      "type": "string"
+    },
+    "set": {
+      "type": "array",
+      "items": {
+        "type": "object"
       }
     }
-  `;
+  }
+}`;
 
   let result;
 
@@ -67,6 +70,4 @@
 
 <Form {schema} {uiSchema} bind:result />
 
-{#if typeof result !== 'undefined'}
-  <pre>{JSON.stringify(result, null, 2)}</pre>
-{/if}
+<pre class="debug">{JSON.stringify(result, null, 2)}</pre>

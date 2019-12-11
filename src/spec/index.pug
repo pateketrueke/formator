@@ -12,3 +12,13 @@
   ---
 
 extend _/layout
+
+block head
+  link(rel='stylesheet' href='style.css')
+
+block after
+  details
+    summary REPL &mdash; Interactive editor
+    #editor.formator
+
+  script(src='main.test.js')

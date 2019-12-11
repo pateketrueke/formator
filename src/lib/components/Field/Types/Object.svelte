@@ -192,7 +192,7 @@
   {#if schema.additionalProperties !== false}
     {#if uiSchema['ui:append'] !== false}
       <div data-actions>
-        <button data-is="append" data-before="&plus;" type="button" on:click={append}>
+        <button class="nobreak" data-is="append" data-before="&plus;" type="button" on:click={append}>
           <span>{uiSchema['ui:append'] || 'Add prop'}</span>
         </button>
       </div>
