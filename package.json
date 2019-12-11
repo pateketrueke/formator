@@ -77,6 +77,8 @@
     "concat": "^1.0.3",
     "csso": "^4.0.1",
     "eslint": "^6.3.0",
+    "lodash": ">=4.17.12",
+    "set-value": ">=2.0.1",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-pug": "^1.1.1",
@@ -96,7 +98,7 @@
     "sqlite3": "^4.1.0",
     "svelte": "^3.5.1",
     "svql": "^0.0.15",
-    "tarima": "^4.6.2",
+    "tarima": "^4.6.3",
     "terser": "^4.2.1",
     "testcafe": "^1.6.0"
   }
