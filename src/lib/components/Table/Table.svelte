@@ -1,5 +1,5 @@
 <script>
-  import { onMount, setContext } from 'svelte';
+  import { onMount, setContext, createEventDispatcher } from 'svelte';
   import { Failure } from 'svql';
 
   import Modal from '../Modal';
@@ -24,10 +24,12 @@
     plural: 'Items',
   };
 
+  const dispatch = createEventDispatcher();
+
   let offset = -1;
   let isUpdate = false;
   let isOpen = false;
-  let payload = null;
+  let payload = result.length !== 0;
 
   function getItems() {
     return result.map((x, k) => ({
@@ -71,9 +73,16 @@
   }
 
   function remove() {}
-  function sync() {}
-  // function fetch() {}
-  function reset() {}
+  function sync() {
+    if (typeof offset === 'undefined') {
+      result = result.concat(value);
+    }
+
+    dispatch('change', result);
+
+    items = getItems();
+    isOpen = false;
+  }
 
   const rootId = randId();
 
@@ -83,14 +92,16 @@
   });
 
   onMount(() => {
-    if (actions) reload();
+    if (actions[model]) reload();
+
+    setTimeout(() => {
+      dispatch('change', result);
+    });
   });
 
   $: items = getItems();
   $: headers = getHeaders();
-  $: fieldProps = {
-    schema,
-  };
+  $: fieldProps = { schema };
 </script>
 
 <table>
@@ -162,7 +173,7 @@
     <tfoot>
       <tr>
         <td colspan="99">
-          <button data-is="new" type="submit" on:click={edit}>
+          <button data-is="new" type="submit" on:click={() => edit()}>
             <span>{uiSchema['ui:new'] || `New ${association.singular}`}</span>
           </button>
         </td>
@@ -171,6 +182,6 @@
   {/if}
 </table>
 
-<Modal {uiSchema} updating={isUpdate} resource={model} bind:visible={isOpen} on:save={sync} on:close={reset}>
+<Modal {uiSchema} updating={isUpdate} resource={model} bind:visible={isOpen} on:save={sync}>
   <Field name="__ROOT__" bind:result={value} {...fieldProps} />
 </Modal>

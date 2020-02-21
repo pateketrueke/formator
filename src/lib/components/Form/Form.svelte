@@ -1,7 +1,7 @@
 <script>
   import { onMount, setContext, createEventDispatcher } from 'svelte';
   import { defaultValue } from '../Field/utils';
-  import { randId, clean } from '../../shared/utils';
+  import { randId } from '../../shared/utils';
 
   import Field from '../Field';
 
@@ -10,8 +10,9 @@
   export let uiSchema = {};
 
   export let name = null;
+  export let action = null;
   export let actions = null;
-  export let onsubmit = undefined;
+  export let onsubmit = null;
   export let result = defaultValue(schema);
 
   const dispatch = createEventDispatcher();
@@ -22,7 +23,7 @@
   };
 
   $: hasChildren = schema.type === 'object' || schema.type === 'array';
-  $: nextAction = (schema.id && actions) ? actions[schema.id][ACTION_MAP[action]] || {} : {};
+  $: nextAction = (schema.id && actions[schema.id]) ? actions[schema.id][ACTION_MAP[action]] || {} : {};
 
   $: formProps = nextAction
     ? {

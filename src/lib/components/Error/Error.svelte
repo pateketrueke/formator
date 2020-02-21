@@ -14,7 +14,7 @@
     } else {
       errorMessage = 'Unknown error';
     }
-  };
+  }
 </script>
 
 <details data-failure>

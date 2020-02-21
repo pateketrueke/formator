@@ -103,7 +103,7 @@
         count += 1;
         nextKey = `${value}${count}`;
         if (typeof result[nextKey] === 'undefined') break;
-      } while (true);
+      } while (true); // eslint-disable-line
 
       e.target.value = nextKey;
     }
@@ -115,17 +115,17 @@
     result[nextKey] = oldValue;
   }
 
-  function sync() {}
+  function sync() {
+    console.log('SYNC?');
+  }
 
   function set(key, value) {
-    const prop = fields.find(x => x.key === key);
-
-    result[prop.field] = value;
+    result[fields.find(x => x.key === key).field] = value;
   }
 
-  $: if (Object.prototype.toString.call(result) !== '[object Object]') {
-    result = {};
-  }
+  // $: if (typeof result !== 'object') {
+  //   result = {};
+  // }
 
   $: dispatch('change', result);
 </script>

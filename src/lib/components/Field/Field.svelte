@@ -16,7 +16,7 @@
   export let uiSchema = {};
   export let through = null;
   export let association = {};
-  export let result = undefined;
+  export let result;
 
   const { refs, rootId } = getContext('__ROOT__');
 

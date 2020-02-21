@@ -1,4 +1,5 @@
 <script>
+  import { createEventDispatcher } from 'svelte';
   import { In } from 'svql';
 
   export let visible = false;
@@ -7,11 +8,11 @@
   let updating = false;
   let resource = 'input';
 
+  const dispatch = createEventDispatcher();
+
   function close() {
     visible = false;
   }
-
-  function sync() {}
 </script>
 
 <style>
@@ -22,7 +23,7 @@
 </style>
 
 {#if visible}
-  <In modal on:cancel={close} on:submit={sync} class="formator-modal">
+  <In modal on:cancel={close} on:submit={() => dispatch('save')} class="formator-modal">
     <div data-content>
       {#if uiSchema['ui:caption']}
         <h2>{uiSchema['ui:caption']}</h2>

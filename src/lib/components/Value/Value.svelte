@@ -11,7 +11,7 @@
   function getNodes() {
     const { type, default: defaultValue } = schema;
 
-    if (typeof value !== 'undefined' && uiSchema['ui:template']) {
+    if (typeof value !== 'undefined' && uiSchema && uiSchema['ui:template']) {
       return renderDOM(value, uiSchema['ui:template']);
     }
 
@@ -34,7 +34,8 @@
     return [defaultValue];
   }
 
-  $: children = getNodes();
+  // FIXME: doing just `$: children = getNodes();` did not cause re-render (?)
+  $: children = typeof value !== 'undefined' ? getNodes() : [];
 </script>
 
 {#each children as node}

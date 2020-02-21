@@ -1,3 +1,15 @@
 description: Inline table with static data
 testName: tables
 action: index
+model: test
+schema:
+  properties:
+    name:
+      type: string
+    age:
+      type: integer
+result:
+  - name: Jack
+    age: 40
+  - name: John
+    age: 33

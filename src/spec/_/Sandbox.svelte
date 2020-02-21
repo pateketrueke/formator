@@ -30,7 +30,19 @@
   }
 }`;
 
-  let result;
+  let result = {
+    title: '',
+    desc: '',
+    set: [
+      {
+        foo: 'bar',
+        baz: 'buzz',
+      },
+      {
+        x: 'y',
+      },
+    ],
+  };
 
   $: {
     try {
