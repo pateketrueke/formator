@@ -24,6 +24,10 @@
     }
 
     if (typeof defaultValue === 'undefined') {
+      if (typeof value === 'undefined') {
+        return [];
+      }
+
       return [(!isScalar(value) && JSON.stringify(value)) || (value === '' ? 'N/A' : value)];
     }
 
