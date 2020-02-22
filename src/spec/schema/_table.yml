@@ -2,6 +2,11 @@ description: Inline table with static data
 testName: table
 action: index
 model: test
+uiSchema:
+  name:
+    ui:label: Name
+  age:
+    ui:label: Age
 schema:
   properties:
     name:

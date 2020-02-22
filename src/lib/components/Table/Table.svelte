@@ -37,7 +37,6 @@
       path: [],
       offset: k,
       schema: schema.properties || {},
-      uiSchema: uiSchema || {},
     }));
   }
 
@@ -55,7 +54,9 @@
     return props
       .filter(x => (uiSchema[x] ? !uiSchema[x]['ui:hidden'] : true))
       .map((key, i) => ({
-        label: (uiSchema['ui:headers'] && uiSchema['ui:headers'][i]) || key,
+        label: (uiSchema['ui:headers'] && uiSchema['ui:headers'][i])
+          || (uiSchema[key] && uiSchema[key]['ui:label'])
+          || key,
         field: key,
       }));
   }
@@ -72,7 +73,11 @@
     });
   }
 
-  function remove() {}
+  function remove(offset) {
+    result = result.filter((_, k) => k !== offset);
+    items = getItems();
+  }
+
   function sync() {
     if (typeof offset === 'undefined') {
       result = result.concat(value);
@@ -127,7 +132,7 @@
           <td colspan="99">Loading data...</td>
         </tr>
       {:then}
-        {#each items as { key, path, schema, offset, uiSchema } (key)}
+        {#each items as { key, path, offset, schema } (key)}
           <tr data-field={`/${path.concat(key).join('/')}`} data-type={schema.type || 'object'}>
             {#if uiSchema['ui:template']}
               <td>

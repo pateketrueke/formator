@@ -42,6 +42,14 @@ table {
   margin: 0;
 }
 
+small.invalid {
+  color: @error;
+
+  + small.invalid::before {
+    content: '; ';
+  }
+}
+
 .invalid > td:first-child,
 .invalid > label + div,
 td.invalid  {

@@ -2,7 +2,7 @@ import { $ } from './widgets';
 import TYPES from './types';
 import HTML from '../HTML';
 
-const RE_PLACEHOLDER = /<(?:(@?[^|?!:@]*)(?::([\w*,.]+))?([|?!:])?(.*?)|)>/;
+const RE_PLACEHOLDER = /\{(?:(@?[^{}|?!:@]*)(?::([\w*,.]+))?([|?!:])?(.*?)|)\}/;
 const RE_IDENTITY = /\{\}/g;
 
 export function getProp(from, key) {
@@ -149,7 +149,7 @@ export function renderValue(data, template) {
 
 export function reduce(value, template) {
   if (!Array.isArray(template)) {
-    return ['small', null, `Invalid template, given ${JSON.stringify(template)}`];
+    return ['small.invalid', null, `Invalid template, given ${JSON.stringify(template)}`];
   }
 
   if (Array.isArray(template[1])) {
