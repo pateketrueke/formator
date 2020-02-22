@@ -36,8 +36,8 @@
       key: k,
       path: [],
       offset: k,
-      schema: {},
-      uiSchema: {},
+      schema: schema.properties || {},
+      uiSchema: uiSchema || {},
     }));
   }
 
@@ -120,7 +120,7 @@
     </thead>
   {/if}
 
-  <tbody>
+  <tbody data-field="/" data-type="array">
     {#if payload}
       {#await payload}
         <tr>
@@ -128,14 +128,14 @@
         </tr>
       {:then}
         {#each items as { key, path, schema, offset, uiSchema } (key)}
-          <tr data-field={`/${path.join('/')}`}>
+          <tr data-field={`/${path.concat(key).join('/')}`} data-type={schema.type || 'object'}>
             {#if uiSchema['ui:template']}
               <td>
                 <Value {schema} {uiSchema} value={result[offset]} />
               </td>
             {:else}
               {#each headers as { field }}
-                <td data-field={`/${path.concat(field).join('/')}`}>
+                <td data-field={`/${path.concat(key, field).join('/')}`} data-type={(schema[field] && schema[field].type) || 'object'}>
                   <Value {schema} uiSchema={uiSchema[field]} value={result[offset][field]} />
                 </td>
               {/each}

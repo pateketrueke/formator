@@ -22,7 +22,15 @@ export default class Formator {
   }
 
   type(typeName, subField) {
-    return this.get(`[data-type="${typeName}"]${subField ? ` > [data-field="${subField}"]` : ''}`);
+    if (!subField) {
+      return this.get(`[data-type="${typeName}"]`);
+    }
+
+    if (subField.charAt() === '&') {
+      return this.get(`[data-type="${typeName}"][data-field="${subField.substr(1)}"]`);
+    }
+
+    return this.get(`[data-type="${typeName}"] > [data-field="${subField}"]`);
   }
 
   is(actionName) {

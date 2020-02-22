@@ -59,31 +59,4 @@ html
 
       script(src='ajv.js')
       script(src='main.umd.js')
-
-      script.
-        const details = [].slice.call(document.querySelectorAll('details'));
-        const summaries = [].slice.call(document.querySelectorAll('summary'));
-
-        window.addEventListener('click', e => {
-          const index = summaries.indexOf(e.target);
-
-          if (index !== -1) {
-            summaries.forEach((node, offset) => {
-              details[offset].removeAttribute('open');
-
-              if (offset === index) {
-                history.replaceState(null, document.title, `#${summaries[offset].id}`);
-              }
-            });
-          }
-        });
-
-        setTimeout(() => {
-          if (location.hash) {
-            const target = document.querySelector(location.hash);
-
-            if (target && target.tagName === 'SUMMARY') {
-              target.click();
-            }
-          }
-        });
+      script(src='main.test.js')

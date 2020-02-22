@@ -1,5 +1,5 @@
 description: Inline table with static data
-testName: tables
+testName: table
 action: index
 model: test
 schema:

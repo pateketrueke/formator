@@ -8,17 +8,10 @@
   - !include schema/_boolean.yml
   - !include schema/_object.yml
   - !include schema/_array.yml
-  - !include schema/_tables.yml
+  - !include schema/_table.yml
   ---
 
 extend _/layout
 
 block head
   link(rel='stylesheet' href='style.css')
-
-block after
-  details
-    summary REPL &mdash; Interactive editor
-    #editor.formator
-
-  script(src='main.test.js')

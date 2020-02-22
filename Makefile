@@ -10,11 +10,14 @@ help: Makefile
 lint: src lib e2e deps ## Lint all sources
 	@npm run lint
 
-dev: src deps ## Start dev tasks (nodejs)
+dev: src deps ## Start dev tasks  (nodejs)
 	@npm run watch & npm run dev
 
-test: src deps ## Run E2E locally  (nodejs)
-	@npm test  -- --debug-on-fail e2e/cases
+e2e: src deps ## Run E2E locally  (nodejs)
+	@BROWSER=$(browser) npm test -- --debug-on-fail e2e/cases $(TESTCAFE_FLAGS)
+
+ci: src deps ## Run tests on CI  (nodejs)
+	@make e2e TESTCAFE_FLAGS="-a 'npm run dev'"
 
 dist: src deps ## Build final output for production
 	@(git worktree remove $(src) --force > /dev/null 2>&1) || true
