@@ -106,7 +106,7 @@
 
   $: items = getItems();
   $: headers = getHeaders();
-  $: fieldProps = { schema };
+  $: fieldProps = { schema, uiSchema };
 </script>
 
 <table>

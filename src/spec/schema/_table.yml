@@ -9,13 +9,13 @@ uiSchema:
     ui:label: Age
   ui:new: false
   ui:remove: false
+  ui:append: false
 schema:
   properties:
     name:
       type: string
     age:
       type: integer
-  additionalProperties: false
 result:
   - name: Jack
     age: 40

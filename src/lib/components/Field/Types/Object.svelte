@@ -123,10 +123,6 @@
     result[fields.find(x => x.key === key).field] = value;
   }
 
-  // $: if (typeof result !== 'object') {
-  //   result = {};
-  // }
-
   $: dispatch('change', result);
 </script>
 
@@ -189,13 +185,11 @@
     <div data-empty>{uiSchema['ui:empty'] || 'No props'}</div>
   {/if}
 
-  {#if schema.additionalProperties !== false}
-    {#if uiSchema['ui:append'] !== false}
-      <div data-actions>
-        <button class="nobreak" data-is="append" data-before="&plus;" type="button" on:click={append}>
-          <span>{uiSchema['ui:append'] || 'Add prop'}</span>
-        </button>
-      </div>
-    {/if}
+  {#if schema.additionalProperties !== false && uiSchema['ui:append'] !== false}
+    <div data-actions>
+      <button class="nobreak" data-is="append" data-before="&plus;" type="button" on:click={append}>
+        <span>{uiSchema['ui:append'] || 'Add prop'}</span>
+      </button>
+    </div>
   {/if}
 </fieldset>
