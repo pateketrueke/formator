@@ -63,7 +63,13 @@
     keys = items.map(x => x.key);
   });
 
-  function open() { console.log('open'); }
+  // FIXME: implement these methods to responds against API calls...
+  function open() {
+    // this method should open a inner modal with a search-bar, or inline form
+    // to append a new resource based on its schema...
+    console.log('open!', actions[through]);
+  }
+
   function sync() { console.log('sync'); }
   function edit() { console.log('edit'); }
   function reset() { console.log('reset'); }

@@ -22,17 +22,6 @@
     new: 'create',
   };
 
-  $: hasChildren = schema.type === 'object' || schema.type === 'array';
-  $: nextAction = (schema.id && actions[schema.id]) ? actions[schema.id][ACTION_MAP[action]] || {} : {};
-
-  $: formProps = nextAction
-    ? {
-      method: 'post',
-      action: nextAction.path || '',
-      ...(!hasChildren ? { 'data-type': schema.type } : null),
-    }
-    : {};
-
   setContext('__ROOT__', {
     refs,
     rootId,
@@ -55,6 +44,17 @@
   }
 
   $: dispatch('change', result);
+
+  $: hasChildren = schema.type === 'object' || schema.type === 'array';
+  $: nextAction = (schema.id && actions[schema.id]) ? actions[schema.id][ACTION_MAP[action]] || {} : {};
+
+  $: formProps = nextAction
+    ? {
+      method: 'post',
+      action: nextAction.path || '',
+      ...(!hasChildren ? { 'data-type': schema.type } : null),
+    }
+    : {};
 </script>
 
 {#if uiSchema['ui:title']}

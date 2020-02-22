@@ -25,6 +25,15 @@
   };
 
   const dispatch = createEventDispatcher();
+  const rootId = randId();
+
+  setContext('__ROOT__', {
+    refs,
+    rootId,
+    actions,
+    schema,
+    uiSchema,
+  });
 
   let offset = -1;
   let isUpdate = false;
@@ -88,13 +97,6 @@
     items = getItems();
     isOpen = false;
   }
-
-  const rootId = randId();
-
-  setContext('__ROOT__', {
-    refs,
-    rootId,
-  });
 
   onMount(() => {
     if (actions[model] && !payload) reload();
