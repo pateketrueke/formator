@@ -103,12 +103,18 @@ input[type=text],
 input[type=number],
 input[type=search],
 input[type=password] {
+  outline: none;
+  transition: box-shadow .2s;
   border: 1px solid @light;
   background: inherit;
   padding: @sp1;
 
   &:hover {
     border-color: @dark;
+  }
+
+  &:focus {
+    box-shadow: 0 0 3px @dark;
   }
 }
 

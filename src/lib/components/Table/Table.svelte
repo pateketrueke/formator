@@ -151,7 +151,7 @@
                   <span>{uiSchema['ui:edit'] || 'Edit'}</span>
                 </button>
               {/if}
-              {#if uiSchema['ui:edit'] !== false}
+              {#if uiSchema['ui:remove'] !== false}
                 <button data-is="remove" data-before="&times;" type="button" on:click={() => remove(offset)}>
                   <span>{uiSchema['ui:remove'] || 'Remove'}</span>
                 </button>

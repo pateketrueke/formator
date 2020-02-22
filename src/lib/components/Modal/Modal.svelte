@@ -13,6 +13,10 @@
   function close() {
     visible = false;
   }
+
+  function save() {
+    dispatch('save');
+  }
 </script>
 
 <style>
@@ -23,7 +27,7 @@
 </style>
 
 {#if visible}
-  <In modal on:cancel={close} on:submit={() => dispatch('save')} class="formator-modal">
+  <In modal autofocus on:cancel={close} on:submit={save} class="formator-modal">
     <div data-content>
       {#if uiSchema['ui:caption']}
         <h2>{uiSchema['ui:caption']}</h2>
