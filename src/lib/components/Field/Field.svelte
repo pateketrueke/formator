@@ -44,6 +44,10 @@
           },
         },
       };
+
+      if (refItems) {
+        _schema.type = 'array';
+      }
     }
 
     schema = _schema;

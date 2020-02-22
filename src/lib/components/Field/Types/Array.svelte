@@ -1,5 +1,5 @@
 <script>
-  import { onMount, createEventDispatcher } from 'svelte';
+  import { onMount, getContext, createEventDispatcher } from 'svelte';
   import { randId } from '../../../shared/utils';
   import { defaultValue } from '../utils';
 
@@ -15,7 +15,7 @@
   export let schema = { type: 'array' };
   export let result = defaultValue(schema);
 
-  // const { actions, refs } = getContext('__ROOT__');
+  const { actions, refs } = getContext('__ROOT__');
   const dispatch = createEventDispatcher();
 
   let headers = [];
@@ -84,10 +84,6 @@
     keys = keys.concat(newKey);
     result = result.concat(defaultValue(subSchema));
     items = items.concat(getItemBy(offset, subSchema));
-  }
-
-  $: if (!Array.isArray(result)) {
-    result = [];
   }
 
   $: dispatch('change', result);

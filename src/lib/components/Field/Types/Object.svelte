@@ -28,11 +28,19 @@
   function getItemFor(field, offset, subSchema) {
     const key = keys[offset] || (keys[offset] = randId());
 
+    if (subSchema.items && typeof subSchema.items.$ref === 'string') {
+      subSchema.items = refs[subSchema.items.$ref];
+    }
+
+    if (typeof subSchema.$ref === 'string') {
+      subSchema = refs[subSchema.$ref];
+    }
+
     return {
       key,
       field,
       schema: subSchema,
-      uiSchema: uiSchema[key] || {},
+      uiSchema: uiSchema[field] || {},
       path: (path || []).concat(field),
       name: (name && name !== '__ROOT__') ? `${name}[${field}]` : field,
       id: getId(rootId, (name && name !== '__ROOT__') ? `${name}[${field}]` : field),

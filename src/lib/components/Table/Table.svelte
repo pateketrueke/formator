@@ -97,7 +97,7 @@
   });
 
   onMount(() => {
-    if (actions[model]) reload();
+    if (actions[model] && !payload) reload();
 
     setTimeout(() => {
       dispatch('change', result);
