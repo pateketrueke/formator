@@ -3,6 +3,7 @@
   import { In } from 'svql';
 
   export let visible = false;
+  export let noclosing = false;
   export let notitlebar = false;
 
   let uiSchema = {};
@@ -23,6 +24,9 @@
 </script>
 
 <style>
+  :global(form) {
+    padding: 0 !important;
+  }
   form > div {
     padding: 0;
     border: 0;
@@ -30,21 +34,26 @@
 </style>
 
 <In modal autofocus bind:visible on:cancel={close} on:submit={save}>
-  <div slot="before" data-before>
-    {#if !notitlebar}
-      <div data-titlebar>
+  {#if !notitlebar}
+    <div data-titlebar>
+      {#if !noclosing}
         <button data-cancel nofocus type="button" on:click={close}>&times;</button>
+      {/if}
 
-        {#if uiSchema['ui:caption']}
-          <h3>{uiSchema['ui:caption']}</h3>
-        {/if}
-      </div>
-    {/if}
+      {#if uiSchema['ui:caption']}
+        <h3>{uiSchema['ui:caption']}</h3>
+      {/if}
+    </div>
+  {/if}
 
-    <slot name="nested" />
+  <slot name="before" />
 
+  <div data-body>
     <slot />
   </div>
+
+  <slot name="after" />
+
   <div data-actions>
     <button data-is="close" type="button" on:click={close}>
       <span>{uiSchema['ui:cancel'] || 'Cancel'}</span>

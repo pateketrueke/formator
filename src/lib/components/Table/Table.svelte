@@ -17,7 +17,6 @@
   export let uiSchema = {};
   export let schema = {};
   export let value = {};
-  export let keys = [];
 
   export let association = {
     singular: 'Item',
@@ -190,7 +189,5 @@
 </table>
 
 <Modal {uiSchema} notitlebar updating={isUpdate} resource={model} bind:visible={isOpen} on:save={sync}>
-  <div slot="nested" data-content>
-    <Field name="__ROOT__" bind:result={value} {...fieldProps} />
-  </div>
+  <Field name="__ROOT__" bind:result={value} {...fieldProps} />
 </Modal>

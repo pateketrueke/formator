@@ -185,5 +185,5 @@
 {/if}
 
 <Modal notitlebar bind:visible={addSub} on:cancel={() => { console.log('CANCEL') }} on:save={() => { console.log('SAVE') }}>
-  <div data-content>FIXME</div>
+  <input type="number" required />
 </Modal>
