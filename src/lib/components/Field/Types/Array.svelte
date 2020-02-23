@@ -18,6 +18,9 @@
   const { actions, refs } = getContext('__ROOT__');
   const dispatch = createEventDispatcher();
 
+  // FIXME
+  let addSub;
+
   let headers = [];
   let items = [];
   let keys = [];
@@ -68,6 +71,7 @@
     // this method should open a inner modal with a search-bar, or inline form
     // to append a new resource based on its schema...
     console.log('open!', actions[through]);
+    addSub = true;
   }
 
   function sync() { console.log('sync'); }
@@ -179,3 +183,7 @@
     </div>
   {/if}
 {/if}
+
+<Modal notitlebar bind:visible={addSub} on:cancel={() => { console.log('CANCEL') }} on:save={() => { console.log('SAVE') }}>
+  <div data-content>FIXME</div>
+</Modal>

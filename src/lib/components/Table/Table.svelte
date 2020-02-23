@@ -189,6 +189,8 @@
   {/if}
 </table>
 
-<Modal {uiSchema} updating={isUpdate} resource={model} bind:visible={isOpen} on:save={sync}>
-  <Field name="__ROOT__" bind:result={value} {...fieldProps} />
+<Modal {uiSchema} notitlebar updating={isUpdate} resource={model} bind:visible={isOpen} on:save={sync}>
+  <div slot="nested" data-content>
+    <Field name="__ROOT__" bind:result={value} {...fieldProps} />
+  </div>
 </Modal>
