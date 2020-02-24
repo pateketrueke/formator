@@ -173,7 +173,7 @@
 
             <div>
               {#if schema.modelName}
-                FINDER: {schema.modelName}
+                <Finder {name} {field} {model} {schema} {through} {uiSchema} {current} {association} />
               {:else}
                 <Field
                   {path} {name} {field} {model} {schema} {through} {uiSchema}

@@ -26,6 +26,7 @@
   let keys = [];
 
   let subProps = {};
+  let backup = null;
   let isOpen = false;
   let isUpdate = false;
   let isFixed;
@@ -55,13 +56,16 @@
   function open() {
     // this method should open a inner modal with a search-bar, or inline form
     // to append a new resource based on its schema...
-    console.log('open!', actions[through]);
+    console.log('open!', value);
+    backup = [...value];
     isOpen = true;
   }
 
   function sync() { console.log('sync'); }
   function edit() { console.log('edit'); }
-  function reset() { console.log('reset'); }
+  function reset() {
+    value = backup;
+  }
 
   function remove(key) {
     const offset = items.findIndex(x => x.key === key);
@@ -178,9 +182,6 @@
       <button data-is="append" type="button" on:click={open}>
         <span>{uiSchema['ui:append'] || `Add ${association.singular}`}</span>
       </button>
-      <Modal updating={isUpdate} resource={association.singular} bind:visible={isOpen} on:cancel={reset} on:save={sync}>
-        <Field name={`${name}[${items.length}]`} bind:result={value} {...subProps} {association} {model} {parent} {through} />
-      </Modal>
     {:else}
       <button class="nobreak" data-is="append" data-before="&plus;" type="button" on:click={append}>
         <span>{uiSchema['ui:append'] || 'Add item'}</span>
@@ -188,3 +189,7 @@
     {/if}
   </div>
 {/if}
+
+<Modal updating={isUpdate} resource={association.singular} bind:visible={isOpen} on:cancel={reset} on:save={sync}>
+  <Field name={`${name}[${items.length}]`} bind:result={value} {...subProps} {association} {model} {parent} {through} />
+</Modal>
