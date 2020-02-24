@@ -173,10 +173,13 @@
 
             <div>
               {#if schema.modelName}
-                <Finder {name} {field} {model} {schema} {through} {uiSchema} {current} {association} />
+                <Finder
+                  {id} {name} {field} {model} {schema} {through} {uiSchema} {current} {association}
+                  on:change={e => set(key, e.detail)}
+                />
               {:else}
                 <Field
-                  {path} {name} {field} {model} {schema} {through} {uiSchema}
+                  {id} {path} {name} {field} {model} {schema} {through} {uiSchema}
                   on:change={e => set(key, e.detail)}
                   parent={fixedResult}
                   result={current}

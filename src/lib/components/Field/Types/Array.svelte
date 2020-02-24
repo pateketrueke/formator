@@ -18,6 +18,8 @@
   export let schema = { type: 'array' };
   export let result = defaultValue(schema);
 
+  // FIXME: not longer trigger rebuild on change...
+
   const { actions, refs } = getContext('__ROOT__');
   const dispatch = createEventDispatcher();
 
@@ -26,7 +28,8 @@
   let keys = [];
 
   let subProps = {};
-  let backup = null;
+  let backup = [];
+
   let isOpen = false;
   let isUpdate = false;
   let isFixed;
@@ -56,7 +59,13 @@
   function open() {
     // this method should open a inner modal with a search-bar, or inline form
     // to append a new resource based on its schema...
-    console.log('open!', value);
+    subProps = {
+      schema: refs[through],
+      uiSchema: uiSchema[through] || {},
+    };
+
+    if (!Array.isArray(value)) value = [];
+
     backup = [...value];
     isOpen = true;
   }
@@ -87,13 +96,6 @@
 
   $: if (!Array.isArray(result)) {
     result = [];
-  }
-
-  $: if (isOpen) {
-    subProps = {
-      schema: refs[through],
-      uiSchema: uiSchema[through] || {},
-    };
   }
 
   $: {

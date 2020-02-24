@@ -1,32 +1,56 @@
 <script>
-  import { getContext } from 'svelte';
+  import { getContext, createEventDispatcher } from 'svelte';
 
+  import { API } from '../../shared/utils';
   import Value from '../Value';
 
-  // export let name = null;
-  // export let field = null;
-  // export let model = null;
-
-  // export let through = null;
-  export let current = null;
-
+  export let id = null;
+  export let name = null;
   export let schema = {};
   export let uiSchema = {};
   export let association = {};
 
+  let t;
+  let layer;
+  let search;
+  let current;
   let options;
   let items = [];
-  let status = '';
+  let status = 'idle';
   let isOpen = false;
   let isClear = !current;
 
   const { actions, refs } = getContext('__ROOT__');
+  const dispatch = createEventDispatcher();
 
-  function open() { console.log('open'); }
-  function close() { console.log('close'); }
+  function reset(e) {
+    if (e.target === layer) isOpen = false;
+  }
 
-  function input(e) {
-    console.log(actions[schema.modelName]);
+  function open() {
+    if (!isOpen) isOpen = true;
+  }
+
+  function find() {
+    const req = { ...actions[association.model].index };
+
+    if (search && search.value) {
+      req.path += `?search=${search.value}`
+    }
+
+    status = 'pending';
+
+    API.call(req).then(data => {
+      if (data.status === 'ok') {
+        status = 'ready';
+        items = data.result;
+      }
+    });
+  }
+
+  function input() {
+    clearTimeout(t);
+    t = setTimeout(find, 120);
   }
 
   function cancel(e) {
@@ -37,33 +61,46 @@
     isClear = e.target.value.length === 0;
   }
 
-  function select() { console.log('select'); }
+  function select(e) {
+    current = e.target.dataset.value;
+    isOpen = false;
+  }
+
+  $: if (isOpen) input();
+  $: dispatch('change', current);
 </script>
 
 <div data-finder class={status}>
-  <input
+  <input {id}
     type="search"
     data-is="finder"
+    bind:this={search}
     on:focus={open}
-    on:blur={close}
     on:input={input}
     on:keyup={cancel}
     on:keydown={keydown}
     placeholder="{uiSchema['ui:find'] || `Find ${association.singular}`}"
   />
+
+  <input {name} type="hidden" value={current} />
+
   {#if status === 'ready' && !items.length}
     <small>{uiSchema['ui:empty'] || `${association.plural} were not found`}</small>
   {/if}
+
   {#if isOpen}
-    <div data-autocomplete>
+    <div bind:this={layer} on:click={reset} data-autocomplete>
       <ul bind:this={options} on:click={select}>
         {#each items as value (value)}
-          <li><Value {value} {schema} {uiSchema} /></li>
+          <li data-value={value[schema.references.key]}>
+            <Value {value} {uiSchema} schema={refs[schema.modelName]} />
+          </li>
         {/each}
       </ul>
     </div>
   {/if}
-  <div data-separator>
-    <span>{uiSchema['ui:details'] || `${association.singular} details`}</span>
-  </div>
+
+  {#if typeof current !== 'undefined' && current !== null}
+    <small data-selected>{current}</small>
+  {/if}
 </div>

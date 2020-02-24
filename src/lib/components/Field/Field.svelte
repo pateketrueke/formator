@@ -11,6 +11,7 @@
 
   export let path = [];
   export let name = 'field';
+  export let id = null;
   export let model = null;
   export let result = null;
   export let parent = null;
@@ -66,7 +67,7 @@
 </script>
 
 <svelte:component
-  {err} {path} {name} {model} {parent} {schema} {uiSchema} {rootId} {through} {association}
+  {id} {err} {path} {name} {model} {parent} {schema} {uiSchema} {rootId} {through} {association}
   on:change on:sync={validate} bind:result
   this={propType}
 />

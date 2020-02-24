@@ -132,6 +132,10 @@ input[readonly]:hover {
   border: 1px solid rgba(0, 0, 0, .1);
 }
 
+input {
+  width: inherit;
+}
+
 button {
   border-style: dashed;
 }
@@ -152,11 +156,6 @@ label {
       margin-left: @sp2;
     }
   }
-}
-
-input {
-  width: inherit;
-  padding: @sp1;
 }
 
 [data-type=boolean] {
