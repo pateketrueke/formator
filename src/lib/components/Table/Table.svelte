@@ -37,6 +37,7 @@
   let offset = -1;
   let isUpdate = false;
   let isOpen = false;
+  let backup = null;
   let payload = result.length !== 0;
 
   function getItems() {
@@ -72,6 +73,7 @@
   function edit(newOffset) {
     isOpen = true;
     offset = newOffset;
+    backup = { ...result[offset] };
     value = offset >= 0 ? result[offset] : defaultValue(schema);
   }
 
@@ -84,6 +86,10 @@
   function remove(offset) {
     result = result.filter((_, k) => k !== offset);
     items = getItems();
+  }
+
+  function reset() {
+    result[offset] = backup;
   }
 
   function sync() {
@@ -188,6 +194,6 @@
   {/if}
 </table>
 
-<Modal {uiSchema} updating={isUpdate} resource={model} bind:visible={isOpen} on:save={sync}>
+<Modal {uiSchema} updating={isUpdate} resource={model} bind:visible={isOpen} on:save={sync} on:cancel={reset}>
   <Field name="__ROOT__" bind:result={value} {...fieldProps} />
 </Modal>

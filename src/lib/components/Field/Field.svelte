@@ -7,7 +7,7 @@
 </script>
 
 <script>
-  import { onMount, getContext } from 'svelte';
+  import { getContext } from 'svelte';
 
   export let path = [];
   export let name = 'field';
@@ -24,7 +24,9 @@
   let err = null;
   let propType = null;
 
-  onMount(() => {
+  function validate() {}
+
+  $: {
     let _schema = reduceRefs(schema, refs);
 
     if (refs[name] && !schema.id) {
@@ -52,19 +54,15 @@
     }
 
     schema = _schema;
-  });
-
-  $: {
-    if (err) {
-      propType = ErrorType;
-    } else if (!schema) {
-      propType = LoaderType;
-    } else if (components) {
-      propType = components[schema.type || 'object'] || ErrorType;
-    }
   }
 
-  function validate() {}
+  $: if (err) {
+    propType = ErrorType;
+  } else if (!schema) {
+    propType = LoaderType;
+  } else if (components) {
+    propType = components[schema.type || 'object'] || ErrorType;
+  }
 </script>
 
 <svelte:component

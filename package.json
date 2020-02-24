@@ -19,7 +19,7 @@
     "concat:bundle": "concat dist/ajv.js dist/main.umd.js -o dist/bundle.js",
     "postdist": "npm run copy:ajv && npm run concat:bundle",
     "prepublishOnly": "npm test && npm run build",
-    "lint": "eslint --ext js,svelte lib src e2e *.js",
+    "lint": "eslint --ext js,svelte lib src e2e",
     "test": "npm run lint && npm run test:e2e --",
     "test:e2e": "BASE_URL=http://localhost:3001 testcafe ${BROWSER:-chrome:headless}"
   },

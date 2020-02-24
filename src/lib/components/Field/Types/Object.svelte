@@ -5,7 +5,7 @@
 </script>
 
 <script>
-  import { onMount, getContext, createEventDispatcher } from 'svelte';
+  import { getContext, createEventDispatcher } from 'svelte';
   import { randId } from '../../../shared/utils';
   import { defaultValue, getId } from '../utils';
 
@@ -46,7 +46,7 @@
 
     const isRef = subSchema.modelName === model;
     const isHidden = uiSchema[field] && uiSchema[field]['ui:hidden'];
-    const currentValue = isRef ? parent[field] : result[field];
+    const currentValue = ((isRef && parent ? parent : result) || {})[field];
 
     return {
       key,
@@ -60,29 +60,6 @@
       id: getId(rootId, (name && name !== '__ROOT__') ? `${name}[${field}]` : field),
     };
   }
-
-  onMount(() => {
-    if (ref && ref.references) {
-      ref.references.primaryKeys.forEach(key => {
-        const fk = `${schema.id}${ucfirst(key.prop)}`;
-
-        fixedResult[fk] = fixedResult[fk] || result[key.prop];
-      });
-    }
-
-    // FIXME: use ui:something to re-order fields...
-    const props = Object.entries(schema.properties)
-      .map(([field, subSchema], offset) => getItemFor(field, offset, subSchema), []);
-
-    hidden = props.filter(x => x.hidden);
-    fields = props.filter(x => !x.hidden).sort((a, b) => {
-      if (!uiSchema['ui:order']) {
-        return 0;
-      }
-
-      return uiSchema['ui:order'].indexOf(b[0]) - uiSchema['ui:order'].indexOf(a[0]);
-    });
-  });
 
   function append() {
     const nextSchema = (schema.additionalProperties !== true && schema.additionalProperties) || { type: 'string' };
@@ -143,6 +120,32 @@
     result[fields.find(x => x.key === key).field] = value;
   }
 
+  $: if (Object.prototype.toString.call(result) !== '[object Object]') {
+    result = {};
+  }
+
+  $: if (ref && ref.references) {
+    ref.references.primaryKeys.forEach(key => {
+      const fk = `${schema.id}${ucfirst(key.prop)}`;
+
+      fixedResult[fk] = fixedResult[fk] || result[key.prop];
+    });
+  }
+
+  $: {
+    const props = uiSchema['ui:props'] || (schema.properties ? Object.keys(schema.properties) : [])
+      .map((k, i) => getItemFor(k, i, schema.properties[k]));
+
+    hidden = props.filter(x => x.hidden);
+    fields = props.filter(x => !x.hidden).sort((a, b) => {
+      if (!uiSchema['ui:order']) {
+        return 0;
+      }
+
+      return uiSchema['ui:order'].indexOf(b[0]) - uiSchema['ui:order'].indexOf(a[0]);
+    });
+  }
+
   $: dispatch('change', result);
 </script>
 
@@ -159,7 +162,7 @@
       />
     {/each}
     <ul>
-      {#each fields as { id, key, path, name, field, isFixed, schema, uiSchema } (key)}
+      {#each fields as { id, key, path, name, field, isFixed, schema, uiSchema, current } (key)}
         <li data-type={schema.type || 'object'}>
           <div data-field={`/${path.join('/')}`}>
             {#if isFixed}
@@ -176,7 +179,7 @@
                   {path} {name} {field} {model} {schema} {through} {uiSchema}
                   on:change={e => set(key, e.detail)}
                   parent={fixedResult}
-                  result={result[field]}
+                  result={current}
                 />
               {/if}
             </div>

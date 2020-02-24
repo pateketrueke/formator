@@ -1,5 +1,5 @@
 <script>
-  import { onMount, getContext, createEventDispatcher } from 'svelte';
+  import { getContext, createEventDispatcher } from 'svelte';
   import { randId } from '../../../shared/utils';
   import { defaultValue } from '../utils';
 
@@ -26,14 +26,9 @@
   let keys = [];
 
   let subProps = {};
-  let nextValue = {};
-  let nextProps = {};
-  let nextOffset = 0;
-
   let isOpen = false;
   let isUpdate = false;
   let isFixed;
-  let isSub;
 
   function getItemBy(offset, subSchema) {
     const key = keys[offset] || (keys[offset] = randId());
@@ -56,24 +51,12 @@
     || {};
   }
 
-  onMount(() => {
-    isFixed = Array.isArray(schema.items);
-
-    if (isFixed) {
-      items = schema.items.map((_, offset) => getItemBy(offset, getSubSchema(offset)));
-    } else {
-      items = result.map((_, offset) => getItemBy(offset, schema.items || {}));
-    }
-
-    keys = items.map(x => x.key);
-  });
-
   // FIXME: implement these methods to responds against API calls...
   function open() {
     // this method should open a inner modal with a search-bar, or inline form
     // to append a new resource based on its schema...
     console.log('open!', actions[through]);
-    isSub = true;
+    isOpen = true;
   }
 
   function sync() { console.log('sync'); }
@@ -98,16 +81,28 @@
     items = items.concat(getItemBy(offset, subSchema));
   }
 
-  $: if (isSub) {
+  $: if (!Array.isArray(result)) {
+    result = [];
+  }
+
+  $: if (isOpen) {
     subProps = {
-      model,
-      parent,
-      through,
       schema: refs[through],
       uiSchema: uiSchema[through] || {},
     };
   }
 
+  $: {
+    if (isFixed) {
+      items = schema.items.map((_, offset) => getItemBy(offset, getSubSchema(offset)));
+    } else {
+      items = result.map((_, offset) => getItemBy(offset, schema.items || {}));
+    }
+
+    keys = items.map(x => x.key);
+  }
+
+  $: isFixed = Array.isArray(schema.items);
   $: dispatch('change', result);
 </script>
 
@@ -177,25 +172,19 @@
   <div data-empty>{uiSchema['ui:empty'] || 'No items'}</div>
 {/if}
 
-{#if schema.additionalItems !== false}
-  {#if uiSchema['ui:append'] !== false}
-    <div>
-      {#if through}
-        <button data-is="append" type="button" on:click={open}>
-          <span>{uiSchema['ui:append'] || `Add ${association.singular}`}</span>
-        </button>
-        <Modal {uiSchema} updating={isUpdate} resource={association.singular} bind:visible={isOpen} on:save={sync} on:close={reset}>
-          <Field {...nextProps} {association} {through} bind:result={nextValue} name={`${name}[${nextOffset}]`} />
-        </Modal>
-      {:else}
-        <button class="nobreak" data-is="append" data-before="&plus;" type="button" on:click={append}>
-          <span>{uiSchema['ui:append'] || 'Add item'}</span>
-        </button>
-      {/if}
-    </div>
-  {/if}
+{#if schema.additionalItems !== false && uiSchema['ui:append'] !== false}
+  <div>
+    {#if through}
+      <button data-is="append" type="button" on:click={open}>
+        <span>{uiSchema['ui:append'] || `Add ${association.singular}`}</span>
+      </button>
+      <Modal updating={isUpdate} resource={association.singular} bind:visible={isOpen} on:cancel={reset} on:save={sync}>
+        <Field name={`${name}[${items.length}]`} bind:result={value} {...subProps} {association} {model} {parent} {through} />
+      </Modal>
+    {:else}
+      <button class="nobreak" data-is="append" data-before="&plus;" type="button" on:click={append}>
+        <span>{uiSchema['ui:append'] || 'Add item'}</span>
+      </button>
+    {/if}
+  </div>
 {/if}
-
-<Modal bind:visible={isSub} on:cancel={() => { console.log('CANCEL') }} on:save={() => { console.log('SAVE') }}>
-  <Field name="__REF__" bind:result={value} {...subProps} />
-</Modal>
