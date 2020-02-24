@@ -6,6 +6,8 @@
 
   export let id = null;
   export let name = null;
+  export let current = null;
+
   export let schema = {};
   export let uiSchema = {};
   export let association = {};
@@ -15,7 +17,7 @@
   let search;
   let options;
   let offset = -1;
-  let current = {};
+  let data = {};
   let items = [];
   let status = 'idle';
   let isOpen = false;
@@ -51,7 +53,7 @@
 
   function clear() {
     offset = -1;
-    current = {};
+    data = {};
   }
 
   function input() {
@@ -60,30 +62,42 @@
   }
 
   function cancel(e) {
-    if (e.keyCode === 27 && !isClear) e.stopPropagation();
+    if (e.keyCode === 27 && !isClear) {
+      e.stopPropagation();
+      isOpen = false;
+    }
   }
 
   function keydown(e) {
-    isClear = e.target.value.length === 0;
-
     if (e.keyCode === 38) {
-      offset = Math.max(0, offset - 1);
+      e.preventDefault();
+      if (!isOpen) isOpen = true;
+      else offset = Math.max(0, offset - 1);
     }
 
     if (e.keyCode === 40) {
-      offset = Math.min(items.length - 1, offset + 1);
+      e.preventDefault();
+      if (!isOpen) isOpen = true;
+      else offset = Math.min(items.length - 1, offset + 1);
+    }
+
+    if (e.keyCode === 9) {
+      isOpen = false;
     }
 
     if (offset >= 0 && e.keyCode === 13) {
-      current = items[offset];
-      e.preventDefault();
+      if (isOpen) e.preventDefault();
+      data = items[offset];
+      isOpen = false;
     }
+
+    isClear = e.target.value.length === 0 && !isOpen;
   }
 
   function select(e) {
     for (let i = 0, c = options.children.length; i < c; i++) {
       if (options.children[i] === e.target) {
-        current = items[i];
+        data = items[i];
         offset = i;
         break;
       }
@@ -92,7 +106,10 @@
   }
 
   $: if (isOpen) input();
-  $: dispatch('change', current);
+  $: dispatch('change', data);
+
+  // FIXME: recover from passed values...
+  $: console.log({data,current});
 </script>
 
 <div data-finder class={status}>
@@ -107,7 +124,7 @@
     placeholder="{uiSchema['ui:find'] || `Find ${association.singular}`}"
   />
 
-  <input {name} type="hidden" value={current[schema.references.key]} />
+  <input {name} type="hidden" value={data[schema.references.key]} />
 
   {#if status === 'ready' && !items.length}
     <small>{uiSchema['ui:empty'] || `${association.plural} were not found`}</small>
@@ -117,7 +134,7 @@
     <div bind:this={layer} on:click={reset} data-autocomplete>
       <ul bind:this={options} on:click={select}>
         {#each items as value, k (value)}
-          <li class:active={k === offset} data-value={value[schema.references.key]}>
+          <li class:selected={k === offset} data-value={value[schema.references.key]}>
             <Value {value} {uiSchema} schema={refs[schema.modelName]} />
           </li>
         {/each}
@@ -125,7 +142,7 @@
     </div>
   {/if}
 
-  {#if typeof current[schema.references.key] !== 'undefined'}
-    <small data-selected on:click={clear}>{current[schema.references.key]}</small>
+  {#if typeof data[schema.references.key] !== 'undefined'}
+    <small data-selected on:click={clear}>{data[schema.references.key]}</small>
   {/if}
 </div>

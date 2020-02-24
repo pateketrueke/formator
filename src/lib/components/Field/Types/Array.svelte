@@ -70,7 +70,11 @@
     isOpen = true;
   }
 
-  function sync() { console.log('sync'); }
+  function sync() {
+    // FIXME: extract/append accordingly!
+    console.log({value, schema, model, through, subProps});
+  }
+
   function edit() { console.log('edit'); }
   function reset() {
     value = backup;
