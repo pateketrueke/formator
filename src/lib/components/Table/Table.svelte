@@ -107,7 +107,7 @@
 
   $: items = getItems();
   $: headers = getHeaders();
-  $: fieldProps = { schema, uiSchema };
+  $: fieldProps = { model, schema, uiSchema };
 </script>
 
 <table>
@@ -188,6 +188,6 @@
   {/if}
 </table>
 
-<Modal {uiSchema} notitlebar updating={isUpdate} resource={model} bind:visible={isOpen} on:save={sync}>
+<Modal {uiSchema} updating={isUpdate} resource={model} bind:visible={isOpen} on:save={sync}>
   <Field name="__ROOT__" bind:result={value} {...fieldProps} />
 </Modal>

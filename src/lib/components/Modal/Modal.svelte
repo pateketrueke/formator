@@ -3,8 +3,6 @@
   import { In } from 'svql';
 
   export let visible = false;
-  export let noclosing = false;
-  export let notitlebar = false;
 
   let uiSchema = {};
   let updating = false;
@@ -34,15 +32,13 @@
 </style>
 
 <In modal autofocus bind:visible on:cancel={close} on:submit={save}>
-  {#if !notitlebar}
+  {#if uiSchema['ui:caption']}
     <div data-titlebar>
-      {#if !noclosing}
+      {#if !uiSchema['ui:closing']}
         <button data-cancel nofocus type="button" on:click={close}>&times;</button>
       {/if}
 
-      {#if uiSchema['ui:caption']}
-        <h3>{uiSchema['ui:caption']}</h3>
-      {/if}
+      <h3>{uiSchema['ui:caption']}</h3>
     </div>
   {/if}
 

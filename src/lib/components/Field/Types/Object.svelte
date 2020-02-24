@@ -1,3 +1,9 @@
+<script context="module">
+  function ucfirst(value) {
+    return value[0].toUpperCase() + value.substr(1);
+  }
+</script>
+
 <script>
   import { onMount, getContext, createEventDispatcher } from 'svelte';
   import { randId } from '../../../shared/utils';
@@ -11,8 +17,10 @@
   export let schema = { type: 'object' };
   export let result = defaultValue(schema);
 
-  export let name;
   export let path = [];
+  export let name = null;
+  export let model = null;
+  export let parent = null;
   export let through = null;
   export let association = {};
 
@@ -36,11 +44,17 @@
       subSchema = refs[subSchema.$ref];
     }
 
+    const isRef = subSchema.modelName === model;
+    const isHidden = uiSchema[field] && uiSchema[field]['ui:hidden'];
+    const currentValue = isRef ? parent[field] : result[field];
+
     return {
       key,
       field,
       schema: subSchema,
       uiSchema: uiSchema[field] || {},
+      current: isRef && currentValue === 0 ? null : currentValue,
+      hidden: isHidden || isRef,
       path: (path || []).concat(field),
       name: (name && name !== '__ROOT__') ? `${name}[${field}]` : field,
       id: getId(rootId, (name && name !== '__ROOT__') ? `${name}[${field}]` : field),
@@ -50,26 +64,24 @@
   onMount(() => {
     if (ref && ref.references) {
       ref.references.primaryKeys.forEach(key => {
-        const fk = `${schema.id}${key.prop[0].toUpperCase() + key.prop.substr(1)}`;
+        const fk = `${schema.id}${ucfirst(key.prop)}`;
 
         fixedResult[fk] = fixedResult[fk] || result[key.prop];
       });
     }
 
-    hidden = !schema.properties ? [] : Object.entries(schema.properties)
-      .filter(x => uiSchema[x[0]] && uiSchema[x[0]]['ui:hidden'])
+    // FIXME: use ui:something to re-order fields...
+    const props = Object.entries(schema.properties)
       .map(([field, subSchema], offset) => getItemFor(field, offset, subSchema), []);
 
-    fields = !schema.properties ? [] : Object.entries(schema.properties)
-      .filter(x => (uiSchema[x[0]] ? !uiSchema[x[0]]['ui:hidden'] : true))
-      .sort((a, b) => {
-        if (!uiSchema['ui:order']) {
-          return 0;
-        }
+    hidden = props.filter(x => x.hidden);
+    fields = props.filter(x => !x.hidden).sort((a, b) => {
+      if (!uiSchema['ui:order']) {
+        return 0;
+      }
 
-        return uiSchema['ui:order'].indexOf(b[0]) - uiSchema['ui:order'].indexOf(a[0]);
-      })
-      .map(([field, subSchema], offset) => getItemFor(field, offset, subSchema), []);
+      return uiSchema['ui:order'].indexOf(b[0]) - uiSchema['ui:order'].indexOf(a[0]);
+    });
   });
 
   function append() {
@@ -136,58 +148,47 @@
 
 <fieldset>
   {#if fields.length}
-    {#each hidden as { id, key, path, name, field, schema } (key)}
+    {#each hidden as { id, key, path, name, field, schema, current } (key)}
       <input
         {id}
         {name}
         type="hidden"
         data-type={schema.type || 'object'}
         data-field={`/${path.join('/')}`}
-        bind:value={result[field]}
+        bind:value={current}
       />
     {/each}
     <ul>
-      {#if through && through !== schema.id}
-        {#each fields as { key, path, field, schema, uiSchema } (key)}
-          <li data-type={schema.type || 'object'}>
-            <div data-field={`/${path.join('/')}`}>
-              <span>{uiSchema['ui:label'] || field}</span>
-              <Value {uiSchema} value={result[field]} />
-            </div>
-          </li>
-        {/each}
-      {:else}
-        {#each fields as { id, key, path, name, field, isFixed, schema, uiSchema } (key)}
-          <li data-type={schema.type || 'object'}>
-            <div data-field={`/${path.join('/')}`}>
-              {#if isFixed}
-                <input type="text" on:change={e => prop(e, key)} />
+      {#each fields as { id, key, path, name, field, isFixed, schema, uiSchema } (key)}
+        <li data-type={schema.type || 'object'}>
+          <div data-field={`/${path.join('/')}`}>
+            {#if isFixed}
+              <input type="text" on:change={e => prop(e, key)} />
+            {:else}
+              <label for={id}>{uiSchema['ui:label'] || field}</label>
+            {/if}
+
+            <div>
+              {#if schema.modelName}
+                FINDER: {schema.modelName}
               {:else}
-                <label for={id}>{uiSchema['ui:label'] || field}</label>
-              {/if}
-
-              <div>
-                {#if through && field === schema.id}
-                  <Finder {id} {field} {schema} {uiSchema} {association} on:change={e => sync(e, key)} />
-                {/if}
-
                 <Field
-                  {path} {name} {field} {schema} {through} {uiSchema}
+                  {path} {name} {field} {model} {schema} {through} {uiSchema}
                   on:change={e => set(key, e.detail)}
                   parent={fixedResult}
                   result={result[field]}
                 />
-              </div>
-
-              {#if isFixed && uiSchema['ui:remove'] !== false}
-                <button data-is="remove" data-before="&times;" type="button" on:click={() => remove(key)}>
-                  <span>{uiSchema['ui:remove'] || 'Remove prop'}</span>
-                </button>
               {/if}
             </div>
-          </li>
-        {/each}
-      {/if}
+
+            {#if isFixed && uiSchema['ui:remove'] !== false}
+              <button data-is="remove" data-before="&times;" type="button" on:click={() => remove(key)}>
+                <span>{uiSchema['ui:remove'] || 'Remove prop'}</span>
+              </button>
+            {/if}
+          </div>
+        </li>
+      {/each}
     </ul>
   {:else}
     <div data-empty>{uiSchema['ui:empty'] || 'No props'}</div>

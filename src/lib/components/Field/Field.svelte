@@ -11,12 +11,13 @@
 
   export let path = [];
   export let name = 'field';
+  export let model = null;
+  export let result = null;
   export let parent = null;
+  export let through = null;
   export let schema = {};
   export let uiSchema = {};
-  export let through = null;
   export let association = {};
-  export let result;
 
   const { refs, rootId } = getContext('__ROOT__');
 
@@ -67,7 +68,7 @@
 </script>
 
 <svelte:component
-  {err} {path} {name} {parent} {schema} {uiSchema} {rootId} {through} {association}
+  {err} {path} {name} {model} {parent} {schema} {uiSchema} {rootId} {through} {association}
   on:change on:sync={validate} bind:result
   this={propType}
 />

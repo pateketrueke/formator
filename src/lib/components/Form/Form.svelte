@@ -10,6 +10,7 @@
   export let uiSchema = {};
 
   export let name = null;
+  export let model = null;
   export let action = null;
   export let actions = null;
   export let onsubmit = null;
@@ -64,10 +65,10 @@
 <form on:submit={save} {...formProps}>
   {#if !hasChildren}
     <div data-field="/">
-      <Field name={name || 'value'} bind:result {schema} {uiSchema} />
+      <Field name={name || 'value'} bind:result {model} {schema} {uiSchema} />
     </div>
   {:else}
-    <Field name={name || 'value'} bind:result {schema} {uiSchema} />
+    <Field name={name || 'value'} bind:result {model} {schema} {uiSchema} />
   {/if}
   {#if actions}
     <div>

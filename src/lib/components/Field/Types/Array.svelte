@@ -8,9 +8,12 @@
   import Modal from '../../Modal';
 
   export let name;
+  export let model;
   export let through;
   export let association;
   export let path = [];
+  export let value = [];
+  export let parent = null;
   export let uiSchema = {};
   export let schema = { type: 'array' };
   export let result = defaultValue(schema);
@@ -18,13 +21,11 @@
   const { actions, refs } = getContext('__ROOT__');
   const dispatch = createEventDispatcher();
 
-  // FIXME
-  let addSub;
-
   let headers = [];
   let items = [];
   let keys = [];
 
+  let subProps = {};
   let nextValue = {};
   let nextProps = {};
   let nextOffset = 0;
@@ -32,6 +33,7 @@
   let isOpen = false;
   let isUpdate = false;
   let isFixed;
+  let isSub;
 
   function getItemBy(offset, subSchema) {
     const key = keys[offset] || (keys[offset] = randId());
@@ -71,7 +73,7 @@
     // this method should open a inner modal with a search-bar, or inline form
     // to append a new resource based on its schema...
     console.log('open!', actions[through]);
-    addSub = true;
+    isSub = true;
   }
 
   function sync() { console.log('sync'); }
@@ -94,6 +96,16 @@
     keys = keys.concat(newKey);
     result = result.concat(defaultValue(subSchema));
     items = items.concat(getItemBy(offset, subSchema));
+  }
+
+  $: if (isSub) {
+    subProps = {
+      model,
+      parent,
+      through,
+      schema: refs[through],
+      uiSchema: uiSchema[through] || {},
+    };
   }
 
   $: dispatch('change', result);
@@ -184,6 +196,6 @@
   {/if}
 {/if}
 
-<Modal notitlebar bind:visible={addSub} on:cancel={() => { console.log('CANCEL') }} on:save={() => { console.log('SAVE') }}>
-  <input type="number" required />
+<Modal bind:visible={isSub} on:cancel={() => { console.log('CANCEL') }} on:save={() => { console.log('SAVE') }}>
+  <Field name="__REF__" bind:result={value} {...subProps} />
 </Modal>
