@@ -11,9 +11,8 @@
   right: 2px;
   z-index: 2;
   color: @dark;
-  padding: 0 @sp1;
   position: absolute;
-  pointer-events: none;
+  padding: 0 (@sp1 / 2);
   background-color: @high;
 }
 
@@ -51,7 +50,7 @@
     }
 
     &.active {
-      background-color: @mid;
+      background-color: @high;
     }
 
     > * {

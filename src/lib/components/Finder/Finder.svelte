@@ -13,12 +13,13 @@
   let t;
   let layer;
   let search;
-  let current;
   let options;
+  let offset = -1;
+  let current = {};
   let items = [];
   let status = 'idle';
   let isOpen = false;
-  let isClear = !current;
+  let isClear = true;
 
   const { actions, refs } = getContext('__ROOT__');
   const dispatch = createEventDispatcher();
@@ -35,7 +36,7 @@
     const req = { ...actions[association.model].index };
 
     if (search && search.value) {
-      req.path += `?search=${search.value}`
+      req.path += `?search=${search.value}`;
     }
 
     status = 'pending';
@@ -46,6 +47,11 @@
         items = data.result;
       }
     });
+  }
+
+  function clear() {
+    offset = -1;
+    current = {};
   }
 
   function input() {
@@ -59,10 +65,29 @@
 
   function keydown(e) {
     isClear = e.target.value.length === 0;
+
+    if (e.keyCode === 38) {
+      offset = Math.max(0, offset - 1);
+    }
+
+    if (e.keyCode === 40) {
+      offset = Math.min(items.length - 1, offset + 1);
+    }
+
+    if (offset >= 0 && e.keyCode === 13) {
+      current = items[offset];
+      e.preventDefault();
+    }
   }
 
   function select(e) {
-    current = e.target.dataset.value;
+    for (let i = 0, c = options.children.length; i < c; i++) {
+      if (options.children[i] === e.target) {
+        current = items[i];
+        offset = i;
+        break;
+      }
+    }
     isOpen = false;
   }
 
@@ -82,7 +107,7 @@
     placeholder="{uiSchema['ui:find'] || `Find ${association.singular}`}"
   />
 
-  <input {name} type="hidden" value={current} />
+  <input {name} type="hidden" value={current[schema.references.key]} />
 
   {#if status === 'ready' && !items.length}
     <small>{uiSchema['ui:empty'] || `${association.plural} were not found`}</small>
@@ -91,8 +116,8 @@
   {#if isOpen}
     <div bind:this={layer} on:click={reset} data-autocomplete>
       <ul bind:this={options} on:click={select}>
-        {#each items as value (value)}
-          <li data-value={value[schema.references.key]}>
+        {#each items as value, k (value)}
+          <li class:active={k === offset} data-value={value[schema.references.key]}>
             <Value {value} {uiSchema} schema={refs[schema.modelName]} />
           </li>
         {/each}
@@ -100,7 +125,7 @@
     </div>
   {/if}
 
-  {#if typeof current !== 'undefined' && current !== null}
-    <small data-selected>{current}</small>
+  {#if typeof current[schema.references.key] !== 'undefined'}
+    <small data-selected on:click={clear}>{current[schema.references.key]}</small>
   {/if}
 </div>
