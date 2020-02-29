@@ -49,9 +49,9 @@
       "rollup": {
         "format": "es",
         "plugins": [
-          "rollup-plugin-node-resolve",
+          "rollup-plugin-svelte",
           "rollup-plugin-commonjs",
-          "rollup-plugin-svelte"
+          "rollup-plugin-node-resolve"
         ]
       },
       "buble": {
