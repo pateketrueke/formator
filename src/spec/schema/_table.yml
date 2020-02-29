@@ -7,9 +7,9 @@ uiSchema:
     ui:label: Name
   age:
     ui:label: Age
+  ui:add: false
   ui:new: false
   ui:remove: false
-  ui:append: false
 schema:
   properties:
     name:

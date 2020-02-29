@@ -40,6 +40,11 @@
   let backup = null;
   let payload = result.length !== 0;
 
+  // FIXME: this is the ideal payload to build, for full-render support!!
+  // however, regular flow is not creating/keeping this structure... we
+  // need to revisit each point to make sure...
+  // result[0].items = [{ id: 0, qty: 1, Product: { name: 'x', price: 1 } }, { id: 0, qty: 1, Product: { name: 'y', price: 2 } }];
+
   function getItems() {
     return result.map((x, k) => ({
       key: k,
@@ -197,3 +202,5 @@
 <Modal {uiSchema} updating={isUpdate} resource={model} bind:visible={isOpen} on:save={sync} on:cancel={reset}>
   <Field name="__ROOT__" bind:result={value} {...fieldProps} />
 </Modal>
+
+<pre>{JSON.stringify(result, null, 2)}</pre>

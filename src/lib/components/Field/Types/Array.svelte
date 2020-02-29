@@ -1,7 +1,7 @@
 <script>
   import { getContext, createEventDispatcher } from 'svelte';
+  import { getItems, defaultValue } from '../utils';
   import { randId } from '../../../shared/utils';
-  import { defaultValue } from '../utils';
 
   import Field from '..';
   import Value from '../../Value';
@@ -64,6 +64,9 @@
       uiSchema: uiSchema[through] || {},
     };
 
+    // here we should translate from ProductId to Product,
+    // so we can fill-in Product info and it should mirror as ID
+
     if (!Array.isArray(value)) value = [];
 
     backup = [...value];
@@ -71,8 +74,7 @@
   }
 
   function sync() {
-    // FIXME: extract/append accordingly!
-    console.log({value, schema, model, through, subProps});
+    result = result.concat(value);
   }
 
   function edit() { console.log('edit'); }
@@ -102,12 +104,29 @@
     result = [];
   }
 
+  // $: if (through) {
+  //   Object.assign(schema.items.properties, refs[through].properties);
+  //   Object.assign(uiSchema, uiSchema[through]);
+  // }
+
   $: {
     if (isFixed) {
       items = schema.items.map((_, offset) => getItemBy(offset, getSubSchema(offset)));
     } else {
       items = result.map((_, offset) => getItemBy(offset, schema.items || {}));
     }
+
+    const propSchema = getItems(schema, 0);
+    const props = uiSchema['ui:fields'] || (propSchema.properties
+      ? Object.keys(propSchema.properties)
+      : []);
+
+    headers = props
+      .filter(x => (uiSchema[x] ? !uiSchema[x]['ui:hidden'] : true))
+      .map(key => ({
+        label: (uiSchema['ui:headers'] && uiSchema['ui:headers'][key]) || key,
+        field: key,
+      }));
 
     keys = items.map(x => x.key);
   }
@@ -182,15 +201,15 @@
   <div data-empty>{uiSchema['ui:empty'] || 'No items'}</div>
 {/if}
 
-{#if schema.additionalItems !== false && uiSchema['ui:append'] !== false}
+{#if schema.additionalItems !== false && uiSchema['ui:push'] !== false}
   <div>
     {#if through}
       <button data-is="append" type="button" on:click={open}>
-        <span>{uiSchema['ui:append'] || `Add ${association.singular}`}</span>
+        <span>{uiSchema['ui:push'] || `Add ${association.singular}`}</span>
       </button>
     {:else}
       <button class="nobreak" data-is="append" data-before="&plus;" type="button" on:click={append}>
-        <span>{uiSchema['ui:append'] || 'Add item'}</span>
+        <span>{uiSchema['ui:push'] || 'Add item'}</span>
       </button>
     {/if}
   </div>
@@ -199,3 +218,5 @@
 <Modal updating={isUpdate} resource={association.singular} bind:visible={isOpen} on:cancel={reset} on:save={sync}>
   <Field name={`${name}[${items.length}]`} bind:result={value} {...subProps} {association} {model} {parent} {through} />
 </Modal>
+
+<pre>{JSON.stringify(result, null, 2)}</pre>

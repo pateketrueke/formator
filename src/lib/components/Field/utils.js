@@ -24,6 +24,14 @@ export function getId(rootId, forName, incOffset) {
   return `${prefix}${forName}-field-${offset}`;
 }
 
+export function getItems(schema, offset) {
+  return (Array.isArray(schema.items)
+    ? schema.items[offset]
+    : schema.items)
+  || schema.additionalItems
+  || {};
+}
+
 export function defaultValue(schema) {
   if (!schema) {
     return null;

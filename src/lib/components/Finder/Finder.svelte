@@ -1,12 +1,11 @@
 <script>
   import { getContext, createEventDispatcher } from 'svelte';
 
-  import { API } from '../../shared/utils';
   import Value from '../Value';
+  import { API } from '../../shared/utils';
 
   export let id = null;
   export let name = null;
-  export let current = null;
 
   export let schema = {};
   export let uiSchema = {};
@@ -15,6 +14,7 @@
   let t;
   let layer;
   let search;
+  let current;
   let options;
   let offset = -1;
   let data = {};
@@ -47,6 +47,7 @@
       if (data.status === 'ok') {
         status = 'ready';
         items = data.result;
+        offset = Math.max(0, Math.min(offset, items.length - 1));
       }
     });
   }
@@ -109,7 +110,7 @@
   $: dispatch('change', data);
 
   // FIXME: recover from passed values...
-  $: console.log({data,current});
+  // $: console.log({data,current});
 </script>
 
 <div data-finder class={status}>
@@ -134,7 +135,7 @@
     <div bind:this={layer} on:click={reset} data-autocomplete>
       <ul bind:this={options} on:click={select}>
         {#each items as value, k (value)}
-          <li class:selected={k === offset} data-value={value[schema.references.key]}>
+          <li class:selected={k === offset}>
             <Value {value} {uiSchema} schema={refs[schema.modelName]} />
           </li>
         {/each}

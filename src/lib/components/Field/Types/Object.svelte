@@ -200,11 +200,13 @@
     <div data-empty>{uiSchema['ui:empty'] || 'No props'}</div>
   {/if}
 
-  {#if schema.additionalProperties !== false && uiSchema['ui:append'] !== false}
+  {#if schema.additionalProperties !== false && uiSchema['ui:add'] !== false}
     <div data-actions>
       <button class="nobreak" data-is="append" data-before="&plus;" type="button" on:click={append}>
-        <span>{uiSchema['ui:append'] || 'Add prop'}</span>
+        <span>{uiSchema['ui:add'] || 'Add prop'}</span>
       </button>
     </div>
   {/if}
 </fieldset>
+
+<pre>{JSON.stringify(result, null, 2)}</pre>

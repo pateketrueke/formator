@@ -105,7 +105,7 @@ export function loader(components, selector) {
         uiSchema: {
           'ui:template': [['a', { href: `${document.location.href}/{}` }, '{}']],
           'ui:title': data.description || 'Resources',
-          'ui:append': false,
+          'ui:push': false,
         },
       };
     }
