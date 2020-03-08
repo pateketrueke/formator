@@ -90,7 +90,6 @@
     "lodash": ">=4.17.12",
     "nodemon": "^2.0.2",
     "pug": "^2.0.3",
-    "rollup": "^1.25.0",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-svelte": "^5.1.0",
@@ -98,8 +97,8 @@
     "somedom": "^0.1.2",
     "sqlite3": "^4.1.0",
     "svelte": "^3.18.2",
-    "svql": "^0.0.26",
-    "tarima": "^4.6.4",
+    "svql": "0.0.27",
+    "tarima": "^4.7.2",
     "terser": "^4.2.1",
     "testcafe": "^1.5.0"
   }
