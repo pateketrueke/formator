@@ -21,13 +21,13 @@ export default class Formator {
     return this.get(`[data-field="${propName}"]`);
   }
 
-  type(typeName, subField) {
+  type(typeName, subField, skipNested) {
     if (!subField) {
       return this.get(`[data-type="${typeName}"]`);
     }
 
-    if (subField.charAt() === '&') {
-      return this.get(`[data-type="${typeName}"][data-field="${subField.substr(1)}"]`);
+    if (skipNested) {
+      return this.get(`[data-type="${typeName}"][data-field="${subField}"]`);
     }
 
     return this.get(`[data-type="${typeName}"] > [data-field="${subField}"]`);
