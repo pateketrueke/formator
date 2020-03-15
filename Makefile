@@ -16,6 +16,9 @@ dev: src deps ## Start dev tasks  (nodejs)
 e2e: src deps ## Run E2E locally  (nodejs)
 	@BROWSER=$(browser) npm run test:e2e -- --debug-on-fail e2e/cases $(TESTCAFE_FLAGS)
 
+live: src deps ## Live E2E session  (ndoejs)
+	@make -s e2e browser=chrome TESTCAFE_FLAGS="--live --app-init-delay=500"
+
 ci: src deps ## Run tests on CI  (nodejs)
 	@make e2e TESTCAFE_FLAGS="-a 'npm run dev'"
 

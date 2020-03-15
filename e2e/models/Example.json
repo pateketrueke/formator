@@ -1,0 +1,18 @@
+{
+  "$attributes": {
+    "findAll": ["title"]
+  },
+  "$uiSchema": {
+    "ui:pending": "Saving changes...",
+    "ui:fields": ["id", "title"],
+    "ui:headers": ["#ID", "Example's title"]
+  },
+  "$schema": {
+    "id": "Example",
+    "properties": {
+      "title": {
+        "type": "string"
+      }
+    }
+  }
+}

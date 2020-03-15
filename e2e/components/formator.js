@@ -21,6 +21,10 @@ export default class Formator {
     return this.get(`[data-field="${propName}"]`);
   }
 
+  input(selector) {
+    return this.get(`input${selector || ''}`);
+  }
+
   type(typeName, subField, skipNested) {
     if (!subField) {
       return this.get(`[data-type="${typeName}"]`);

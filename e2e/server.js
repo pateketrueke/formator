@@ -4,38 +4,20 @@ const Formator = require('..');
 
 const app = express();
 
+app.use(require('body-parser').json());
+
 const repo = new Formator(new Sequelizer({
   dialect: 'sqlite',
   storage: ':memory:',
 }));
 
-const fixtures = [
-  { title: 'Hello World!' },
-];
+repo.database.add(require('./models/Example'));
 
-repo.database.add({
-  $attributes: {
-    findAll: ['title'],
-  },
-  $uiSchema: {
-    'ui:fields': ['id', 'title'],
-    'ui:headers': ['#ID', "Example's title"],
-  },
-  $schema: {
-    id: 'Example',
-    properties: {
-      title: {
-        type: 'string',
-      },
-    },
-  },
-});
+async function main() {
+  await repo.database.connect();
+  await repo.database.sync();
 
-Promise.resolve()
-  .then(() => repo.database.connect())
-  .then(() => repo.database.sync())
-  .then(() => repo.database.models.Example.bulkCreate(fixtures))
-  .then(() => {
-    app.use('/db', repo.hook());
-    app.listen(8080);
-  });
+  app.use('/db', repo.hook());
+  app.listen(8080);
+}
+main();
