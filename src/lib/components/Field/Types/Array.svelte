@@ -218,5 +218,3 @@
 <Modal updating={isUpdate} resource={association.singular} bind:visible={isOpen} on:cancel={reset} on:save={sync}>
   <Field name={`${name}[${items.length}]`} bind:result={value} {...subProps} {association} {model} {parent} {through} />
 </Modal>
-
-<pre>{JSON.stringify(result, null, 2)}</pre>

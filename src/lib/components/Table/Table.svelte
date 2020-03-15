@@ -9,6 +9,7 @@
   import { defaultValue } from '../Field/utils';
   import { API, randId } from '../../shared/utils';
 
+  export let pending = 'Loading...';
   export let actions = {};
   export let result = [];
   export let refs = {};
@@ -34,10 +35,12 @@
     uiSchema,
   });
 
+  let pk = 'id';
   let offset = -1;
   let isUpdate = false;
   let isOpen = false;
   let backup = null;
+  let loading = null;
   let payload = result.length !== 0;
 
   // FIXME: this is the ideal payload to build, for full-render support!!
@@ -75,8 +78,13 @@
       }));
   }
 
+  function fail(e) {
+    console.log('ERROR', e);
+  }
+
   function edit(newOffset) {
     isOpen = true;
+    isUpdate = newOffset >= 0;
     offset = newOffset;
     backup = { ...result[offset] };
     value = offset >= 0 ? result[offset] : defaultValue(schema);
@@ -88,9 +96,19 @@
     });
   }
 
-  function remove(offset) {
-    result = result.filter((_, k) => k !== offset);
-    items = getItems();
+  function remove(fixedOffset) {
+    if (!confirm('Are you sure?')) return;
+
+    loading = Promise.resolve()
+      .then(() => actions[model] && API.call(actions[model].destroy, {
+        [pk]: result[fixedOffset][pk],
+      }))
+      .then(data => {
+        loading = null;
+        if (data && data.status !== 'ok') return fail(data);
+        result = result.filter((_, k) => k !== fixedOffset);
+        items = getItems();
+      });
   }
 
   function reset() {
@@ -98,14 +116,24 @@
   }
 
   function sync() {
-    if (typeof offset === 'undefined') {
-      result = result.concat(value);
-    }
+    loading = Promise.resolve()
+      .then(() => actions[model]
+        && API.call(actions[model][isUpdate ? 'update' : 'create'], value))
+      .then(data => {
+        loading = null;
+        isOpen = false;
 
-    dispatch('change', result);
+        if (data && data.status !== 'ok') return fail(data);
+        if (!isUpdate && data) value[pk] = data.result;
 
-    items = getItems();
-    isOpen = false;
+        if (typeof offset === 'undefined') {
+          result = result.concat(value);
+        }
+
+        dispatch('change', result);
+
+        items = getItems();
+      });
   }
 
   onMount(() => {
@@ -119,9 +147,27 @@
   $: items = getItems();
   $: headers = getHeaders();
   $: fieldProps = { model, schema, uiSchema };
+  $: pk = refs[model].references.primaryKeys[0].prop;
 </script>
 
-<table>
+<style>
+  table {
+    position: relative;
+  }
+  table.loading::before {
+    width: 100%;
+    height: 100%;
+    content: attr(data-pending);
+    text-align: center;
+    padding-top: 2em;
+    cursor: wait;
+    position: absolute;
+    pointer-events: none;
+    background-color: rgba(255, 255, 255, .75);
+  }
+</style>
+
+<table class:loading={loading} data-pending={uiSchema['ui:pending'] || pending}>
   {#if uiSchema['ui:title']}
     <caption>{uiSchema['ui:title']}</caption>
   {/if}
@@ -202,5 +248,3 @@
 <Modal {uiSchema} updating={isUpdate} resource={model} bind:visible={isOpen} on:save={sync} on:cancel={reset}>
   <Field name="__ROOT__" bind:result={value} {...fieldProps} />
 </Modal>
-
-<pre>{JSON.stringify(result, null, 2)}</pre>

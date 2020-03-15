@@ -208,5 +208,3 @@
     </div>
   {/if}
 </fieldset>
-
-<pre>{JSON.stringify(result, null, 2)}</pre>

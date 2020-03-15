@@ -3,9 +3,9 @@
   import { In } from 'svql';
 
   export let visible = false;
+  export let updating = false;
 
   let uiSchema = {};
-  let updating = false;
   let resource = 'input';
 
   const dispatch = createEventDispatcher();
@@ -56,8 +56,8 @@
     </button>
     <button data-is="save" type="submit">
       <span>{updating
-        ? uiSchema['ui:update'] || `Update ${resource}`
-        : uiSchema['ui:save'] || `Save ${resource}`}</span>
+        ? (uiSchema['ui:update'] || `Update ${resource}`)
+        : (uiSchema['ui:save'] || `Save ${resource}`)}</span>
     </button>
   </div>
 </In>
