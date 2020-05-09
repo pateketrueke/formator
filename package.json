@@ -74,6 +74,7 @@
     }
   },
   "devDependencies": {
+    "body-parser": "^1.19.0",
     "buble": "^0.19.3",
     "concat": "^1.0.3",
     "csso": "^4.0.1",
