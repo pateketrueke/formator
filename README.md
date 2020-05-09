@@ -1,8 +1,6 @@
-# Formator [![Build Status](https://travis-ci.org/pateketrueke/formator.svg?branch=master)](https://travis-ci.org/pateketrueke/formator)
+# Formator ![build](https://github.com/pateketrueke/formator/workflows/build/badge.svg)
 
 Abstract JSON-Schema form-builder and RESTful adapter for [json-schema-sequelizer](https://www.npmjs.com/package/json-schema-sequelizer) models.
-
-> Heavely inspired by [react-jsonschema-form](https://github.com/mozilla-services/react-jsonschema-form), carefully built with [Svelte.js](https://svelte.technology/)
 
 ## Install
 

@@ -1,11 +1,9 @@
-# defaults
-src := dist
-from := master
-target := latest
-message := Release: $(shell date)
-
 help: Makefile
 	@awk -F':.*?##' '/[a-z]+:.*##/{printf "\033[36m%-13s\033[0m %s\n",$$1,$$2}' $<
+
+ci: dist ## Run tests on CI  (nodejs)
+	@npm i json-schema-sequelizer
+	@make -s test
 
 lint: src lib e2e deps ## Lint all sources
 	@npm run lint
@@ -14,29 +12,19 @@ dev: src deps ## Start dev tasks  (nodejs)
 	@npm run watch & npm run dev
 
 e2e: src deps ## Run E2E locally  (nodejs)
-	@BROWSER=$(browser) npm run test:e2e -- --debug-on-fail e2e/cases $(TESTCAFE_FLAGS)
+	@npm run test:e2e -- --debug-on-fail e2e/cases $(TESTCAFE_FLAGS)
 
 live: src deps ## Live E2E session  (ndoejs)
-	@make -s e2e browser=chrome TESTCAFE_FLAGS="--live --app-init-delay=500"
+	@make -s e2e TESTCAFE_FLAGS="--live --app-init-delay=500"
 
-ci: src deps ## Run tests on CI  (nodejs)
-	@make e2e TESTCAFE_FLAGS="-a 'npm run dev'"
+test: src deps ## Run tests on locally  (nodejs)
+	@make e2e TESTCAFE_FLAGS="--color -a 'make dev'"
 
 dist: src deps ## Build final output for production
-	@(git worktree remove $(src) --force > /dev/null 2>&1) || true
-	@git worktree add $(src) $(target)
-	@cd $(src) && rm -rf *
 	@npm run dist
-	@mkdir $(src)/dist
-	@mv $(src)/*.* $(src)/dist
-	@cp -r lib index.js package*.json $(src)
-
-push: $(src) ## Push built artifacts to github!
-	@cd $(src) && git add . && git commit -m "$(message)"
-	@git push origin $(target) -f
 
 clean: ## Remove unwanted artifacts
-	@rm -f dist/* .tarima
+	@rm -rf $(src)/dist $(src)/lib .tarima
 
 purge: ## Delete all installed modules
 	@rm -rf node_modules/*

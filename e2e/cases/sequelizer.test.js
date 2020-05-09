@@ -14,7 +14,7 @@ test('should list available models at /db', async t => {
   await t.expect(Selector('form [data-type="string"] a').withText('Example').visible).ok();
 });
 
-fixture.only('Resource model (index)')
+fixture('Resource model (index)')
   .page(defaultPage.url('/db/Example'));
 
 test('should render ui:fields and ui:headers', async t => {

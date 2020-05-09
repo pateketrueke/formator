@@ -21,3 +21,8 @@ result:
     age: 40
   - name: John
     age: 33
+refs:
+  test:
+    references:
+      primaryKeys:
+        - id
