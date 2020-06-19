@@ -1,4 +1,4 @@
-<script context="module">
+<script context="module">//
   import ErrorType from '../Error';
   import LoaderType from '../Loader';
 

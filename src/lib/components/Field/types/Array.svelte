@@ -1,4 +1,4 @@
-<script>
+<script>//
   import { getContext, createEventDispatcher } from 'svelte';
   import { getItems, defaultValue } from '../utils';
   import { randId } from '../../../shared/utils';
@@ -20,7 +20,7 @@
 
   // FIXME: not longer trigger rebuild on change...
 
-  const { actions, refs } = getContext('__ROOT__');
+  const { refs } = getContext('__ROOT__');
   const dispatch = createEventDispatcher();
 
   let headers = [];

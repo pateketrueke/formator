@@ -1,4 +1,4 @@
-<script>
+<script>//
   import { createEventDispatcher } from 'svelte';
   import { In } from 'svql';
 

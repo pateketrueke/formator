@@ -1,4 +1,4 @@
-<script>
+<script>//
   import { getContext, createEventDispatcher } from 'svelte';
 
   import Value from '../Value';
@@ -14,7 +14,7 @@
   let t;
   let layer;
   let search;
-  let current;
+  // let current;
   let options;
   let offset = -1;
   let data = {};
@@ -43,10 +43,10 @@
 
     status = 'pending';
 
-    API.call(req).then(data => {
-      if (data.status === 'ok') {
+    API.call(req).then(resp => {
+      if (resp.status === 'ok') {
         status = 'ready';
-        items = data.result;
+        items = resp.result;
         offset = Math.max(0, Math.min(offset, items.length - 1));
       }
     });
@@ -96,7 +96,7 @@
   }
 
   function select(e) {
-    for (let i = 0, c = options.children.length; i < c; i++) {
+    for (let i = 0, c = options.children.length; i < c; i += 1) {
       if (options.children[i] === e.target) {
         data = items[i];
         offset = i;

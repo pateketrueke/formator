@@ -1,4 +1,4 @@
-<script context="module">
+<script context="module">//
   function ucfirst(value) {
     return value[0].toUpperCase() + value.substr(1);
   }
@@ -10,7 +10,7 @@
   import { defaultValue, getId } from '../utils';
 
   import Field from '..';
-  import Value from '../../Value';
+  // import Value from '../../Value';
   import Finder from '../../Finder';
 
   export let uiSchema = {};
@@ -112,9 +112,9 @@
     result[nextKey] = oldValue;
   }
 
-  function sync() {
-    console.log('SYNC?');
-  }
+  // function sync() {
+  //   console.log('SYNC?');
+  // }
 
   function set(key, value) {
     result[fields.find(x => x.key === key).field] = value;

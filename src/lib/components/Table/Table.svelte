@@ -97,7 +97,7 @@
   }
 
   function remove(fixedOffset) {
-    if (!confirm('Are you sure?')) return;
+    if (!confirm('Are you sure?')) return; // eslint-disable-line
 
     loading = Promise.resolve()
       .then(() => actions[model] && API.call(actions[model].destroy, {

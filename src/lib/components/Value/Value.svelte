@@ -1,4 +1,4 @@
-<script context="module">
+<script context="module">//
   import { renderDOM } from './helpers';
   import { isScalar } from '../../shared/utils';
 </script>
