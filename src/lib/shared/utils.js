@@ -103,7 +103,7 @@ export function loader(components, selector) {
           items: { type: 'string' },
         },
         uiSchema: {
-          'ui:template': [['a', { href: `${document.location.href}/{}` }, '{}']],
+          'ui:template': [['a', { href: `${document.location.href.replace(/\/$/, '')}/{}` }, '{}']],
           'ui:title': data.description || 'Resources',
           'ui:push': false,
         },
