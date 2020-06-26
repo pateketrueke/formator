@@ -1,6 +1,6 @@
 {
   "name": "formator",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "main": "index.js",
   "unpkg": "dist/bundle.min.js",
   "svelte": "src/lib/main.js",
