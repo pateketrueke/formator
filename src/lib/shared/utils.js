@@ -103,7 +103,7 @@ export function loader(components, selector) {
           items: { type: 'string' },
         },
         uiSchema: {
-          'ui:template': [['a', { href: `${document.location.href.replace(/\/$/, '')}/{}` }, '{}']],
+          'ui:template': [['a', { href: `${document.location.pathname.replace(/\/$/, '')}/{}` }, '{}']],
           'ui:title': data.description || 'Resources',
           'ui:push': false,
         },
@@ -169,7 +169,15 @@ export function clean(value) {
 
 export const API = {
   call(action, data = {}) {
-    const path = action.path.replace(/:(\w+)/g, (_, key) => data[key]);
+    let path = action.path.replace(/:(\w+)/g, (_, key) => data[key]);
+
+    const local = document.location.pathname.split('/');
+    const parts = path.split('/');
+
+    if (local[0] === parts[0] && local[1] === parts[1] && local[2] !== parts[2]) {
+      parts.splice(2, 0, local[2]);
+      path = parts.join('/');
+    }
 
     return fetch(path, {
       headers: {
