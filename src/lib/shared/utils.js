@@ -179,15 +179,45 @@ export const API = {
       path = parts.join('/');
     }
 
+    const fixedHeaders = {
+      Accept: 'application/json',
+    };
+
+    const formData = new FormData();
+
+    let hasFiles;
+    function pushFiles(obj) {
+      if (!obj || typeof obj !== 'object') return obj;
+
+      Object.keys(obj).forEach(key => {
+        if (obj[key] instanceof window.FileList) {
+          const prefix = `upload_${Math.random().toString(36).substr(2)}`;
+
+          Array.from(obj[key]).forEach(blob => {
+            formData.append(prefix, blob);
+          });
+
+          hasFiles = true;
+          obj[key] = { $upload: prefix };
+        } else if (typeof obj[key] === 'object') {
+          pushFiles(obj[key]);
+        }
+      });
+    }
+    pushFiles(data);
+
+    if (hasFiles) {
+      formData.append('payload', JSON.stringify(data));
+      payload = formData;
+    } else {
+      fixedHeaders['Content-Type'] = 'application/json';
+      payload = JSON.stringify({ payload: data });
+    }
+
     return fetch(path, {
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
+      headers: fixedHeaders,
       method: action.verb,
-      body: action.verb !== 'GET'
-        ? JSON.stringify({ payload: data })
-        : undefined,
+      body: action.verb !== 'GET' ? payload : undefined,
     }).then(resp => resp.json());
   },
 };
