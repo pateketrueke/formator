@@ -1,8 +1,10 @@
 *.log
 *.mkv
 *.todo
+*.sqlite
 .tarima
 .DS_Store
+tmp
 dist
 public
 node_modules

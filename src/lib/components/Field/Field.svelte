@@ -2,6 +2,7 @@
   import ErrorType from '../Error';
   import LoaderType from '../Loader';
 
+  import extensions from '../../shared/exts';
   import components from '../../shared/deps';
   import { reduceRefs } from '../../shared/utils';
 </script>
@@ -62,7 +63,10 @@
   } else if (!schema) {
     propType = LoaderType;
   } else if (components) {
-    propType = components[schema.type || 'object'] || ErrorType;
+    const Type = components[schema.type || 'object'];
+    const Ext = extensions[uiSchema['ui:component']];
+
+    propType = Ext || Type;
   }
 </script>
 

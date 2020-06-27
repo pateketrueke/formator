@@ -1,16 +1,30 @@
 {
   "$attributes": {
-    "findAll": ["title"]
+    "findAll": ["url", "blob", "title"]
   },
   "$uiSchema": {
     "ui:pending": "Saving changes...",
-    "ui:fields": ["id", "title"],
-    "ui:headers": ["#ID", "Example's title"]
+    "ui:fields": ["id", "url", "blob", "title"],
+    "ui:headers": ["#ID", "Image URL", "Base64 Blob", "Example's title"],
+    "blob": {
+      "ui:component": "FileUpload",
+      "ui:attachment": true
+    },
+    "url": {
+      "ui:component": "FileUpload"
+    }
   },
   "$schema": {
     "id": "Example",
     "properties": {
       "title": {
+        "type": "string"
+      },
+      "blob": {
+        "attachment": true,
+        "type": "string"
+      },
+      "url": {
         "type": "string"
       }
     }

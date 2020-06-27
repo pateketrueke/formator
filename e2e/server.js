@@ -1,14 +1,37 @@
 const Sequelizer = require('json-schema-sequelizer');
+const formidable = require('formidable');
 const express = require('express');
+const path = require('path');
+
 const Formator = require('..');
 
 const app = express();
 
 app.use(require('body-parser').json());
+app.use((req, res, next) => {
+  if (req._body) return next();
+
+  const form = formidable({
+    uploadDir: path.join(__dirname, '../tmp'),
+    keepExtensions: true,
+    multiples: true,
+  });
+
+  form.parse(req, (err, fields, files) => {
+    if (err) {
+      next(err);
+      return;
+    }
+
+    req.body = fields;
+    req.files = files;
+    next();
+  });
+});
 
 const repo = new Formator(new Sequelizer({
+  storage: `${__dirname}/db.sqlite`,
   dialect: 'sqlite',
-  storage: ':memory:',
 }));
 
 repo.database.add(require('./models/Example'));

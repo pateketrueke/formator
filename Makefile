@@ -2,7 +2,7 @@ help: Makefile
 	@awk -F':.*?##' '/[a-z]+:.*##/{printf "\033[36m%-13s\033[0m %s\n",$$1,$$2}' $<
 
 ci: dist ## Run tests on CI  (nodejs)
-	@(((ls node_modules | grep json-schema-sequelizer) > /dev/null 2>&1) || npm json-schema-sequelizer) || true
+	@(((ls node_modules | grep json-schema-sequelizer) > /dev/null 2>&1) || npm i json-schema-sequelizer) || true
 	@git checkout -- package.json
 	@make -s test
 

@@ -1,0 +1,35 @@
+description: FileUpload for inline attachments
+testName: files
+action: edit
+model: test
+uiSchema:
+  blob:
+    ui:component: FileUpload
+    ui:attachment: true
+  url:
+    ui:component: FileUpload
+  set:
+    ui:component: FileUpload
+    ui:attachment: true
+  list:
+    ui:component: FileUpload
+    ui:attachment: true
+  files:
+    ui:component: FileUpload
+    ui:attachment: true
+schema:
+  properties:
+    blob:
+      type: string
+    url:
+      type: string
+    set:
+      type: array
+      items:
+        type: object
+    list:
+      type: array
+      items:
+        type: string
+    files:
+      type: object

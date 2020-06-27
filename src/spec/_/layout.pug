@@ -41,6 +41,8 @@ html
         padding: 10px;
         right: 10px;
         top: 10px;
+        max-width: 320px;
+        overflow: auto;
       }
 
       #editor > div {
@@ -54,7 +56,7 @@ html
           details
             summary(id=`test-${test.testName}`) Test ##{i + 1} &mdash; #{(test && test.description) || ''}
             script(type='application/json' rel='resource' data-debug=`#json-${i}`) !{JSON.stringify(test, null, 2)}
-            pre.debug(id=`json-${i}`)
+            .debug: summary: details: pre(id=`json-${i}`)
         block after
 
       script(src='ajv.js')
