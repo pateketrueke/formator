@@ -7,7 +7,7 @@ const Formator = require('..');
 
 const app = express();
 
-app.use(require('body-parser').json());
+app.use(require('body-parser').json({ limit: '5mb' }));
 app.use((req, res, next) => {
   if (req._body) return next();
 
@@ -40,7 +40,11 @@ async function main() {
   await repo.database.connect();
   await repo.database.sync();
 
-  app.use('/db', repo.hook());
+  app.use('/db', repo.hook({
+    onUpload: ({ field, payload, metadata }) => {
+      payload[field] = metadata.filePath;
+    },
+  }));
   app.listen(8080);
 }
 main();
