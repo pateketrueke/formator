@@ -53,9 +53,13 @@ export function getProp(from, key) {
 }
 
 export function renderValue(data, template) {
-  if (typeof template === 'object') {
+  if (Object.prototype.toString.call(template) === '[object Object]') {
     return Object.keys(template).reduce((prev, cur) => {
       prev[cur] = renderValue(data, template[cur]);
+
+      if (Array.isArray(prev[cur])) {
+        prev[cur] = prev[cur].join('');
+      }
 
       return prev;
     }, {});
@@ -63,7 +67,7 @@ export function renderValue(data, template) {
 
   if (typeof template === 'string') {
     if (typeof data !== 'object') {
-      return template.replace(RE_IDENTITY, data);
+      return renderValue({ this: data }, template.replace(RE_IDENTITY, data));
     }
 
     let copy = template;
@@ -165,7 +169,11 @@ export function reduce(value, template) {
   const text = template.slice(offset);
   const node = template.slice(0, offset);
 
-  return [node[0], node[1] ? renderValue(value, node[1]) : null].concat(text.map(x => renderValue(value, x)));
+  if (Object.prototype.toString.call(text[0]) === '[object Object]') {
+    return [node[0], renderValue(value, text[0])].concat(text.slice(1).map(x => renderValue(value, x)));
+  } else {
+    return [node[0], renderValue(value, node[1] ? node[1] : text[0])].concat(text.map(x => renderValue(value, x)));
+  }
 }
 
 export function renderDOM(value, template) {

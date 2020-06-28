@@ -8,8 +8,8 @@ export default function slideShow($, data, values, parentNode) {
     ? `${values.length} sources`
     : '1 source';
 
-  if (!values.length) {
-    return null;
+  if (!values[0]) {
+    return 'N/A';
   }
 
   let ref;
@@ -18,7 +18,7 @@ export default function slideShow($, data, values, parentNode) {
     href: '#',
     oncreate(self) {
       ref = self;
-      ref.href = values[0];
+      ref.href = `/${values[0]}`;
     },
     onclick(e) {
       if (e.metaKey || e.ctrlKey) {
@@ -50,7 +50,7 @@ export default function slideShow($, data, values, parentNode) {
           : ['img']);
 
         node.style.opacity = 0;
-        node.src = ref.href = values[offset];
+        node.src = ref.href = `/${values[offset]}`;
 
         const count = values.length > 1
           ? `(${offset + 1}/${values.length}) `
