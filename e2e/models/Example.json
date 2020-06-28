@@ -8,10 +8,12 @@
     "ui:headers": ["#ID", "Image URL", "Base64 Blob", "Example's title"],
     "blob": {
       "ui:component": "FileUpload",
-      "ui:attachment": true
+      "ui:attachment": true,
+      "ui:template": [["span", "{@embed:this}"]]
     },
     "url": {
-      "ui:component": "FileUpload"
+      "ui:component": "FileUpload",
+      "ui:template": [["span", "{@embed:this}"]]
     }
   },
   "$schema": {

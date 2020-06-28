@@ -10,6 +10,10 @@ const app = express();
 app.use(require('body-parser').json({ limit: '5mb' }));
 app.use((req, res, next) => {
   if (req._body) return next();
+  if (req.url.indexOf('/tmp/') === 0) {
+    res.sendFile(path.join(process.cwd(), req.url.substr(1)));
+    return;
+  }
 
   const form = formidable({
     uploadDir: path.join(__dirname, '../tmp'),

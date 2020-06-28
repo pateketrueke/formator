@@ -11,7 +11,7 @@
     "index.js"
   ],
   "scripts": {
-    "dev": "tarima watch -p 3001 -P '/db -> 8080'",
+    "dev": "tarima watch -p 3001 -P '/db,/tmp -> 8080'",
     "dist": "tarima -qe $NODE_ENV",
     "watch": "nodemon -i src -i dist -i public e2e/server.js",
     "copy:ajv": "cp node_modules/ajv/dist/ajv.min.js dist/ajv.js",
