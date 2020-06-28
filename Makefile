@@ -3,7 +3,7 @@ help: Makefile
 
 ci: dist ## Run tests on CI  (nodejs)
 	@(((ls node_modules | grep json-schema-sequelizer) > /dev/null 2>&1) || npm i json-schema-sequelizer) || true
-	@git checkout -- package.json
+	@git checkout -- package*.json
 	@make -s test
 
 lint: src lib e2e deps ## Lint all sources
