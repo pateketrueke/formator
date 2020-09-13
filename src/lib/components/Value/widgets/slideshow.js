@@ -18,7 +18,9 @@ export default function slideShow($, data, values, parentNode) {
     href: '#',
     oncreate(self) {
       ref = self;
-      ref.href = `/${values[0]}`;
+      ref.href = values[0].indexOf('://') === -1
+        ? `/${values[0]}`
+        : values[0];
     },
     onclick(e) {
       if (e.metaKey || e.ctrlKey) {
