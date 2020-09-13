@@ -2,8 +2,6 @@ help: Makefile
 	@awk -F':.*?##' '/[a-z]+:.*##/{printf "\033[36m%-13s\033[0m %s\n",$$1,$$2}' $<
 
 ci: dist ## Run tests on CI  (nodejs)
-	@(((ls node_modules | grep json-schema-sequelizer) > /dev/null 2>&1) || npm i json-schema-sequelizer) || true
-	@git checkout -- package*.json
 	@make -s test
 
 lint: src lib e2e deps ## Lint all sources
@@ -22,7 +20,7 @@ test: src deps ## Run tests on locally  (nodejs)
 	@make e2e TESTCAFE_FLAGS="--color -a 'make dev'"
 
 dist: src deps ## Build final output for production
-	@npm run dist
+	@npm run dist -- -f
 
 clean: ## Remove unwanted artifacts
 	@rm -rf $(src)/dist $(src)/lib .tarima
