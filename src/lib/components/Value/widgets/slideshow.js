@@ -21,6 +21,7 @@ export default function slideShow($, data, values, parentNode) {
 
   return ['a', {
     href: '#',
+    target: '_blank',
     oncreate(self) {
       ref = self;
       ref.href = values[0].filePath.indexOf('://') === -1
