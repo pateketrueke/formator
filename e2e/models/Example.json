@@ -12,7 +12,7 @@
       "ui:attachment": true
     },
     "url": {
-      "_ui:template": [["span", "{@embed:this}"]],
+      "ui:template": [["span", "{@embed:this}"]],
       "ui:component": "FileUpload"
     }
   },

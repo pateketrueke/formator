@@ -46,7 +46,9 @@ async function main() {
 
   app.use('/db', repo.hook({
     onUpload: ({ field, payload, metadata }) => {
-      payload[field] = metadata.filePath;
+      if (Math.random() > 0.5) {
+        payload[field] = metadata.filePath;
+      }
     },
   }));
   app.listen(8080);
