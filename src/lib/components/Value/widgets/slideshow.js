@@ -50,7 +50,9 @@ export default function slideShow($, data, values, parentNode) {
           : ['img']);
 
         node.style.opacity = 0;
-        node.src = ref.href = `/${values[offset]}`;
+        node.src = ref.href = values[offset].indexOf('://') === -1
+          ? `/${values[offset]}`
+          : values[offset];
 
         const count = values.length > 1
           ? `(${offset + 1}/${values.length}) `
