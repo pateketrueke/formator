@@ -7,18 +7,22 @@
     "ui:fields": ["id", "url", "blob", "title"],
     "ui:headers": ["#ID", "Image URL", "Base64 Blob", "Example's title"],
     "blob": {
+      "ui:template": [["span", "{@embed:this}"]],
       "ui:component": "FileUpload",
-      "ui:attachment": true,
-      "ui:template": [["span", "{@embed:this}"]]
+      "ui:attachment": true
     },
     "url": {
-      "ui:component": "FileUpload",
-      "ui:template": [["span", "{@embed:this}"]]
+      "_ui:template": [["span", "{@embed:this}"]],
+      "ui:component": "FileUpload"
     }
   },
   "$schema": {
     "id": "Example",
     "properties": {
+      "id": {
+        "type": "integer",
+        "primaryKey": true
+      },
       "title": {
         "type": "string"
       },
