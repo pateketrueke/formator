@@ -1,14 +1,19 @@
 import { mount, unmount } from 'somedom';
+import { isJSON } from '../helpers';
 import { destroy, update } from '../../Modal/stacked';
 
 export default function slideShow($, data, values, parentNode) {
-  values = values.reduce((prev, cur) => prev.concat(cur), []);
+  values = values.reduce((prev, cur) => prev.concat(cur || []), [])
+    .map(value => (isJSON(value) ? JSON.parse(value) : {
+      filePath: value,
+      fileName: value.split('/').pop(),
+    }));
 
   const prefix = values.length !== 1
-    ? `${values.length} sources`
-    : '1 source';
+    ? `${values.length} files`
+    : '1 file';
 
-  if (!values[0]) {
+  if (!(values[0] && values[0].fileName)) {
     return 'N/A';
   }
 
@@ -18,9 +23,9 @@ export default function slideShow($, data, values, parentNode) {
     href: '#',
     oncreate(self) {
       ref = self;
-      ref.href = values[0].indexOf('://') === -1
-        ? `/${values[0]}`
-        : values[0];
+      ref.href = values[0].filePath.indexOf('://') === -1
+        ? `/${values[0].filePath}`
+        : values[0].filePath;
     },
     onclick(e) {
       if (e.metaKey || e.ctrlKey) {
@@ -29,7 +34,7 @@ export default function slideShow($, data, values, parentNode) {
 
       e.preventDefault();
 
-      let offset = Math.max(0, values.indexOf(ref.href));
+      let offset = Math.max(0, values.findIndex(x => x.filePath === ref.href));
       let target;
       let node;
 
@@ -47,20 +52,20 @@ export default function slideShow($, data, values, parentNode) {
           target.removeChild(node);
         }
 
-        node = $(!values[offset].match(/\.(svg|gif|png|jpe?g)/i)
+        node = $(!values[offset].fileName.match(/\.(svg|gif|png|jpe?g)/i)
           ? ['iframe', { width: 853, height: 505 }]
           : ['img']);
 
         node.style.opacity = 0;
-        node.src = ref.href = values[offset].indexOf('://') === -1
-          ? `/${values[offset]}`
-          : values[offset];
+        node.src = ref.href = values[offset].filePath.indexOf('://') === -1
+          ? `/${values[offset].filePath}`
+          : values[offset].filePath;
 
         const count = values.length > 1
           ? `(${offset + 1}/${values.length}) `
           : '';
 
-        target.dataset.title = `${count}${ref.href.split('/').pop()}`;
+        target.dataset.title = `${count}${values[offset].fileName}`;
         target.appendChild(node);
 
         setTimeout(() => {

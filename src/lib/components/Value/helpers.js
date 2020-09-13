@@ -5,6 +5,10 @@ import HTML from '../HTML';
 const RE_PLACEHOLDER = /\{(?:(@?[^{}|?!:@]*)(?::([\w*,.]+))?([|?!:])?(.*?)|)\}/;
 const RE_IDENTITY = /\{\}/g;
 
+export function isJSON(value) {
+  return typeof value === 'string' && value.charAt() === '{' && value.charAt(value.length - 1) === '}';
+}
+
 export function getProp(from, key) {
   if (!key) {
     return null;
