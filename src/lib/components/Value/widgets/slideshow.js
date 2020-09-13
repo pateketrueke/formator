@@ -1,13 +1,13 @@
 import { mount, unmount } from 'somedom';
-import { isJSON } from '../helpers';
+import { JSONData } from '../helpers';
 import { destroy, update } from '../../Modal/stacked';
 
 export default function slideShow($, data, values, parentNode) {
   values = values.reduce((prev, cur) => prev.concat(cur || []), [])
-    .map(value => (isJSON(value) ? JSON.parse(value) : {
+    .map(value => JSONData(value, () => ({
       filePath: value,
       fileName: value.split('/').pop(),
-    }));
+    })));
 
   const prefix = values.length !== 1
     ? `${values.length} files`
