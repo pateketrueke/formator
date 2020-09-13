@@ -13,7 +13,6 @@ uiSchema:
     ui:attachment: true
   list:
     ui:component: FileUpload
-    ui:attachment: true
   files:
     ui:component: FileUpload
     ui:attachment: true

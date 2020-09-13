@@ -134,7 +134,11 @@ export function loader(components, selector) {
 
     instance.$on('change', e => {
       if (debug) {
-        debug.innerText = JSON.stringify(e.detail, null, 2);
+        debug.innerText = JSON.stringify(e.detail, (_, v) => {
+          if (v instanceof window.FileList) return `[FileList (${v.length})]`;
+          if (typeof v === 'string' && v.indexOf('data:') === 0) return `${v.substr(0, 32)}...`;
+          return v;
+        }, 2);
       }
 
       result = e.detail;
