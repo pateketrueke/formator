@@ -4,6 +4,90 @@
   }
 }
 
+[data-failure] {
+  border: 1px solid transparent;
+  position: absolute;
+  right: 0;
+
+  &[open] {
+    border: 1px dashed @light;
+    background-color: @white;
+    z-index: 1;
+  }
+
+  summary {
+    color: @error;
+  }
+
+  > * {
+    overflow: auto;
+  }
+}
+
+[data-fileset] {
+  button + details {
+    margin-top: @sp2;
+  }
+  summary {
+    position: relative;
+    padding: @sp1;
+
+    > button {
+      position: absolute;
+      top: 2px;
+      right: 1px;
+    }
+  }
+  small {
+    background-color: @hover;
+    border: 1px solid @high;
+    padding: 1px 3px;
+  }
+  dl {
+    margin: @sp1 0 @sp2;
+    overflow: hidden;
+    font-size: .9em;
+
+    dd + dt {
+      margin-top: @sp2;
+    }
+
+    dt {
+      color: @light;
+      font-weight: bold;
+    }
+
+    dd {
+      word-break: break-all;
+    }
+
+    @media @sm {
+      dt, dd {
+        float: left;
+      }
+
+      dd + dt {
+        margin: 0;
+      }
+
+      dt {
+        clear: left;
+        width: 33.3%;
+
+        &::after {
+          content: ': ';
+        }
+      }
+
+      dd {
+        border: 0;
+        width: 66.6%;
+        clear: right;
+      }
+    }
+  }
+}
+
 [data-actions] {
   > button {
     &:nth-child(2) {
@@ -14,14 +98,7 @@
 }
 
 li {
-  [data-field] > div {
-    + div {
-      margin-left: @sp2;
-    }
-  }
-
   [data-field] > span {
-    margin-right: @sp2;
     max-width: 50px;
     color: @dark;
     width: 100%;
@@ -37,11 +114,34 @@ li {
       min-width: 100px;
     }
 
+    > input {
+      border: 0;
+      padding: 0;
+      font-size: 1em;
+
+      &:focus {
+        outline: none;
+        box-shadow: none;
+      }
+
+      + [data-value] {
+        display: flex;
+      }
+    }
+
+    fieldset {
+      border-left: 1px dashed @light;
+      padding-left: @sp2;
+
+      + button {
+        margin-top: @sp2;
+      }
+    }
+
     > input ~ div {
       width: 100%;
-      margin-left: @sp2;
 
-      ~ button {
+      > button {
         margin-left: @sp2;
       }
     }
@@ -77,10 +177,6 @@ li {
         position: relative;
         flex: 1 1 auto;
 
-        @media @sm {
-          xmargin-right: @sp2;
-        }
-
         > select,
         > textarea,
         > input[type=text],
@@ -89,6 +185,19 @@ li {
         > input[type=password] {
           width: 100%;
         }
+      }
+    }
+  }
+
+  &[data-type=string],
+  &[data-type=number],
+  &[data-type=integer],
+  &[data-type=boolean] {
+    > [data-field] > [data-value]:only-child {
+      display: flex;
+
+      button {
+        margin-left: @sp2;
       }
     }
   }
@@ -104,7 +213,7 @@ input[type=password] {
   outline: none;
   transition: box-shadow .2s;
   border: 1px solid @light;
-  background: inherit;
+  background-color: @white;
   padding: @sp1;
 
   &:hover {
@@ -121,6 +230,8 @@ input[type=text],
 input[type=number],
 input[type=search],
 input[type=password] {
+  width: inherit;
+
   &:focus,
   &:hover {
     background-color: @white;
@@ -130,10 +241,6 @@ input[type=password] {
 input[readonly],
 input[readonly]:hover {
   border: 1px solid rgba(0, 0, 0, .1);
-}
-
-input {
-  width: inherit;
 }
 
 button {
@@ -150,22 +257,6 @@ label {
   ~ div {
     width: 100%;
   }
-
-  @media @sm {
-    ~ div {
-      margin-left: @sp2;
-    }
-  }
-}
-
-[data-type=boolean] {
-  > div {
-    display: flex;
-  }
-}
-
-[data-value] {
-  display: flex;
 }
 
 [data-modal] {

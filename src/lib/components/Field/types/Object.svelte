@@ -24,6 +24,8 @@
   export let through = null;
   export let association = {};
 
+  const nextSchema = (schema.additionalProperties !== true && schema.additionalProperties) || { type: 'string' };
+
   const { refs, rootId } = getContext('__ROOT__');
   const dispatch = createEventDispatcher();
 
@@ -33,7 +35,17 @@
   let fields = [];
   let keys = [];
 
-  function getItemFor(field, offset, subSchema) {
+  function uniqueItems(a, b) {
+    const keys = (a && Object.keys(a)) || [];
+
+    Object.keys(result).forEach(key => {
+      if (a && typeof a[key] === 'undefined') keys.push(key);
+    });
+
+    return keys;
+  }
+
+  function getItemFor(field, offset, subSchema, currentField) {
     const key = keys[offset] || (keys[offset] = randId());
 
     if (subSchema.items && typeof subSchema.items.$ref === 'string') {
@@ -54,6 +66,7 @@
       schema: subSchema,
       uiSchema: uiSchema[field] || {},
       current: isRef && currentValue === 0 ? null : currentValue,
+      isFixed: currentField && currentField.isFixed,
       hidden: isHidden || isRef,
       path: (path || []).concat(field),
       name: (name && name !== '__ROOT__') ? `${name}[${field}]` : field,
@@ -62,7 +75,6 @@
   }
 
   function append() {
-    const nextSchema = (schema.additionalProperties !== true && schema.additionalProperties) || { type: 'string' };
     const nextKey = schema.patternProperties ? 'FIXME' : '';
 
     if (typeof result[nextKey] === 'undefined') {
@@ -133,8 +145,8 @@
   }
 
   $: {
-    const props = uiSchema['ui:props'] || (schema.properties ? Object.keys(schema.properties) : [])
-      .map((k, i) => getItemFor(k, i, schema.properties[k]));
+    const props = (uiSchema['ui:props'] || uniqueItems(schema.properties, result))
+      .map((k, i) => getItemFor(k, i, (schema.properties && schema.properties[k]) || nextSchema, fields[i]));
 
     hidden = props.filter(x => x.hidden);
     fields = props.filter(x => !x.hidden).sort((a, b) => {
@@ -166,12 +178,12 @@
         <li data-type={schema.type || 'object'}>
           <div data-field={`/${path.join('/')}`}>
             {#if isFixed}
-              <input type="text" on:change={e => prop(e, key)} />
+              <input type="text" placeholder={uiSchema['ui:key'] || 'key'} on:change={e => prop(e, key)} />
             {:else}
               <label for={id}>{uiSchema['ui:label'] || field}</label>
             {/if}
 
-            <div>
+            <div data-value>
               {#if schema.modelName}
                 <Finder
                   {id} {name} {field} {model} {schema} {through} {uiSchema} {current} {association}
@@ -185,13 +197,13 @@
                   result={current}
                 />
               {/if}
-            </div>
 
-            {#if isFixed && uiSchema['ui:remove'] !== false}
-              <button data-is="remove" data-before="&times;" type="button" on:click={() => remove(key)}>
-                <span>{uiSchema['ui:remove'] || 'Remove prop'}</span>
-              </button>
-            {/if}
+              {#if isFixed && uiSchema['ui:remove'] !== false}
+                <button data-is="remove" data-before="&times;" type="button" on:click={() => remove(key)}>
+                  <span>{uiSchema['ui:remove'] || 'Remove prop'}</span>
+                </button>
+              {/if}
+            </div>
           </div>
         </li>
       {/each}

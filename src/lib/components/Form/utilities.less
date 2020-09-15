@@ -2,18 +2,19 @@
   > span {
     display: none;
   }
-}
 
-[data-before] {
   &::before {
     content: attr(data-before) ' ';
   }
 }
 
-[data-before] {
-  &::before {
-    content: attr(data-before) ' ';
-  }
+.chunk {
+  max-width: 200px;
+  display: inline-block;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  line-height: 1em;
+  height: 1em;
 }
 
 .flex {

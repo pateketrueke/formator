@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-globals */
 
-const details = [].slice.call(document.querySelectorAll('details'));
-const summaries = [].slice.call(document.querySelectorAll('summary'));
+const details = [].slice.call(document.querySelectorAll('body > div > details'));
+const summaries = [].slice.call(document.querySelectorAll('body > div > details > summary'));
 
 window.addEventListener('click', e => {
   const index = summaries.indexOf(e.target);

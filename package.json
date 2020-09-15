@@ -58,7 +58,7 @@
         "objectAssign": "Object.assign"
       },
       "bundleCache": true,
-      "entryCache": true,
+      "entryCache": false,
       "extensions": {
         "js": "es6",
         "css": "less",

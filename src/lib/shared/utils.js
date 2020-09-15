@@ -135,7 +135,7 @@ export function loader(components, selector) {
     instance.$on('change', e => {
       if (debug) {
         debug.innerText = JSON.stringify(e.detail, (_, v) => {
-          if (v instanceof window.FileList) return `[FileList (${v.length})]`;
+          if (v instanceof window.File) return `[File (${v.name})]`;
           if (typeof v === 'string' && v.indexOf('data:') === 0) return `${v.substr(0, 32)}...`;
           return v;
         }, 2);
@@ -188,23 +188,27 @@ export const API = {
     };
 
     const formData = new FormData();
+    const keys = {};
 
     let hasFiles;
     function pushFiles(obj) {
       if (!obj || typeof obj !== 'object') return obj;
 
       Object.keys(obj).forEach(key => {
-        if (obj[key] instanceof window.FileList) {
+        if (Array.isArray(obj[key]) && obj[key][0] instanceof window.File) {
           const prefix = `upload_${Math.random().toString(36).substr(2)}`;
 
-          Array.from(obj[key]).forEach(blob => {
+          obj[key].forEach(blob => {
             formData.append(prefix, blob);
           });
-
-          hasFiles = true;
           obj[key] = { $upload: prefix };
+          hasFiles = true;
+        } else if (obj[key] instanceof window.File) {
+          formData.append(key, obj[key]);
+          obj[key] = { $upload: key };
+          hasFiles = true;
         } else if (typeof obj[key] === 'object') {
-          pushFiles(obj[key]);
+          pushFiles(obj[key], key);
         }
       });
     }

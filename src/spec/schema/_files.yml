@@ -32,3 +32,15 @@ schema:
         type: string
     files:
       type: object
+result:
+  url: a.file
+  blob: b.file
+  set:
+  - c.file
+  - d.file
+  list:
+  - e.file
+  - f.file
+  files:
+    foo: g.file
+    baz: h.file

@@ -1,10 +1,10 @@
 import { mount, unmount } from 'somedom';
-import { JSONData } from '../helpers';
+import { jsonData } from '../helpers';
 import { destroy, update } from '../../Modal/stacked';
 
 export default function slideShow($, data, values, parentNode) {
   values = values.reduce((prev, cur) => prev.concat(cur || []), [])
-    .map(value => JSONData(value, () => ({
+    .map(value => jsonData(value, () => ({
       filePath: value,
       fileName: value.split('/').pop(),
     })));
@@ -14,7 +14,7 @@ export default function slideShow($, data, values, parentNode) {
     : '1 file';
 
   if (!(values[0] && values[0].fileName)) {
-    return 'N/A';
+    return;
   }
 
   let ref;

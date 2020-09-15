@@ -1,7 +1,6 @@
 /**
 ---
 $format: umd
-$minify: true
 $bundle: Formator
 ---
 */

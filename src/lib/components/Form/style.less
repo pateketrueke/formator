@@ -1,7 +1,24 @@
 @import './utilities';
 
+.overlay {
+  align-items: baseline !important;
+  overflow: auto;
+
+  .wrapper {
+    width: 100%;
+    overflow: auto;
+    margin-top: 7em;
+  }
+
+  @media screen and (min-width: @smb) {
+    .wrapper {
+      min-width: @smw;
+      width: auto;
+    }
+  }
+}
+
 table {
-  border-collapse: collapse;
   border-spacing: 0;
   width: 100%;
 
@@ -31,10 +48,6 @@ table {
     tr:nth-child(odd) { background-color: lighten(@light, 30); }
     tr:hover { background-color: @hover; }
   }
-}
-
-> table {
-  xborder-bottom: 1px dashed @light;
 }
 
 > table ~ div {
@@ -71,9 +84,12 @@ td.invalid  {
   }
 }
 
-[data-body],
-[data-actions] {
+[data-body] {
   padding: @sp2;
+
+  + [data-actions] {
+    padding: @sp2;
+  }
 }
 
 [data-body] {
@@ -180,30 +196,26 @@ fieldset {
       > div {
         display: block;
       }
-
-      @media @sm {
-        > div {
-          display: flex;
-        }
-      }
     }
   }
 }
 
 > details {
   border: 1px dashed @error;
-
-  summary {
-    padding: @sp1;
-  }
 }
 
 summary {
+  transition: box-shadow .2s;
   cursor: default;
-  color: @error;
   padding: 0 @sp1;
-  font-size: 12px;
+  color: @dark;
+  font-size: .9em;
   white-space: nowrap;
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 3px @dark;
+  }
 }
 
 ul {
@@ -227,25 +239,5 @@ li {
 
   &[data-type="object"] {
     margin-bottom: 0;
-  }
-
-  details {
-    border: 1px solid transparent;
-    position: absolute;
-    right: 0;
-
-    &[open] {
-      border: 1px dashed @light;
-      background-color: @white;
-      z-index: 1;
-    }
-
-    > * {
-      overflow: auto;
-    }
-  }
-
-  > div {
-    display: flex;
   }
 }

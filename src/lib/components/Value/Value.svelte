@@ -11,6 +11,10 @@
   function getNodes() {
     const { type, default: defaultValue } = schema;
 
+    if (value === '' || typeof value === 'undefined') {
+      return [];
+    }
+
     if (typeof value !== 'undefined' && uiSchema && uiSchema['ui:template']) {
       return renderDOM(value, uiSchema['ui:template']);
     }
@@ -20,15 +24,11 @@
     }
 
     if (type === 'string') {
-      return [value || defaultValue || ''];
+      return [value || defaultValue];
     }
 
     if (typeof defaultValue === 'undefined') {
-      if (typeof value === 'undefined') {
-        return [];
-      }
-
-      return [(!isScalar(value) && JSON.stringify(value)) || (value === '' ? 'N/A' : value)];
+      return [(!isScalar(value) && JSON.stringify(value)) || value];
     }
 
     return [defaultValue];

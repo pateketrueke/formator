@@ -161,7 +161,7 @@
                   </button>
                 {/if}
                 {#if uiSchema['ui:remove'] !== false}
-                  <button data-is="remove" data-before="&ndash;" type="button" on:click={() => remove(key)}>
+                  <button data-is="remove" data-before="&times;" type="button" on:click={() => remove(key)}>
                     <span>{uiSchema['ui:remove'] || `Remove ${association.singular}`}</span>
                   </button>
                 {/if}
@@ -180,16 +180,14 @@
               <Value {uiSchema} {schema} value={result[offset]} />
             {:else}
               <div data-field={`/${path.join('/')}`}>
-                <div>
+                <div data-value>
                   <Field {schema} {uiSchema} bind:result={result[offset]} name={`${name}[${offset}]`} />
-                </div>
-                {#if !isFixed && uiSchema['ui:remove'] !== false}
-                  <div>
-                    <button data-is="remove" data-before="&ndash;" type="button" on:click={() => remove(key)}>
+                  {#if !isFixed && uiSchema['ui:remove'] !== false}
+                    <button data-is="remove" data-before="&times;" type="button" on:click={() => remove(key)}>
                       <span>{uiSchema['ui:remove'] || 'Remove item'}</span>
                     </button>
-                  </div>
-                {/if}
+                  {/if}
+                </div>
               </div>
             {/if}
           </li>

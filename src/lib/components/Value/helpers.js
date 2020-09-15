@@ -5,7 +5,7 @@ import HTML from '../HTML';
 const RE_PLACEHOLDER = /\{(?:(@?[^{}|?!:@]*)(?::([\w*,.]+))?([|?!:])?(.*?)|)\}/;
 const RE_IDENTITY = /\{\}/g;
 
-export function JSONData(value, cb) {
+export function jsonData(value, cb) {
   if (typeof value === 'string' && value.charAt() === '{' && value.charAt(value.length - 1) === '}') {
     try {
       return JSON.parse(value);
