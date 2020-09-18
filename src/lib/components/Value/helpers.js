@@ -22,13 +22,9 @@ export function jsonData(value, cb) {
 }
 
 export function getProp(from, key) {
-  if (!key) {
-    return null;
-  }
-
-  if (Array.isArray(from)) {
-    return getProp({ from }, `from.${key}`);
-  }
+  if (!key) return null;
+  if (key === 'this') return from;
+  if (Array.isArray(from)) return getProp({ from }, `from.${key}`);
 
   const keys = key.split('.');
 
