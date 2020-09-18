@@ -128,11 +128,10 @@
           result = result.concat(value);
         } else {
           result[offset] = value;
+          items = getItems();
         }
 
         dispatch('change', result);
-
-        items = getItems();
       });
   }
 
@@ -200,13 +199,13 @@
         {#each items as { key, path, offset, schema } (key)}
           <tr data-field={`/${path.concat(key).join('/')}`} data-type={schema.type || 'object'}>
             {#if uiSchema['ui:template']}
-              <td>
-                <Value {schema} {uiSchema} value={result[offset]} />
+              <td colspan="99">
+                {#if result[offset] !== null}<Value {schema} {uiSchema} value={result[offset]} />{/if}
               </td>
             {:else}
               {#each headers as { field }}
                 <td data-field={`/${path.concat(key, field).join('/')}`} data-type={(schema[field] && schema[field].type) || 'object'}>
-                  <Value {schema} uiSchema={uiSchema[field]} value={result[offset][field]} />
+                  {#if result[offset][field] !== null}<Value {schema} uiSchema={uiSchema[field]} value={result[offset][field]} />{/if}
                 </td>
               {/each}
             {/if}
