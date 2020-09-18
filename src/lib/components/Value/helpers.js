@@ -47,7 +47,13 @@ export function getProp(from, key) {
       if (Array.isArray(o)) {
         if (keys[i] === '*') {
           return o.reduce((prev, y) => {
-            const sub = getProp(y, keys.slice(i + 1).join('.'));
+            const next = keys.slice(i + 1).join('.');
+
+            if (next === '*') {
+              return prev.concat(y);
+            }
+
+            const sub = getProp(y, next);
 
             if (typeof sub !== 'undefined') {
               prev.push(sub);
