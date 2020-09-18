@@ -9,7 +9,9 @@
   export let result = defaultValue(schema);
 
   const multiple = schema.type === 'object' || schema.type === 'array';
+  const isAppend = uiSchema['ui:append'] !== false && multiple;
   const isAttachment = uiSchema['ui:attachment'];
+
   const { rootId } = getContext('__ROOT__');
   const dispatch = createEventDispatcher();
 
@@ -19,7 +21,9 @@
 
   if (result) {
     if (typeof result === 'object') {
-      if (Array.isArray(result)) {
+      if (typeof (result.name || result.path) === 'string') {
+        currentFiles = [result];
+      } else if (Array.isArray(result)) {
         currentFiles = result.map(x => jsonData(x, () => ({ path: x })));
       } else {
         currentFiles = Object.keys(result).reduce((memo, x) => memo.concat(jsonData(x, () => ({ path: result[x] }))), []);
@@ -46,6 +50,11 @@
 
 
     return `${bytes.toFixed(decimals)} ${units[unit]}`;
+  }
+
+  function fixedLink(uri) {
+    if (uri.charAt() === '/' || uri.indexOf('://') !== -1) return uri;
+    return `${window.location.origin}/${uri}`;
   }
 
   function toBase64(file) {
@@ -81,7 +90,7 @@
 
       if (schema.type === 'object') {
         result = currentFiles.reduce((prev, cur) => {
-          prev[cur.name] = cur;
+          prev[cur.name || cur.path] = cur;
           return prev;
         }, {});
       }
@@ -111,17 +120,32 @@
     sync();
   }
 
+  function addFiles(set) {
+    if (isAppend) {
+      if (schema.type === 'object') {
+        currentFiles = currentFiles.reduce((memo, x) => {
+          if (!result[x.name || x.path]) memo.push(x);
+          return memo;
+        }, set);
+      } else {
+        currentFiles = currentFiles.concat(set);
+      }
+    } else {
+      currentFiles = set;
+    }
+  }
+
   function setFiles(e, skip) {
     if (!e.target.files.length && !skip) return;
     if (isAttachment) {
       Promise.all(Array.from(e.target.files).map(encode))
         .then(set => {
-          currentFiles = set;
+          addFiles(set);
           pending = false;
           sync();
         });
     } else {
-      currentFiles = [...e.target.files];
+      addFiles([...e.target.files]);
       pending = false;
       sync();
     }
@@ -135,12 +159,12 @@
   input { display: none; }
 </style>
 
-<div data-fileset>
+<div data-fieldset>
   <input {multiple} on:change={setFiles} bind:this={ref} type="file" {id} {name} />
   <button class="nobreak" data-before="&plus;" type="button" on:click={() => ref.click()}>
-    <span>{currentFiles.length > 0 ? 'Replace' : 'Add'} file{multiple ? 's' : ''}</span>
+    <span>{currentFiles.length > 0 ? (isAppend ? 'Append' : 'Replace') : 'Add'} file{multiple ? 's' : ''}</span>
   </button>
-  {#each currentFiles as fileInfo}
+  {#each currentFiles as fileInfo (fileInfo.path)}
     <details>
       <summary>
         <span class="chunk">{fileInfo.name || fileInfo.path}</span>
@@ -152,13 +176,17 @@
       <dl>
         {#if fileInfo.path}
           <dt>File path</dt>
-          <dd>{fileInfo.path}</dd>
+          <dd>
+            <a href={fixedLink(fileInfo.path)} target="_blank">{fileInfo.path}</a>
+          </dd>
         {/if}
         <dt>MIME Type</dt>
         <dd>{fileInfo.type || 'application/octet-stream'}</dd>
         {#if fileInfo.lastModifiedDate || fileInfo.mtime}
           <dt>Last Modified</dt>
-          <dd>{fileInfo.lastModifiedDate ? fileInfo.lastModifiedDate.toISOString() : fileInfo.mtime}</dd>
+          <dd>
+            <span class="chunk">{fileInfo.lastModifiedDate ? fileInfo.lastModifiedDate.toGMTString() : fileInfo.mtime}</span>
+          </dd>
         {/if}
       </dl>
     </details>

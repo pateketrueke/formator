@@ -11,6 +11,7 @@ uiSchema:
   set:
     ui:component: FileUpload
     ui:attachment: true
+    ui:append: false
   list:
     ui:component: FileUpload
   files:
