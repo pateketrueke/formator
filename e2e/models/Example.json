@@ -1,15 +1,19 @@
 {
   "$attributes": {
-    "findAll": ["url", "blob", "title"]
+    "findAll": ["url", "blob", "title", "fileset.name", "fileset.path", "fileset.size", "fileset.mtime"]
   },
   "$uiSchema": {
     "ui:pending": "Saving changes...",
-    "ui:fields": ["id", "url", "blob", "title"],
+    "ui:fields": ["id", "url", "blob", "title", "fileset"],
     "ui:headers": ["#ID", "Image URL", "Base64 Blob", "Example's title"],
     "blob": {
       "ui:template": [["span", "{@embed:this}"]],
       "ui:component": "FileUpload",
       "ui:attachment": true
+    },
+    "fileset": {
+      "ui:template": [["span", "{@embed:this}"]],
+      "ui:component": "FileUpload"
     },
     "url": {
       "ui:template": [["span", "{@embed:this}"]],
@@ -32,6 +36,12 @@
       },
       "url": {
         "type": "string"
+      },
+      "fileset": {
+        "type": "array",
+        "items": {
+          "$ref": "File"
+        }
       }
     }
   }

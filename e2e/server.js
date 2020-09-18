@@ -38,6 +38,7 @@ const repo = new Formator(new Sequelizer({
   dialect: 'sqlite',
 }));
 
+repo.database.add(require('./models/File'));
 repo.database.add(require('./models/Example'));
 
 async function main() {
@@ -46,8 +47,8 @@ async function main() {
 
   app.use('/db', repo.hook({
     onUpload: ({ field, payload, metadata }) => {
-      if (Math.random() > 0.5) {
-        payload[field] = metadata.filePath;
+      if (Math.random() > 0.5 && field === 'url') {
+        payload[field] = metadata.path;
       }
     },
   }));
