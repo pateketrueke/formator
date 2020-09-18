@@ -9,12 +9,16 @@
 }
 
 .chunk {
-  max-width: 200px;
   display: inline-block;
   text-overflow: ellipsis;
   overflow: hidden;
   line-height: 1em;
   height: 1em;
+  max-width: 85vw;
+
+  @media @sm {
+    max-width: 320px;
+  }
 }
 
 .flex {
