@@ -37,6 +37,7 @@
 
   let pk = 'id';
   let offset = -1;
+  let failure = null;
   let isUpdate = false;
   let isOpen = false;
   let backup = null;
@@ -79,7 +80,7 @@
   }
 
   function fail(e) {
-    console.log('ERROR', e);
+    failure = e.failure;
   }
 
   function edit(newOffset) {
@@ -91,8 +92,10 @@
   }
 
   function reload() {
-    payload = API.call(actions[model].index).then(resp => {
-      result = resp.result;
+    payload = API.call(actions[model].index).then(data => {
+      if (!data || data.status !== 'ok') return fail(data);
+      failure = data.failure;
+      result = data.result;
     });
   }
 
@@ -168,6 +171,13 @@
     background-color: rgba(255, 255, 255, .75);
   }
 </style>
+
+{#if failure}
+  <details data-failure>
+    <summary>Failure</summary>
+    <pre>{failure}</pre>
+  </details>
+{/if}
 
 <table class:loading={loading} data-pending={uiSchema['ui:pending'] || pending}>
   {#if uiSchema['ui:title']}

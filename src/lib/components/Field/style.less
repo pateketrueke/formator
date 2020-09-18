@@ -5,18 +5,25 @@
 }
 
 [data-failure] {
-  border: 1px solid transparent;
+  background-color: @white;
   position: absolute;
-  right: 0;
+  max-width: 100%;
+  padding: @sp1;
+  z-index: 1;
+  right: @sp1;
+  top: @sp1;
 
   &[open] {
     border: 1px dashed @light;
-    background-color: @white;
     z-index: 1;
   }
 
   summary {
     color: @error;
+  }
+
+  pre {
+    overflow: auto;
   }
 
   > * {

@@ -20,14 +20,14 @@
   if (result) {
     if (typeof result === 'object') {
       if (Array.isArray(result)) {
-        currentFiles = result.map(x => jsonData(x, () => ({ filePath: x })));
+        currentFiles = result.map(x => jsonData(x, () => ({ path: x })));
       } else {
-        currentFiles = Object.keys(result).reduce((memo, x) => memo.concat(jsonData(x, () => ({ filePath: result[x] }))), []);
+        currentFiles = Object.keys(result).reduce((memo, x) => memo.concat(jsonData(x, () => ({ path: result[x] }))), []);
       }
     }
 
     if (typeof result === 'string') {
-      currentFiles = [jsonData(result, () => ({ filePath: result }))];
+      currentFiles = [jsonData(result, () => ({ path: result }))];
     }
   }
 
@@ -62,11 +62,11 @@
       const offset = blob.indexOf(';');
 
       return {
-        fileName: file.name,
-        fileSize: file.size,
-        fileType: file.type,
-        fileMTime: file.lastModifiedDate,
-        fileContent: blob.indexOf(';name=') === -1
+        name: file.name,
+        size: file.size,
+        type: file.type,
+        mtime: file.lastModifiedDate,
+        content: blob.indexOf(';name=') === -1
           ? `${blob.substr(0, offset)};name=${file.name};${blob.substr(offset + 1)}`
           : blob,
       };
@@ -76,18 +76,18 @@
   function sync() {
     if (isAttachment) {
       if (schema.type === 'string') {
-        result = currentFiles[0] ? currentFiles[0].fileContent : undefined;
+        result = currentFiles[0] ? currentFiles[0].content : undefined;
       }
 
       if (schema.type === 'object') {
         result = currentFiles.reduce((prev, cur) => {
-          prev[cur.fileName] = cur;
+          prev[cur.name] = cur;
           return prev;
         }, {});
       }
 
       if (schema.type === 'array') {
-        result = currentFiles.map(x => schema.items.type === 'object' ? x : x.fileContent);
+        result = currentFiles.map(x => schema.items.type === 'object' ? x : x.content);
       }
     } else if (schema.type !== 'array') {
       result = currentFiles[0];
@@ -143,22 +143,22 @@
   {#each currentFiles as fileInfo}
     <details>
       <summary>
-        <span class="chunk">{fileInfo.name || fileInfo.fileName || fileInfo.filePath}</span>
-        {#if fileInfo.size || fileInfo.fileSize}<small>{humanFileSize(fileInfo.size || fileInfo.fileSize)}</small>{/if}
+        <span class="chunk">{fileInfo.name || fileInfo.path}</span>
+        {#if fileInfo.size}<small>{humanFileSize(fileInfo.size)}</small>{/if}
         <button data-before="&times;" type="button" on:click={() => removeFile(fileInfo)}>
           <span>Remove file</span>
         </button>
       </summary>
       <dl>
-        {#if fileInfo.filePath}
+        {#if fileInfo.path}
           <dt>File path</dt>
-          <dd>{fileInfo.filePath}</dd>
+          <dd>{fileInfo.path}</dd>
         {/if}
         <dt>MIME Type</dt>
-        <dd>{fileInfo.type || fileInfo.fileType || 'application/octet-stream'}</dd>
-        {#if fileInfo.lastModifiedDate || fileInfo.fileMTime}
+        <dd>{fileInfo.type || 'application/octet-stream'}</dd>
+        {#if fileInfo.lastModifiedDate || fileInfo.mtime}
           <dt>Last Modified</dt>
-          <dd>{fileInfo.lastModifiedDate ? fileInfo.lastModifiedDate.toISOString() : fileInfo.fileMTime}</dd>
+          <dd>{fileInfo.lastModifiedDate ? fileInfo.lastModifiedDate.toISOString() : fileInfo.mtime}</dd>
         {/if}
       </dl>
     </details>
