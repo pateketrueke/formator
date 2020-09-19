@@ -46,7 +46,7 @@
     API.call(req).then(resp => {
       if (resp.status === 'ok') {
         status = 'ready';
-        items = resp.result;
+        items = resp.result || [];
         offset = Math.max(0, Math.min(offset, items.length - 1));
       }
     });
@@ -127,11 +127,11 @@
 
   <input {name} type="hidden" value={data[schema.references.key]} />
 
-  {#if status === 'ready' && !items.length}
+  {#if !items.length}
     <small>{uiSchema['ui:empty'] || `${association.plural} were not found`}</small>
   {/if}
 
-  {#if isOpen}
+  {#if isOpen && items.length > 0}
     <div bind:this={layer} on:click={reset} data-autocomplete>
       <ul bind:this={options} on:click={select}>
         {#each items as value, k (value)}

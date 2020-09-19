@@ -1,14 +1,15 @@
 <script>
   import { getContext, createEventDispatcher } from 'svelte';
-  import { defaultValue, getId } from '../Field/utils';
-  import { jsonData } from '../Value/helpers';
+  import {
+    defaultValue, withKeys, getId, jsonData, humanFileSize,
+  } from '../../shared/utils';
 
   export let name;
   export let uiSchema = {};
   export let schema = { type: 'string' };
   export let result = defaultValue(schema);
 
-  const multiple = schema.type === 'object' || schema.type === 'array';
+  const multiple = (schema.type === 'object' || schema.type === 'array') && uiSchema['ui:multiple'] !== false;
   const isAppend = uiSchema['ui:append'] !== false && multiple;
   const isAttachment = uiSchema['ui:attachment'];
 
@@ -20,36 +21,19 @@
   let ref;
 
   if (result) {
-    if (typeof result === 'object') {
+    if (typeof result === 'object' && result.path) {
       if (typeof (result.name || result.path) === 'string') {
-        currentFiles = [result];
+        currentFiles = withKeys([result]);
       } else if (Array.isArray(result)) {
-        currentFiles = result.map(x => jsonData(x, () => ({ path: x })));
+        currentFiles = withKeys(result.map(x => jsonData(x, () => ({ path: x }))));
       } else {
-        currentFiles = Object.keys(result).reduce((memo, x) => memo.concat(jsonData(x, () => ({ path: result[x] }))), []);
+        currentFiles = withKeys(Object.keys(result).reduce((memo, x) => memo.concat(jsonData(x, () => ({ path: result[x] }))), []));
       }
     }
 
     if (typeof result === 'string') {
-      currentFiles = [jsonData(result, () => ({ path: result }))];
+      currentFiles = withKeys([jsonData(result, () => ({ path: result }))]);
     }
-  }
-
-  function humanFileSize(bytes, decimals = 1) {
-    if (Math.abs(bytes) < 1000) return `${bytes} B`;
-
-    const units = ['KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-    const ratio = 10 ** decimals;
-
-    let unit = -1;
-
-    do {
-      bytes /= 1000;
-      unit += 1;
-    } while (Math.round(Math.abs(bytes) * ratio) / ratio >= 1000 && unit < units.length - 1);
-
-
-    return `${bytes.toFixed(decimals)} ${units[unit]}`;
   }
 
   function fixedLink(uri) {
@@ -96,7 +80,7 @@
       }
 
       if (schema.type === 'array') {
-        result = currentFiles.map(x => schema.items.type === 'object' ? x : x.content);
+        result = currentFiles.map(x => (schema.items.type === 'object' ? x : x.content));
       }
     } else if (schema.type !== 'array') {
       result = currentFiles[0];
@@ -112,10 +96,10 @@
     if (currentFiles.length > 0) sync();
   }
 
-  function removeFile(selected) {
+  function removeFile(key) {
     if (!confirm('Are you sure?')) return; // eslint-disable-line
 
-    currentFiles = currentFiles.filter(x => x !== selected);
+    currentFiles = currentFiles.filter(x => x.key !== key);
     pending = true;
     sync();
   }
@@ -140,19 +124,19 @@
     if (isAttachment) {
       Promise.all(Array.from(e.target.files).map(encode))
         .then(set => {
-          addFiles(set);
+          addFiles(withKeys(set));
           pending = false;
           sync();
         });
     } else {
-      addFiles([...e.target.files]);
+      addFiles(withKeys([...e.target.files]));
       pending = false;
       sync();
     }
   }
 
   $: id = getId(rootId, name);
-  $: check() || dispatch('change', result);
+  $: check() || dispatch('change', result); // eslint-disable-line
 </script>
 
 <style>
@@ -162,30 +146,30 @@
 <div data-fieldset>
   <input {multiple} on:change={setFiles} bind:this={ref} type="file" {id} {name} />
   <button class="nobreak" data-before="&plus;" type="button" on:click={() => ref.click()}>
-    <span>{currentFiles.length > 0 ? (isAppend ? 'Append' : 'Replace') : 'Add'} file{multiple ? 's' : ''}</span>
+    <span>{#if currentFiles.length > 0}{isAppend ? 'Append' : 'Replace'}{:else}Add{/if} file{multiple ? 's' : ''}</span>
   </button>
-  {#each currentFiles as fileInfo (fileInfo.path)}
+  {#each currentFiles as { key, name, type, path, size, mtime, lastModifiedDate } (key)}
     <details>
       <summary>
-        <span class="chunk">{fileInfo.name || fileInfo.path}</span>
-        {#if fileInfo.size}<small>{humanFileSize(fileInfo.size)}</small>{/if}
-        <button data-before="&times;" type="button" on:click={() => removeFile(fileInfo)}>
+        <span class="chunk">{name || path}</span>
+        {#if size}<small>{humanFileSize(size)}</small>{/if}
+        <button data-before="&times;" type="button" on:click={() => removeFile(key)}>
           <span>Remove file</span>
         </button>
       </summary>
       <dl>
-        {#if fileInfo.path}
+        {#if path}
           <dt>File path</dt>
           <dd>
-            <a href={fixedLink(fileInfo.path)} target="_blank">{fileInfo.path}</a>
+            <a href={fixedLink(path)} target="_blank">{path}</a>
           </dd>
         {/if}
         <dt>MIME Type</dt>
-        <dd>{fileInfo.type || 'application/octet-stream'}</dd>
-        {#if fileInfo.lastModifiedDate || fileInfo.mtime}
+        <dd>{type || 'application/octet-stream'}</dd>
+        {#if lastModifiedDate || mtime}
           <dt>Last Modified</dt>
           <dd>
-            <span class="chunk">{fileInfo.lastModifiedDate ? fileInfo.lastModifiedDate.toGMTString() : fileInfo.mtime}</span>
+            <span class="chunk">{lastModifiedDate ? lastModifiedDate.toGMTString() : mtime}</span>
           </dd>
         {/if}
       </dl>

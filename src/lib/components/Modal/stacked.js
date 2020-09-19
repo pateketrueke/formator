@@ -1,6 +1,14 @@
 const STACK = [];
 
-window.addEventListener('keyup', e => {
+let skip;
+let t;
+
+function onClose(e) {
+  if (skip) {
+    skip = false;
+    return;
+  }
+
   const last = STACK[STACK.length - 1];
 
   if (last && typeof last.keyup === 'function') {
@@ -19,7 +27,16 @@ window.addEventListener('keyup', e => {
 
     last.close();
   }
+}
+
+window.addEventListener('keyup', e => {
+  clearTimeout(t);
+  t = setTimeout(() => onClose(e), 60);
 });
+
+export function stopPropagation() {
+  skip = true;
+}
 
 export function destroy(target) {
   const offset = STACK.indexOf(target);

@@ -6,8 +6,7 @@
   import Field from '../Field';
   import Value from '../Value';
 
-  import { defaultValue } from '../Field/utils';
-  import { API, randId } from '../../shared/utils';
+  import { API, randId, defaultValue } from '../../shared/utils';
 
   export let pending = 'Loading...';
   export let actions = {};
@@ -36,6 +35,7 @@
   });
 
   let pk = 'id';
+  let items = [];
   let offset = -1;
   let failure = null;
   let isUpdate = false;
@@ -43,15 +43,6 @@
   let backup = null;
   let loading = null;
   let payload = result.length !== 0;
-
-  function getItems() {
-    return result.map((x, k) => ({
-      key: k,
-      path: [],
-      offset: k,
-      schema: schema.properties || {},
-    }));
-  }
 
   function getHeaders() {
     let props;
@@ -72,6 +63,15 @@
           || key,
         field: key,
       }));
+  }
+
+  function getItems(from) {
+    return from.map((data, _offset) => ({
+      key: data.id || data.key || randId('key_'),
+      schema: schema.properties || {},
+      offset: _offset,
+      data,
+    }));
   }
 
   function fail(e) {
@@ -105,7 +105,6 @@
         loading = null;
         if (data && data.status !== 'ok') return fail(data);
         result = result.filter((_, k) => k !== fixedOffset);
-        items = getItems();
       });
   }
 
@@ -114,6 +113,10 @@
   }
 
   function sync() {
+    if (isUpdate) {
+      value[pk] = result[offset][pk];
+    }
+
     loading = Promise.resolve()
       .then(() => actions[model]
         && API.call(actions[model][isUpdate ? 'update' : 'create'], value))
@@ -128,7 +131,6 @@
           result = result.concat(value);
         } else {
           result[offset] = value;
-          items = getItems();
         }
 
         dispatch('change', result);
@@ -143,7 +145,7 @@
     });
   });
 
-  $: items = getItems();
+  $: items = getItems(result);
   $: headers = getHeaders();
   $: fieldProps = { model, schema, uiSchema };
   $: pk = refs[model].references.primaryKeys[0].prop;
@@ -184,7 +186,7 @@
         {#each headers as { label }}
           <th>{label}</th>
         {/each}
-        <th></th>
+        <th colspan="99"></th>
       </tr>
     </thead>
   {/if}
@@ -196,16 +198,16 @@
           <td colspan="99">Loading data...</td>
         </tr>
       {:then}
-        {#each items as { key, path, offset, schema } (key)}
-          <tr data-field={`/${path.concat(key).join('/')}`} data-type={schema.type || 'object'}>
+        {#each items as { key, data, schema, offset } (key)}
+          <tr data-field="/{offset}" data-type="object">
             {#if uiSchema['ui:template']}
               <td colspan="99">
-                {#if result[offset] !== null}<Value {schema} {uiSchema} value={result[offset]} />{/if}
+                {#if data !== null}<Value {schema} {uiSchema} value={data} />{/if}
               </td>
             {:else}
               {#each headers as { field }}
-                <td data-field={`/${path.concat(key, field).join('/')}`} data-type={(schema[field] && schema[field].type) || 'object'}>
-                  {#if result[offset][field] !== null}<Value {schema} uiSchema={uiSchema[field]} value={result[offset][field]} />{/if}
+                <td data-field="/{offset}/{field}" data-type={schema[field].type || 'object'}>
+                  {#if data[field] !== null}<Value schema={schema[field]} uiSchema={uiSchema[field]} value={data[field]} />{/if}
                 </td>
               {/each}
             {/if}

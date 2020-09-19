@@ -4,6 +4,9 @@ export default {
   embed(data, values, parentNode) {
     return widgets.slideshow($, data, values, parentNode);
   },
+  file(data, values, parentNode) {
+    return widgets.attachment($, data, values, parentNode);
+  },
   sum(data, values) {
     return values.map(x => x.reduce((prev, cur) => prev + cur, 0).toFixed(2).replace('.00', '')).join(', ');
   },

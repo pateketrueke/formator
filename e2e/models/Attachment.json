@@ -1,0 +1,28 @@
+{
+  "$attributes": {
+    "findAll": ["label"]
+  },
+  "$uiSchema": {
+    "id": {
+      "ui:hidden": true
+    },
+    "ExampleId": {
+      "ui:hidden": true
+    },
+    "FileId": {
+      "ui:hidden": true
+    }
+  },
+  "$schema": {
+    "id": "Attachment",
+    "properties": {
+      "id": {
+        "type": "integer",
+        "primaryKey": true
+      },
+      "label": {
+        "type": "string"
+      }
+    }
+  }
+}

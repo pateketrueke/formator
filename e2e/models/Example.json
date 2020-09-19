@@ -16,25 +16,24 @@
     ]
   },
   "$uiSchema": {
+    "ui:add": false,
     "ui:pending": "Saving changes...",
-    "ui:fields": ["id", "url", "file", "blob", "title", "fileset"],
-    "ui:headers": ["#ID", "Image URL", "File", "Base64 Blob", "Example's title", "Images"],
+    "ui:fields": ["id", "title", "url", "file", "blob", "fileset"],
+    "ui:headers": ["#", "Example", "URL", "File", "Blob", "Images"],
     "blob": {
-      "ui:template": [["span", "{@embed:this}"]],
+      "ui:template": [["div", "{@embed:this}"]],
       "ui:component": "FileUpload",
       "ui:attachment": true
     },
-    "fileset": {
-      "ui:template": [["span", "{@embed:*.*}"]],
-      "ui:component": "FileUpload"
-    },
-    "file": {
-      "ui:template": [["span", "{@embed:this}"]],
-      "ui:component": "FileUpload"
-    },
     "url": {
-      "ui:template": [["span", "{@embed:this}"]],
+      "ui:template": [["div", "{@file:this}"]],
       "ui:component": "FileUpload"
+    },
+    "fileId": {
+      "ui:hidden": true
+    },
+    "id": {
+      "ui:edit": false
     }
   },
   "$schema": {
@@ -55,12 +54,22 @@
         "type": "string"
       },
       "file": {
-        "$ref": "File"
+        "$ref": "File",
+        "belongsTo": {
+          "through": {
+            "model": "Attachment"
+          }
+        }
       },
       "fileset": {
         "type": "array",
         "items": {
-          "$ref": "File"
+          "$ref": "File",
+          "belongsToMany": {
+            "through": {
+              "model": "Attachment"
+            }
+          }
         }
       }
     }

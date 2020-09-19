@@ -1,29 +1,17 @@
-import { $ } from './widgets';
 import TYPES from './types';
 import HTML from '../HTML';
 
 const RE_PLACEHOLDER = /\{(?:(@?[^{}|?!:@]*)(?::([\w*,.]+))?([|?!:])?(.*?)|)\}/;
 const RE_IDENTITY = /\{\}/g;
 
-export function jsonData(value, cb) {
-  if (typeof value === 'string' && value.charAt() === '{' && value.charAt(value.length - 1) === '}') {
-    try {
-      return JSON.parse(value);
-    } catch (e) {
-      return null;
-    }
-  }
-
-  if (value !== null && typeof value === 'object') {
-    return value;
-  }
-
-  return cb();
-}
-
 export function getProp(from, key) {
   if (!key) return null;
-  if (key === 'this') return from;
+
+  if (key === 'this') {
+    if (!Array.isArray(from)) return from[key];
+    return from;
+  }
+
   if (Array.isArray(from)) return getProp({ from }, `from.${key}`);
 
   const keys = key.split('.');
@@ -158,7 +146,11 @@ export function renderValue(data, template) {
             retval = JSON.stringify(retval);
           }
 
-          prev.push(retval);
+          if (Array.isArray(retval)) {
+            prev.push(...retval);
+          } else {
+            prev.push(retval);
+          }
         }
       }
 
@@ -189,12 +181,12 @@ export function reduce(value, template) {
 
   if (Object.prototype.toString.call(text[0]) === '[object Object]') {
     return [node[0], renderValue(value, text[0])].concat(text.slice(1).map(x => renderValue(value, x)));
-  } else {
-    return [node[0], renderValue(value, node[1] ? node[1] : text[0])].concat(text.map(x => renderValue(value, x)));
   }
+
+  return [node[0], renderValue(value, node[1] ? node[1] : text[0])].concat(text.map(x => renderValue(value, x)));
 }
 
-export function renderDOM(value, template) {
+export function renderDOM($, value, template) {
   return [{
     component: HTML,
     options: {

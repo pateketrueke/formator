@@ -3,6 +3,7 @@
 .overlay {
   align-items: baseline !important;
   overflow: auto;
+  z-index: 2;
 
   .wrapper {
     width: 100%;
@@ -16,6 +17,67 @@
       width: auto;
     }
   }
+}
+
+dl {
+  margin: @sp1 0 @sp2;
+  overflow: hidden;
+  font-size: .9em;
+  min-width: 300px;
+
+  dd + dt {
+    margin-top: @sp2;
+  }
+
+  dt {
+    color: @light;
+    font-weight: bold;
+  }
+
+  dd {
+    word-break: break-all;
+
+    &:nth-child(1) {
+      margin-bottom: @sp2;
+    }
+  }
+
+  @media @sm {
+    dt, dd {
+      float: left;
+    }
+
+    dd + dt {
+      margin: 0;
+    }
+
+    dt {
+      clear: left;
+      width: 30%;
+      margin-right: @sp2;
+
+      &::after {
+        content: ': ';
+      }
+    }
+
+    dd {
+      border: 0;
+      width: 66.6%;
+      clear: right;
+    }
+  }
+}
+
+summary > small,
+a + small {
+  margin-left: @sp1;
+}
+
+small {
+  background-color: @hover;
+  border: 1px solid @high;
+  padding: 1px 3px;
 }
 
 table {
@@ -33,6 +95,21 @@ table {
   td,
   td ~ th {
     padding: @sp2;
+  }
+
+  td {
+    [data-ref] > div {
+      position: relative;
+      white-space: nowrap;
+
+      dl {
+        z-index: 1;
+        padding: @sp2;
+        position: absolute;
+        background-color: @white;
+        border: 1px dashed @light;
+      }
+    }
   }
 
   thead {
@@ -178,8 +255,7 @@ th,
 h2,
 span,
 label,
-button,
-summary {
+button {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -209,7 +285,6 @@ summary {
   cursor: default;
   padding: 0 @sp1;
   color: @dark;
-  font-size: .9em;
   white-space: nowrap;
 
   &:focus {

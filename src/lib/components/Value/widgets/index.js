@@ -4,6 +4,7 @@ import {
 } from 'somedom';
 
 import slideshow from './slideshow';
+import attachment from './attachment';
 
 export const $ = bind(render,
   listeners(),
@@ -13,4 +14,5 @@ export const $ = bind(render,
 
 export const widgets = {
   slideshow,
+  attachment,
 };

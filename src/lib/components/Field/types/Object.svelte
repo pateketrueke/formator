@@ -6,8 +6,7 @@
 
 <script>
   import { getContext, createEventDispatcher } from 'svelte';
-  import { randId } from '../../../shared/utils';
-  import { defaultValue, getId } from '../utils';
+  import { randId, defaultValue, getId } from '../../../shared/utils';
 
   import Field from '..';
   // import Value from '../../Value';
@@ -36,13 +35,13 @@
   let keys = [];
 
   function uniqueItems(a, b) {
-    const keys = (a && Object.keys(a)) || [];
+    const _set = (a && Object.keys(a)) || [];
 
-    Object.keys(result).forEach(key => {
-      if (a && typeof a[key] === 'undefined') keys.push(key);
+    Object.keys(b).forEach(key => {
+      if (a && typeof a[key] === 'undefined') _set.push(key);
     });
 
-    return keys;
+    return _set;
   }
 
   function getItemFor(field, offset, subSchema, currentField) {
@@ -56,15 +55,16 @@
       subSchema = refs[subSchema.$ref];
     }
 
+    const _uiSchema = uiSchema[field] || {};
     const isRef = subSchema.modelName === model;
-    const isHidden = uiSchema[field] && uiSchema[field]['ui:hidden'];
+    const isHidden = _uiSchema['ui:hidden'] || _uiSchema['ui:edit'] === false;
     const currentValue = ((isRef && parent ? parent : result) || {})[field];
 
     return {
       key,
       field,
       schema: subSchema,
-      uiSchema: uiSchema[field] || {},
+      uiSchema: _uiSchema,
       current: isRef && currentValue === 0 ? null : currentValue,
       isFixed: currentField && currentField.isFixed,
       hidden: isHidden || isRef,
@@ -80,6 +80,8 @@
     if (typeof result[nextKey] === 'undefined') {
       const nextValue = getItemFor(nextKey, keys.length, nextSchema);
 
+      console.log(nextValue);
+
       result[nextKey] = defaultValue(nextSchema);
       nextValue.isFixed = true;
 
@@ -93,7 +95,8 @@
     fields = fields.filter(x => x.key !== key);
     keys = keys.filter(x => x !== key);
 
-    result[oldKey.field] = undefined;
+    delete result[oldKey.field];
+    console.log(key, oldKey, { result });
   }
 
   function prop(e, key) {
@@ -169,14 +172,14 @@
         {name}
         type="hidden"
         data-type={schema.type || 'object'}
-        data-field={`/${path.join('/')}`}
+        data-field="/{path.join('/')}"
         bind:value={current}
       />
     {/each}
     <ul>
       {#each fields as { id, key, path, name, field, isFixed, schema, uiSchema, current } (key)}
         <li data-type={schema.type || 'object'}>
-          <div data-field={`/${path.join('/')}`}>
+          <div data-field="/{path.join('/')}">
             {#if isFixed}
               <input type="text" placeholder={uiSchema['ui:key'] || 'key'} on:change={e => prop(e, key)} />
             {:else}
@@ -200,7 +203,7 @@
 
               {#if isFixed && uiSchema['ui:remove'] !== false}
                 <button data-is="remove" data-before="&times;" type="button" on:click={() => remove(key)}>
-                  <span>{uiSchema['ui:remove'] || 'Remove prop'}</span>
+                  <span>{uiSchema['ui:remove'] || 'Remove prop'} {key}</span>
                 </button>
               {/if}
             </div>

@@ -1,6 +1,7 @@
 <script>//
   import { createEventDispatcher } from 'svelte';
   import { In } from 'svql';
+  import { stopPropagation } from './stacked';
 
   export let visible = false;
   export let updating = false;
@@ -11,7 +12,11 @@
   const dispatch = createEventDispatcher();
 
   function close(e) {
-    if (e) dispatch('cancel');
+    if (e) {
+      stopPropagation();
+      dispatch('cancel');
+    }
+
     visible = false;
   }
 

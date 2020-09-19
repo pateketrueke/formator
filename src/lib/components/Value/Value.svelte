@@ -1,6 +1,7 @@
 <script context="module">//
+  import { $ as _ } from './widgets';
   import { renderDOM } from './helpers';
-  import { isScalar } from '../../shared/utils';
+  import { isScalar, isEmpty } from '../../shared/utils';
 </script>
 
 <script>
@@ -11,12 +12,12 @@
   function getNodes() {
     const { type, default: defaultValue } = schema;
 
-    if (value === '' || typeof value === 'undefined') {
+    if (isEmpty(value)) {
       return [];
     }
 
     if (typeof value !== 'undefined' && uiSchema && uiSchema['ui:template']) {
-      return renderDOM(value, uiSchema['ui:template']);
+      return renderDOM(_, value, uiSchema['ui:template']);
     }
 
     if (type === 'number' || type === 'integer') {

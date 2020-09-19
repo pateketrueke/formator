@@ -1,6 +1,6 @@
 import { mount, unmount } from 'somedom';
-import { jsonData } from '../helpers';
 import { destroy, update } from '../../Modal/stacked';
+import { jsonData, humanFileSize } from '../../../shared/utils';
 
 export default function slideShow($, data, values, parentNode) {
   values = values.reduce((prev, cur) => prev.concat(cur || []), [])
@@ -9,18 +9,33 @@ export default function slideShow($, data, values, parentNode) {
       path: value,
     })));
 
-  const prefix = values.length !== 1
-    ? `${values.length} files`
-    : '1 file';
+  if (!(values[0] && values[0].path)) {
+    values = [data];
+  }
 
-  if (!(values[0] && values[0].name)) {
-    return;
+  const prefix = values[0].name || values[0].path;
+
+  let suffix;
+  let size;
+
+  if (values.length > 1) {
+    suffix = values.length > 2
+      ? ` + ${values.length} files`
+      : ' + 1 file';
+  }
+
+  if (values[0].size) {
+    size = ['small', humanFileSize(values[0].size)];
   }
 
   let ref;
+  let open;
+  let isImage;
+  let isResource;
 
-  return ['a', {
+  return [['a', {
     href: '#',
+    class: 'chunk',
     target: '_blank',
     oncreate(self) {
       ref = self;
@@ -29,7 +44,7 @@ export default function slideShow($, data, values, parentNode) {
         : values[0].path;
     },
     onclick(e) {
-      if (e.metaKey || e.ctrlKey) {
+      if (open || e.metaKey || e.ctrlKey) {
         return;
       }
 
@@ -46,6 +61,7 @@ export default function slideShow($, data, values, parentNode) {
 
         destroy(closeMe);
         unmount(target);
+        open = false;
       }
 
       function showMe() {
@@ -53,14 +69,35 @@ export default function slideShow($, data, values, parentNode) {
           target.removeChild(node);
         }
 
-        node = $(!values[offset].name.match(/\.(svg|gif|png|jpe?g)/i)
-          ? ['iframe', { width: 853, height: 505 }]
-          : ['img']);
+        isImage = values[offset].path.match(/\.(tiff|svg|gif|png|jpe?g)/i);
+        isResource = values[offset].path.match(/\.(mp[34]|midi|avi|mpe?g|og[gv])/i);
 
-        node.style.opacity = 0;
-        node.src = ref.href = values[offset].path.indexOf('://') === -1
+        const name = values[offset].name || values[offset].path;
+        const srcFile = values[offset].path.indexOf('://') === -1
           ? `/${values[offset].path}`
           : values[offset].path;
+
+        if (isImage) {
+          node = $(['img', { src: srcFile }]);
+        } else if (isResource) {
+          node = $(['iframe', { src: srcFile, width: 853, height: 505 }]);
+        } else {
+          node = $(['div', [
+            ['dl', [
+              ['dd', [['a', { href: srcFile, target: '_blank' }, name || values[offset].path]]],
+              values[offset].path && ['dt', 'File path'],
+              values[offset].path && ['dd', values[offset].path],
+              values[offset].size && ['dt', 'File size'],
+              values[offset].size && ['dd', humanFileSize(values[offset].size)],
+              values[offset].type && ['dt', 'MIME Type'],
+              values[offset].type && ['dd', values[offset].type],
+              values[offset].mtime && ['dt', 'Last Modified'],
+              values[offset].mtime && ['dd', values[offset].mtime],
+            ]],
+          ]]);
+        }
+
+        node.style.opacity = 0;
 
         const count = values.length > 1
           ? `(${offset + 1}/${values.length}) `
@@ -103,7 +140,8 @@ export default function slideShow($, data, values, parentNode) {
       setTimeout(() => {
         target.classList.add('active');
         setTimeout(showMe, 60);
+        open = true;
       });
     },
-  }, prefix];
+  }, prefix], suffix, size];
 }

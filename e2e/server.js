@@ -8,6 +8,7 @@ const Formator = require('..');
 const app = express();
 
 app.use(require('body-parser').json({ limit: '5mb' }));
+
 app.use((req, res, next) => {
   if (req._body) return next();
   if (req.url.indexOf('/tmp/') === 0) {
@@ -38,8 +39,9 @@ const repo = new Formator(new Sequelizer({
   dialect: 'sqlite',
 }));
 
-repo.database.add(require('./models/File'));
+repo.database.add(require('./models/Attachment'));
 repo.database.add(require('./models/Example'));
+repo.database.add(require('./models/File'));
 
 async function main() {
   await repo.database.connect();

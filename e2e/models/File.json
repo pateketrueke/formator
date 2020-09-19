@@ -1,6 +1,12 @@
 {
   "$attributes": {
-    "findAll": ["name", "path", "type", "size"]
+    "findAll": ["name", "path", "type", "size", "mtime"]
+  },
+  "$uiSchema": {
+    "ui:template": [["div", "{@file:this}"]],
+    "ui:component": "FileUpload",
+    "ui:fields": ["File info"],
+    "ui:multiple": false
   },
   "$schema": {
     "id": "File",

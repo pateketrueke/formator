@@ -25,4 +25,4 @@
   });
 </script>
 
-<div bind:this={ref} />
+<div data-ref bind:this={ref} />

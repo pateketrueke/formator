@@ -45,54 +45,6 @@
       right: 1px;
     }
   }
-  small {
-    background-color: @hover;
-    border: 1px solid @high;
-    padding: 1px 3px;
-  }
-  dl {
-    margin: @sp1 0 @sp2;
-    overflow: hidden;
-    font-size: .9em;
-
-    dd + dt {
-      margin-top: @sp2;
-    }
-
-    dt {
-      color: @light;
-      font-weight: bold;
-    }
-
-    dd {
-      word-break: break-all;
-    }
-
-    @media @sm {
-      dt, dd {
-        float: left;
-      }
-
-      dd + dt {
-        margin: 0;
-      }
-
-      dt {
-        clear: left;
-        width: 33.3%;
-
-        &::after {
-          content: ': ';
-        }
-      }
-
-      dd {
-        border: 0;
-        width: 66.6%;
-        clear: right;
-      }
-    }
-  }
 }
 
 [data-actions] {
@@ -106,12 +58,12 @@
 
 li {
   [data-field] > span {
-    max-width: 50px;
-    color: @dark;
-    width: 100%;
+    xmax-width: 50px;
+    xcolor: @dark;
+    xwidth: 100%;
 
     &::after {
-      content: ': ';
+      xcontent: ': ';
     }
   }
 
@@ -124,6 +76,7 @@ li {
     > input {
       border: 0;
       padding: 0;
+      width: 100%;
       font-size: 1em;
 
       &:focus {

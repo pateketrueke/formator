@@ -1,3 +1,86 @@
+const DEFAULT_VALUES = {
+  object: () => ({}),
+  array: () => [],
+  string: () => '',
+  integer: () => 0,
+  number: () => 0.0,
+  boolean: () => false,
+};
+
+const SHARED_INDEX = {};
+
+export function getId(rootId, forName, incOffset) {
+  if (!SHARED_INDEX[forName]) {
+    SHARED_INDEX[forName] = 0;
+  }
+
+  if (incOffset) {
+    SHARED_INDEX[forName] += 1;
+  }
+
+  const offset = SHARED_INDEX[forName];
+  const prefix = rootId ? `${rootId}-` : '';
+
+  return `${prefix}${forName}-field-${offset}`;
+}
+
+export function getItems(schema, offset) {
+  return (Array.isArray(schema.items)
+    ? schema.items[offset]
+    : schema.items)
+  || schema.additionalItems
+  || {};
+}
+
+export function defaultValue(schema) {
+  if (!schema) {
+    return null;
+  }
+
+  if (schema.properties) {
+    return Object.keys(schema.properties).reduce((prev, cur) => {
+      prev[cur] = defaultValue(schema.properties[cur]);
+
+      return prev;
+    }, {});
+  }
+
+  return DEFAULT_VALUES[schema.type || 'object']();
+}
+
+export function humanFileSize(bytes, decimals = 1) {
+  if (Math.abs(bytes) < 1000) return `${bytes} B`;
+
+  const units = ['KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+  const ratio = 10 ** decimals;
+
+  let unit = -1;
+
+  do {
+    bytes /= 1000;
+    unit += 1;
+  } while (Math.round(Math.abs(bytes) * ratio) / ratio >= 1000 && unit < units.length - 1);
+
+
+  return `${bytes.toFixed(decimals)} ${units[unit]}`;
+}
+
+export function jsonData(value, cb) {
+  if (typeof value === 'string' && value.charAt() === '{' && value.charAt(value.length - 1) === '}') {
+    try {
+      return JSON.parse(value);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  if (value !== null && typeof value === 'object') {
+    return value;
+  }
+
+  return cb();
+}
+
 export function showError(field, target) {
   const selector = `[data-field="${field}"]`;
   const el = target.querySelector(selector);
@@ -15,8 +98,8 @@ export function throttle(fn, ms) {
   };
 }
 
-export function randId() {
-  return `_${Math.random().toString(36).substr(2)}`;
+export function randId(prefix) {
+  return `${prefix || '_'}${Math.random().toString(36).substr(2)}`;
 }
 
 export function findRef(id, refs) {
@@ -69,8 +152,25 @@ export function reduceRefs(schema, refs) {
   return copy;
 }
 
+export function withKeys(values) {
+  return values.map(x => Object.assign(x, {
+    key: x.key || randId('key_'),
+  }));
+}
+
 export function isScalar(value) {
   return value === null || ['string', 'number', 'boolean'].includes(typeof value);
+}
+
+export function isEmpty(value) {
+  if (typeof value === 'object') {
+    return (Array.isArray(value) && value.length === 0)
+      || (Object.keys(value).length === 0);
+  }
+
+  return (typeof value === 'undefined'
+    || value === null
+    || value === '');
 }
 
 export function loader(components, selector) {
@@ -188,15 +288,15 @@ export const API = {
     };
 
     const formData = new FormData();
-    const keys = {};
 
     let hasFiles;
+    let payload;
+
     function pushFiles(obj) {
       if (!obj || typeof obj !== 'object') return obj;
-
       Object.keys(obj).forEach(key => {
         if (Array.isArray(obj[key]) && obj[key][0] instanceof window.File) {
-          const prefix = `upload_${Math.random().toString(36).substr(2)}`;
+          const prefix = randId('upload_');
 
           obj[key].forEach(blob => {
             formData.append(prefix, blob);
@@ -212,7 +312,16 @@ export const API = {
         }
       });
     }
-    pushFiles(data);
+
+    if (data instanceof window.File) {
+      const prefix = randId('upload_');
+
+      formData.append(prefix, data);
+      data = { $upload: prefix };
+      hasFiles = true;
+    } else {
+      pushFiles(data);
+    }
 
     if (hasFiles) {
       formData.append('payload', JSON.stringify(data));

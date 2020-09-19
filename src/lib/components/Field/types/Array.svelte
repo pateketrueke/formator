@@ -1,7 +1,6 @@
 <script>//
   import { getContext, createEventDispatcher } from 'svelte';
-  import { getItems, defaultValue } from '../utils';
-  import { randId } from '../../../shared/utils';
+  import { randId, getItems, defaultValue } from '../../../shared/utils';
 
   import Field from '..';
   import Value from '../../Value';
@@ -147,9 +146,9 @@
       </thead>
       <tbody>
         {#each items as { key, path, offset, isFixed, schema, uiSchema } (key)}
-          <tr data-field={`/${path.join('/')}`}>
+          <tr data-field="/{path.join('/')}">
             {#each headers as { field }}
-              <td data-field={`/${path.concat(field).join('/')}`}>
+              <td data-field="/{path.concat(field).join('/')}">
                 <Value {schema} uiSchema={uiSchema[field]} value={result[offset][field]} />
               </td>
             {/each}
@@ -179,9 +178,9 @@
             {#if uiSchema['ui:template']}
               <Value {uiSchema} {schema} value={result[offset]} />
             {:else}
-              <div data-field={`/${path.join('/')}`}>
+              <div data-field="/{path.join('/')}">
                 <div data-value>
-                  <Field {schema} {uiSchema} bind:result={result[offset]} name={`${name}[${offset}]`} />
+                  <Field {schema} {uiSchema} bind:result={result[offset]} name="{name}[{offset}]" />
                   {#if !isFixed && uiSchema['ui:remove'] !== false}
                     <button data-is="remove" data-before="&times;" type="button" on:click={() => remove(key)}>
                       <span>{uiSchema['ui:remove'] || 'Remove item'}</span>
@@ -214,5 +213,5 @@
 {/if}
 
 <Modal updating={isUpdate} resource={association.singular} bind:visible={isOpen} on:cancel={reset} on:save={sync}>
-  <Field name={`${name}[${items.length}]`} bind:result={value} {...subProps} {association} {model} {parent} {through} />
+  <Field name="{name}[{items.length}]" bind:result={value} {...subProps} {association} {model} {parent} {through} />
 </Modal>

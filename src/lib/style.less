@@ -56,6 +56,20 @@
       max-width: 100%;
       position: relative;
       transition: opacity .5s;
+      background-color: white;
+    }
+
+    > div {
+      padding: @sp2;
+      overflow: auto;
+
+      dt {
+        font-weight: bold;
+      }
+
+      dd + dt {
+        margin-top: @sp2;
+      }
     }
   }
 
