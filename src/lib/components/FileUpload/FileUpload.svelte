@@ -6,10 +6,11 @@
 
   export let name;
   export let uiSchema = {};
+  export let required = false;
   export let schema = { type: 'string' };
   export let result = defaultValue(schema);
 
-  const multiple = (schema.type === 'object' || schema.type === 'array') && uiSchema['ui:multiple'] !== false;
+  const multiple = schema.type === 'array' || (schema.type === 'object' && uiSchema['ui:multiple'] !== false);
   const isAppend = uiSchema['ui:append'] !== false && multiple;
   const isAttachment = uiSchema['ui:attachment'];
 
@@ -17,8 +18,13 @@
   const dispatch = createEventDispatcher();
 
   let currentFiles = [];
+  let isRequired = false;
   let pending = true;
   let ref;
+
+  if (uiSchema['ui:required']) {
+    required = true;
+  }
 
   if (result) {
     if (typeof result === 'object' && result.path) {
@@ -69,23 +75,23 @@
   function sync() {
     if (isAttachment) {
       if (schema.type === 'string') {
-        result = currentFiles[0] ? currentFiles[0].content : undefined;
+        result = currentFiles[0] ? currentFiles[0].data.content : undefined;
       }
 
       if (schema.type === 'object') {
         result = currentFiles.reduce((prev, cur) => {
-          prev[cur.name || cur.path] = cur;
+          prev[cur.name || cur.path] = cur.data;
           return prev;
         }, {});
       }
 
       if (schema.type === 'array') {
-        result = currentFiles.map(x => (schema.items.type === 'object' ? x : x.content));
+        result = currentFiles.map(x => (schema.items.type === 'object' ? x.data : x.data.content));
       }
     } else if (schema.type !== 'array') {
-      result = currentFiles[0];
+      result = currentFiles[0] ? currentFiles[0].data : undefined;
     } else {
-      result = currentFiles;
+      result = currentFiles.map(x => x.data);
     }
   }
 
@@ -137,39 +143,36 @@
 
   $: id = getId(rootId, name);
   $: check() || dispatch('change', result); // eslint-disable-line
+  $: isRequired = required ? !currentFiles.length : undefined;
 </script>
 
-<style>
-  input { display: none; }
-</style>
-
 <div data-fieldset>
-  <input {multiple} on:change={setFiles} bind:this={ref} type="file" {id} {name} />
-  <button class="nobreak" data-before="&plus;" type="button" on:click={() => ref.click()}>
+  <input data-required required={isRequired} on:change={setFiles} bind:this={ref} type="file" {id} {name} {multiple} />
+  <button class="nobreak" tabIndex="-1" data-before="&plus;" type="button" on:click={() => ref.click()}>
     <span>{#if currentFiles.length > 0}{isAppend ? 'Append' : 'Replace'}{:else}Add{/if} file{multiple ? 's' : ''}</span>
   </button>
-  {#each currentFiles as { key, name, type, path, size, mtime, lastModifiedDate } (key)}
+  {#each currentFiles as { key, data } (key)}
     <details>
       <summary>
-        <span class="chunk">{name || path}</span>
-        {#if size}<small>{humanFileSize(size)}</small>{/if}
+        <span class="chunk">{data.name || data.path}</span>
+        {#if data.size}<small>{humanFileSize(data.size)}</small>{/if}
         <button data-before="&times;" type="button" on:click={() => removeFile(key)}>
           <span>Remove file</span>
         </button>
       </summary>
       <dl>
-        {#if path}
+        {#if data.path}
           <dt>File path</dt>
           <dd>
-            <a href={fixedLink(path)} target="_blank">{path}</a>
+            <a href={fixedLink(data.path)} target="_blank">{data.path}</a>
           </dd>
         {/if}
         <dt>MIME Type</dt>
-        <dd>{type || 'application/octet-stream'}</dd>
-        {#if lastModifiedDate || mtime}
+        <dd>{data.type || 'application/octet-stream'}</dd>
+        {#if data.lastModifiedDate || data.mtime}
           <dt>Last Modified</dt>
           <dd>
-            <span class="chunk">{lastModifiedDate ? lastModifiedDate.toGMTString() : mtime}</span>
+            <span class="chunk">{data.lastModifiedDate ? data.lastModifiedDate.toGMTString() : data.mtime}</span>
           </dd>
         {/if}
       </dl>

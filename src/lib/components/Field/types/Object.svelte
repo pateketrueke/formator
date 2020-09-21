@@ -9,7 +9,8 @@
   import { randId, defaultValue, getId } from '../../../shared/utils';
 
   import Field from '..';
-  // import Value from '../../Value';
+  import Value from '../../Value';
+  import Modal from '../../Modal';
   import Finder from '../../Finder';
 
   export let uiSchema = {};
@@ -19,8 +20,10 @@
   export let path = [];
   export let name = null;
   export let model = null;
+  export let value = null;
   export let parent = null;
   export let through = null;
+  export let required = false;
   export let association = {};
 
   const nextSchema = (schema.additionalProperties !== true && schema.additionalProperties) || { type: 'string' };
@@ -30,6 +33,13 @@
 
   let ref = refs[schema.id];
   let fixedResult = {};
+  let subProps = {};
+
+  let selected;
+  let backup = {};
+  let isOpen = false;
+  let isUpdate = false;
+
   let hidden = [];
   let fields = [];
   let keys = [];
@@ -56,6 +66,8 @@
     }
 
     const _uiSchema = uiSchema[field] || {};
+    const _refSchema = (refs[field] && refs[field].uiSchema) || [];
+
     const isRef = subSchema.modelName === model;
     const isHidden = _uiSchema['ui:hidden'] || _uiSchema['ui:edit'] === false;
     const currentValue = ((isRef && parent ? parent : result) || {})[field];
@@ -66,6 +78,7 @@
       schema: subSchema,
       uiSchema: _uiSchema,
       current: isRef && currentValue === 0 ? null : currentValue,
+      required: schema.required ? schema.required.includes(field) : false,
       isFixed: currentField && currentField.isFixed,
       hidden: isHidden || isRef,
       path: (path || []).concat(field),
@@ -79,8 +92,6 @@
 
     if (typeof result[nextKey] === 'undefined') {
       const nextValue = getItemFor(nextKey, keys.length, nextSchema);
-
-      console.log(nextValue);
 
       result[nextKey] = defaultValue(nextSchema);
       nextValue.isFixed = true;
@@ -96,16 +107,13 @@
     keys = keys.filter(x => x !== key);
 
     delete result[oldKey.field];
-    console.log(key, oldKey, { result });
   }
 
   function prop(e, key) {
-    const { value } = e.target;
-
     const oldKey = fields.find(x => x.key === key);
     const oldValue = oldKey ? result[oldKey.field] : undefined;
 
-    let nextKey = value;
+    let nextKey = e.target.value;
 
     // FIXME: try other strategies?
     if (typeof result[nextKey] !== 'undefined') {
@@ -113,7 +121,7 @@
 
       do {
         count += 1;
-        nextKey = `${value}${count}`;
+        nextKey = `${e.target.value}${count}`;
         if (typeof result[nextKey] === 'undefined') break;
       } while (true); // eslint-disable-line
 
@@ -127,13 +135,48 @@
     result[nextKey] = oldValue;
   }
 
-  // function sync() {
-  //   console.log('SYNC?');
-  // }
+  function reset() {
+    console.log('RESET');
+  }
+
+  function sync() {
+    const target = schema.properties[selected.field];
+
+    fields = fields.map(x => {
+      if (selected === x) x.current = value;
+      return x;
+    });
+
+    selected = null;
+    result[target.modelName] = value;
+  }
+
+  function open(key) {
+    subProps = {
+      schema: refs[association.model],
+      uiSchema: association.uiSchema,
+    };
+
+    selected = fields.find(x => x.key === key);
+    backup = { ...value };
+    isOpen = true;
+  }
 
   function set(key, value) {
     result[fields.find(x => x.key === key).field] = value;
   }
+
+  const props = (uiSchema['ui:props'] || uniqueItems(schema.properties, result || {}))
+    .map((k, i) => getItemFor(k, i, (schema.properties && schema.properties[k]) || nextSchema, fields[i]));
+
+  hidden = props.filter(x => x.hidden);
+  fields = props.filter(x => !x.hidden).sort((a, b) => {
+    if (!uiSchema['ui:order']) {
+      return 0;
+    }
+
+    return uiSchema['ui:order'].indexOf(b[0]) - uiSchema['ui:order'].indexOf(a[0]);
+  });
 
   $: if (Object.prototype.toString.call(result) !== '[object Object]') {
     result = {};
@@ -144,20 +187,6 @@
       const fk = `${schema.id}${ucfirst(key.prop)}`;
 
       fixedResult[fk] = fixedResult[fk] || result[key.prop];
-    });
-  }
-
-  $: {
-    const props = (uiSchema['ui:props'] || uniqueItems(schema.properties, result))
-      .map((k, i) => getItemFor(k, i, (schema.properties && schema.properties[k]) || nextSchema, fields[i]));
-
-    hidden = props.filter(x => x.hidden);
-    fields = props.filter(x => !x.hidden).sort((a, b) => {
-      if (!uiSchema['ui:order']) {
-        return 0;
-      }
-
-      return uiSchema['ui:order'].indexOf(b[0]) - uiSchema['ui:order'].indexOf(a[0]);
     });
   }
 
@@ -177,7 +206,7 @@
       />
     {/each}
     <ul>
-      {#each fields as { id, key, path, name, field, isFixed, schema, uiSchema, current } (key)}
+      {#each fields as { id, key, path, name, field, isFixed, schema, uiSchema, required, current } (key)}
         <li data-type={schema.type || 'object'}>
           <div data-field="/{path.join('/')}">
             {#if isFixed}
@@ -194,7 +223,7 @@
                 />
               {:else}
                 <Field
-                  {id} {path} {name} {field} {model} {schema} {through} {uiSchema}
+                  {id} {path} {name} {field} {model} {schema} {through} {required} {uiSchema}
                   on:change={e => set(key, e.detail)}
                   parent={fixedResult}
                   result={current}
@@ -203,7 +232,7 @@
 
               {#if isFixed && uiSchema['ui:remove'] !== false}
                 <button data-is="remove" data-before="&times;" type="button" on:click={() => remove(key)}>
-                  <span>{uiSchema['ui:remove'] || 'Remove prop'} {key}</span>
+                  <span>{uiSchema['ui:remove'] || 'Remove prop'}</span>
                 </button>
               {/if}
             </div>
@@ -213,6 +242,9 @@
     </ul>
   {:else}
     <div data-empty>{uiSchema['ui:empty'] || 'No props'}</div>
+    {#if required}
+      <input data-required tabIndex="-1" on:input={e => e.target.value = ''} {name} {required} />
+    {/if}
   {/if}
 
   {#if schema.additionalProperties !== false && uiSchema['ui:add'] !== false}
@@ -223,3 +255,7 @@
     </div>
   {/if}
 </fieldset>
+
+<Modal updating={isUpdate} resource={association.singular} bind:visible={isOpen} on:cancel={reset} on:save={sync}>
+  <Field bind:result={value} {...subProps} {association} {name} {model} {parent} {through} />
+</Modal>

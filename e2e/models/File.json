@@ -6,7 +6,8 @@
     "ui:template": [["div", "{@file:this}"]],
     "ui:component": "FileUpload",
     "ui:fields": ["File info"],
-    "ui:multiple": false
+    "ui:multiple": false,
+    "ui:required": true
   },
   "$schema": {
     "id": "File",

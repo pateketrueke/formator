@@ -29,7 +29,7 @@ export function getItems(schema, offset) {
     ? schema.items[offset]
     : schema.items)
   || schema.additionalItems
-  || {};
+  || null;
 }
 
 export function defaultValue(schema) {
@@ -153,8 +153,9 @@ export function reduceRefs(schema, refs) {
 }
 
 export function withKeys(values) {
-  return values.map(x => Object.assign(x, {
+  return values.map(x => ({
     key: x.key || randId('key_'),
+    data: x,
   }));
 }
 
@@ -292,7 +293,7 @@ export const API = {
     let hasFiles;
     let payload;
 
-    function pushFiles(obj) {
+    function walkProps(obj) {
       if (!obj || typeof obj !== 'object') return obj;
       Object.keys(obj).forEach(key => {
         if (Array.isArray(obj[key]) && obj[key][0] instanceof window.File) {
@@ -304,11 +305,14 @@ export const API = {
           obj[key] = { $upload: prefix };
           hasFiles = true;
         } else if (obj[key] instanceof window.File) {
-          formData.append(key, obj[key]);
-          obj[key] = { $upload: key };
+          const prefix = randId('upload_');
+
+          formData.append(prefix, obj[key]);
+          obj[key] = { $upload: prefix };
           hasFiles = true;
-        } else if (typeof obj[key] === 'object') {
-          pushFiles(obj[key], key);
+        } else if (typeof obj[key] === 'object' && obj[key] !== null) {
+          if (!Object.keys(obj[key]).length) delete obj[key];
+          else walkProps(obj[key]);
         }
       });
     }
@@ -320,7 +324,7 @@ export const API = {
       data = { $upload: prefix };
       hasFiles = true;
     } else {
-      pushFiles(data);
+      walkProps(data);
     }
 
     if (hasFiles) {

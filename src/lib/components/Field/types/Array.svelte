@@ -11,13 +11,12 @@
   export let through;
   export let association;
   export let path = [];
-  export let value = [];
+  export let value = null;
   export let parent = null;
+  export let required = false;
   export let uiSchema = {};
   export let schema = { type: 'array' };
   export let result = defaultValue(schema);
-
-  // FIXME: not longer trigger rebuild on change...
 
   const { refs } = getContext('__ROOT__');
   const dispatch = createEventDispatcher();
@@ -26,12 +25,10 @@
   let items = [];
   let keys = [];
 
-  let subProps = {};
   let backup = [];
-
+  let isFixed;
   let isOpen = false;
   let isUpdate = false;
-  let isFixed;
 
   function getItemBy(offset, subSchema) {
     const key = keys[offset] || (keys[offset] = randId());
@@ -56,16 +53,6 @@
 
   // FIXME: implement these methods to responds against API calls...
   function open() {
-    // this method should open a inner modal with a search-bar, or inline form
-    // to append a new resource based on its schema...
-    subProps = {
-      schema: refs[through],
-      uiSchema: uiSchema[through] || {},
-    };
-
-    // here we should translate from ProductId to Product,
-    // so we can fill-in Product info and it should mirror as ID
-
     if (!Array.isArray(value)) value = [];
 
     backup = [...value];
@@ -76,7 +63,10 @@
     result = result.concat(value);
   }
 
-  function edit() { console.log('edit'); }
+  function edit() {
+    console.log('edit');
+  }
+
   function reset() {
     value = backup;
   }
@@ -103,11 +93,6 @@
     result = [];
   }
 
-  // $: if (through) {
-  //   Object.assign(schema.items.properties, refs[through].properties);
-  //   Object.assign(uiSchema, uiSchema[through]);
-  // }
-
   $: {
     if (isFixed) {
       items = schema.items.map((_, offset) => getItemBy(offset, getSubSchema(offset)));
@@ -115,7 +100,7 @@
       items = result.map((_, offset) => getItemBy(offset, schema.items || {}));
     }
 
-    const propSchema = getItems(schema, 0);
+    const propSchema = getItems(schema, 0) || refs[through] || schema[name] || {};
     const props = uiSchema['ui:fields'] || (propSchema.properties
       ? Object.keys(propSchema.properties)
       : []);
@@ -142,6 +127,7 @@
           {#each headers as { label }}
             <th>{label}</th>
           {/each}
+          <th colspan="99"></th>
         </tr>
       </thead>
       <tbody>
@@ -156,12 +142,12 @@
               {#if !isFixed}
                 {#if uiSchema['ui:edit'] !== false}
                   <button data-is="edit" data-before="&#9998;" type="button" on:click={() => edit(key)}>
-                    <span>{uiSchema['ui:edit'] || `Edit ${association.singular}`}</span>
+                    <span>{uiSchema['ui:edit'] || 'Edit'}</span>
                   </button>
                 {/if}
                 {#if uiSchema['ui:remove'] !== false}
                   <button data-is="remove" data-before="&times;" type="button" on:click={() => remove(key)}>
-                    <span>{uiSchema['ui:remove'] || `Remove ${association.singular}`}</span>
+                    <span>{uiSchema['ui:remove'] || 'Remove'}</span>
                   </button>
                 {/if}
               {/if}
@@ -196,12 +182,15 @@
   {/if}
 {:else}
   <div data-empty>{uiSchema['ui:empty'] || 'No items'}</div>
+  {#if required}
+    <input data-required tabIndex="-1" on:input={e => e.target.value = ''} {name} {required} />
+  {/if}
 {/if}
 
 {#if schema.additionalItems !== false && uiSchema['ui:push'] !== false}
-  <div>
+  <div data-actions>
     {#if through}
-      <button data-is="append" type="button" on:click={open}>
+      <button class="nobreak" data-is="append" data-before="&plus;" type="button" on:click={open}>
         <span>{uiSchema['ui:push'] || `Add ${association.singular}`}</span>
       </button>
     {:else}
@@ -213,5 +202,5 @@
 {/if}
 
 <Modal updating={isUpdate} resource={association.singular} bind:visible={isOpen} on:cancel={reset} on:save={sync}>
-  <Field name="{name}[{items.length}]" bind:result={value} {...subProps} {association} {model} {parent} {through} />
+  <Field name="{name}[{items.length}]" bind:result={value} schema={refs[through]} {uiSchema} {association} {model} {parent} {through} />
 </Modal>

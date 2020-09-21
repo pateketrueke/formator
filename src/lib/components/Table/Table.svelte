@@ -113,8 +113,10 @@
   }
 
   function sync() {
+    if (!value) value = {};
+
     if (isUpdate) {
-      value[pk] = result[offset][pk];
+      value[pk] = backup[pk];
     }
 
     loading = Promise.resolve()

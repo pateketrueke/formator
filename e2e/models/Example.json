@@ -19,7 +19,7 @@
     "ui:add": false,
     "ui:pending": "Saving changes...",
     "ui:fields": ["id", "title", "url", "file", "blob", "fileset"],
-    "ui:headers": ["#", "Example", "URL", "File", "Blob", "Images"],
+    "ui:headers": ["#", "Example", "URL", "File", "Blob", "Attachments"],
     "blob": {
       "ui:template": [["div", "{@embed:this}"]],
       "ui:component": "FileUpload",
@@ -29,8 +29,24 @@
       "ui:template": [["div", "{@file:this}"]],
       "ui:component": "FileUpload"
     },
-    "fileId": {
-      "ui:hidden": true
+    "file": {
+      "ui:template": [["div", "{@embed:this}"]],
+      "ui:component": "FileUpload"
+    },
+    "fileset": {
+      "ui:template": [["div", "{@embed:*.File}"]],
+      "ui:add": false,
+      "ui:fields": ["label", "File"],
+      "id": {
+        "ui:hidden": true
+      },
+      "File": {
+        "ui:component": "FileUpload",
+        "ui:template": [["span.chunk", "{name}"], ["small", "{@bytes:size}"]]
+      },
+      "ExampleId": {
+        "ui:hidden": true
+      }
     },
     "id": {
       "ui:edit": false
@@ -54,12 +70,7 @@
         "type": "string"
       },
       "file": {
-        "$ref": "File",
-        "belongsTo": {
-          "through": {
-            "model": "Attachment"
-          }
-        }
+        "$ref": "File"
       },
       "fileset": {
         "type": "array",
@@ -72,6 +83,7 @@
           }
         }
       }
-    }
+    },
+    "required": ["title"]
   }
 }

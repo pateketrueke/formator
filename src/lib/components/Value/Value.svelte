@@ -12,6 +12,16 @@
   function getNodes() {
     const { type, default: defaultValue } = schema;
 
+    if (value instanceof window.File) {
+      value = [{
+        name: value.name.split('/').pop(),
+        path: value.name,
+        size: value.size,
+        type: value.type,
+        mmtime: value.lastModifiedDate.toGMTString(),
+      }];
+    }
+
     if (isEmpty(value)) {
       return [];
     }

@@ -17,6 +17,7 @@
   export let result = null;
   export let parent = null;
   export let through = null;
+  export let required = null;
   export let schema = {};
   export let uiSchema = {};
   export let association = {};
@@ -55,6 +56,19 @@
       }
     }
 
+    if (through && through === _schema.id) {
+      Object.keys(_schema.properties).forEach(key => {
+        const prop = _schema.properties[key];
+
+        if (prop.references && prop.modelName !== model) {
+          _schema.properties[prop.modelName] = refs[prop.modelName];
+        }
+
+        _schema.required = _schema.required || [];
+        _schema.required.push(prop.modelName);
+      });
+    }
+
     schema = _schema;
   }
 
@@ -71,7 +85,7 @@
 </script>
 
 <svelte:component
-  {id} {err} {path} {name} {model} {parent} {schema} {uiSchema} {rootId} {through} {association}
+  {id} {err} {path} {name} {model} {parent} {schema} {uiSchema} {rootId} {through} {required} {association}
   on:change on:sync={validate} bind:result
   this={propType}
 />

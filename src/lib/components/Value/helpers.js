@@ -12,7 +12,9 @@ export function getProp(from, key) {
     return from;
   }
 
-  if (Array.isArray(from)) return getProp({ from }, `from.${key}`);
+  if (Array.isArray(from)) {
+    return getProp({ from }, `from.${key}`);
+  }
 
   const keys = key.split('.');
 
@@ -121,7 +123,7 @@ export function renderValue(data, template) {
             }
 
             retval = TYPES[method](data,
-              cur.property.map(x => getProp(data, x) || cur.value, []), document.body);
+              cur.property.reduce((memo, x) => memo.concat(getProp(data, x) || cur.value), []), document.body);
           } catch (e) {
             prev.push(`Error: ${e.message} in ${JSON.stringify(cur)}`);
           }

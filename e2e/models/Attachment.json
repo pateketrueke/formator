@@ -3,13 +3,11 @@
     "findAll": ["label"]
   },
   "$uiSchema": {
+    "ui:add": false,
     "id": {
       "ui:hidden": true
     },
     "ExampleId": {
-      "ui:hidden": true
-    },
-    "FileId": {
       "ui:hidden": true
     }
   },
@@ -23,6 +21,7 @@
       "label": {
         "type": "string"
       }
-    }
+    },
+    "required": ["label"]
   }
 }

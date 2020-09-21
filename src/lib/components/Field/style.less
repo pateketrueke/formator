@@ -1,6 +1,18 @@
+> [data-empty] {
+  padding: @sp2;
+
+  ~ div {
+    padding: 0 @sp2;
+  }
+}
+
 [data-empty] {
-  + div {
+  ~ [data-actions] {
     margin-top: @sp2;
+  }
+
+  + [data-required] {
+    margin-top: 10px;
   }
 }
 
@@ -31,8 +43,24 @@
   }
 }
 
+[data-required] {
+  pointer-events: none;
+  position: absolute;
+  margin-left: 10px;
+  display: block;
+  width: 50px;
+  height: 30px;
+  opacity: 0;
+
+  &:focus ~ button,
+  &:focus ~ div > button {
+    box-shadow: 0 0 3px @dark;
+  }
+}
+
 [data-fieldset] {
-  button + details {
+  button + details,
+  details + details {
     margin-top: @sp2;
   }
   summary {
@@ -41,6 +69,8 @@
 
     > button {
       position: absolute;
+      margin: auto;
+      bottom: 2px;
       top: 2px;
       right: 1px;
     }
@@ -89,15 +119,6 @@ li {
       }
     }
 
-    fieldset {
-      border-left: 1px dashed @light;
-      padding-left: @sp2;
-
-      + button {
-        margin-top: @sp2;
-      }
-    }
-
     > input ~ div {
       width: 100%;
 
@@ -107,6 +128,13 @@ li {
     }
 
     > div > fieldset {
+      border-left: 1px dashed @light;
+      padding-left: @sp2;
+
+      + button {
+        margin-top: @sp2;
+      }
+
       + div {
         padding-top: @sp2;
         padding-left: 0;
@@ -248,13 +276,5 @@ label {
         padding: @sp2;
       }
     }
-  }
-}
-
-> [data-empty] {
-  padding: @sp2;
-
-  ~ div {
-    padding: 0 @sp2;
   }
 }

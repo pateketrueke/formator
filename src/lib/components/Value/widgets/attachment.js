@@ -10,6 +10,10 @@ export default function attachment($, data, values) {
     data = values[0];
   }
 
+  if (!data.path) {
+    return;
+  }
+
   const srcFile = data.path.indexOf('://') === -1
     ? `/${data.path}`
     : data.path;

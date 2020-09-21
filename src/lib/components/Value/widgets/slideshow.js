@@ -10,20 +10,13 @@ export default function slideShow($, data, values, parentNode) {
     })));
 
   if (!(values[0] && values[0].path)) {
+    if (!data.path) return;
     values = [data];
   }
 
   const prefix = values[0].name || values[0].path;
 
-  let suffix;
   let size;
-
-  if (values.length > 1) {
-    suffix = values.length > 2
-      ? ` + ${values.length} files`
-      : ' + 1 file';
-  }
-
   if (values[0].size) {
     size = ['small', humanFileSize(values[0].size)];
   }
@@ -143,5 +136,5 @@ export default function slideShow($, data, values, parentNode) {
         open = true;
       });
     },
-  }, prefix], suffix, size];
+  }, prefix], size];
 }

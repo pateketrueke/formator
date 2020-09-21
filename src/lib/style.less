@@ -7,6 +7,66 @@
   @import './components/Finder/style';
 }
 
+body {
+  // FIXME: enable when modal is open?;
+  xoverflow: hidden;
+}
+
+.formator,
+.formator-layer {
+  dl {
+    margin: @sp1 0 @sp2;
+    overflow: hidden;
+    font-size: .9em;
+    min-width: 300px;
+    line-height: 1;
+
+    dd, dt {
+      margin-top: @sp2;
+    }
+
+    dt:nth-child(1),
+    dd:nth-child(2) {
+      margin-top: 0;
+    }
+
+    dt {
+      color: @light;
+      font-weight: bold;
+    }
+
+    dd {
+      word-break: break-all;
+
+      &:nth-child(1) {
+        margin-bottom: @sp2;
+      }
+    }
+
+    @media @sm {
+      dt, dd {
+        float: left;
+      }
+
+      dt {
+        clear: left;
+        width: 30%;
+        margin-right: @sp2;
+
+        &::after {
+          content: ': ';
+        }
+      }
+
+      dd {
+        border: 0;
+        width: 66.6%;
+        clear: right;
+      }
+    }
+  }
+}
+
 .formator-layer {
   position: absolute;
   transition: .3s;
@@ -62,14 +122,6 @@
     > div {
       padding: @sp2;
       overflow: auto;
-
-      dt {
-        font-weight: bold;
-      }
-
-      dd + dt {
-        margin-top: @sp2;
-      }
     }
   }
 

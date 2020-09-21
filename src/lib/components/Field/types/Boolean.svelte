@@ -3,6 +3,7 @@
   import { defaultValue, getId } from '../../../shared/utils';
 
   export let name;
+  export let required = false;
   export let schema = { type: 'boolean' };
   export let result = defaultValue(schema);
 
@@ -17,4 +18,4 @@
   $: dispatch('change', result);
 </script>
 
-<input type="checkbox" bind:checked={result} {id} {name} />
+<input type="checkbox" bind:checked={result} {id} {name} {required} />

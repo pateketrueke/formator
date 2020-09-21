@@ -3,6 +3,7 @@
   import { defaultValue, getId } from '../../../shared/utils';
 
   export let name;
+  export let required = false;
   export let schema = { type: 'integer' };
   export let result = defaultValue(schema);
 
@@ -18,4 +19,4 @@
   $: dispatch('change', result);
 </script>
 
-<input {step} type="number" bind:value={result} {id} {name} />
+<input {step} type="number" bind:value={result} {id} {name} {required} />

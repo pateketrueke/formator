@@ -1,4 +1,5 @@
 import { $, widgets } from './widgets';
+import { humanFileSize } from '../../shared/utils';
 
 export default {
   embed(data, values, parentNode) {
@@ -6,6 +7,9 @@ export default {
   },
   file(data, values, parentNode) {
     return widgets.attachment($, data, values, parentNode);
+  },
+  bytes(data, values) {
+    return humanFileSize(values.reduce((prev, cur) => prev + cur, 0));
   },
   sum(data, values) {
     return values.map(x => x.reduce((prev, cur) => prev + cur, 0).toFixed(2).replace('.00', '')).join(', ');
