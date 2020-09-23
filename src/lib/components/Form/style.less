@@ -44,6 +44,30 @@ table {
         position: relative;
       }
     }
+
+    details {
+      > dl {
+        z-index: 1;
+        padding: @sp2;
+        position: absolute;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
+        background-color: @white;
+
+        &::before {
+          position: absolute;
+          content: '';
+          background-color: @white;
+          width: 12px;
+          height: 12px;
+          z-index: 3;
+          border-top: 1px solid rgba(0, 0, 0, .1);
+          border-left: 1px solid rgba(0, 0, 0, .1);
+          top: -7px;
+          left: 8px;
+          transform: rotate(45deg);
+        }
+      }
+    }
   }
 
   thead {
@@ -222,20 +246,6 @@ fieldset {
   }
 }
 
-> details {
-  border: 1px dashed @error;
-}
-
-details {
-  > dl {
-    z-index: 1;
-    padding: @sp2;
-    position: absolute;
-    background-color: @white;
-    border: 1px dashed @light;
-  }
-}
-
 summary {
   transition: box-shadow .2s;
   cursor: default;
@@ -246,10 +256,6 @@ summary {
   &:focus {
     outline: none;
     box-shadow: 0 0 3px @dark;
-
-    ~ dl {
-      z-index: 2;
-    }
   }
 }
 

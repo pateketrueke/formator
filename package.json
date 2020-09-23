@@ -11,7 +11,7 @@
     "index.js"
   ],
   "scripts": {
-    "dev": "tarima watch -p 3001 -P '/db,/tmp -> 8080'",
+    "dev": "tarima watch -p ${PORT:-3001} -P \"/db,/tmp -> :${API_PORT:-8080}\"",
     "dist": "tarima -qe $NODE_ENV",
     "watch": "nodemon -i src -i dist -i public e2e/server.js",
     "copy:ajv": "cp node_modules/ajv/dist/ajv.bundle.js dist/ajv.js",
@@ -20,7 +20,7 @@
     "prepublishOnly": "npm run dist",
     "lint": "eslint --ext js,svelte lib src e2e",
     "test": "npm run lint && npm run test:e2e --",
-    "test:e2e": "BASE_URL=http://localhost:3001 testcafe ${BROWSER:-chrome:headless}"
+    "test:e2e": "BASE_URL=http://localhost:${PORT:-3001} testcafe ${BROWSER:-chrome:headless}"
   },
   "author": "Alvaro Cabrera <pateketrueke@gmail.com>",
   "license": "MIT",
