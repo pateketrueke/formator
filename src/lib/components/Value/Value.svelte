@@ -1,10 +1,11 @@
 <script context="module">//
   import { $ as _ } from './widgets';
-  import { renderDOM } from './helpers';
+  import { renderDOM, formatValue } from './helpers';
   import { isScalar, isEmpty } from '../../shared/utils';
 </script>
 
 <script>
+  export let root;
   export let value;
   export let schema = {};
   export let uiSchema = {};
@@ -13,21 +14,22 @@
     const { type, default: defaultValue } = schema;
 
     if (value instanceof window.File) {
-      value = [{
+      value = {
         name: value.name.split('/').pop(),
         path: value.name,
         size: value.size,
         type: value.type,
         mmtime: value.lastModifiedDate.toGMTString(),
-      }];
+      };
     }
 
     if (isEmpty(value)) {
       return [];
     }
 
-    if (typeof value !== 'undefined' && uiSchema && uiSchema['ui:template']) {
-      return renderDOM(_, value, uiSchema['ui:template']);
+    if (typeof value !== 'undefined') {
+      if (uiSchema['ui:format']) return formatValue(value, uiSchema['ui:format']);
+      if (uiSchema['ui:template']) return renderDOM(_, root, value, uiSchema['ui:template']);
     }
 
     if (type === 'number' || type === 'integer') {

@@ -1,11 +1,19 @@
 {
   "$attributes": {
-    "findAll": ["label"]
+    "findAll": ["label", "file.path"]
   },
   "$uiSchema": {
     "ui:add": false,
+    "ui:refs": ["File"],
     "id": {
       "ui:hidden": true
+    },
+    "File": {
+      "ui:component": "FileUpload",
+      "ui:template": [["div", "{@file:this}"]]
+    },
+    "FileId": {
+      "ui:ref": "File"
     },
     "ExampleId": {
       "ui:hidden": true

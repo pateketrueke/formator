@@ -9,7 +9,6 @@
 
   export let schema = {};
   export let uiSchema = {};
-  export let association = {};
 
   let t;
   let layer;
@@ -35,7 +34,7 @@
   }
 
   function find() {
-    const req = { ...actions[association.model].index };
+    const req = { ...actions[uiSchema['ui:ref']].index };
 
     if (search && search.value) {
       req.path += `?search=${search.value}`;
@@ -62,14 +61,13 @@
     t = setTimeout(find, 120);
   }
 
-  function cancel(e) {
-    if (e.keyCode === 27 && !isClear) {
+  function keydown(e) {
+    if (e.keyCode === 27 && isOpen) {
       e.stopPropagation();
       isOpen = false;
+      return;
     }
-  }
 
-  function keydown(e) {
     if (e.keyCode === 38) {
       e.preventDefault();
       if (!isOpen) isOpen = true;
@@ -120,15 +118,14 @@
     bind:this={search}
     on:focus={open}
     on:input={input}
-    on:keyup={cancel}
     on:keydown={keydown}
-    placeholder="{uiSchema['ui:find'] || `Find ${association.singular}`}"
+    placeholder="{uiSchema['ui:placeholder'] || `Find ${uiSchema['ui:ref']}`}"
   />
 
-  <input {name} type="hidden" value={data[schema.references.key]} />
+  <!-- <input {name} type="hidden" value={data[schema.references.key]} /> -->
 
   {#if !items.length}
-    <small>{uiSchema['ui:empty'] || `${association.plural} were not found`}</small>
+    <small>{uiSchema['ui:empty'] || 'No items were found'}</small>
   {/if}
 
   {#if isOpen && items.length > 0}
@@ -136,14 +133,14 @@
       <ul bind:this={options} on:click={select}>
         {#each items as value, k (value)}
           <li class:selected={k === offset}>
-            <Value {value} {uiSchema} schema={refs[schema.modelName]} />
+            <Value {value} {uiSchema} schema={refs[uiSchema['ui:ref']]} />
           </li>
         {/each}
       </ul>
     </div>
   {/if}
 
-  {#if typeof data[schema.references.key] !== 'undefined'}
+  <!-- {#if typeof data[schema.references.key] !== 'undefined'}
     <small data-selected on:click={clear}>{data[schema.references.key]}</small>
-  {/if}
+  {/if} -->
 </div>

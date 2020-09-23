@@ -1,11 +1,17 @@
+import { humanFileSize } from '../../shared/utils';
 import TYPES from './types';
 import HTML from '../HTML';
 
 const RE_PLACEHOLDER = /\{(?:(@?[^{}|?!:@]*)(?::([\w*,.]+))?([|?!:])?(.*?)|)\}/;
 const RE_IDENTITY = /\{\}/g;
 
-export function getProp(from, key) {
+export function getProp(result, from, key) {
   if (!key) return null;
+
+  if (key.charAt() === '.') {
+    if (key === '..') return result;
+    return result[key.substr(1)];
+  }
 
   if (key === 'this') {
     if (!Array.isArray(from)) return from[key];
@@ -13,7 +19,7 @@ export function getProp(from, key) {
   }
 
   if (Array.isArray(from)) {
-    return getProp({ from }, `from.${key}`);
+    return getProp(result, { from }, `from.${key}`);
   }
 
   const keys = key.split('.');
@@ -39,7 +45,7 @@ export function getProp(from, key) {
               return prev.concat(y);
             }
 
-            const sub = getProp(y, next);
+            const sub = getProp(result, y, next);
 
             if (typeof sub !== 'undefined') {
               prev.push(sub);
@@ -60,10 +66,10 @@ export function getProp(from, key) {
   return o;
 }
 
-export function renderValue(data, template) {
+export function renderValue(it, data, template) {
   if (Object.prototype.toString.call(template) === '[object Object]') {
     return Object.keys(template).reduce((prev, cur) => {
-      prev[cur] = renderValue(data, template[cur]);
+      prev[cur] = renderValue(it, data, template[cur]);
 
       if (Array.isArray(prev[cur])) {
         prev[cur] = prev[cur].join('');
@@ -75,7 +81,7 @@ export function renderValue(data, template) {
 
   if (typeof template === 'string') {
     if (typeof data !== 'object') {
-      return renderValue({ this: data }, template.replace(RE_IDENTITY, data));
+      return renderValue(it, { this: data }, template.replace(RE_IDENTITY, data));
     }
 
     let copy = template;
@@ -123,16 +129,16 @@ export function renderValue(data, template) {
             }
 
             retval = TYPES[method](data,
-              cur.property.reduce((memo, x) => memo.concat(getProp(data, x) || cur.value), []), document.body);
+              cur.property.reduce((memo, x) => memo.concat(getProp(it, data, x) || cur.value), []), document.body);
           } catch (e) {
             prev.push(`Error: ${e.message} in ${JSON.stringify(cur)}`);
           }
         } else {
-          retval = typeof data === 'object' ? getProp(data, cur.expression) : data;
+          retval = typeof data === 'object' ? getProp(it, data, cur.expression) : data;
         }
 
         if (typeof retval === 'undefined' && cur.operator === '|') {
-          retval = typeof data === 'object' ? getProp(data, cur.value) : cur.value;
+          retval = typeof data === 'object' ? getProp(it, data, cur.value) : cur.value;
         } else if (!retval && cur.operator === '!') {
           prev.push(cur.value);
 
@@ -163,17 +169,17 @@ export function renderValue(data, template) {
   return template;
 }
 
-export function reduce(value, template) {
+export function reduce(it, value, template) {
   if (!Array.isArray(template)) {
     return ['small.invalid', null, `Invalid template, given ${JSON.stringify(template)}`];
   }
 
   if (Array.isArray(template[1])) {
-    return [template[0], null, template[1].map(x => reduce(value, x))];
+    return [template[0], null, template[1].map(x => reduce(it, value, x))];
   }
 
   if (Array.isArray(template[2])) {
-    return [template[0], template[1], template[2].map(x => reduce(value, x))];
+    return [template[0], template[1], template[2].map(x => reduce(it, value, x))];
   }
 
   const offset = Math.min(2, template.findIndex((x, i) => i !== 0 && typeof x === 'string'));
@@ -182,17 +188,22 @@ export function reduce(value, template) {
   const node = template.slice(0, offset);
 
   if (Object.prototype.toString.call(text[0]) === '[object Object]') {
-    return [node[0], renderValue(value, text[0])].concat(text.slice(1).map(x => renderValue(value, x)));
+    return [node[0], renderValue(it, value, text[0])].concat(text.slice(1).map(x => renderValue(it, value, x)));
   }
 
-  return [node[0], renderValue(value, node[1] ? node[1] : text[0])].concat(text.map(x => renderValue(value, x)));
+  return [node[0], renderValue(it, value, node[1] ? node[1] : text[0])].concat(text.map(x => renderValue(it, value, x)));
 }
 
-export function renderDOM($, value, template) {
+export function renderDOM($, it, value, template) {
   return [{
     component: HTML,
     options: {
-      children: template.map(x => $(reduce(value, x))),
+      children: template.map(x => $(reduce(it, value, x))),
     },
   }];
+}
+
+export function formatValue(value, formatter) {
+  if (formatter === 'bytes') return humanFileSize(value);
+  return value;
 }

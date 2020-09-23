@@ -184,6 +184,8 @@
 
   $: if (ref && ref.references) {
     ref.references.primaryKeys.forEach(key => {
+      if (key.prop === 'id') return;
+
       const fk = `${schema.id}${ucfirst(key.prop)}`;
 
       fixedResult[fk] = fixedResult[fk] || result[key.prop];
@@ -216,9 +218,9 @@
             {/if}
 
             <div data-value>
-              {#if schema.modelName}
+              {#if uiSchema['ui:ref']}
                 <Finder
-                  {id} {name} {field} {model} {schema} {through} {uiSchema} {current} {association}
+                  {id} {name} {field} {model} {schema} {uiSchema} {current}
                   on:change={e => set(key, e.detail)}
                 />
               {:else}

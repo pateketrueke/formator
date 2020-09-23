@@ -3,11 +3,17 @@
     "findAll": ["name", "path", "type", "size", "mtime"]
   },
   "$uiSchema": {
-    "ui:template": [["div", "{@file:this}"]],
     "ui:component": "FileUpload",
-    "ui:fields": ["File info"],
+    "ui:fields": ["type", "name", "mtime"],
+    "ui:headers": ["MIME Type", "File name", "Last Modified"],
     "ui:multiple": false,
-    "ui:required": true
+    "ui:required": true,
+    "name": {
+      "ui:template": [["span", "{@embed:..}"]]
+    },
+    "size": {
+      "ui:format": "bytes"
+    }
   },
   "$schema": {
     "id": "File",

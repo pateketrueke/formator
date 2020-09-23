@@ -36,6 +36,7 @@
     "fileset": {
       "ui:template": [["div", "{@embed:*.File}"]],
       "ui:add": false,
+      "ui:refs": ["File"],
       "ui:fields": ["label", "File"],
       "id": {
         "ui:hidden": true
@@ -43,6 +44,9 @@
       "File": {
         "ui:component": "FileUpload",
         "ui:template": [["div", "{@file:this}"]]
+      },
+      "FileId": {
+        "ui:ref": "File"
       },
       "ExampleId": {
         "ui:hidden": true

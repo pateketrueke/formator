@@ -56,16 +56,11 @@
       }
     }
 
-    if (through && through === _schema.id) {
-      Object.keys(_schema.properties).forEach(key => {
-        const prop = _schema.properties[key];
-
-        if (prop.references && prop.modelName !== model) {
-          _schema.properties[prop.modelName] = refs[prop.modelName];
-        }
-
+    if (schema.id && uiSchema['ui:refs']) {
+      uiSchema['ui:refs'].forEach(key => {
+        _schema.properties[key] = refs[key];
         _schema.required = _schema.required || [];
-        _schema.required.push(prop.modelName);
+        _schema.required.push(key);
       });
     }
 

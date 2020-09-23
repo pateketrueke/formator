@@ -279,7 +279,11 @@ export const API = {
     const local = document.location.pathname.split('/');
     const parts = path.split('/');
 
-    if (local[0] === parts[0] && local[1] === parts[1] && local[2] !== parts[2]) {
+    if (local.length > 3
+      && local[0] === parts[0]
+      && local[1] === parts[1]
+      && local[2] !== parts[2]
+    ) {
       parts.splice(2, 0, local[2]);
       path = parts.join('/');
     }
