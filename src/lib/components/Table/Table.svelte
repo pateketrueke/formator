@@ -207,8 +207,8 @@
                 {#if data !== null}<Value {schema} {uiSchema} value={data} />{/if}
               </td>
             {:else}
-              {#each headers as { field }}
-                <td data-field="/{offset}/{field}" data-type={schema[field].type || 'object'}>
+              {#each headers as { field, label }}
+                <td data-field="/{offset}/{field}" data-type={schema[field].type || 'object'} data-label={label}>
                   {#if data[field] !== null}<Value schema={schema[field]} uiSchema={uiSchema[field]} value={data[field]} />{/if}
                 </td>
               {/each}

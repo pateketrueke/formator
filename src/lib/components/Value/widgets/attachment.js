@@ -21,13 +21,13 @@ export default function attachment($, data, values) {
   const name = data.name || data.path;
 
   return [['details', [
-    ['summary', [['span.chunk', name || data.path], ['small', humanFileSize(data.size)]]],
+    ['summary.flex', [['span.chunk', name || data.path], ['small', humanFileSize(data.size)]]],
     ['dl', [
       data.path && ['dd', [['a', { href: srcFile, target: '_blank' }, data.path]]],
-      data.type && ['dt', 'MIME Type'],
-      data.type && ['dd', data.type],
-      data.mtime && ['dt', 'Last Modified'],
-      data.mtime && ['dd', data.mtime],
+      data.type && ['dt.chunk', 'MIME Type'],
+      data.type && ['dd.chunk', data.type],
+      data.mtime && ['dt.chunk', 'Last Modified'],
+      data.mtime && ['dd.chunk', data.mtime],
     ]],
   ]]];
 }

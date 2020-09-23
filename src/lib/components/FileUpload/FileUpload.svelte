@@ -153,7 +153,7 @@
   </button>
   {#each currentFiles as { key, data } (key)}
     <details>
-      <summary>
+      <summary class="flex">
         <span class="chunk">{data.name || data.path}</span>
         {#if data.size}<small>{humanFileSize(data.size)}</small>{/if}
         <button data-before="&times;" type="button" on:click={() => removeFile(key)}>
@@ -162,16 +162,15 @@
       </summary>
       <dl>
         {#if data.path}
-          <dt>File path</dt>
           <dd>
             <a href={fixedLink(data.path)} target="_blank">{data.path}</a>
           </dd>
         {/if}
-        <dt>MIME Type</dt>
-        <dd>{data.type || 'application/octet-stream'}</dd>
+        <dt class="chunk">MIME Type</dt>
+        <dd class="chunk">{data.type || 'application/octet-stream'}</dd>
         {#if data.lastModifiedDate || data.mtime}
-          <dt>Last Modified</dt>
-          <dd>
+          <dt class="chunk">Last Modified</dt>
+          <dd class="flex">
             <span class="chunk">{data.lastModifiedDate ? data.lastModifiedDate.toGMTString() : data.mtime}</span>
           </dd>
         {/if}

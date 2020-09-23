@@ -18,11 +18,25 @@
 @mdp: 96px;
 @mdw: 620px;
 
-@mdp: 120px;
+@lgp: 120px;
 @lgw: 768px;
+
+@xlp: 260px;
+@xlw: 960px;
+
 @smn: @smw - 1px;
+@mdn: @mdw - 1px;
+@lgn: @lgw - 1px;
+@xln: @xlw - 1px;
+
 @smb: @smw + (@sp2 * 2);
 
 @sm: ~"screen and (min-width: @{smw})";
 @md: ~"screen and (min-width: @{mdw})";
+@lg: ~"screen and (min-width: @{lgw})";
+@xl: ~"screen and (min-width: @{xlw})";
+
 @smx: ~"screen and (max-width: @{smn})";
+@mdx: ~"screen and (max-width: @{mdn})";
+@lgx: ~"screen and (max-width: @{lgn})";
+@xlx: ~"screen and (max-width: @{xln})";

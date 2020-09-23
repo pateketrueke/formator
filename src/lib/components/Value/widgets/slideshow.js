@@ -26,7 +26,7 @@ export default function slideShow($, data, values, parentNode) {
   let isImage;
   let isResource;
 
-  return [['a', {
+  return [['span.flex', [['a', {
     href: '#',
     class: 'chunk',
     target: '_blank',
@@ -136,5 +136,5 @@ export default function slideShow($, data, values, parentNode) {
         open = true;
       });
     },
-  }, prefix], size];
+  }, prefix], size]]];
 }

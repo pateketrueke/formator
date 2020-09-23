@@ -133,8 +133,8 @@
       <tbody>
         {#each items as { key, path, offset, isFixed, schema, uiSchema } (key)}
           <tr data-field="/{path.join('/')}">
-            {#each headers as { field }}
-              <td data-field="/{path.concat(field).join('/')}">
+            {#each headers as { field, label }}
+              <td data-field="/{path.concat(field).join('/')}" data-label={label}>
                 <Value {schema} uiSchema={uiSchema[field]} value={result[offset][field]} />
               </td>
             {/each}

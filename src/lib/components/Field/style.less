@@ -67,6 +67,7 @@
   summary {
     position: relative;
     padding: @sp1;
+    padding-right: @sp2 * 3;
 
     > button {
       position: absolute;
@@ -75,29 +76,20 @@
       top: 2px;
       right: 1px;
     }
+
+    @media @sm {
+      padding-right: 25%;
+    }
   }
 }
 
 [data-actions] {
-  > button {
-    &:nth-child(2) {
-      float: right;
-      margin-left: @sp2;
-    }
+  button + button {
+    margin-left: @sp1;
   }
 }
 
 li {
-  [data-field] > span {
-    xmax-width: 50px;
-    xcolor: @dark;
-    xwidth: 100%;
-
-    &::after {
-      xcontent: ': ';
-    }
-  }
-
   [data-field] {
     > input,
     > label {
@@ -245,6 +237,36 @@ label {
 
   ~ div {
     width: 100%;
+  }
+}
+
+details {
+  white-space: normal;
+
+  > dl {
+    z-index: 1;
+    padding: @sp2;
+    position: absolute;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
+    background-color: @white;
+
+    &::before {
+      position: absolute;
+      content: '';
+      background-color: @white;
+      width: 12px;
+      height: 12px;
+      z-index: 3;
+      border-top: 1px solid rgba(0, 0, 0, .1);
+      border-left: 1px solid rgba(0, 0, 0, .1);
+      top: -7px;
+      left: 48%;
+      transform: rotate(45deg);
+    }
+
+    @media @md {
+      min-width: 350px;
+    }
   }
 }
 

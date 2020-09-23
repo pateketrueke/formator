@@ -14,15 +14,25 @@
   overflow: hidden;
   line-height: 1em;
   height: 1em;
-  max-width: 85vw;
+  max-width: 100%;
+  white-space: nowrap;
 
-  @media @sm {
+  @media @smx {
+    display: block;
+  }
+
+  @media @md {
     max-width: 220px;
+  }
+
+  @media @xl {
+    max-width: 280px;
   }
 }
 
 .flex {
   display: flex;
+  align-items: center;
 }
 
 .auto {

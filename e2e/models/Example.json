@@ -42,7 +42,7 @@
       },
       "File": {
         "ui:component": "FileUpload",
-        "ui:template": [["span.chunk", "{name}"], ["small", "{@bytes:size}"]]
+        "ui:template": [["div", "{@file:this}"]]
       },
       "ExampleId": {
         "ui:hidden": true

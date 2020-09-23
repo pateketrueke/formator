@@ -8,7 +8,6 @@
   .wrapper {
     width: 100%;
     margin-top: 7em;
-    overflow: auto;
   }
 
   @media screen and (min-width: @smb) {
@@ -21,7 +20,6 @@
 
 table {
   border-spacing: 0;
-  width: 100%;
 
   ~ div {
     margin-top: @sp2;
@@ -39,33 +37,11 @@ table {
   td {
     [data-ref] {
       white-space: nowrap;
+      max-width: 100%;
 
       > div {
+        width: 100%;
         position: relative;
-      }
-    }
-
-    details {
-      > dl {
-        z-index: 1;
-        padding: @sp2;
-        position: absolute;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
-        background-color: @white;
-
-        &::before {
-          position: absolute;
-          content: '';
-          background-color: @white;
-          width: 12px;
-          height: 12px;
-          z-index: 3;
-          border-top: 1px solid rgba(0, 0, 0, .1);
-          border-left: 1px solid rgba(0, 0, 0, .1);
-          top: -7px;
-          left: 8px;
-          transform: rotate(45deg);
-        }
       }
     }
   }
@@ -88,6 +64,90 @@ table {
 > table ~ div {
   padding: @sp2;
   margin: 0;
+}
+
+@media @mdx {
+  thead {
+    display: none;
+  }
+
+  table, tbody, th, tr, td {
+    display: block;
+  }
+
+  table {
+    th {
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+  }
+
+  tbody {
+    tr {
+      position: relative;
+      padding: @sp2;
+    }
+
+    td {
+      margin: @sp1 0;
+      min-height: 1.5em;
+      padding: @sp1 0 0 33.3%;
+      position: relative;
+
+      &::before {
+        content: attr(data-label) ": ";
+        position: absolute;
+        font-weight: bold;
+        font-size: .9em;
+        color: @light;
+        left: 0;
+      }
+
+      ~ th {
+        width: auto;
+      }
+
+      + td {
+        border-top: 1px dashed @light;
+      }
+
+      details > dl {
+        max-width: 320px;
+        right: 0;
+      }
+    }
+  }
+
+  [data-value] > table {
+    td {
+      padding-left: 25%;
+
+      &:first-child {
+        padding-right: 28%;
+      }
+    }
+  }
+}
+
+@media @smx {
+  [data-value] > table td,
+  tbody td {
+    min-height: 2em;
+    padding: 1.5em 0 0 0;
+
+    &::before {
+      top: .2em;
+    }
+
+    + td {
+      padding-top: 1.5em;
+    }
+
+    details > dl {
+      left: 0;
+    }
+  }
 }
 
 summary > small,
@@ -132,15 +192,16 @@ td.invalid  {
 }
 
 [data-body] {
+  border-bottom: 1px solid rgba(0, 0, 0, .1);
   padding: @sp2;
 
   + [data-actions] {
     padding: @sp2;
   }
-}
 
-[data-body] {
-  border-bottom: 1px solid rgba(0, 0, 0, .1);
+  > fieldset > ul {
+    max-width: calc(100vw - (@sp2 * 4));
+  }
 }
 
 ul + [data-actions] {
@@ -248,14 +309,20 @@ fieldset {
 
 summary {
   transition: box-shadow .2s;
+  white-space: nowrap;
   cursor: default;
   padding: 0 @sp1;
   color: @dark;
-  white-space: nowrap;
 
   &:focus {
     outline: none;
     box-shadow: 0 0 3px @dark;
+  }
+}
+
+details[open] {
+  > summary {
+    box-shadow: 0 0 3px @light;
   }
 }
 
