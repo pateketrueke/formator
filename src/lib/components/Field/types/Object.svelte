@@ -9,7 +9,7 @@
   import { randId, defaultValue, getId } from '../../../shared/utils';
 
   import Field from '..';
-  import Value from '../../Value';
+  // import Value from '../../Value';
   import Modal from '../../Modal';
   import Finder from '../../Finder';
 
@@ -36,7 +36,7 @@
   let subProps = {};
 
   let selected;
-  let backup = {};
+  // let backup = {};
   let isOpen = false;
   let isUpdate = false;
 
@@ -66,7 +66,7 @@
     }
 
     const _uiSchema = uiSchema[field] || {};
-    const _refSchema = (refs[field] && refs[field].uiSchema) || [];
+    // const _refSchema = (refs[field] && refs[field].uiSchema) || [];
 
     const isRef = subSchema.modelName === model;
     const isHidden = _uiSchema['ui:hidden'] || _uiSchema['ui:edit'] === false;
@@ -151,19 +151,19 @@
     result[target.modelName] = value;
   }
 
-  function open(key) {
-    subProps = {
-      schema: refs[association.model],
-      uiSchema: association.uiSchema,
-    };
+  // function open(key) {
+  //   subProps = {
+  //     schema: refs[association.model],
+  //     uiSchema: association.uiSchema,
+  //   };
 
-    selected = fields.find(x => x.key === key);
-    backup = { ...value };
-    isOpen = true;
-  }
+  //   selected = fields.find(x => x.key === key);
+  //   backup = { ...value };
+  //   isOpen = true;
+  // }
 
-  function set(key, value) {
-    result[fields.find(x => x.key === key).field] = value;
+  function set(key, _value) {
+    result[fields.find(x => x.key === key).field] = _value;
   }
 
   const props = (uiSchema['ui:props'] || uniqueItems(schema.properties, result || {}))
@@ -245,7 +245,7 @@
   {:else}
     <div data-empty>{uiSchema['ui:empty'] || 'No props'}</div>
     {#if required}
-      <input data-required tabIndex="-1" on:input={e => e.target.value = ''} {name} {required} />
+      <input data-required tabIndex="-1" on:input="{e => { e.target.value = ''; }}" {name} {required} />
     {/if}
   {/if}
 

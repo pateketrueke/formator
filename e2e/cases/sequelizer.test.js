@@ -18,7 +18,7 @@ fixture('Resource model (index)')
   .page(defaultPage.url('/db/Example'));
 
 test('should render ui:fields and ui:headers', async t => {
-  await t.expect($('body').get('thead').innerText).contains("#\tExample\tURL\tFile\tBlob\tImages\t\n");
+  await t.expect($('body').get('thead').innerText).contains('#\tExample\tURL\tFile\tBlob\tAttachments\t\n');
 });
 
 test('should allow to add new items', async t => {

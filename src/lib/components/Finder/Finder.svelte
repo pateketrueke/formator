@@ -5,9 +5,9 @@
   import { API } from '../../shared/utils';
 
   export let id = null;
-  export let name = null;
+  // export let name = null;
 
-  export let schema = {};
+  // export let schema = {};
   export let uiSchema = {};
 
   let t;
@@ -20,7 +20,7 @@
   let items = [];
   let status = 'idle';
   let isOpen = false;
-  let isClear = true;
+  // let isClear = true;
 
   const { actions, refs } = getContext('__ROOT__');
   const dispatch = createEventDispatcher();
@@ -51,10 +51,10 @@
     });
   }
 
-  function clear() {
-    offset = -1;
-    data = {};
-  }
+  // function clear() {
+  //   offset = -1;
+  //   data = {};
+  // }
 
   function input() {
     clearTimeout(t);
@@ -90,7 +90,7 @@
       isOpen = false;
     }
 
-    isClear = e.target.value.length === 0 && !isOpen;
+    // isClear = e.target.value.length === 0 && !isOpen;
   }
 
   function select(e) {
