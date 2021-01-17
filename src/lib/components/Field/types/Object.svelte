@@ -80,7 +80,7 @@
       current: isRef && currentValue === 0 ? null : currentValue,
       required: schema.required ? schema.required.includes(field) : false,
       isFixed: currentField && currentField.isFixed,
-      hidden: isHidden || isRef,
+      hidden: uiSchema['ui:change'] ? !uiSchema['ui:change'].includes(field) : isHidden || isRef,
       path: (path || []).concat(field),
       name: (name && name !== '__ROOT__') ? `${name}[${field}]` : field,
       id: getId(rootId, (name && name !== '__ROOT__') ? `${name}[${field}]` : field),
@@ -175,7 +175,7 @@
       return 0;
     }
 
-    return uiSchema['ui:order'].indexOf(b[0]) - uiSchema['ui:order'].indexOf(a[0]);
+    return uiSchema['ui:order'].indexOf(a.field) - uiSchema['ui:order'].indexOf(b.field);
   });
 
   $: if (Object.prototype.toString.call(result) !== '[object Object]') {
@@ -190,6 +190,13 @@
 
       fixedResult[fk] = fixedResult[fk] || result[key.prop];
     });
+  }
+
+  $: if (uiSchema['ui:change']) {
+    result = uiSchema['ui:change'].reduce((memo, key) => {
+      memo[key] = result[key];
+      return memo;
+    }, {});
   }
 
   $: dispatch('change', result);
