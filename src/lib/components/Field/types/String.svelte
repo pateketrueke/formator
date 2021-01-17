@@ -4,11 +4,16 @@
 
   export let name;
   export let required = false;
+  export let uiSchema = {};
   export let schema = { type: 'string' };
   export let result = defaultValue(schema);
 
   const { rootId } = getContext('__ROOT__');
   const dispatch = createEventDispatcher();
+
+  function update(e) {
+    result = e.target.value;
+  }
 
   $: if (typeof result !== 'string') {
     result = '';
@@ -18,4 +23,8 @@
   $: dispatch('change', result);
 </script>
 
-<input type="text" bind:value={result} {id} {name} {required} />
+{#if uiSchema['ui:password']}
+  <input type="password" on:change={update} {id} {name} {required} />
+{:else}
+  <input type="text" bind:value={result} {id} {name} {required} />
+{/if}
