@@ -34,7 +34,7 @@ table {
     padding: @sp2;
   }
 
-  td, th {
+  td, thead th {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -64,6 +64,28 @@ table {
     tr:nth-child(even) { background-color: lighten(@light, 32); }
     tr:nth-child(odd) { background-color: lighten(@light, 30); }
     tr:hover { background-color: @hover; }
+  }
+
+  @media @md {
+    width: 100%;
+    max-width: 100%;
+    table-layout: fixed;
+
+    tbody td.focused {
+      position: absolute;
+      margin-top: @sp1;
+      width: auto;
+      z-index: 1;
+      background-color: @white;
+      box-shadow: 1px 1px 3px @mid;
+    }
+
+    .cols(@counter) when (@counter > 0) {
+      @offset: (12 - @counter) + 1;
+      .cols((@counter - 1));
+      .col-@{offset} { width: (100% / @counter); }
+    }
+    .cols(12);
   }
 }
 

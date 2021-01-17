@@ -44,6 +44,29 @@
   let loading = null;
   let payload = result.length !== 0;
 
+  let prev;
+  function toggleActive(e) {
+    let root = e.target;
+    while (root.tagName !== 'TD') {
+      if (root.tagName === 'TBODY') break;
+      root = root.parentNode;
+    }
+    if (root.tagName === 'TD' && root.offsetWidth < root.scrollWidth) {
+      if (!root.textContent.trim()) return;
+      if (prev !== root) root.classList.add('focused');
+      if (prev) prev.classList.remove('focused');
+      if (prev === root) prev = null;
+      else prev = root;
+    }
+  }
+
+  function handleClick(e) {
+    if (prev && prev !== e.target) {
+      prev.classList.remove('focused');
+      prev = null;
+    }
+  }
+
   function getHeaders() {
     let props;
 
@@ -63,6 +86,10 @@
           || key,
         field: key,
       }));
+  }
+
+  function fixedCols() {
+    return `col-${Math.floor(12 / (headers.length + 1))}`;
   }
 
   function getItems(from) {
@@ -145,6 +172,9 @@
     setTimeout(() => {
       dispatch('change', result);
     });
+
+    document.addEventListener('click', handleClick, true);
+    return () => document.removeEventListener('click', handleClick, true);
   });
 
   $: items = getItems(result);
@@ -185,15 +215,15 @@
   {#if headers.length}
     <thead>
       <tr>
-        {#each headers as { label }}
-          <th>{label}</th>
+        {#each headers as { field, label }}
+          <th class={(uiSchema[field] && uiSchema[field]['ui:class']) || fixedCols()}>{label}</th>
         {/each}
         <th colspan="99"></th>
       </tr>
     </thead>
   {/if}
 
-  <tbody data-field="/" data-type="array">
+  <tbody data-field="/" data-type="array" on:click={toggleActive}>
     {#if payload}
       {#await payload}
         <tr>
@@ -208,7 +238,7 @@
               </td>
             {:else}
               {#each headers as { field, label }}
-                <td data-field="/{offset}/{field}" data-type={schema[field].type || 'object'} data-label={label}>
+                <td data-field="/{offset}/{field}" data-type={schema[field].type || 'object'} data-label={label} class={(uiSchema[field] && uiSchema[field]['ui:class']) || fixedCols()}>
                   {#if data[field] !== null}<Value schema={schema[field]} uiSchema={uiSchema[field]} value={data[field]} root={data} />{/if}
                 </td>
               {/each}
