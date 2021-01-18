@@ -20,7 +20,7 @@ export default function attachment($, data, values) {
 
   const name = data.name || data.path;
 
-  return [['details', [
+  return ['details', [
     ['summary.flex', [['span.chunk', name || data.path], ['small', humanFileSize(data.size)]]],
     ['dl', [
       data.path && ['dd', [['a', { href: srcFile, target: '_blank' }, data.path]]],
@@ -29,5 +29,5 @@ export default function attachment($, data, values) {
       data.mtime && ['dt.chunk', 'Last Modified'],
       data.mtime && ['dd.chunk', data.mtime],
     ]],
-  ]]];
+  ]];
 }

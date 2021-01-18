@@ -1,10 +1,12 @@
 import {
-  bind, render,
+  bind, render, mount,
   listeners, attributes, classes,
 } from 'somedom';
 
 import slideshow from './slideshow';
 import attachment from './attachment';
+
+export { mount, patch } from 'somedom';
 
 export const $ = bind(render,
   listeners(),

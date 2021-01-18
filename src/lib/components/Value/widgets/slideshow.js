@@ -26,7 +26,7 @@ export default function slideShow($, data, values, parentNode) {
   let isImage;
   let isResource;
 
-  return [['span.flex', [['a', {
+  return ['span.flex', [['a', {
     href: '#',
     class: 'chunk',
     target: '_blank',
@@ -36,8 +36,11 @@ export default function slideShow($, data, values, parentNode) {
         ? `/${values[0].path}`
         : values[0].path;
     },
+    onupdate(self) {
+      this.oncreate(self);
+    },
     onclick(e) {
-      if (open || e.metaKey || e.ctrlKey) {
+      if (open || e.metaKey || e.ctrlKey || e.button !== 0) {
         return;
       }
 
@@ -136,5 +139,5 @@ export default function slideShow($, data, values, parentNode) {
         open = true;
       });
     },
-  }, prefix], size]]];
+  }, prefix], size]];
 }

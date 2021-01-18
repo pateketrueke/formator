@@ -174,6 +174,10 @@ export function reduce(it, value, template) {
     return ['small.invalid', null, `Invalid template, given ${JSON.stringify(template)}`];
   }
 
+  if (!template[1]) {
+    return [renderValue(it, value, template[0])];
+  }
+
   if (Array.isArray(template[1])) {
     return [template[0], null, template[1].map(x => reduce(it, value, x))];
   }
@@ -191,14 +195,14 @@ export function reduce(it, value, template) {
     return [node[0], renderValue(it, value, text[0])].concat(text.slice(1).map(x => renderValue(it, value, x)));
   }
 
-  return [node[0], renderValue(it, value, node[1] ? node[1] : text[0])].concat(text.map(x => renderValue(it, value, x)));
+  return [node[0], renderValue(it, value, node[1] ? node[1] : text[0])].concat(text.slice(1).map(x => renderValue(it, value, x)));
 }
 
-export function renderDOM($, it, value, template) {
+export function renderDOM(it, value, template) {
   return [{
     component: HTML,
     options: {
-      children: template.map(x => $(reduce(it, value, x))),
+      vnode: template.map(x => reduce(it, value, x)),
     },
   }];
 }

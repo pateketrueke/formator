@@ -99,7 +99,7 @@
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-svelte": "^5.1.0",
     "set-value": ">=2.0.1",
-    "somedom": "^0.1.2",
+    "somedom": "^0.2.9",
     "sqlite3": "^4.1.0",
     "svelte": "^3.18.2",
     "svql": "0.0.27",

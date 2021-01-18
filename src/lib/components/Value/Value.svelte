@@ -1,5 +1,4 @@
-<script context="module">//
-  import { $ as _ } from './widgets';
+<script context="module">
   import { renderDOM, formatValue } from './helpers';
   import { isScalar, isEmpty } from '../../shared/utils';
 </script>
@@ -29,7 +28,7 @@
 
     if (typeof value !== 'undefined') {
       if (uiSchema['ui:format']) return formatValue(value, uiSchema['ui:format']);
-      if (uiSchema['ui:template']) return renderDOM(_, root, value, uiSchema['ui:template']);
+      if (uiSchema['ui:template']) return renderDOM(root, value, uiSchema['ui:template']);
     }
 
     if (type === 'number' || type === 'integer') {
