@@ -154,7 +154,9 @@
         isOpen = false;
 
         if (data && data.status !== 'ok') return fail(data);
-        if (data && data.result) value = data.result;
+        if (data && data.result) {
+          value = Object.assign(backup, data.result);
+        }
 
         if (typeof offset === 'undefined') {
           result = result.concat(value);
