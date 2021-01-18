@@ -34,7 +34,7 @@ table {
     padding: @sp2;
   }
 
-  td, thead th {
+  td {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -69,7 +69,8 @@ table {
   @media @md {
     width: 100%;
     max-width: 100%;
-    table-layout: fixed;
+
+    .lg-show, .xl-show, .wl-show { display: none; }
 
     tbody td.focused {
       position: absolute;
@@ -79,14 +80,11 @@ table {
       background-color: @white;
       box-shadow: 1px 1px 3px @mid;
     }
-
-    .cols(@counter) when (@counter > 0) {
-      @offset: (12 - @counter) + 1;
-      .cols((@counter - 1));
-      .col-@{offset} { width: (100% / @counter); }
-    }
-    .cols(12);
   }
+
+  @media @lg { .lg-show { display: table-cell; } }
+  @media @xl { .xl-show { display: table-cell; } }
+  @media @wl { .wl-show { display: table-cell; } }
 }
 
 > table ~ div {
