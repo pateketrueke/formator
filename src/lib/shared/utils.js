@@ -8,6 +8,7 @@ const DEFAULT_VALUES = {
 };
 
 const SHARED_INDEX = {};
+const USED_COLS = [null, 'lg', 'xl', 'wl'];
 
 export function getId(rootId, forName, incOffset) {
   if (!SHARED_INDEX[forName]) {
@@ -22,6 +23,28 @@ export function getId(rootId, forName, incOffset) {
   const prefix = rootId ? `${rootId}-` : '';
 
   return `${prefix}${forName}-field-${offset}`;
+}
+
+export function getCols(value) {
+  if (!value) return [];
+
+  const parts = value.split(':');
+  const classes = [];
+
+  for (let i = 0; i < parts.length; i += 1) {
+    if (!parts[i]) continue;
+
+    const width = parts[i].replace(/\?$/, '');
+    const prefix = USED_COLS[i] ? `${USED_COLS[i]}-`: '';
+
+    if (prefix && parts[i].includes('?')) {
+      classes.push(`${prefix}show`);
+    }
+    if (width) {
+      classes.push(`${prefix}col-${width}`);
+    }
+  }
+  return classes;
 }
 
 export function getItems(schema, offset) {
@@ -204,7 +227,7 @@ export function loader(components, selector) {
           items: { type: 'string' },
         },
         uiSchema: {
-          'ui:template': [['a', { href: `${document.location.pathname.replace(/\/$/, '')}/{}` }, '{}']],
+          'ui:template': [['a', { href: `${document.location.pathname.replace(/\/$/, '')}/{}` }, ['{}']]],
           'ui:title': data.description || 'Resources',
           'ui:push': false,
         },

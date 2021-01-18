@@ -169,13 +169,28 @@ export function renderValue(it, data, template) {
   return template;
 }
 
+export function renderProps(it, value, object) {
+  return Object.keys(object).reduce((memo, key) => {
+    if (typeof object[key] === 'string') {
+      memo[key] = renderValue(it, value, object[key]).join('');
+    } else {
+      memo[key] = object[key];
+    }
+    return memo;
+  }, {});
+}
+
 export function reduce(it, value, template) {
+  if (typeof template === 'string') {
+    return renderValue(it, value, template);
+  }
+
   if (!Array.isArray(template)) {
     return ['small.invalid', null, `Invalid template, given ${JSON.stringify(template)}`];
   }
 
   if (!template[1]) {
-    return [renderValue(it, value, template[0])];
+    return renderValue(it, value, template[0]);
   }
 
   if (Array.isArray(template[1])) {
@@ -183,7 +198,7 @@ export function reduce(it, value, template) {
   }
 
   if (Array.isArray(template[2])) {
-    return [template[0], template[1], template[2].map(x => reduce(it, value, x))];
+    return [template[0], renderProps(it, value, template[1]), template[2].map(x => reduce(it, value, x))];
   }
 
   const offset = Math.min(2, template.findIndex((x, i) => i !== 0 && typeof x === 'string'));
@@ -191,8 +206,8 @@ export function reduce(it, value, template) {
   const text = template.slice(offset);
   const node = template.slice(0, offset);
 
-  if (Object.prototype.toString.call(text[0]) === '[object Object]') {
-    return [node[0], renderValue(it, value, text[0])].concat(text.slice(1).map(x => renderValue(it, value, x)));
+  if (typeof text[0] === 'object') {
+    return [node[0], text[0] ? renderProps(it, value, text[0]) : null].concat(text.slice(1).map(x => renderValue(it, value, x)));
   }
 
   return [node[0], renderValue(it, value, node[1] ? node[1] : text[0])].concat(text.slice(1).map(x => renderValue(it, value, x)));
