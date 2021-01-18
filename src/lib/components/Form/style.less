@@ -134,7 +134,11 @@ table {
       padding: @sp2;
     }
 
-    td {
+    td[data-empty] {
+      padding: 0;
+    }
+
+    td[data-field] {
       margin: @sp1 0;
       min-height: 1.5em;
       padding: @sp1 0 0 30%;

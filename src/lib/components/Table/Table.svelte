@@ -89,11 +89,17 @@
   }
 
   function fixedCols(_uiSchema) {
-    if (!_uiSchema) {
-      return `col-${Math.floor(12 / (headers.length + 1))}`;
+    let classes = [];
+    if (_uiSchema && _uiSchema['ui:class']) {
+      classes = classes.concat(_uiSchema['ui:class']);
     }
-
-    return [].concat(_uiSchema['ui:class'] || []).concat(getCols(_uiSchema['ui:cols'])).join(' ');
+    if (_uiSchema && _uiSchema['ui:columns']) {
+      classes = classes.concat(getCols(_uiSchema['ui:columns']));
+    }
+    if (!classes.length) {
+      classes.push(`col-${Math.floor(12 / (headers.length + 1))}`);
+    }
+    return classes.join(' ');
   }
 
   function getItems(from) {
@@ -233,7 +239,7 @@
     {#if payload}
       {#await payload}
         <tr>
-          <td colspan="99">Loading data...</td>
+          <td colspan="99" data-empty>Loading data...</td>
         </tr>
       {:then}
         {#each items as { key, data, schema, offset } (key)}
