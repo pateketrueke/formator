@@ -1,4 +1,4 @@
-<script>
+<script>// eslint-disable-line
   import { onMount, setContext, createEventDispatcher } from 'svelte';
   import { Failure } from 'svql';
 
@@ -6,7 +6,9 @@
   import Field from '../Field';
   import Value from '../Value';
 
-  import { API, randId, getCols, defaultValue } from '../../shared/utils';
+  import {
+    API, randId, getCols, defaultValue,
+  } from '../../shared/utils';
 
   export let pending = 'Loading...';
   export let actions = {};

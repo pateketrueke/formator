@@ -1,4 +1,4 @@
-<script context="module">
+<script context="module">// eslint-disable-line
   import { renderDOM, formatValue } from './helpers';
   import { isScalar, isEmpty } from '../../shared/utils';
 </script>

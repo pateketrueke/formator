@@ -32,10 +32,10 @@ export function getCols(value) {
   const classes = [];
 
   for (let i = 0; i < parts.length; i += 1) {
-    if (!parts[i]) continue;
+    if (!parts[i]) continue; // eslint-disable-line
 
     const width = parts[i].replace(/\?$/, '');
-    const prefix = USED_COLS[i] ? `${USED_COLS[i]}-`: '';
+    const prefix = USED_COLS[i] ? `${USED_COLS[i]}-` : '';
 
     if (prefix && parts[i].includes('?')) {
       classes.push(`${prefix}show`);

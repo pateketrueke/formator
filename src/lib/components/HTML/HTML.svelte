@@ -1,4 +1,4 @@
-<script>
+<script>// eslint-disable-line
   import { onDestroy } from 'svelte';
   import { $ as render, patch, mount } from '../Value/widgets';
 

@@ -1,5 +1,5 @@
 import {
-  bind, render, mount,
+  bind, render,
   listeners, attributes, classes,
 } from 'somedom';
 
