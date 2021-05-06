@@ -91,7 +91,7 @@
     "json-schema-sequelizer": "^0.22.0",
     "less": "^3.8.1",
     "less-plugin-autoprefix": "^2.0.0",
-    "lodash": ">=4.17.19",
+    "lodash": ">=4.17.21",
     "minimist": ">=1.2.3",
     "nodemon": "^2.0.2",
     "pug": "^3.0.1",
