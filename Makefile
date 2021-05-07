@@ -17,7 +17,7 @@ live: src deps ## Live E2E session  (ndoejs)
 	@make -s e2e TESTCAFE_FLAGS="--live --app-init-delay=500"
 
 test: src deps ## Run tests on locally  (nodejs)
-	@make e2e TESTCAFE_FLAGS="--color -a 'make dev >/dev/null 2>&1'"
+	@make e2e TESTCAFE_FLAGS="--color --skip-js-errors -a 'make dev >/dev/null 2>&1'"
 
 dist: src deps ## Build final output for production
 	@npm run dist -- -f
