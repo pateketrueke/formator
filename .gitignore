@@ -2,7 +2,7 @@
 *.mkv
 *.todo
 *.sqlite
-.tarima
+cache.json
 .DS_Store
 tmp
 dist

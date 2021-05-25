@@ -8,7 +8,7 @@ lint: src lib e2e deps ## Lint all sources
 	@npm run lint
 
 dev: src deps ## Start dev tasks  (nodejs)
-	@npm run watch & npm run dev
+	@npm start & npm run dev
 
 e2e: src deps ## Run E2E locally  (nodejs)
 	@npm run test:e2e -- --debug-on-fail e2e/cases $(TESTCAFE_FLAGS)
@@ -23,7 +23,7 @@ dist: src deps ## Build final output for production
 	@npm run dist -- -f
 
 clean: ## Remove unwanted artifacts
-	@rm -rf $(src)/dist $(src)/lib .tarima
+	@rm -rf dist/* tmp/* cache.json
 
 purge: ## Delete all installed modules
 	@rm -rf node_modules/*

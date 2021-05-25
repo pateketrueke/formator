@@ -1,6 +1,6 @@
-<script>// eslint-disable-line
+<script>
   import { onMount, setContext, createEventDispatcher } from 'svelte';
-  import { Failure } from 'svql';
+  import Failure from 'smoo/src/components/Failure.svelte';
 
   import Modal from '../Modal';
   import Field from '../Field';

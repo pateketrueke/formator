@@ -1,6 +1,7 @@
-<script>//
+<script>
   import { createEventDispatcher } from 'svelte';
-  import { In } from 'svql';
+
+  import Fence from 'smoo/src/components/Fence.svelte';
   import { stopPropagation } from './stacked';
 
   export let visible = false;
@@ -30,13 +31,13 @@
   :global(form) {
     padding: 0 !important;
   }
-  form > div {
+  :global(form > div) {
     padding: 0;
     border: 0;
   }
 </style>
 
-<In modal autofocus bind:visible on:cancel={close} on:submit={save}>
+<Fence modal autofocus bind:visible on:cancel={close} on:submit={save}>
   {#if uiSchema['ui:caption']}
     <div data-titlebar>
       {#if !uiSchema['ui:closing']}
@@ -65,4 +66,4 @@
         : (uiSchema['ui:save'] || `Save ${resource}`)}</span>
     </button>
   </div>
-</In>
+</Fence>
