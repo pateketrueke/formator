@@ -20,14 +20,14 @@ export default function attachment($, data, values) {
 
   const name = data.name || data.path;
 
-  return ['details', [
-    ['summary.flex', [['span.chunk', name || data.path], ['small', humanFileSize(data.size)]]],
-    ['dl', [
-      data.path && ['dd', [['a', { href: srcFile, target: '_blank' }, data.path]]],
-      data.type && ['dt.chunk', 'MIME Type'],
-      data.type && ['dd.chunk', data.type],
-      data.mtime && ['dt.chunk', 'Last Modified'],
-      data.mtime && ['dd.chunk', data.mtime],
+  return ['details', null, [
+    ['summary.flex', null, [['span.chunk', name || data.path], ['small', humanFileSize(data.size)]]],
+    ['dl', null, [
+      data.path && ['dd', null, [['a', { href: srcFile, target: '_blank' }, data.path]]],
+      data.type && ['dt.chunk', null, 'MIME Type'],
+      data.type && ['dd.chunk', null, data.type],
+      data.mtime && ['dt.chunk', null, 'Last Modified'],
+      data.mtime && ['dd.chunk', null, data.mtime],
     ]],
   ]];
 }

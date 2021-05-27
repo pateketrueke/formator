@@ -189,28 +189,11 @@ export function reduce(it, value, template) {
     return ['small.invalid', null, `Invalid template, given ${JSON.stringify(template)}`];
   }
 
-  if (!template[1]) {
-    return renderValue(it, value, template[0]);
+  if (!Array.isArray(template[2])) {
+    return [template[0], renderProps(it, value, template[1] || {}), template.slice(2).map(x => reduce(it, value, x))];
   }
 
-  if (Array.isArray(template[1])) {
-    return [template[0], null, template[1].map(x => reduce(it, value, x))];
-  }
-
-  if (Array.isArray(template[2])) {
-    return [template[0], renderProps(it, value, template[1]), template[2].map(x => reduce(it, value, x))];
-  }
-
-  const offset = Math.min(2, template.findIndex((x, i) => i !== 0 && typeof x === 'string'));
-
-  const text = template.slice(offset);
-  const node = template.slice(0, offset);
-
-  if (typeof text[0] === 'object') {
-    return [node[0], text[0] ? renderProps(it, value, text[0]) : null].concat(text.slice(1).map(x => renderValue(it, value, x)));
-  }
-
-  return [node[0], renderValue(it, value, node[1] ? node[1] : text[0])].concat(text.slice(1).map(x => renderValue(it, value, x)));
+  return [template[0], renderValue(it, value, template[1] || {}), template[2].map(x => reduce(it, value, x))];
 }
 
 export function renderDOM(it, value, template) {

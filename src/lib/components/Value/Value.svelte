@@ -28,7 +28,7 @@
 
     if (typeof value !== 'undefined') {
       if (uiSchema['ui:format']) return formatValue(value, uiSchema['ui:format']);
-      if (uiSchema['ui:template']) return renderDOM(root, value, [].concat(uiSchema['ui:template']));
+      if (uiSchema['ui:template']) return renderDOM(root, value, uiSchema['ui:template']);
     }
 
     if (type === 'number' || type === 'integer') {
