@@ -56,14 +56,6 @@
       }
     }
 
-    if (schema.id && uiSchema['ui:refs']) {
-      uiSchema['ui:refs'].forEach(key => {
-        _schema.properties[key] = refs[key];
-        _schema.required = _schema.required || [];
-        _schema.required.push(key);
-      });
-    }
-
     schema = _schema;
   }
 

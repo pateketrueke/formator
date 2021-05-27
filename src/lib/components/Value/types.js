@@ -2,6 +2,9 @@ import { $, widgets } from './widgets';
 import { humanFileSize } from '../../shared/utils';
 
 export default {
+  debug(data, values) {
+    return JSON.stringify({ data, values }, null, 2);
+  },
   embed(data, values, parentNode) {
     return widgets.slideshow($, data, values, parentNode);
   },

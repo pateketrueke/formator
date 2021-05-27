@@ -2,7 +2,6 @@
   import { createEventDispatcher } from 'svelte';
 
   import Fence from 'smoo/src/components/Fence.svelte';
-  import { stopPropagation } from './stacked';
 
   export let visible = false;
   export let updating = false;
@@ -14,7 +13,6 @@
 
   function close(e) {
     if (e) {
-      stopPropagation();
       dispatch('cancel');
     }
 

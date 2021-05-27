@@ -26,7 +26,7 @@
       return [];
     }
 
-    if (typeof value !== 'undefined') {
+    if (uiSchema && typeof value !== 'undefined') {
       if (uiSchema['ui:format']) return formatValue(value, uiSchema['ui:format']);
       if (uiSchema['ui:template']) return renderDOM(root, value, uiSchema['ui:template']);
     }

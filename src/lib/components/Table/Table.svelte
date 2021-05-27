@@ -44,7 +44,7 @@
   let isOpen = false;
   let backup = null;
   let loading = null;
-  let payload = result.length !== 0;
+  let payload = result !== null;
 
   let prev;
   function toggleActive(e) {

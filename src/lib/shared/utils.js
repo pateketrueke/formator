@@ -84,7 +84,6 @@ export function humanFileSize(bytes, decimals = 1) {
     unit += 1;
   } while (Math.round(Math.abs(bytes) * ratio) / ratio >= 1000 && unit < units.length - 1);
 
-
   return `${bytes.toFixed(decimals)} ${units[unit]}`;
 }
 

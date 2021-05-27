@@ -1,146 +1,75 @@
-<script>//
+<script>
   import { getContext, createEventDispatcher } from 'svelte';
+  import Search from 'smoo/src/components/Search.svelte';
 
   import Value from '../Value';
   import { API } from '../../shared/utils';
 
-  export let id = null;
-  // export let name = null;
-
-  // export let schema = {};
   export let uiSchema = {};
+  export let schema = {};
 
-  let t;
-  let layer;
-  let search;
-  // let current;
-  let options;
-  let offset = -1;
-  let data = {};
-  let items = [];
-  let status = 'idle';
-  let isOpen = false;
-  // let isClear = true;
-
-  const { actions, refs } = getContext('__ROOT__');
   const dispatch = createEventDispatcher();
+  const { actions, refs } = getContext('__ROOT__');
 
-  function reset(e) {
-    if (e.target === layer) isOpen = false;
-  }
+  const fallback = uiSchema['ui:empty'] || 'No items were found';
+  const placeholder = uiSchema['ui:placeholder'] || 'Find items...';
 
-  function open() {
-    if (!isOpen) isOpen = true;
-  }
+  let timeout;
+  let data = [];
+  let value = [];
+  let result = null;
 
-  function find() {
+  function find(term) {
     const req = { ...actions[uiSchema['ui:ref']].index };
 
-    if (search && search.value) {
-      req.path += `?search=${search.value}`;
+    if (term) {
+      req.path += `?search=${term}`;
+
+      API.call(req).then(resp => {
+        if (resp.status === 'ok') {
+          data = resp.result;
+        }
+      });
     }
-
-    status = 'pending';
-
-    API.call(req).then(resp => {
-      if (resp.status === 'ok') {
-        status = 'ready';
-        items = resp.result || [];
-        offset = Math.max(0, Math.min(offset, items.length - 1));
-      }
-    });
   }
 
-  // function clear() {
-  //   offset = -1;
-  //   data = {};
-  // }
-
-  function input() {
-    clearTimeout(t);
-    t = setTimeout(find, 120);
+  function sync(e) {
+    value = e.detail;
+    result = data.find(x => x.id.toString() === value[0]);
+    dispatch('change', value[0]);
   }
 
-  function keydown(e) {
-    if (e.keyCode === 27 && isOpen) {
-      e.stopPropagation();
-      isOpen = false;
+  function reset() {
+    value = [];
+    result = null;
+  }
+
+  function search(e) {
+    if (!e.detail) {
+      data = [];
       return;
     }
 
-    if (e.keyCode === 38) {
-      e.preventDefault();
-      if (!isOpen) isOpen = true;
-      else offset = Math.max(0, offset - 1);
-    }
-
-    if (e.keyCode === 40) {
-      e.preventDefault();
-      if (!isOpen) isOpen = true;
-      else offset = Math.min(items.length - 1, offset + 1);
-    }
-
-    if (e.keyCode === 9) {
-      isOpen = false;
-    }
-
-    if (offset >= 0 && e.keyCode === 13) {
-      if (isOpen) e.preventDefault();
-      data = items[offset];
-      isOpen = false;
-    }
-
-    // isClear = e.target.value.length === 0 && !isOpen;
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      find(e.detail);
+    }, 260);
   }
-
-  function select(e) {
-    for (let i = 0, c = options.children.length; i < c; i += 1) {
-      if (options.children[i] === e.target) {
-        data = items[i];
-        offset = i;
-        break;
-      }
-    }
-    isOpen = false;
-  }
-
-  $: if (isOpen) input();
-  $: dispatch('change', data);
-
-  // FIXME: recover from passed values...
-  // $: console.log({data,current});
 </script>
 
-<div data-finder class={status}>
-  <input {id}
-    type="search"
-    data-is="finder"
-    bind:this={search}
-    on:focus={open}
-    on:input={input}
-    on:keydown={keydown}
-    placeholder="{uiSchema['ui:placeholder'] || `Find ${uiSchema['ui:ref']}`}"
-  />
+<Search {data} {fallback} {placeholder} on:input={search} on:change={sync} bind:value nofilter autoclose>
+  <svg slot="before" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+    <path fill-rule="evenodd" d="M14.53 15.59a8.25 8.25 0 111.06-1.06l5.69 5.69a.75.75 0 11-1.06 1.06l-5.69-5.69zM2.5 9.25a6.75 6.75 0 1111.74 4.547.746.746 0 00-.443.442A6.75 6.75 0 012.5 9.25z"></path>
+  </svg>
+</Search>
 
-  <!-- <input {name} type="hidden" value={data[schema.references.key]} /> -->
-
-  {#if !items.length}
-    <small>{uiSchema['ui:empty'] || 'No items were found'}</small>
-  {/if}
-
-  {#if isOpen && items.length > 0}
-    <div bind:this={layer} on:click={reset} data-autocomplete>
-      <ul bind:this={options} on:click={select}>
-        {#each items as value, k (value)}
-          <li class:selected={k === offset}>
-            <Value {value} {uiSchema} schema={refs[uiSchema['ui:ref']]} />
-          </li>
-        {/each}
-      </ul>
-    </div>
-  {/if}
-
-  <!-- {#if typeof data[schema.references.key] !== 'undefined'}
-    <small data-selected on:click={clear}>{data[schema.references.key]}</small>
-  {/if} -->
-</div>
+{#if value.length > 0}
+  <div data-selected>
+    {#if result}
+      <Value {schema} uiSchema={uiSchema} value={result} />
+    {:else}
+      <span>{value[0]}</span>
+    {/if}
+    <button type="button" on:click={reset}>&times;</button>
+  </div>
+{/if}

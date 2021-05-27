@@ -65,7 +65,8 @@
       subSchema = refs[subSchema.$ref];
     }
 
-    const _uiSchema = uiSchema[field] || {};
+    const _uiSchema = { ...uiSchema[field] };
+    // console.log(refs[_uiSchema['ui:ref']])
     // const _refSchema = (refs[field] && refs[field].uiSchema) || [];
 
     const isRef = subSchema.modelName === model;
@@ -227,17 +228,16 @@
             <div data-value>
               {#if uiSchema['ui:ref']}
                 <Finder
-                  {id} {name} {field} {model} {schema} {uiSchema} {current}
+                  {name} {field} {model} {schema} {uiSchema} {current}
                   on:change={e => set(key, e.detail)}
-                />
-              {:else}
-                <Field
-                  {id} {path} {name} {field} {model} {schema} {through} {required} {uiSchema}
-                  on:change={e => set(key, e.detail)}
-                  parent={fixedResult}
-                  result={current}
                 />
               {/if}
+              <Field
+                {id} {path} {name} {field} {model} {schema} {through} {required} {uiSchema}
+                on:change={e => set(key, e.detail)}
+                parent={fixedResult}
+                result={current}
+              />
 
               {#if isFixed && uiSchema['ui:remove'] !== false}
                 <button data-is="remove" data-before="&times;" type="button" on:click={() => remove(key)}>

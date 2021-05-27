@@ -6,12 +6,9 @@ export default function attachment($, data, values) {
     path: value,
   })));
 
-  if (values[0].path) {
-    data = values[0];
-  }
-
-  if (!data.path) {
-    return;
+  if (!(values[0] && values[0].path)) {
+    if (!data.path) return;
+    values = [data];
   }
 
   const srcFile = data.path.indexOf('://') === -1
@@ -19,15 +16,17 @@ export default function attachment($, data, values) {
     : data.path;
 
   const name = data.name || data.path;
+  const size = data.size ? ['small', null, humanFileSize(data.size)] : null;
+  const length = values.length > 1 ? ['small', null, `${values.length} file${values.length === 1 ? '' : 's'}`] : null;
 
   return ['details', null, [
-    ['summary.flex', null, [['span.chunk', name || data.path], ['small', humanFileSize(data.size)]]],
-    ['dl', null, [
-      data.path && ['dd', null, [['a', { href: srcFile, target: '_blank' }, data.path]]],
-      data.type && ['dt.chunk', null, 'MIME Type'],
-      data.type && ['dd.chunk', null, data.type],
-      data.mtime && ['dt.chunk', null, 'Last Modified'],
-      data.mtime && ['dd.chunk', null, data.mtime],
-    ]],
+    ['summary.flex', null, [['span.chunk', null, name || data.path], size, length]],
+    ['dl', null, values.map(value => [
+      value.path && ['dd', null, [['a', { href: srcFile, target: '_blank' }, value.path]]],
+      value.type && ['dt.chunk', null, 'MIME Type'],
+      value.type && ['dd.chunk', null, value.type],
+      value.mtime && ['dt.chunk', null, 'Last Modified'],
+      value.mtime && ['dd.chunk', null, value.mtime],
+    ])],
   ]];
 }

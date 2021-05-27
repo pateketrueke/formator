@@ -15,11 +15,8 @@ export default function slideShow($, data, values, parentNode) {
   }
 
   const prefix = values[0].name || values[0].path;
-
-  let size;
-  if (values[0].size) {
-    size = ['small', null, humanFileSize(values[0].size)];
-  }
+  const size = values[0].size ? ['small', null, humanFileSize(values[0].size)] : null;
+  const length = values.length > 1 ? ['small', null, `${values.length} file${values.length === 1 ? '' : 's'}`] : null;
 
   let ref;
   let open;
@@ -139,5 +136,5 @@ export default function slideShow($, data, values, parentNode) {
         open = true;
       });
     },
-  }, prefix], size]];
+  }, prefix], size, length]];
 }

@@ -8,6 +8,8 @@ lint: src lib e2e deps ## Lint all sources
 	@npm run lint
 
 dev: src deps ## Start dev tasks  (nodejs)
+	@mkdir -p tmp
+	@npm run dist
 	@npm start & npm run dev
 
 e2e: src deps ## Run E2E locally  (nodejs)

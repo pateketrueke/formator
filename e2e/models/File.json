@@ -9,7 +9,7 @@
     "ui:multiple": false,
     "ui:required": true,
     "name": {
-      "ui:template": [["span", "{@embed:..}"]]
+      "ui:template": [["span", null, "{@embed:..}"]]
     },
     "size": {
       "ui:format": "bytes"
