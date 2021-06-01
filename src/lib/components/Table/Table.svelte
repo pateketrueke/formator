@@ -7,7 +7,7 @@
   import Value from '../Value';
 
   import {
-    API, randId, getCols, defaultValue,
+    API, randId, fixedCols, defaultValue,
   } from '../../shared/utils';
 
   export let pending = 'Loading...';
@@ -88,20 +88,6 @@
           || key,
         field: key,
       }));
-  }
-
-  function fixedCols(_uiSchema) {
-    let classes = [];
-    if (_uiSchema && _uiSchema['ui:class']) {
-      classes = classes.concat(_uiSchema['ui:class']);
-    }
-    if (_uiSchema && _uiSchema['ui:columns']) {
-      classes = classes.concat(getCols(_uiSchema['ui:columns']));
-    }
-    if (!classes.length) {
-      classes.push(`col-${Math.floor(12 / (headers.length + 1))}`);
-    }
-    return classes.join(' ');
   }
 
   function getItems(from) {
@@ -230,7 +216,7 @@
     <thead>
       <tr>
         {#each headers as { field, label }}
-          <th class={fixedCols(uiSchema[field])}>{label}</th>
+          <th class={fixedCols(uiSchema[field], headers)}>{label}</th>
         {/each}
         <th colspan="99"></th>
       </tr>
@@ -252,7 +238,7 @@
               </td>
             {:else}
               {#each headers as { field, label }}
-                <td data-field="/{offset}/{field}" data-type={schema[field].type || 'object'} data-label={label} class={fixedCols(uiSchema[field])}>
+                <td data-field="/{offset}/{field}" data-type={schema[field].type || 'object'} data-label={label} class={fixedCols(uiSchema[field], headers)}>
                   {#if data[field] !== null}<Value schema={schema[field]} uiSchema={uiSchema[field]} value={data[field]} root={data} />{/if}
                 </td>
               {/each}

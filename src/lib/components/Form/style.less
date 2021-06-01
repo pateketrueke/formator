@@ -8,6 +8,7 @@
   .wrapper {
     width: 100%;
     margin-top: 7em;
+    max-width: 720px;
   }
 
   @media screen and (min-width: @smb) {
@@ -59,6 +60,12 @@ table {
     tr:nth-child(odd) { background-color: lighten(@light, 30); }
     tr:hover { background-color: @hover; }
   }
+
+  .ems(@counter) when (@counter > 0) {
+    .ems((@counter - 1));
+    th.em@{counter}, td.em@{counter} { width: ~"@{counter}em"; }
+  }
+  .ems(16);
 
   @media @md {
     width: 100%;
@@ -293,7 +300,6 @@ form {
 
   > div {
     padding: @sp2;
-    border-top: 1px dashed @light;
   }
 }
 

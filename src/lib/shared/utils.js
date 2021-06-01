@@ -47,6 +47,20 @@ export function getCols(value) {
   return classes;
 }
 
+export function fixedCols(_uiSchema, headers) {
+  let classes = [];
+  if (_uiSchema && _uiSchema['ui:class']) {
+    classes = classes.concat(_uiSchema['ui:class']);
+  }
+  if (_uiSchema && _uiSchema['ui:columns']) {
+    classes = classes.concat(getCols(_uiSchema['ui:columns']));
+  }
+  if (!classes.length) {
+    classes.push(`col-${Math.floor(12 / (headers.length + 1))}`);
+  }
+  return classes.join(' ');
+}
+
 export function getItems(schema, offset) {
   return (Array.isArray(schema.items)
     ? schema.items[offset]
