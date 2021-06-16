@@ -1,4 +1,4 @@
-<script context="module">//
+<script context="module">
   import ErrorType from '../Error';
   import LoaderType from '../Loader';
 
@@ -9,6 +9,7 @@
 
 <script>
   import { getContext } from 'svelte';
+  import Enum from './Enum.svelte';
 
   export let path = [];
   export let name = 'field';
@@ -64,7 +65,7 @@
   } else if (!schema) {
     propType = LoaderType;
   } else if (components) {
-    const Type = components[schema.type || 'object'];
+    const Type = schema.enum ? Enum : components[schema.type || 'object'];
     const Ext = extensions[uiSchema['ui:component']];
 
     propType = Ext || Type;

@@ -73,7 +73,9 @@ export function defaultValue(schema) {
   if (!schema) {
     return null;
   }
-
+  if (schema.enum) {
+    return undefined;
+  }
   if (schema.properties) {
     return Object.keys(schema.properties).reduce((prev, cur) => {
       prev[cur] = defaultValue(schema.properties[cur]);

@@ -26,10 +26,10 @@
 </script>
 
 <style>
-  :global(form) {
+  :global(.wrapper form) {
     padding: 0 !important;
   }
-  :global(form > div) {
+  :global(.wrapper form > div) {
     padding: 0;
     border: 0;
   }

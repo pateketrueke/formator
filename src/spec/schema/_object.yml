@@ -23,3 +23,7 @@ schema:
       properties:
         strValue:
           type: string
+        enumValues:
+          enum:
+            - FOO
+            - BAR
