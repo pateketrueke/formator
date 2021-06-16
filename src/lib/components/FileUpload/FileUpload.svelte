@@ -19,11 +19,11 @@
   const { rootId } = getContext('__ROOT__');
   const dispatch = createEventDispatcher();
 
+  let additionalFields = {};
   let currentFiles = [];
   let fixedFields = null;
   let isRequired = false;
   let pending = true;
-  let extra = {};
   let ref;
 
   if (uiSchema['ui:required']) {
@@ -43,6 +43,17 @@
 
     if (typeof result === 'string') {
       currentFiles = withKeys([jsonData(result, () => ({ path: result }))]);
+    }
+
+    if (uiSchema['ui:includes']) {
+      additionalFields = currentFiles.reduce((memo, cur) => {
+        memo[cur.key] = {};
+        uiSchema['ui:includes'].forEach(key => {
+          memo[cur.key][key] = cur.data[key];
+          delete cur.data[key];
+        });
+        return memo;
+      }, {});
     }
   }
 
@@ -94,9 +105,13 @@
     });
   }
 
-  function fix(data) {
-    data.properties = extra;
-    return data;
+  function fix(file) {
+    if (file.data instanceof window.File) {
+      file.data.properties = { ...additionalFields[file.key] };
+    } else {
+      Object.assign(file.data, additionalFields[file.key]);
+    }
+    return file.data;
   }
 
   function sync() {
@@ -107,18 +122,18 @@
 
       if (schema.type === 'object') {
         result = currentFiles.reduce((prev, cur) => {
-          prev[cur.name || cur.path] = fix(cur.data);
+          prev[cur.name || cur.path] = fix(cur);
           return prev;
         }, {});
       }
 
       if (schema.type === 'array') {
-        result = currentFiles.map(x => (schema.items.type === 'object' ? fix(x.data) : x.data.content));
+        result = currentFiles.map(x => (schema.items.type === 'object' ? fix(x) : x.data.content));
       }
     } else if (schema.type !== 'array') {
-      result = currentFiles[0] ? fix(currentFiles[0].data) : undefined;
+      result = currentFiles[0] ? fix(currentFiles[0]) : undefined;
     } else {
-      result = currentFiles.map(x => fix(x.data));
+      result = currentFiles.map(x => fix(x));
     }
   }
 
@@ -170,13 +185,9 @@
 
   $: id = getId(rootId, name);
   $: check() || dispatch('change', result); // eslint-disable-line
-  $: isRequired = required ? !currentFiles.length : undefined;
+  $: isRequired = required ? !currentFiles.length : null;
   $: fixedFields = uiSchema['ui:includes'] && getExtraFields();
 </script>
-
-{#if fixedFields}
-  <ObjectType {uiSchema} schema={fixedFields.schema} bind:result={extra} />
-{/if}
 
 <div data-fieldset>
   {#if uiSchema['ui:label'] || field}<label for={id}>{uiSchema['ui:label'] || field}</label>{/if}
@@ -184,30 +195,39 @@
   <button class="nobreak" tabIndex="-1" data-before="&plus;" type="button" on:click={() => ref.click()}>
     <span>{#if currentFiles.length > 0}{isAppend ? 'Append' : 'Replace'}{:else}Add{/if} file{multiple ? 's' : ''}</span>
   </button>
-  {#each currentFiles as { key, data } (key)}
-    <details>
-      <summary class="flex">
-        <span class="chunk">{data.name || data.path}</span>
-        {#if data.size}<small>{humanFileSize(data.size)}</small>{/if}
-        <button data-before="&times;" type="button" on:click={() => removeFile(key)}>
-          <span>Remove file</span>
-        </button>
-      </summary>
-      <dl>
-        {#if data.path}
-          <dd>
-            <a href={fixedLink(data.path)} target="_blank">{data.path}</a>
-          </dd>
+  <ul data-files>
+    {#each currentFiles as { key, data } (key)}
+      <li data-file>
+        <details>
+          <summary class="flex">
+            <span class="chunk">{data.name || data.path}</span>
+            {#if data.size}<small>{humanFileSize(data.size)}</small>{/if}
+            <button data-before="&times;" type="button" on:click={() => removeFile(key)}>
+              <span>{uiSchema['ui:remove'] || 'Remove file'}</span>
+            </button>
+          </summary>
+          <dl>
+            {#if data.path}
+              <dd>
+                <a href={fixedLink(data.path)} target="_blank">{data.path}</a>
+              </dd>
+            {/if}
+            <dt class="chunk">MIME Type</dt>
+            <dd class="chunk">{data.type || 'application/octet-stream'}</dd>
+            {#if data.lastModifiedDate || data.mtime}
+              <dt class="chunk">Last Modified</dt>
+              <dd class="flex">
+                <span class="chunk">{data.lastModifiedDate ? data.lastModifiedDate.toGMTString() : data.mtime}</span>
+              </dd>
+            {/if}
+          </dl>
+        </details>
+        {#if fixedFields}
+          <ObjectType {uiSchema} schema={fixedFields.schema} on:change={sync} bind:result={additionalFields[key]} />
         {/if}
-        <dt class="chunk">MIME Type</dt>
-        <dd class="chunk">{data.type || 'application/octet-stream'}</dd>
-        {#if data.lastModifiedDate || data.mtime}
-          <dt class="chunk">Last Modified</dt>
-          <dd class="flex">
-            <span class="chunk">{data.lastModifiedDate ? data.lastModifiedDate.toGMTString() : data.mtime}</span>
-          </dd>
-        {/if}
-      </dl>
-    </details>
-  {/each}
+      </li>
+    {:else}
+      <li data-empty>{uiSchema['ui:empty'] || 'No files'}</li>
+    {/each}
+  </ul>
 </div>
