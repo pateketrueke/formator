@@ -109,7 +109,12 @@
     if (file.data instanceof window.File) {
       file.data.properties = { ...additionalFields[file.key] };
     } else {
-      Object.assign(file.data, additionalFields[file.key]);
+      const payload = Object.keys(schema.properties).reduce((memo, cur) => {
+        memo[cur] = additionalFields[file.key][cur] || file.data[cur];
+        return memo;
+      }, {});
+
+      file.data = { ...additionalFields[file.key], ...payload };
     }
     return file.data;
   }
@@ -138,7 +143,7 @@
   }
 
   function check() {
-    if (pending) return;
+    if (pending) return true;
     pending = true;
 
     if (currentFiles.length > 0) sync();

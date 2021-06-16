@@ -220,7 +220,7 @@
         <li data-type={schema.type || 'object'}>
           <div data-field="/{path.join('/')}">
             {#if isFixed}
-              <input type="text" placeholder={uiSchema['ui:key'] || 'key'} on:change={e => prop(e, key)} />
+              <input type="text" required placeholder={uiSchema['ui:key'] || 'key'} on:change={e => prop(e, key)} />
             {:else}
               <label for={id}>{uiSchema['ui:label'] || field}</label>
             {/if}
