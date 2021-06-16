@@ -200,9 +200,12 @@
   <button class="nobreak" tabIndex="-1" data-before="&plus;" type="button" on:click={() => ref.click()}>
     <span>{#if currentFiles.length > 0}{isAppend ? 'Append' : 'Replace'}{:else}Add{/if} file{multiple ? 's' : ''}</span>
   </button>
-  <ul data-files>
+  <ul>
     {#each currentFiles as { key, data } (key)}
       <li data-file>
+        {#if fixedFields}
+          <ObjectType {uiSchema} schema={fixedFields.schema} on:change={sync} bind:result={additionalFields[key]} />
+        {/if}
         <details>
           <summary class="flex">
             <span class="chunk">{data.name || data.path}</span>
@@ -227,9 +230,6 @@
             {/if}
           </dl>
         </details>
-        {#if fixedFields}
-          <ObjectType {uiSchema} schema={fixedFields.schema} on:change={sync} bind:result={additionalFields[key]} />
-        {/if}
       </li>
     {:else}
       <li data-empty>{uiSchema['ui:empty'] || 'No files'}</li>

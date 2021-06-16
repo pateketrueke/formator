@@ -65,8 +65,10 @@
     max-width: 100%;
     line-height: 1.5em;
   }
+  button + ul,
   button + details,
-  details + details {
+  details + details,
+  fieldset + details {
     margin-top: @sp2;
   }
   summary {
@@ -86,11 +88,6 @@
     @media @sm {
       padding-right: 25%;
     }
-  }
-
-  [data-file] > details + fieldset,
-  [data-files] {
-    margin-top: @sp2;
   }
 }
 

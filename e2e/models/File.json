@@ -9,6 +9,7 @@
     "ui:headers": ["Kind", "MIME Type", "File Name", "Last Modified"],
     "ui:multiple": false,
     "ui:required": true,
+    "ui:add": false,
     "name": {
       "ui:template": "{@embed:..}"
     },
