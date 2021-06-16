@@ -3,8 +3,10 @@
   import {
     defaultValue, withKeys, getId, jsonData, humanFileSize,
   } from '../../shared/utils';
+  import ObjectType from '../Field/types/Object.svelte';
 
   export let name;
+  export let field;
   export let uiSchema = {};
   export let required = false;
   export let schema = { type: 'string' };
@@ -18,8 +20,10 @@
   const dispatch = createEventDispatcher();
 
   let currentFiles = [];
+  let fixedFields = null;
   let isRequired = false;
   let pending = true;
+  let extra = {};
   let ref;
 
   if (uiSchema['ui:required']) {
@@ -40,6 +44,24 @@
     if (typeof result === 'string') {
       currentFiles = withKeys([jsonData(result, () => ({ path: result }))]);
     }
+  }
+
+  function getExtraFields() {
+    const req = [];
+    const props = uiSchema['ui:includes'].reduce((memo, cur) => {
+        if (schema.required && schema.required.includes(cur)) req.push(cur);
+        memo[cur] = { ...schema.properties[cur] };
+        return memo;
+      }, {});
+
+    return {
+      schema: {
+        properties: props,
+        required: req,
+        type: 'object',
+      },
+      uiSchema: { ...uiSchema, 'ui:component': undefined },
+    };
   }
 
   function fixedLink(uri) {
@@ -72,6 +94,11 @@
     });
   }
 
+  function fix(data) {
+    data.properties = extra;
+    return data;
+  }
+
   function sync() {
     if (isAttachment) {
       if (schema.type === 'string') {
@@ -80,18 +107,18 @@
 
       if (schema.type === 'object') {
         result = currentFiles.reduce((prev, cur) => {
-          prev[cur.name || cur.path] = cur.data;
+          prev[cur.name || cur.path] = fix(cur.data);
           return prev;
         }, {});
       }
 
       if (schema.type === 'array') {
-        result = currentFiles.map(x => (schema.items.type === 'object' ? x.data : x.data.content));
+        result = currentFiles.map(x => (schema.items.type === 'object' ? fix(x.data) : x.data.content));
       }
     } else if (schema.type !== 'array') {
-      result = currentFiles[0] ? currentFiles[0].data : undefined;
+      result = currentFiles[0] ? fix(currentFiles[0].data) : undefined;
     } else {
-      result = currentFiles.map(x => x.data);
+      result = currentFiles.map(x => fix(x.data));
     }
   }
 
@@ -144,9 +171,15 @@
   $: id = getId(rootId, name);
   $: check() || dispatch('change', result); // eslint-disable-line
   $: isRequired = required ? !currentFiles.length : undefined;
+  $: fixedFields = uiSchema['ui:includes'] && getExtraFields();
 </script>
 
+{#if fixedFields}
+  <ObjectType {uiSchema} schema={fixedFields.schema} bind:result={extra} />
+{/if}
+
 <div data-fieldset>
+  {#if uiSchema['ui:label'] || field}<label for={id}>{uiSchema['ui:label'] || field}</label>{/if}
   <input data-required required={isRequired} on:change={setFiles} bind:this={ref} type="file" {id} {name} {multiple} />
   <button class="nobreak" tabIndex="-1" data-before="&plus;" type="button" on:click={() => ref.click()}>
     <span>{#if currentFiles.length > 0}{isAppend ? 'Append' : 'Replace'}{:else}Add{/if} file{multiple ? 's' : ''}</span>

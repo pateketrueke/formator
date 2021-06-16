@@ -250,8 +250,13 @@ td.invalid  {
     padding: @sp2;
   }
 
-  > fieldset > ul {
-    max-width: calc(100vw - (@sp2 * 4));
+  > fieldset {
+    > ul {
+      max-width: calc(100vw - (@sp2 * 4));
+    }
+    + div {
+      margin-top: @sp2;
+    }
   }
 }
 

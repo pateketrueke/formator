@@ -1,18 +1,19 @@
 {
   "$attributes": {
-    "findAll": ["name", "path", "type", "size", "mtime"]
+    "findAll": ["kind", "name", "path", "type", "size", "mtime"]
   },
   "$uiSchema": {
     "ui:component": "FileUpload",
-    "ui:fields": ["type", "name", "mtime"],
-    "ui:headers": ["MIME Type", "File name", "Last Modified"],
+    "ui:includes": ["kind"],
+    "ui:fields": ["kind", "type", "name", "mtime"],
+    "ui:headers": ["Kind", "MIME Type", "File Name", "Last Modified"],
     "ui:multiple": false,
     "ui:required": true,
     "name": {
-      "ui:template": [["span", null, "{@embed:..}"]]
+      "ui:template": "{@embed:..}"
     },
-    "size": {
-      "ui:format": "bytes"
+    "mtime": {
+      "ui:format": "date"
     }
   },
   "$schema": {
@@ -26,6 +27,10 @@
         "type": "string",
         "format": "datetime"
       },
+      "kind": {
+        "type": "string",
+        "enum": ["ATTACHMENT", "DOWNLOAD", "BACKUP"]
+      },
       "name": {
         "type": "string"
       },
@@ -38,6 +43,7 @@
       "type": {
         "type": "string"
       }
-    }
+    },
+    "required": ["kind"]
   }
 }

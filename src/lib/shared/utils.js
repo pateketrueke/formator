@@ -337,18 +337,21 @@ export const API = {
       if (!obj || typeof obj !== 'object') return obj;
       Object.keys(obj).forEach(key => {
         if (Array.isArray(obj[key]) && obj[key][0] instanceof window.File) {
-          const prefix = randId('upload_');
+          const out = [];
 
           obj[key].forEach(blob => {
+            const prefix = randId('upload_');
+
             formData.append(prefix, blob);
+            out.push({ ...blob.properties, $upload: prefix });
           });
-          obj[key] = { $upload: prefix };
+          obj[key] = out;
           hasFiles = true;
         } else if (obj[key] instanceof window.File) {
           const prefix = randId('upload_');
 
           formData.append(prefix, obj[key]);
-          obj[key] = { $upload: prefix };
+          obj[key] = { ...obj[key].properties, $upload: prefix };
           hasFiles = true;
         } else if (typeof obj[key] === 'object' && obj[key] !== null) {
           if (!Object.keys(obj[key]).length) delete obj[key];
@@ -361,7 +364,7 @@ export const API = {
       const prefix = randId('upload_');
 
       formData.append(prefix, data);
-      data = { $upload: prefix };
+      data = { ...data.properties, $upload: prefix };
       hasFiles = true;
     } else {
       walkProps(data);
