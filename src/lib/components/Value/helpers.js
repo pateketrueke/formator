@@ -200,12 +200,13 @@ export function renderDOM(it, value, template) {
   return [{
     component: HTML,
     options: {
-      vnode: template.map(x => reduce(it, value, x)),
+      vnode: [].concat(template).map(x => reduce(it, value, x)),
     },
   }];
 }
 
 export function formatValue(value, formatter) {
   if (formatter === 'bytes') return humanFileSize(value);
+  if (formatter === 'date') return value.substr(0, 10);
   return value;
 }
