@@ -207,6 +207,6 @@ export function renderDOM(it, value, template) {
 
 export function formatValue(value, formatter) {
   if (formatter === 'bytes') return humanFileSize(value);
-  if (formatter === 'date') return value.substr(0, 10);
+  if (formatter === 'date') return new Date(value).toISOString().substr(0, 10);
   return value;
 }
