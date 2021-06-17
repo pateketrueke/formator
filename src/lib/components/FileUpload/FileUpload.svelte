@@ -150,8 +150,6 @@
   }
 
   function removeFile(key) {
-    if (!confirm('Are you sure?')) return; // eslint-disable-line
-
     currentFiles = currentFiles.filter(x => x.key !== key);
     pending = true;
     sync();
@@ -170,6 +168,8 @@
     } else {
       currentFiles = set;
     }
+    ref.type = '';
+    ref.type = 'file';
   }
 
   function setFiles(e, skip) {
