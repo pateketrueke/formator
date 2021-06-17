@@ -1,5 +1,6 @@
 <script>
   import { getContext, createEventDispatcher } from 'svelte';
+  import Failure from 'smoo/src/components/Failure.svelte';
   import Search from 'smoo/src/components/Search.svelte';
 
   import Value from '../Value';
@@ -7,6 +8,8 @@
 
   export let uiSchema = {};
   export let schema = {};
+  export let name = null;
+  export let id = null;
 
   const dispatch = createEventDispatcher();
   const { actions, refs } = getContext('__ROOT__');
@@ -18,14 +21,14 @@
   let data = [];
   let value = [];
   let result = null;
+  let pending = null;
 
   function find(term) {
     const req = { ...actions[uiSchema['ui:ref']].index };
 
     if (term) {
       req.path += `?search=${term}`;
-
-      API.call(req).then(resp => {
+      pending = API.call(req).then(resp => {
         if (resp.status === 'ok') {
           data = resp.result;
         }
@@ -34,9 +37,14 @@
   }
 
   function sync(e) {
+    result = null;
+    pending = true;
     value = e.detail;
-    result = data.find(x => x.id.toString() === value[0]);
     dispatch('change', value[0]);
+    setTimeout(() => {
+      pending = null;
+      result = data.find(x => x.id.toString() === value[0]);
+    });
   }
 
   function reset() {
@@ -59,15 +67,24 @@
 
 <Search {data} {fallback} {placeholder} on:input={search} on:change={sync} bind:value nofilter autoclose />
 
-{#if value.length > 0}
-  <div data-selected>
-    {#if result}
-      <Value {schema} {uiSchema} value={result} />
-    {:else}
-      <span>{value[0]}</span>
-    {/if}
-    <button type="button" on:click={reset} data-is="remove" data-before="&times;">
-      <span>Remove item</span>
-    </button>
-  </div>
-{/if}
+{#await pending}
+  <div data-loading>{uiSchema['ui:loading'] || 'Loading results...'}</div>
+{:then}
+  {#if value.length > 0}
+    <div data-selected>
+      {#if result}
+        <Value {schema} {uiSchema} value={result} />
+      {:else}
+        <div data-loading>{uiSchema['ui:loading'] || 'Loading results...'}</div>
+      {/if}
+      <input type="hidden" bind:value={value[0]} {id} {name} />
+      <button type="button" on:click={reset} data-is="remove" data-before="&times;">
+        <span>Remove item</span>
+      </button>
+    </div>
+  {:else}
+    <div data-empty>{uiSchema['ui:empty'] || 'No selection'}</div>
+  {/if}
+{:catch error}
+  <Failure {error} />
+{/await}
