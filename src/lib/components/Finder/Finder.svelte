@@ -37,14 +37,9 @@
   }
 
   function sync(e) {
-    result = null;
-    pending = true;
     value = e.detail;
+    result = data.find(x => x.id.toString() === value[0]);
     dispatch('change', value[0]);
-    setTimeout(() => {
-      pending = null;
-      result = data.find(x => x.id.toString() === value[0]);
-    });
   }
 
   function reset() {
