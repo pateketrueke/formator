@@ -7,6 +7,7 @@
 
   export let name;
   export let field;
+  export let model;
   export let uiSchema = {};
   export let required = false;
   export let schema = { type: 'string' };
@@ -16,7 +17,7 @@
   const isAppend = uiSchema['ui:append'] !== false && multiple;
   const isAttachment = uiSchema['ui:attachment'];
 
-  const { rootId } = getContext('__ROOT__');
+  const { refs, rootId } = getContext('__ROOT__');
   const dispatch = createEventDispatcher();
 
   let additionalFields = {};
@@ -58,10 +59,20 @@
   }
 
   function getExtraFields() {
+    const _target = uiSchema['ui:ref'] || model;
+    const _props = schema.properties || refs[_target].properties;
+    const _req = schema.required || refs[_target].required;
+    const _ui = {
+      ...uiSchema,
+      ...refs[_target].uiSchema,
+      'ui:ref': undefined,
+      'ui:component': undefined,
+    };
+
     const req = [];
     const props = uiSchema['ui:includes'].reduce((memo, cur) => {
-        if (schema.required && schema.required.includes(cur)) req.push(cur);
-        memo[cur] = { ...schema.properties[cur] };
+        if (_req && _req.includes(cur)) req.push(cur);
+        memo[cur] = { ..._props[cur] };
         return memo;
       }, {});
 
@@ -71,7 +82,7 @@
         required: req,
         type: 'object',
       },
-      uiSchema: { ...uiSchema, 'ui:component': undefined },
+      uiSchema: _ui,
     };
   }
 
@@ -106,10 +117,13 @@
   }
 
   function fix(file) {
+    const _target = uiSchema['ui:ref'] || model;
+    const _props = schema.properties || refs[_target].properties;
+
     if (file.data instanceof window.File) {
       file.data.properties = { ...additionalFields[file.key] };
     } else {
-      const payload = Object.keys(schema.properties).reduce((memo, cur) => {
+      const payload = Object.keys(_props).reduce((memo, cur) => {
         memo[cur] = additionalFields[file.key][cur] || file.data[cur];
         return memo;
       }, {});

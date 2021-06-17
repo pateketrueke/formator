@@ -10,7 +10,9 @@
     "FileId": {
       "ui:ref": "File",
       "ui:component": "FileUpload",
-      "ui:template": "{@file:this}"
+      "ui:template": "{@file:this}",
+      "ui:includes": ["kind"],
+      "ui:add": false
     },
     "ExampleId": {
       "ui:hidden": true
