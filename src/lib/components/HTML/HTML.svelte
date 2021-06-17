@@ -1,23 +1,26 @@
 <script>
   import { onMount, onDestroy } from 'svelte';
-  import { $ as render, patch, mount } from '../Value/widgets';
+  import {
+    $ as render, patch, mount, unmount,
+  } from '../Value/widgets';
 
-  export let markup;
   export let vnode;
 
+  let dirty;
+  let prev;
   let ref;
 
   onMount(() => {
-    if (typeof markup === 'string') {
-      ref.innerHTML = markup;
-    } else if (vnode) {
-      mount(ref, vnode, render);
-    }
+    mount(ref, prev = vnode, render);
   });
 
   onDestroy(() => {
-    while (ref.firstChild) ref.removeChild(ref.firstChild);
+    unmount(ref);
   });
+
+  $: if (prev && prev !== vnode) {
+    patch(ref, prev, prev = vnode, render);
+  }
 </script>
 
 <div data-ref bind:this={ref} />
