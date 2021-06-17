@@ -185,7 +185,7 @@
 {:else}
   <div data-empty>{uiSchema['ui:empty'] || 'No items'}</div>
   {#if required}
-    <input data-required tabIndex="-1" on:input="{e => { e.target.value = ''; }}" {name} {required} />
+    <input type="hidden" tabIndex="-1" on:input="{e => { e.target.value = ''; }}" {name} {required} />
   {/if}
 {/if}
 
