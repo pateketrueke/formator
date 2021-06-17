@@ -20,14 +20,14 @@
       input {
         position: absolute;
         &:checked + span {
-          background-color: silver;
-          color: gray;
+          background-color: @high;
+          color: @dark;
         }
         &:focus {
           outline: none;
           + span {
-            background-color: blue;
-            color: white;
+            background-color: @mid;
+            color: @white;
          }
         }
       }
@@ -42,14 +42,21 @@
     }
   }
 
-  [role=listbox] > ul[role=menu] {
-    z-index: 1;
+  [role=listbox] + * {
+    min-height: 35px;
   }
-
-  [role=listbox] + [data-selected],
-  [role=listbox] + [data-fieldset],
-  [data-selected] + [data-fieldset] {
+  [role=listbox] + div {
     margin-top: @sp1;
+  }
+  [role=listbox] > ul[role=menu] {
+    box-shadow: 0 0 3px @dark;
+    z-index: 2;
+  }
+  [role=listbox] + [data-empty],
+  [role=listbox] + [data-loading],
+  [data-selected] > [data-loading] {
+    padding: @sp1;
+    opacity: .5;
   }
 
   [data-selected] {
