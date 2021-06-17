@@ -31,11 +31,11 @@
       if (uiSchema['ui:template']) return renderDOM(root, value, uiSchema['ui:template']);
     }
 
-    if (type === 'number' || type === 'integer') {
+    if (typeof value === 'number' && (type === 'number' || type === 'integer')) {
       return [value || defaultValue || 0];
     }
 
-    if (type === 'string') {
+    if (typeof value === 'string' && type === 'string') {
       return [value || defaultValue];
     }
 
