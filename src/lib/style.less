@@ -93,7 +93,6 @@
       padding: @sp1;
       color: @white;
       position: absolute;
-      cursor: pointer;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -111,9 +110,11 @@
       z-index: 1;
       margin: auto;
       max-width: 100%;
+      cursor: crosshair;
       position: relative;
       transition: opacity .5s;
       background-color: white;
+      outline: 1px dashed @mid;
     }
 
     > div {
