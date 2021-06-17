@@ -62,10 +62,12 @@
 {#if value.length > 0}
   <div data-selected>
     {#if result}
-      <Value {schema} uiSchema={uiSchema} value={result} />
+      <Value {schema} {uiSchema} value={result} />
     {:else}
       <span>{value[0]}</span>
     {/if}
-    <button type="button" on:click={reset}>&times;</button>
+    <button type="button" on:click={reset} data-is="remove" data-before="&times;">
+      <span>Remove item</span>
+    </button>
   </div>
 {/if}
