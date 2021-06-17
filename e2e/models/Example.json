@@ -21,18 +21,18 @@
     "ui:fields": ["id", "title", "url", "file", "blob", "fileset"],
     "ui:headers": ["#", "Example", "URL", "File", "Blob", "Attachments"],
     "blob": {
-      "ui:template": [["div", null, "{@embed:this}"]],
+      "ui:template": "{@embed:this}",
       "ui:component": "FileUpload",
       "ui:attachment": true,
       "ui:columns": "6::?"
     },
     "url": {
-      "ui:template": [["div", null, "{@file:this}"]],
+      "ui:template": "{@file:this}",
       "ui:component": "FileUpload",
       "ui:columns": "9::6"
     },
     "file": {
-      "ui:template": [["div", null, "{@embed:this}"]],
+      "ui:template": "{@embed:this}",
       "ui:component": "FileUpload",
       "ui:columns": "6::?"
     },
@@ -40,7 +40,7 @@
       "ui:columns": "9::6"
     },
     "fileset": {
-      "ui:template": [["div", null, "{@embed:*.File}"]],
+      "ui:template": "{@embed:*.File}",
       "ui:add": false,
       "ui:columns": "9",
       "ui:fields": ["id", "label", "File"],
@@ -53,11 +53,12 @@
       },
       "FileId": {
         "ui:ref": "File",
-        "ui:component": "FileUpload"
+        "ui:component": "FileUpload",
+        "ui:template": "{@file:this}"
       },
       "File": {
         "ui:columns": "10",
-        "ui:template": [["div", null, "{@file:this}"]]
+        "ui:template": "{@file:this}"
       },
       "ExampleId": {
         "ui:hidden": true
