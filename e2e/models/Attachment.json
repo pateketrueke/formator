@@ -1,11 +1,15 @@
 {
   "$attributes": {
-    "findAll": ["label", "file.path"]
+    "findAll": ["label"]
   },
   "$uiSchema": {
+    "ui:fields": ["label"],
     "ui:add": false,
     "id": {
       "ui:hidden": true
+    },
+    "label": {
+      "ui:template": "#{.FileId} {this}"
     },
     "FileId": {
       "ui:ref": "File",

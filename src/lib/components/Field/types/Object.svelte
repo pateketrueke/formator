@@ -228,7 +228,7 @@
             <div data-value>
               {#if uiSchema['ui:ref']}
                 <Finder
-                  {name} {field} {model} {schema} {uiSchema} {current}
+                  {name} {schema} {uiSchema} {current}
                   on:change={e => set(key, e.detail)}
                 />
               {/if}

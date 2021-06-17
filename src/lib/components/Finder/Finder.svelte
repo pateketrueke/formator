@@ -8,8 +8,8 @@
 
   export let uiSchema = {};
   export let schema = {};
-  export let name = null;
-  export let id = null;
+  export let current;
+  export let name;
 
   const dispatch = createEventDispatcher();
   const { actions, refs } = getContext('__ROOT__');
@@ -22,6 +22,13 @@
   let value = [];
   let result = null;
   let pending = null;
+
+  function getItems(from) {
+    return from.map((_value, _offset) => ({
+      key: [current, _value].join('.'),
+      value: _value,
+    }));
+  }
 
   function find(term) {
     const req = { ...actions[uiSchema['ui:ref']].index };
@@ -58,6 +65,8 @@
       find(e.detail);
     }, 260);
   }
+
+  $: values = getItems(value);
 </script>
 
 <Search {data} {fallback} {placeholder} on:input={search} on:change={sync} bind:value nofilter autoclose />
@@ -65,21 +74,21 @@
 {#await pending}
   <div data-loading>{uiSchema['ui:loading'] || 'Loading results...'}</div>
 {:then}
-  {#if value.length > 0}
+  {#each values as item (item.key)}
     <div data-selected>
       {#if result}
         <Value {schema} {uiSchema} value={result} />
       {:else}
         <div data-loading>{uiSchema['ui:loading'] || 'Loading results...'}</div>
       {/if}
-      <input type="hidden" bind:value={value[0]} {id} {name} />
+      <input type="hidden" bind:value={item.value} {name} />
       <button type="button" on:click={reset} data-is="remove" data-before="&times;">
         <span>Remove item</span>
       </button>
     </div>
   {:else}
     <div data-empty>{uiSchema['ui:empty'] || 'No selection'}</div>
-  {/if}
+  {/each}
 {:catch error}
   <Failure {error} />
 {/await}

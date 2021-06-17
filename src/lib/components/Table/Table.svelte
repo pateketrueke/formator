@@ -37,6 +37,7 @@
   });
 
   let pk = 'id';
+  let keys = [];
   let items = [];
   let offset = -1;
   let failure = null;
@@ -90,9 +91,13 @@
       }));
   }
 
+  function getKey(item) {
+    return keys.map(k => item[k] || '_').join('.');
+  }
+
   function getItems(from) {
     return from.map((data, _offset) => ({
-      key: data.id || data.key || randId('key_'),
+      key: getKey(data),
       schema: schema.properties || {},
       offset: _offset,
       data,
@@ -159,7 +164,7 @@
         if (typeof offset === 'undefined') {
           result = result.concat(value);
         } else {
-          result[offset] = value;
+          result[offset] = { ...value, key: getKey(value) };
         }
 
         dispatch('change', result);
@@ -181,6 +186,7 @@
   $: headers = getHeaders();
   $: fieldProps = { model, schema, uiSchema };
   $: pk = refs[model].references.primaryKeys[0].prop;
+  $: keys = refs[model].references.primaryKeys.map(x => x.prop);
 </script>
 
 <style>
