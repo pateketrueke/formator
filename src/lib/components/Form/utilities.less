@@ -8,6 +8,59 @@
   }
 }
 
+.toggle {
+  display: inline-block;
+  border-radius: 30px;
+  height: 30px;
+  width: 56px;
+  opacity: .87;
+
+  label {
+    display: inline-flex;
+    overflow: visible;
+    font-size: 22px;
+    height: inherit;
+    width: inherit;
+    background-color: @light;
+    border-radius: inherit;
+    border: 2px solid @mid;
+  }
+
+  span {
+    display: inherit;
+    pointer-events: none;
+    height: 26px;
+    width: 26px;
+    border-radius: 30px;
+    background-color: @white;
+    box-shadow: 0 1px 3px @dark;
+    transition: transform 300ms;
+  }
+
+  input:checked + label {
+    background-color: @high;
+    border-color: @light;
+    > span {
+      transform: translate3d(100%, 0, 0);
+    }
+  }
+
+  input {
+    position: absolute;
+    opacity: 0;
+    &:focus ~ label {
+      border-color: @blue;
+    }
+  }
+
+  &:hover {
+    opacity: 1;
+    label > span {
+      background-color: @hover;
+    }
+  }
+}
+
 .chunk {
   display: inline-block;
   text-overflow: ellipsis;
@@ -81,6 +134,5 @@
 }
 
 .focused() {
-  xoutline-offset: 1px;
-  xoutline: 2px solid @blue;
+  outline-color: @blue;
 }
