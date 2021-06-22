@@ -1,6 +1,6 @@
 <script>
   import { getContext, createEventDispatcher } from 'svelte';
-  import { defaultValue, getId } from '../../../shared/utils';
+  import { defaultValue, inputType, getId } from '../../../shared/utils';
 
   export let name;
   export let required = false;
@@ -19,6 +19,7 @@
     result = '';
   }
 
+  $: type = inputType(schema);
   $: id = getId(rootId, name);
   $: dispatch('change', result);
 </script>
@@ -26,5 +27,5 @@
 {#if uiSchema['ui:password']}
   <input type="password" on:change={update} {id} {name} {required} />
 {:else}
-  <input type="text" bind:value={result} {id} {name} {required} />
+  <input {type} on:input={update} {id} {name} {required} />
 {/if}

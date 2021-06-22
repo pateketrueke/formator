@@ -69,6 +69,13 @@ export function getItems(schema, offset) {
   || null;
 }
 
+export function inputType(schema) {
+  switch (schema.format) {
+    case 'email': return 'email';
+    default: return 'text';
+  }
+}
+
 export function defaultValue(schema) {
   if (!schema) {
     return null;

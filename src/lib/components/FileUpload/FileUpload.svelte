@@ -209,7 +209,6 @@
 </script>
 
 <div data-fieldset>
-  {#if uiSchema['ui:label'] || field}<label for={id}>{uiSchema['ui:label'] || field}</label>{/if}
   <input required={isRequired} on:change={setFiles} bind:this={ref} type="file" {id} {name} {multiple} />
   <button class="nobreak" tabIndex="-1" data-before="&plus;" type="button" on:click={() => ref.click()}>
     <span>{#if currentFiles.length > 0}{isAppend ? 'Append' : 'Replace'}{:else}Add{/if} file{multiple ? 's' : ''}</span>
