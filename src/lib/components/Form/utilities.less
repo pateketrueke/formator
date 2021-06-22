@@ -10,36 +10,36 @@
 
 .toggle {
   display: inline-block;
-  border-radius: 30px;
-  height: 30px;
-  width: 56px;
+  border-radius: @height;
+  height: @height;
+  width: (@height * 2) + 4px;
   opacity: .87;
 
   label {
     display: inline-flex;
     overflow: visible;
-    font-size: 22px;
+    font-size: 0;
     height: inherit;
     width: inherit;
-    background-color: @high;
+    background-color: @mid;
     border-radius: inherit;
-    border: 2px solid @mid;
+    border: 2px solid @dark;
   }
 
   span {
     display: inherit;
     pointer-events: none;
-    height: 26px;
-    width: 26px;
-    border-radius: 30px;
+    height: @height - 4px;
+    width: @height;
+    border-radius: @height;
     background-color: @white;
     box-shadow: 0 1px 3px @dark;
     transition: transform 300ms;
   }
 
   input:checked + label {
-    background-color: @light;
-    border-color: @high;
+    background-color: @high;
+    border-color: @light;
     > span {
       transform: translate3d(100%, 0, 0);
     }
