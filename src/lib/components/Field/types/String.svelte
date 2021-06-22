@@ -1,6 +1,6 @@
 <script>
   import { getContext, createEventDispatcher } from 'svelte';
-  import { defaultValue, inputType, getId } from '../../../shared/utils';
+  import { getId, defaultValue, inputType } from '../../../shared/utils';
 
   export let name;
   export let required = false;

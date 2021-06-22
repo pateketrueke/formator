@@ -2,14 +2,12 @@
   import ErrorType from '../Error';
   import LoaderType from '../Loader';
 
-  import extensions from '../../shared/exts';
-  import components from '../../shared/deps';
+  import { componentType } from '../../shared';
   import { reduceRefs } from '../../shared/utils';
 </script>
 
 <script>
   import { getContext } from 'svelte';
-  import Enum from './Enum.svelte';
 
   export let path = [];
   export let name = 'field';
@@ -64,11 +62,8 @@
     propType = ErrorType;
   } else if (!schema) {
     propType = LoaderType;
-  } else if (components) {
-    const Type = schema.enum ? Enum : components[schema.type || 'object'];
-    const Ext = extensions[uiSchema['ui:component']];
-
-    propType = Ext || Type;
+  } else {
+    propType = componentType(schema, uiSchema);
   }
 </script>
 

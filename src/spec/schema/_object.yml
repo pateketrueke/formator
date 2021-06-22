@@ -23,7 +23,22 @@ schema:
       properties:
         strValue:
           type: string
+        boolValue:
+          type: boolean
         enumValues:
           enum:
             - FOO
             - BAR
+        dateValue:
+          type: string
+          format: date
+        pickrValue:
+          type: string
+      required:
+        - dateValue
+uiSchema:
+  objValues:
+    boolValue:
+      ui:toggle: true
+    pickrValue:
+      ui:component: Flatpickr

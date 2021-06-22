@@ -1,7 +1,7 @@
 <script>
   import { getContext, createEventDispatcher } from 'svelte';
   import {
-    defaultValue, withKeys, getId, jsonData, humanFileSize,
+    withKeys, defaultValue, getId, jsonData, humanFileSize,
   } from '../../shared/utils';
   import ObjectType from '../Field/types/Object.svelte';
 

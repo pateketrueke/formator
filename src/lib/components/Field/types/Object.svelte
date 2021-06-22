@@ -1,4 +1,4 @@
-<script context="module">//
+<script context="module">
   function ucfirst(value) {
     return value[0].toUpperCase() + value.substr(1);
   }
@@ -6,10 +6,9 @@
 
 <script>
   import { getContext, createEventDispatcher } from 'svelte';
-  import { randId, defaultValue, getId } from '../../../shared/utils';
+  import { defaultValue, randId, getId } from '../../../shared/utils';
 
   import Field from '..';
-  // import Value from '../../Value';
   import Modal from '../../Modal';
   import Finder from '../../Finder';
 
@@ -36,7 +35,6 @@
   let subProps = {};
 
   let selected;
-  // let backup = {};
   let isOpen = false;
   let isUpdate = false;
 
@@ -66,9 +64,6 @@
     }
 
     const _uiSchema = { ...uiSchema[field] };
-    // console.log(refs[_uiSchema['ui:ref']])
-    // const _refSchema = (refs[field] && refs[field].uiSchema) || [];
-
     const isRef = subSchema.modelName === model;
     const isHidden = _uiSchema['ui:hidden'] || _uiSchema['ui:edit'] === false;
     const currentValue = ((isRef && parent ? parent : result) || {})[field];
@@ -151,17 +146,6 @@
     selected = null;
     result[target.modelName] = value;
   }
-
-  // function open(key) {
-  //   subProps = {
-  //     schema: refs[association.model],
-  //     uiSchema: association.uiSchema,
-  //   };
-
-  //   selected = fields.find(x => x.key === key);
-  //   backup = { ...value };
-  //   isOpen = true;
-  // }
 
   function set(key, _value) {
     result[fields.find(x => x.key === key).field] = _value;

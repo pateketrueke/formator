@@ -1,6 +1,6 @@
 <script>
   import { onMount, setContext, createEventDispatcher } from 'svelte';
-  import { defaultValue, randId } from '../../shared/utils';
+  import { randId, defaultValue } from '../../shared/utils';
 
   import Field from '../Field';
 

@@ -1,3 +1,6 @@
+const SHARED_INDEX = {};
+const USED_COLS = [null, 'lg', 'xl', 'wl'];
+
 const DEFAULT_VALUES = {
   object: () => ({}),
   array: () => [],
@@ -7,8 +10,31 @@ const DEFAULT_VALUES = {
   boolean: () => false,
 };
 
-const SHARED_INDEX = {};
-const USED_COLS = [null, 'lg', 'xl', 'wl'];
+export function inputType(schema) {
+  switch (schema.format) {
+    case 'email': return 'email';
+    case 'date': return 'date';
+    default: return 'text';
+  }
+}
+
+export function defaultValue(schema) {
+  if (!schema) {
+    return null;
+  }
+  if (schema.enum) {
+    return undefined;
+  }
+  if (schema.properties) {
+    return Object.keys(schema.properties).reduce((prev, cur) => {
+      prev[cur] = defaultValue(schema.properties[cur]);
+
+      return prev;
+    }, {});
+  }
+
+  return DEFAULT_VALUES[schema.type || 'object']();
+}
 
 export function getId(rootId, forName, incOffset) {
   if (!SHARED_INDEX[forName]) {
@@ -47,13 +73,13 @@ export function getCols(value) {
   return classes;
 }
 
-export function fixedCols(_uiSchema, headers) {
+export function fixedCols(uiSchema, headers) {
   let classes = [];
-  if (_uiSchema && _uiSchema['ui:class']) {
-    classes = classes.concat(_uiSchema['ui:class']);
+  if (uiSchema && uiSchema['ui:class']) {
+    classes = classes.concat(uiSchema['ui:class']);
   }
-  if (_uiSchema && _uiSchema['ui:columns']) {
-    classes = classes.concat(getCols(_uiSchema['ui:columns']));
+  if (uiSchema && uiSchema['ui:columns']) {
+    classes = classes.concat(getCols(uiSchema['ui:columns']));
   }
   if (!classes.length) {
     classes.push(`col-${Math.floor(12 / (headers.length + 1))}`);
@@ -67,31 +93,6 @@ export function getItems(schema, offset) {
     : schema.items)
   || schema.additionalItems
   || null;
-}
-
-export function inputType(schema) {
-  switch (schema.format) {
-    case 'email': return 'email';
-    default: return 'text';
-  }
-}
-
-export function defaultValue(schema) {
-  if (!schema) {
-    return null;
-  }
-  if (schema.enum) {
-    return undefined;
-  }
-  if (schema.properties) {
-    return Object.keys(schema.properties).reduce((prev, cur) => {
-      prev[cur] = defaultValue(schema.properties[cur]);
-
-      return prev;
-    }, {});
-  }
-
-  return DEFAULT_VALUES[schema.type || 'object']();
 }
 
 export function humanFileSize(bytes, decimals = 1) {
@@ -219,7 +220,7 @@ export function isEmpty(value) {
     || value === '');
 }
 
-export function loader(components, selector) {
+export function loader(_components, selector) {
   return [].slice.call(document.querySelectorAll(selector)).map(node => {
     let target;
     let data;
@@ -257,8 +258,8 @@ export function loader(components, selector) {
     }
 
     const Component = data.action === 'index'
-      ? components.Table
-      : components.Form;
+      ? _components.Table
+      : _components.Form;
 
     const instance = new Component({
       target,

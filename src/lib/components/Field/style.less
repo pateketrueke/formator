@@ -23,7 +23,7 @@
   top: @sp1;
 
   &[open] {
-    border: 1px dashed @light;
+    border: @separator;
     z-index: 1;
   }
 
@@ -107,14 +107,9 @@
 
 li {
   [data-field] {
-    @media @md {
-      display: flex;
-      align-items: flex-start;
-    }
-
     > input,
     > label {
-      min-width: 10em;
+      min-width: 7em;
     }
 
     > label {
@@ -151,7 +146,7 @@ li {
     }
 
     > div > fieldset {
-      border-left: 1px dashed @light;
+      border-left: @separator;
       padding-left: @sp2;
 
       + button {
@@ -161,6 +156,16 @@ li {
       + div {
         padding-top: @sp2;
         padding-left: 0;
+      }
+    }
+
+    @media @md {
+      gap: @sp1;
+      display: flex;
+
+      > input {
+        width: 10%;
+        margin-bottom: 0;
       }
     }
   }
@@ -194,6 +199,7 @@ li {
     }
   }
 
+  &[data-type=date],
   &[data-type=string],
   &[data-type=number],
   &[data-type=integer],
@@ -212,6 +218,7 @@ button,
 select,
 textarea,
 input[type=text],
+input[type=date],
 input[type=email],
 input[type=number],
 input[type=search],
@@ -321,7 +328,7 @@ details {
       padding: @sp2;
 
       ~ div {
-        border-top: 1px dashed @light;
+        border-top: @separator;
         padding: @sp2;
       }
     }

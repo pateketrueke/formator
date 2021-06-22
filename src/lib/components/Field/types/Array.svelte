@@ -1,4 +1,4 @@
-<script>//
+<script>
   import { getContext, createEventDispatcher } from 'svelte';
   import {
     randId, getItems, fixedCols, defaultValue,
