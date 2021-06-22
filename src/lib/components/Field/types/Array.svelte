@@ -170,7 +170,7 @@
                 <div data-value>
                   <Field {schema} {uiSchema} bind:result={result[offset]} name="{name}[{offset}]" />
                   {#if !isFixed && uiSchema['ui:remove'] !== false}
-                    <button data-is="remove" data-before="&times;" type="button" on:click={() => remove(key)}>
+                    <button data-is="remove" data-before="&minus;" type="button" on:click={() => remove(key)}>
                       <span>{uiSchema['ui:remove'] || 'Remove item'}</span>
                     </button>
                   {/if}

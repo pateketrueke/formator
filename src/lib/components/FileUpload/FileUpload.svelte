@@ -6,7 +6,6 @@
   import ObjectType from '../Field/types/Object.svelte';
 
   export let name;
-  export let field;
   export let model;
   export let uiSchema = {};
   export let required = false;
@@ -118,7 +117,7 @@
 
   function fix(file) {
     const _target = uiSchema['ui:ref'] || model;
-    const _props = schema.properties || refs[_target].properties;
+    const _props = (schema.properties || refs[_target] || {}).properties;
 
     if (file.data instanceof window.File) {
       file.data.properties = { ...additionalFields[file.key] };
@@ -210,7 +209,7 @@
 
 <div data-fieldset>
   <input required={isRequired} on:change={setFiles} bind:this={ref} type="file" {id} {name} {multiple} />
-  <button class="nobreak" tabIndex="-1" data-before="&plus;" type="button" on:click={() => ref.click()}>
+  <button class="nobreak" tabIndex="-1" type="button" on:click={() => ref.click()}>
     <span>{#if currentFiles.length > 0}{isAppend ? 'Append' : 'Replace'}{:else}Add{/if} file{multiple ? 's' : ''}</span>
   </button>
   <ul>
@@ -223,15 +222,20 @@
           <summary class="flex">
             <span class="chunk">{data.name || data.path}</span>
             {#if data.size}<small>{humanFileSize(data.size)}</small>{/if}
-            <button data-before="&times;" type="button" on:click={() => removeFile(key)}>
+            <button data-before="&minus;" type="button" on:click={() => removeFile(key)}>
               <span>{uiSchema['ui:remove'] || 'Remove file'}</span>
             </button>
           </summary>
           <dl>
             {#if data.path}
-              <dd>
+              <dd class="fill center">
+                {#if /\.(?:jpe?g|svg|png|gif)$/.test(data.path)}
+                  <img alt={data.name || data.path} src={fixedLink(data.path)} width="150" />
+                {/if}
                 <a href={fixedLink(data.path)} target="_blank">{data.path}</a>
               </dd>
+            {:else}
+              <dd>{data.name}</dd>
             {/if}
             <dt class="chunk">MIME Type</dt>
             <dd class="chunk">{data.type || 'application/octet-stream'}</dd>

@@ -17,6 +17,12 @@
   max-width: 100%;
   white-space: nowrap;
 
+  ~ button {
+    gap: @sp1;
+    display: flex;
+    align-items: center;
+  }
+
   @media @smx {
     display: block;
   }
@@ -30,6 +36,10 @@
   }
 }
 
+.fill {
+  width: 100%;
+}
+
 .flex {
   display: flex;
   align-items: center;
@@ -37,6 +47,10 @@
 
 .auto {
   flex: 1 1 auto;
+}
+
+.center {
+  text-align: center;
 }
 
 .margin-left { margin-left: 1em; }
@@ -67,6 +81,6 @@
 }
 
 .focused() {
-  outline-offset: 1px;
-  outline: 2px solid @blue;
+  xoutline-offset: 1px;
+  xoutline: 2px solid @blue;
 }

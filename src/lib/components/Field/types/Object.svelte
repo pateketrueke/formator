@@ -240,7 +240,7 @@
               />
 
               {#if isFixed && uiSchema['ui:remove'] !== false}
-                <button data-is="remove" data-before="&times;" type="button" on:click={() => remove(key)}>
+                <button data-is="remove" data-before="&minus;" type="button" on:click={() => remove(key)}>
                   <span>{uiSchema['ui:remove'] || 'Remove prop'}</span>
                 </button>
               {/if}
