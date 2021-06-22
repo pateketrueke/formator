@@ -19,13 +19,14 @@
     result = '';
   }
 
+  $: autocomplete = uiSchema['ui:autocomplete'];
   $: type = inputType(schema);
   $: id = getId(rootId, name);
   $: dispatch('change', result);
 </script>
 
 {#if uiSchema['ui:password']}
-  <input type="password" on:change={update} {id} {name} {required} />
+  <input type="password" on:change={update} {id} {name} {required} {autocomplete} />
 {:else}
-  <input {type} on:input={update} {id} {name} {required} />
+  <input {type} value={result} on:input={update} {id} {name} {required} {autocomplete} />
 {/if}
