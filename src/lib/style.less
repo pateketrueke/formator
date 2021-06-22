@@ -84,6 +84,7 @@
 
   &.overlay {
     display: flex;
+    overflow: auto;
 
     &::after {
       top: 0;
@@ -92,7 +93,7 @@
       z-index: 1;
       padding: @sp1;
       color: @white;
-      position: absolute;
+      position: fixed;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -132,6 +133,7 @@
     right: 0;
     bottom: 0;
     background-color: rgba(255, 255, 255, .8);
+    background-image: url(data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAQDAwMDAwQDAwQGBAMEBgcFBAQFBwgGBgcGBggKCAkJCQkICgoMDAwMDAoMDA0NDAwRERERERQUFBQUFBQUFBT/2wBDAQQFBQgHCA8KCg8UDg4OFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAAoACgDAREAAhEBAxEB/8QAFwABAQEBAAAAAAAAAAAAAAAAAAUGCP/EACIQAQAABQMFAQAAAAAAAAAAAAAFFUNjgqLB4RESEzVRkf/EABQBAQAAAAAAAAAAAAAAAAAAAAD/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwDv4AE6K0stgTgAaIAE6K0stgTgAUZra1cATW1q4A9na8WXXu/PgEqu6eQJVd08gnAAowqrjuCiADOgAowqrjuCiAD/2Q==);
   }
 
   &.active {
