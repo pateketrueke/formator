@@ -219,17 +219,6 @@
 </script>
 
 <div data-fieldset>
-  <span for={id}>
-    <button class="nobreak" on:click={() => ref.click()}>
-      <span>{#if currentFiles.length > 0}{isAppend ? 'Append' : 'Replace'}{:else}Add{/if} file{multiple ? 's' : ''}</span>
-    </button>
-    <label data-caption={label} class:hover={dover} on:dragover={allowDrop} on:dragleave={cancelDrop} on:drop={cancelDrop}>
-      <input required={isRequired} tabindex="-1" on:change={setFiles} bind:this={ref} type="file" {id} {name} {multiple} />
-    </label>
-    {#if uiSchema['ui:counter']}
-      <small>{currentFiles.length} file{currentFiles.length === 1 ? '' : 's'} selected</small>
-    {/if}
-  </span>
   <ul>
     {#each currentFiles as { key, data } (key)}
       <li data-file>
@@ -270,4 +259,15 @@
       <li data-empty>{uiSchema['ui:empty'] || 'No files'}</li>
     {/each}
   </ul>
+  <div data-actions>
+    <button type="button" class="nobreak" on:click={() => ref.click()}>
+      <span>{#if currentFiles.length > 0}{isAppend ? 'Append' : 'Replace'}{:else}Add{/if} file{multiple ? 's' : ''}</span>
+    </button>
+    <label data-caption={label} class:hover={dover} on:dragover={allowDrop} on:dragleave={cancelDrop} on:drop={cancelDrop}>
+      <input required={isRequired} title={label} tabindex="-1" on:change={setFiles} bind:this={ref} type="file" {id} {name} {multiple} />
+    </label>
+    {#if uiSchema['ui:counter']}
+      <small>{currentFiles.length} file{currentFiles.length === 1 ? '' : 's'} selected</small>
+    {/if}
+  </div>
 </div>

@@ -47,7 +47,6 @@
     max-width: 100%;
     line-height: 1.5;
   }
-  span + ul,
   button + details,
   details + details,
   fieldset + details {
@@ -73,7 +72,7 @@
 }
 
 [data-fieldset] {
-  > span {
+  > [data-actions] {
     width: 100%;
     gap: @sp2;
     display: flex;
@@ -92,13 +91,13 @@
       position: relative;
       max-width: 100%;
       &::before {
-        content: attr(data-caption);
+        left: @sp1;
         top: @sp1;
-        left: 0;
         width: 100%;
-        pointer-events: none;
         position: absolute;
         text-align: center;
+        pointer-events: none;
+        content: attr(data-caption);
       }
       &.hover {
         border-color: @outline;
