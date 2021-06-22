@@ -39,6 +39,10 @@
       return [value || defaultValue];
     }
 
+    if (typeof value !== 'object' && type === 'boolean') {
+      return [value ? 'YES' : 'NO'];
+    }
+
     if (typeof defaultValue === 'undefined') {
       return [(!isScalar(value) && JSON.stringify(value)) || value];
     }
