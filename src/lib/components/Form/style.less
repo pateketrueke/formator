@@ -9,6 +9,7 @@
     width: 100%;
     margin-top: 7em;
     max-width: 720px;
+    border-radius: 3px;
   }
 
   @media screen and (min-width: @smb) {
@@ -141,9 +142,9 @@ table {
 
     td[data-field] {
       margin: @sp1 0;
+      position: relative;
       min-height: 1.5em;
       padding: @sp1 0 0 30%;
-      position: relative;
 
       &::before {
         content: attr(data-label) ": ";
@@ -188,6 +189,11 @@ table {
 
     &::before {
       top: .2em;
+    }
+
+    &[data-field] {
+      padding: 1.5em 0 0 0;
+      min-height: 2em;
     }
 
     + td {
@@ -244,6 +250,7 @@ td.invalid  {
 
 [data-body] {
   border-bottom: 1px solid rgba(0, 0, 0, .1);
+  overflow: auto;
   padding: @sp2;
 
   + [data-actions] {
@@ -336,8 +343,7 @@ a {
 
   &:focus {
     opacity: 1;
-    outline: none;
-    box-shadow: 0 0 3px @dark;
+    .focused;
   }
 }
 
@@ -376,8 +382,7 @@ summary {
   color: @dark;
 
   &:focus {
-    outline: none;
-    box-shadow: 0 0 3px @dark;
+    .focused;
   }
 }
 

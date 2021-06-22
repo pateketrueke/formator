@@ -250,16 +250,18 @@
               {/each}
             {/if}
             <th>
-              {#if uiSchema['ui:edit'] !== false}
-                <button data-is="edit" data-before="&#9998;" type="button" on:click={() => edit(offset)}>
-                  <span>{uiSchema['ui:edit'] || 'Edit'}</span>
-                </button>
-              {/if}
-              {#if uiSchema['ui:remove'] !== false}
-                <button data-is="remove" data-before="&times;" type="button" on:click={() => remove(offset)}>
-                  <span>{uiSchema['ui:remove'] || 'Remove'}</span>
-                </button>
-              {/if}
+              <div data-actions>
+                {#if uiSchema['ui:edit'] !== false}
+                  <button data-is="edit" data-before="&#9998;" type="button" on:click={() => edit(offset)}>
+                    <span>{uiSchema['ui:edit'] || 'Edit'}</span>
+                  </button>
+                {/if}
+                {#if uiSchema['ui:remove'] !== false}
+                  <button data-is="remove" data-before="&times;" type="button" on:click={() => remove(offset)}>
+                    <span>{uiSchema['ui:remove'] || 'Remove'}</span>
+                  </button>
+                {/if}
+              </div>
             </th>
           </tr>
         {:else}

@@ -49,7 +49,7 @@
   opacity: 0;
 
   &:focus + button {
-    box-shadow: 0 0 3px @dark;
+    .focused;
   }
 }
 
@@ -87,9 +87,8 @@
 }
 
 [data-actions] {
-  button + button {
-    margin-left: @sp1;
-  }
+  display: flex;
+  gap: @sp1;
 }
 
 li {
@@ -197,16 +196,10 @@ input[type=number],
 input[type=search],
 input[type=password] {
   outline: none;
-  border: 1px solid @light;
-  background-color: @white;
   padding: @sp1;
 
-  &:hover {
-    border-color: @dark;
-  }
-
   &:focus {
-    box-shadow: 0 0 3px @dark;
+    .focused;
   }
 }
 
@@ -217,20 +210,13 @@ input[type=number],
 input[type=search],
 input[type=password] {
   width: inherit;
+}
 
-  &:focus,
-  &:hover {
-    background-color: @white;
+input[type=radio],
+input[type=checkbox] {
+  &:focus {
+    .focused;
   }
-}
-
-input[readonly],
-input[readonly]:hover {
-  border: 1px solid rgba(0, 0, 0, .1);
-}
-
-button {
-  border-style: dashed;
 }
 
 label {
