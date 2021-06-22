@@ -31,4 +31,4 @@
   $: dispatch('change', result);
 </script>
 
-<input bind:this={ref} {id} {name} {required} />
+<input type="text" bind:this={ref} {id} {name} {required} />
