@@ -240,12 +240,12 @@
           <tr data-field="/{offset}" data-type="object">
             {#if uiSchema['ui:template']}
               <td colspan="99">
-                {#if data !== null}<Value {schema} {uiSchema} value={data} />{/if}
+                <Value {schema} {uiSchema} value={data} />
               </td>
             {:else}
               {#each headers as { field, label }}
                 <td data-field="/{offset}/{field}" data-type={schema[field].type || 'object'} data-label={label} class={fixedCols(uiSchema[field], headers)}>
-                  {#if data[field] !== null}<Value schema={schema[field]} uiSchema={uiSchema[field]} value={data[field]} root={data} />{/if}
+                  <Value schema={schema[field]} uiSchema={uiSchema[field]} value={data[field]} root={data} />
                 </td>
               {/each}
             {/if}
