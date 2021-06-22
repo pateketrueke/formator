@@ -11,7 +11,7 @@
   const dispatch = createEventDispatcher();
 
   $: if (typeof result !== 'boolean') {
-    result = false;
+    result = Boolean(result);
   }
 
   $: id = getId(rootId, name);
