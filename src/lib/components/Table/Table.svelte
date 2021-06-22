@@ -20,10 +20,7 @@
   export let schema = {};
   export let value = {};
 
-  export let association = {
-    singular: 'Item',
-    plural: 'Items',
-  };
+  export let association = refs[model];
 
   const dispatch = createEventDispatcher();
   const rootId = randId();

@@ -5,9 +5,8 @@
 
   export let visible = false;
   export let updating = false;
-
-  let uiSchema = {};
-  let resource = 'input';
+  export let resource = 'input';
+  export let uiSchema = {};
 
   const dispatch = createEventDispatcher();
 
