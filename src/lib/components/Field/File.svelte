@@ -215,9 +215,7 @@
   $: check() || dispatch('change', result); // eslint-disable-line
   $: isRequired = required ? !currentFiles.length : null;
   $: fixedFields = uiSchema['ui:includes'] && getExtraFields();
-  $: label = currentFiles.length > 0
-    ? `${currentFiles.length} file${currentFiles.length === 1 ? '' : 's'} selected`
-    : `Choose or drag file${multiple ? 's' : ''} here`;
+  $: label = uiSchema['ui:caption'] || `Choose or drag file${multiple ? 's' : ''} here`;
 </script>
 
 <div data-fieldset>
