@@ -21,7 +21,7 @@
     "prepublishOnly": "npm run dist",
     "lint": "eslint --ext js,svelte lib src e2e",
     "test": "npm run lint && npm run test:e2e --",
-    "test:e2e": "BASE_URL=http://localhost:${PORT:-8080} testcafe ${BROWSER:-chrome:headless} --retry-test-pages --hostname localhost"
+    "test:e2e": "BASE_URL=http://localhost:${PORT:-8080} testcafe ${BROWSER:-chrome:headless} -q --retry-test-pages --hostname localhost"
   },
   "author": "Alvaro Cabrera <pateketrueke@gmail.com>",
   "license": "MIT",
@@ -61,19 +61,18 @@
     "express": "^4.17.1",
     "formidable": "^1.2.2",
     "json-schema-sequelizer": "^0.22.5",
-    "less": "^3.8.1",
+    "less": "^4.1.1",
     "less-plugin-autoprefix": "^2.0.0",
     "lodash": ">=4.17.19",
     "minimist": ">=1.2.3",
-    "mortero": "^0.0.23",
+    "mortero": "^0.0.24",
     "nodemon": "^2.0.7",
     "pug": "^3.0.1",
     "set-value": ">=2.0.1",
     "smoo": "^0.0.10",
     "somedom": "^0.3.2",
-    "sqlite3": "^4.1.0",
+    "sqlite3": "^5.0.2",
     "svelte": "^3.38.2",
-    "terser": "^4.2.1",
     "testcafe": "^1.14.2"
   },
   "peerDependencies": {
