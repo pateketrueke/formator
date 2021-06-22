@@ -15,12 +15,11 @@
     "dist": "npm run build",
     "build": "mortero -P/db:3001/db/ -P/tmp:3001/tmp/ -ecss.less -I.gitignore -Ddist",
     "start": "API_PORT=3001 nodemon -i dist -i cache.json e2e/server.js",
-    "copy:ajv": "cp node_modules/ajv/dist/ajv.bundle.js dist/ajv.js",
     "copy:pickr": "cp node_modules/flatpickr/dist/flatpickr.min.css dist/flatpickr.css",
-    "concat:bundle:js": "concat dist/ajv.js dist/main-iife.js -o dist/bundle.js",
+    "concat:bundle:js": "concat dist/vendor.js dist/main-iife.js -o dist/bundle.js",
     "concat:bundle:css": "concat dist/flatpickr.css dist/style.css -o dist/bundle.css",
     "concat:bundles": "npm run concat:bundle:css && npm run concat:bundle:js",
-    "postdist": "npm run copy:ajv && npm run copy:pickr && npm run concat:bundles",
+    "postdist": "npm run copy:pickr && npm run concat:bundles",
     "prepublishOnly": "npm run dist",
     "lint": "eslint --ext js,svelte lib src e2e",
     "test": "npm run lint && npm run test:e2e --",
@@ -40,7 +39,7 @@
       "!**/components/**"
     ],
     "bundle": [
-      "**/main*.js"
+      "**/{main,vendor}*.js"
     ],
     "options": {
       "less": {

@@ -2,7 +2,6 @@
   import {
     getContext, createEventDispatcher, onMount, onDestroy,
   } from 'svelte';
-  import flatpickr from 'flatpickr';
 
   import { defaultValue, getId } from '../../shared/utils';
 
@@ -17,7 +16,7 @@
   let pickr;
   let ref;
   onMount(() => {
-    pickr = flatpickr(ref, {
+    pickr = window.Flatpickr(ref, {
       // FIXME: support for more options...
       onValueUpdate: (selectedDates, dateStr) => {
         result = dateStr;
