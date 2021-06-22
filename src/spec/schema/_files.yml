@@ -17,6 +17,7 @@ uiSchema:
   files:
     ui:component: FileUpload
     ui:attachment: true
+    ui:counter: true
 schema:
   properties:
     blob:

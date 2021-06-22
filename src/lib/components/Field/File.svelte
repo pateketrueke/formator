@@ -226,6 +226,9 @@
     <label data-caption={label} class:hover={dover} on:dragover={allowDrop} on:dragleave={cancelDrop} on:drop={cancelDrop}>
       <input required={isRequired} tabindex="-1" on:change={setFiles} bind:this={ref} type="file" {id} {name} {multiple} />
     </label>
+    {#if uiSchema['ui:counter']}
+      <small>{currentFiles.length} file{currentFiles.length === 1 ? '' : 's'} selected</small>
+    {/if}
   </span>
   <ul>
     {#each currentFiles as { key, data } (key)}
