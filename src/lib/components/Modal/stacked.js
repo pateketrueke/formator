@@ -2,6 +2,8 @@ const STACK = [];
 
 let t;
 window.addEventListener('keydown', e => {
+  if ((e.shiftKey && e.keyCode !== 9) || e.ctrlKey || e.altKey || e.metaKey) return;
+
   if (STACK.length) {
     e.preventDefault();
     e.stopPropagation();
