@@ -16,11 +16,12 @@
     result = schema.enum[current];
   }
 
+  $: size = uiSchema['ui:size'] || null;
   $: id = getId(rootId, name);
   $: dispatch('change', result);
 </script>
 
-<select bind:value={current} on:change={update} on:blur={update} {id} {name} {required}>
+<select bind:value={current} on:change={update} on:blur={update} {id} {name} {size} {required}>
   <option disabled selected value="">{uiSchema['ui:placeholder'] || 'Choose...'}</option>
   {#each schema.enum as value, idx (value)}
     <option value={idx}>{value}</option>

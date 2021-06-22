@@ -7,6 +7,7 @@
 
   export let name;
   export let required = false;
+  export let uiSchema = {};
   export let schema = { type: 'number' };
   export let result = defaultValue(schema);
 
@@ -27,8 +28,9 @@
     pickr.destroy();
   });
 
+  $: size = uiSchema['ui:size'] || null;
   $: id = getId(rootId, name);
   $: dispatch('change', result);
 </script>
 
-<input type="text" bind:this={ref} {id} {name} {required} />
+<input type="text" bind:this={ref} {id} {name} {size} {required} />

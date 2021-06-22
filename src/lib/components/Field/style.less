@@ -275,6 +275,15 @@ input[type=number],
 input[type=search],
 input[type=password] {
   width: inherit;
+  &[size] {
+    width: auto;
+  }
+}
+
+textarea {
+  &[cols] {
+    width: auto;
+  }
 }
 
 input[type=radio],

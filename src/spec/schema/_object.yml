@@ -38,7 +38,11 @@ schema:
         - dateValue
 uiSchema:
   objValues:
+    strValue:
+      ui:textarea: true
+      ui:rows: 10
     boolValue:
       ui:toggle: true
     pickrValue:
       ui:component: Flatpickr
+      ui:size: 10
