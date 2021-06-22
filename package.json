@@ -16,8 +16,11 @@
     "build": "mortero -P/db:3001/db/ -P/tmp:3001/tmp/ -ecss.less -I.gitignore -Ddist",
     "start": "API_PORT=3001 nodemon -i dist -i cache.json e2e/server.js",
     "copy:ajv": "cp node_modules/ajv/dist/ajv.bundle.js dist/ajv.js",
-    "concat:bundle": "concat dist/ajv.js dist/main-iife.js -o dist/bundle.js",
-    "postdist": "npm run copy:ajv && npm run concat:bundle",
+    "copy:pickr": "cp node_modules/flatpickr/dist/flatpickr.min.css dist/flatpickr.css",
+    "concat:bundle:js": "concat dist/ajv.js dist/main-iife.js -o dist/bundle.js",
+    "concat:bundle:css": "concat dist/flatpickr.css dist/style.css -o dist/bundle.css",
+    "concat:bundles": "npm run concat:bundle:css && npm run concat:bundle:js",
+    "postdist": "npm run copy:ajv && npm run copy:pickr && npm run concat:bundles",
     "prepublishOnly": "npm run dist",
     "lint": "eslint --ext js,svelte lib src e2e",
     "test": "npm run lint && npm run test:e2e --",
@@ -49,6 +52,7 @@
   },
   "devDependencies": {
     "acorn": ">=6.4.1",
+    "ajv": "^8.6.0",
     "body-parser": "^1.19.0",
     "concat": "^1.0.3",
     "dot-prop": ">=4.2.1",
@@ -59,13 +63,14 @@
     "eslint-plugin-svelte3": "^3.2.0",
     "eslint-utils": ">=1.4.1",
     "express": "^4.17.1",
+    "flatpickr": "^4.6.9",
     "formidable": "^1.2.2",
     "json-schema-sequelizer": "^0.22.5",
     "less": "^4.1.1",
     "less-plugin-autoprefix": "^2.0.0",
     "lodash": ">=4.17.19",
     "minimist": ">=1.2.3",
-    "mortero": "^0.0.24",
+    "mortero": "^0.0.25",
     "nodemon": "^2.0.7",
     "pug": "^3.0.1",
     "set-value": ">=2.0.1",
@@ -77,6 +82,5 @@
   },
   "peerDependencies": {
     "json-schema-sequelizer": "*"
-  },
-  "dependencies": {}
+  }
 }
