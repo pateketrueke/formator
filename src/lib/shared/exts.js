@@ -1,5 +1,5 @@
-import FileUpload from '../components/FileUpload';
+import File from '../components/File';
 
 export default {
-  FileUpload,
+  File,
 };

@@ -1,21 +1,21 @@
-description: FileUpload for inline attachments
+description: File for inline attachments
 testName: files
 action: edit
 model: test
 uiSchema:
   blob:
-    ui:component: FileUpload
+    ui:component: File
     ui:attachment: true
   url:
-    ui:component: FileUpload
+    ui:component: File
   set:
-    ui:component: FileUpload
+    ui:component: File
     ui:attachment: true
     ui:append: false
   list:
-    ui:component: FileUpload
+    ui:component: File
   files:
-    ui:component: FileUpload
+    ui:component: File
     ui:attachment: true
 schema:
   properties:
