@@ -24,6 +24,7 @@
   let fixedFields = null;
   let isRequired = false;
   let pending = true;
+  let dover;
   let ref;
 
   if (uiSchema['ui:required']) {
@@ -201,17 +202,33 @@
     }
   }
 
+  function allowDrop(ev) {
+    dover = true;
+    ev.preventDefault();
+  }
+
+  function cancelDrop() {
+    dover = false;
+  }
+
   $: id = getId(rootId, name);
   $: check() || dispatch('change', result); // eslint-disable-line
   $: isRequired = required ? !currentFiles.length : null;
   $: fixedFields = uiSchema['ui:includes'] && getExtraFields();
+  $: label = currentFiles.length > 0
+    ? `${currentFiles.length} file${currentFiles.length === 1 ? '' : 's'} selected`
+    : `Choose or drag file${multiple ? 's' : ''} here`;
 </script>
 
 <div data-fieldset>
-  <input required={isRequired} on:change={setFiles} bind:this={ref} type="file" {id} {name} {multiple} />
-  <button class="nobreak" tabIndex="-1" type="button" on:click={() => ref.click()}>
-    <span>{#if currentFiles.length > 0}{isAppend ? 'Append' : 'Replace'}{:else}Add{/if} file{multiple ? 's' : ''}</span>
-  </button>
+  <span for={id}>
+    <button class="nobreak" on:click={() => ref.click()}>
+      <span>{#if currentFiles.length > 0}{isAppend ? 'Append' : 'Replace'}{:else}Add{/if} file{multiple ? 's' : ''}</span>
+    </button>
+    <label data-caption={label} class:hover={dover} on:dragover={allowDrop} on:dragleave={cancelDrop} on:drop={cancelDrop}>
+      <input required={isRequired} tabindex="-1" on:change={setFiles} bind:this={ref} type="file" {id} {name} {multiple} />
+    </label>
+  </span>
   <ul>
     {#each currentFiles as { key, data } (key)}
       <li data-file>

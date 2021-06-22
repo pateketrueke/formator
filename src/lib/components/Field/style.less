@@ -40,34 +40,6 @@
   }
 }
 
-[data-fieldset] {
-  position: relative;
-  > input {
-    font-size: .9em;
-    pointer-events: none;
-    display: inline-block;
-    width: 7em;
-    height: 2em;
-
-    ~ button {
-      font-size: .9em;
-      position: absolute;
-      outline: none;
-      width: 7em;
-      height: 2em;
-      top: 1px;
-      left: 0;
-    }
-
-    &:focus {
-      outline-color: @outline;
-      ~ button {
-        .focused;
-      }
-    }
-  }
-}
-
 [data-fieldset],
 [data-selected] {
   > label {
@@ -75,7 +47,7 @@
     max-width: 100%;
     line-height: 1.5;
   }
-  button + ul,
+  span + ul,
   button + details,
   details + details,
   fieldset + details {
@@ -97,6 +69,68 @@
     @media @sm {
       padding-right: 25%;
     }
+  }
+}
+
+[data-fieldset] {
+  > span {
+    width: 100%;
+    gap: @sp2;
+    display: flex;
+    align-items: center;
+    position: relative;
+
+    > button {
+      ~ label {
+        border: 2px dashed @high;
+        border-radius: 5px;
+        text-align: center;
+      }
+    }
+
+    > label {
+      position: relative;
+      max-width: 100%;
+      &::before {
+        content: attr(data-caption);
+        top: @sp1;
+        left: 0;
+        width: 100%;
+        pointer-events: none;
+        position: absolute;
+        text-align: center;
+      }
+      &.hover {
+        border-color: @outline;
+        background-color: @hover;
+        &::before {
+          color: @mid;
+        }
+      }
+      > input {
+        border: @sp1 solid transparent;
+      }
+    }
+  }
+
+  label > input {
+    width: inherit;
+    opacity: 0;
+
+    &:focus {
+      outline: none;
+      ~ label button {
+        .focused;
+      }
+    }
+  }
+
+  &::before {
+    top: @sp1;
+    right: @sp1;
+    color: @light;
+    position: absolute;
+    content: attr(data-caption);
   }
 }
 
@@ -271,6 +305,7 @@ details {
   }
   &[open] {
     summary {
+      color: @mid;
       &::before {
         content: '▸';
       }
