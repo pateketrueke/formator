@@ -25,10 +25,10 @@
 </script>
 
 <style>
-  :global(.wrapper form) {
+  :global(.smoo-fence--form) {
     padding: 0 !important;
   }
-  :global(.wrapper form > div) {
+  :global(.smoo-fence--form > div) {
     padding: 0;
     border: 0;
   }
