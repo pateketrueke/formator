@@ -20,7 +20,7 @@
     "concat:bundles": "npm run concat:bundle:css && npm run concat:bundle:js",
     "prepublishOnly": "rm -rf dist/* && NODE_ENV=production npm run build -- -Xspec",
     "postbuild": "npm run concat:bundles && rm -rf dist/{node_modules,components} dist/*.html",
-    "prebuild": "npm run copy:pickr",
+    "prebuild": "mkdir -p dist && npm run copy:pickr",
     "lint": "eslint --ext js,svelte lib src e2e",
     "test": "npm run lint && npm run test:e2e --",
     "test:e2e": "BASE_URL=http://localhost:${PORT:-8080} testcafe ${BROWSER:-chrome:headless} -q --retry-test-pages --hostname localhost"
