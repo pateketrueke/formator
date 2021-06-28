@@ -122,7 +122,7 @@
 
     if (file.data instanceof window.File) {
       file.data.properties = { ...additionalFields[file.key] };
-    } else {
+    } else if (_props) {
       const payload = Object.keys(_props).reduce((memo, cur) => {
         memo[cur] = additionalFields[file.key][cur] || file.data[cur];
         return memo;
