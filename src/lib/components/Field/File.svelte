@@ -1,9 +1,8 @@
 <script>
   import { getContext, createEventDispatcher } from 'svelte';
-  import {
-    withKeys, defaultValue, getId, jsonData, humanFileSize,
-  } from '../../shared/utils';
-  import ObjectType from '../Field/types/Object.svelte';
+  import { withKeys, defaultValue, getId, jsonData, humanFileSize } from '../../shared/utils';
+
+  import ObjectType from './Object.svelte';
 
   export let name;
   export let model;

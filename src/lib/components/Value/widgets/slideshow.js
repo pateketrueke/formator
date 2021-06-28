@@ -16,7 +16,7 @@ export default function slideShow($, data, values, parentNode) {
 
   const prefix = values[0].name || values[0].path;
   const size = values[0].size ? ['small', null, humanFileSize(values[0].size)] : null;
-  const length = values.length > 1 ? ['small', null, `${values.length} file${values.length === 1 ? '' : 's'}`] : null;
+  const length = values.length > 1 ? ['small', null, `${values.length} files`] : null;
 
   let ref;
   let open;

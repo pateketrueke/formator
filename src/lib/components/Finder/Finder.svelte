@@ -11,7 +11,7 @@
   export let name;
 
   const dispatch = createEventDispatcher();
-  const { actions, refs } = getContext('__ROOT__');
+  const { actions } = getContext('__ROOT__');
 
   const fallback = uiSchema['ui:empty'] || 'No items were found';
   const placeholder = uiSchema['ui:placeholder'] || 'Find items...';
@@ -23,7 +23,7 @@
   let pending = null;
 
   function getItems(from) {
-    return from.map((_value, _offset) => ({
+    return from.map(_value => ({
       key: [current, _value].join('.'),
       value: _value,
     }));

@@ -17,10 +17,10 @@ export default function attachment($, data, values) {
 
   const name = data.name || data.path;
   const size = data.size ? ['small', null, humanFileSize(data.size)] : null;
-  const length = values.length > 1 ? ['small', null, `${values.length} file${values.length === 1 ? '' : 's'}`] : null;
+  const length = values.length > 1 ? ['small', null, `${values.length} files`] : null;
 
   return ['details', null, [
-    ['summary.flex', null, [['span.chunk', null, name || data.path], size, length]],
+    ['summary.flex', null, [['span.chunk', null, name], size, length]],
     ['dl', null, values.map(value => [
       value.path && ['dd', null, [['a', { href: srcFile, target: '_blank' }, value.path]]],
       value.type && ['dt.chunk', null, 'MIME Type'],

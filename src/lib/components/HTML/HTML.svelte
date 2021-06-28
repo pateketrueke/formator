@@ -7,7 +7,7 @@
   let ref;
 
   onMount(() => {
-    mount(ref, prev = vnode, render);
+    mount(ref, vnode, render);
   });
 
   onDestroy(() => {

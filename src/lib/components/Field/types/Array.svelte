@@ -1,8 +1,6 @@
 <script>
   import { getContext, createEventDispatcher } from 'svelte';
-  import {
-    randId, getItems, fixedCols, defaultValue,
-  } from '../../../shared/utils';
+  import { randId, getItems, fixedCols, defaultValue } from '../../../shared/utils';
 
   import Field from '..';
   import Value from '../../Value';

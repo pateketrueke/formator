@@ -1,8 +1,5 @@
 <script>
-  import {
-    getContext, createEventDispatcher, onMount, onDestroy,
-  } from 'svelte';
-
+  import { getContext, createEventDispatcher, onMount, onDestroy } from 'svelte';
   import { defaultValue, getId } from '../../shared/utils';
 
   export let name;
