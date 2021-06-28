@@ -21,7 +21,7 @@ html
         font-family: Helvetica;
       }
 
-      #builder > details,
+      .formator > form + details,
       body > div > details {
         box-shadow: 0 1px 2px silver;
         margin: auto;
@@ -33,7 +33,7 @@ html
         margin-bottom: 0;
       }
 
-      #builder details > summary,
+      .formator > form + details > summary,
       body > div > details > summary {
         cursor: default;
         padding: 6px;
@@ -41,7 +41,7 @@ html
         user-select: none;
       }
 
-      #builder details[open] > summary,
+      .formator > form + details[open] > summary,
       body > div > details[open] > summary {
         color: black;
       }
@@ -50,7 +50,7 @@ html
         padding: 6px;
       }
 
-      .formator + details,
+      .formator > form + details,
       .debug {
         box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
         background-color: white;
@@ -73,6 +73,10 @@ html
       }
       #builder > details {
         margin-bottom: 0;
+      }
+      #builder summary + button {
+        padding: 6px;
+        margin: 10px;
       }
   body
     block before
