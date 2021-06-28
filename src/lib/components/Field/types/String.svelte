@@ -30,7 +30,7 @@
 </script>
 
 {#if uiSchema['ui:password']}
-  <input type="password" on:change={update} {id} {name} {size} {required} {maxlength} {autocomplete} />
+  <input type="password" on:input={update} {id} {name} {size} {required} {maxlength} {autocomplete} />
 {:else if uiSchema['ui:textarea']}
   <textarea value={result} on:input={update} {id} {name} {cols} {rows} {required} {maxlength} />
 {:else}
