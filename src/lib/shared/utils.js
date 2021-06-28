@@ -210,7 +210,7 @@ export function isScalar(value) {
 }
 
 export function isEmpty(value) {
-  if (typeof value === 'object') {
+  if (value !== null && typeof value === 'object') {
     return (Array.isArray(value) && value.length === 0)
       || (Object.keys(value).length === 0);
   }
