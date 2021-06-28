@@ -88,10 +88,17 @@
 .flex {
   display: flex;
   align-items: center;
+  &.gap {
+    gap: @sp1;
+  }
 }
 
 .auto {
   flex: 1 1 auto;
+}
+
+.min {
+  min-width: auto;
 }
 
 .center {
