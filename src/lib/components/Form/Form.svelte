@@ -1,5 +1,5 @@
 <script>
-  import { onMount, setContext, createEventDispatcher } from 'svelte';
+  import { setContext, createEventDispatcher } from 'svelte';
   import { randId, defaultValue } from '../../shared/utils';
 
   import Field from '../Field';
@@ -30,20 +30,14 @@
     uiSchema,
   });
 
-  onMount(() => {
-    setTimeout(() => dispatch('change', result));
-  });
-
   function save(e) {
     if (typeof onsubmit === 'function') {
       if (onsubmit(e, result) !== true) return;
     }
 
     e.preventDefault();
-    dispatch('change', result);
+    dispatch('submit', result);
   }
-
-  $: dispatch('change', result);
 
   $: hasChildren = schema.type === 'object' || schema.type === 'array';
   $: nextAction = (schema.id && actions[schema.id]) ? actions[schema.id][ACTION_MAP[action]] || {} : {};
@@ -62,6 +56,7 @@
 {/if}
 
 <form on:submit={save} {...formProps}>
+  <slot name="before" />
   {#if !hasChildren}
     <div data-field="/">
       <Field name={name || 'value'} bind:result {model} {schema} {uiSchema} />
@@ -77,4 +72,5 @@
       <input type="hidden" name="_method" value={nextAction.verb} />
     </div>
   {/if}
+  <slot name="after" />
 </form>
