@@ -1,4 +1,4 @@
-<script context="module">// eslint-disable-line
+<script context="module">
   import { renderDOM, formatValue } from './helpers';
   import { isScalar, isEmpty } from '../../shared/utils';
 </script>
@@ -26,17 +26,21 @@
       return [];
     }
 
-    if (typeof value !== 'undefined') {
+    if (uiSchema && typeof value !== 'undefined') {
       if (uiSchema['ui:format']) return formatValue(value, uiSchema['ui:format']);
-      if (uiSchema['ui:template']) return renderDOM(root, value, [].concat(uiSchema['ui:template']));
+      if (uiSchema['ui:template']) return renderDOM(root, value, uiSchema['ui:template']);
     }
 
-    if (type === 'number' || type === 'integer') {
+    if (typeof value === 'number' && (type === 'number' || type === 'integer')) {
       return [value || defaultValue || 0];
     }
 
-    if (type === 'string') {
+    if (typeof value === 'string' && type === 'string') {
       return [value || defaultValue];
+    }
+
+    if (typeof value !== 'object' && type === 'boolean') {
+      return [value ? 'YES' : 'NO'];
     }
 
     if (typeof defaultValue === 'undefined') {

@@ -1,13 +1,13 @@
 <script>
   import { onMount, setContext, createEventDispatcher } from 'svelte';
-  import Failure from 'smoo/src/components/Failure.svelte';
+  import { Failure } from 'smoo';
 
   import Modal from '../Modal';
   import Field from '../Field';
   import Value from '../Value';
 
   import {
-    API, randId, getCols, defaultValue,
+    API, randId, fixedCols, defaultValue,
   } from '../../shared/utils';
 
   export let pending = 'Loading...';
@@ -20,10 +20,7 @@
   export let schema = {};
   export let value = {};
 
-  export let association = {
-    singular: 'Item',
-    plural: 'Items',
-  };
+  export let association = refs[model];
 
   const dispatch = createEventDispatcher();
   const rootId = randId();
@@ -37,6 +34,7 @@
   });
 
   let pk = 'id';
+  let keys = [];
   let items = [];
   let offset = -1;
   let failure = null;
@@ -44,7 +42,7 @@
   let isOpen = false;
   let backup = null;
   let loading = null;
-  let payload = result.length !== 0;
+  let payload = result !== null;
 
   let prev;
   function toggleActive(e) {
@@ -90,23 +88,13 @@
       }));
   }
 
-  function fixedCols(_uiSchema) {
-    let classes = [];
-    if (_uiSchema && _uiSchema['ui:class']) {
-      classes = classes.concat(_uiSchema['ui:class']);
-    }
-    if (_uiSchema && _uiSchema['ui:columns']) {
-      classes = classes.concat(getCols(_uiSchema['ui:columns']));
-    }
-    if (!classes.length) {
-      classes.push(`col-${Math.floor(12 / (headers.length + 1))}`);
-    }
-    return classes.join(' ');
+  function getKey(item) {
+    return keys.map(k => item[k] || '_').join('.');
   }
 
   function getItems(from) {
     return from.map((data, _offset) => ({
-      key: data.id || data.key || randId('key_'),
+      key: getKey(data),
       schema: schema.properties || {},
       offset: _offset,
       data,
@@ -173,7 +161,7 @@
         if (typeof offset === 'undefined') {
           result = result.concat(value);
         } else {
-          result[offset] = value;
+          result[offset] = { ...value, key: getKey(value) };
         }
 
         dispatch('change', result);
@@ -195,6 +183,7 @@
   $: headers = getHeaders();
   $: fieldProps = { model, schema, uiSchema };
   $: pk = refs[model].references.primaryKeys[0].prop;
+  $: keys = refs[model].references.primaryKeys.map(x => x.prop);
 </script>
 
 <style>
@@ -230,7 +219,7 @@
     <thead>
       <tr>
         {#each headers as { field, label }}
-          <th class={fixedCols(uiSchema[field])}>{label}</th>
+          <th class={fixedCols(uiSchema[field], headers)}>{label}</th>
         {/each}
         <th colspan="99"></th>
       </tr>
@@ -248,26 +237,28 @@
           <tr data-field="/{offset}" data-type="object">
             {#if uiSchema['ui:template']}
               <td colspan="99">
-                {#if data !== null}<Value {schema} {uiSchema} value={data} />{/if}
+                <Value {schema} {uiSchema} value={data} />
               </td>
             {:else}
               {#each headers as { field, label }}
-                <td data-field="/{offset}/{field}" data-type={schema[field].type || 'object'} data-label={label} class={fixedCols(uiSchema[field])}>
-                  {#if data[field] !== null}<Value schema={schema[field]} uiSchema={uiSchema[field]} value={data[field]} root={data} />{/if}
+                <td data-field="/{offset}/{field}" data-type={schema[field].type || 'object'} data-label={label} class={fixedCols(uiSchema[field], headers)}>
+                  <Value schema={schema[field]} uiSchema={uiSchema[field]} value={data[field]} root={data} />
                 </td>
               {/each}
             {/if}
             <th>
-              {#if uiSchema['ui:edit'] !== false}
-                <button data-is="edit" data-before="&#9998;" type="button" on:click={() => edit(offset)}>
-                  <span>{uiSchema['ui:edit'] || 'Edit'}</span>
-                </button>
-              {/if}
-              {#if uiSchema['ui:remove'] !== false}
-                <button data-is="remove" data-before="&times;" type="button" on:click={() => remove(offset)}>
-                  <span>{uiSchema['ui:remove'] || 'Remove'}</span>
-                </button>
-              {/if}
+              <div data-actions>
+                {#if uiSchema['ui:edit'] !== false}
+                  <button data-is="edit" data-before="&#9998;" type="button" on:click={() => edit(offset)}>
+                    <span>{uiSchema['ui:edit'] || 'Edit'}</span>
+                  </button>
+                {/if}
+                {#if uiSchema['ui:remove'] !== false}
+                  <button data-is="remove" data-before="&times;" type="button" on:click={() => remove(offset)}>
+                    <span>{uiSchema['ui:remove'] || 'Remove'}</span>
+                  </button>
+                {/if}
+              </div>
             </th>
           </tr>
         {:else}

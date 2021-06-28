@@ -1,4 +1,4 @@
-<script context="module">//
+<script context="module">
   function ucfirst(value) {
     return value[0].toUpperCase() + value.substr(1);
   }
@@ -6,10 +6,9 @@
 
 <script>
   import { getContext, createEventDispatcher } from 'svelte';
-  import { randId, defaultValue, getId } from '../../../shared/utils';
+  import { defaultValue, randId, getId } from '../../../shared/utils';
 
   import Field from '..';
-  // import Value from '../../Value';
   import Modal from '../../Modal';
   import Finder from '../../Finder';
 
@@ -36,7 +35,6 @@
   let subProps = {};
 
   let selected;
-  // let backup = {};
   let isOpen = false;
   let isUpdate = false;
 
@@ -65,9 +63,7 @@
       subSchema = refs[subSchema.$ref];
     }
 
-    const _uiSchema = uiSchema[field] || {};
-    // const _refSchema = (refs[field] && refs[field].uiSchema) || [];
-
+    const _uiSchema = { ...uiSchema[field] };
     const isRef = subSchema.modelName === model;
     const isHidden = _uiSchema['ui:hidden'] || _uiSchema['ui:edit'] === false;
     const currentValue = ((isRef && parent ? parent : result) || {})[field];
@@ -151,17 +147,6 @@
     result[target.modelName] = value;
   }
 
-  // function open(key) {
-  //   subProps = {
-  //     schema: refs[association.model],
-  //     uiSchema: association.uiSchema,
-  //   };
-
-  //   selected = fields.find(x => x.key === key);
-  //   backup = { ...value };
-  //   isOpen = true;
-  // }
-
   function set(key, _value) {
     result[fields.find(x => x.key === key).field] = _value;
   }
@@ -219,7 +204,7 @@
         <li data-type={schema.type || 'object'}>
           <div data-field="/{path.join('/')}">
             {#if isFixed}
-              <input type="text" placeholder={uiSchema['ui:key'] || 'key'} on:change={e => prop(e, key)} />
+              <input type="text" required placeholder={uiSchema['ui:key'] || 'key'} on:change={e => prop(e, key)} />
             {:else}
               <label for={id}>{uiSchema['ui:label'] || field}</label>
             {/if}
@@ -227,20 +212,19 @@
             <div data-value>
               {#if uiSchema['ui:ref']}
                 <Finder
-                  {id} {name} {field} {model} {schema} {uiSchema} {current}
+                  {name} {schema} {uiSchema} {current}
                   on:change={e => set(key, e.detail)}
-                />
-              {:else}
-                <Field
-                  {id} {path} {name} {field} {model} {schema} {through} {required} {uiSchema}
-                  on:change={e => set(key, e.detail)}
-                  parent={fixedResult}
-                  result={current}
                 />
               {/if}
+              <Field
+                {id} {path} {name} {field} {model} {schema} {through} {required} {uiSchema}
+                on:change={e => set(key, e.detail)}
+                parent={fixedResult}
+                result={current}
+              />
 
               {#if isFixed && uiSchema['ui:remove'] !== false}
-                <button data-is="remove" data-before="&times;" type="button" on:click={() => remove(key)}>
+                <button data-is="remove" data-before="&minus;" type="button" on:click={() => remove(key)}>
                   <span>{uiSchema['ui:remove'] || 'Remove prop'}</span>
                 </button>
               {/if}
@@ -252,7 +236,7 @@
   {:else}
     <div data-empty>{uiSchema['ui:empty'] || 'No props'}</div>
     {#if required}
-      <input data-required tabIndex="-1" on:input="{e => { e.target.value = ''; }}" {name} {required} />
+      <input type="hidden" tabIndex="-1" on:input="{e => { e.target.value = ''; }}" {name} {required} />
     {/if}
   {/if}
 

@@ -1,9 +1,8 @@
-<script context="module">//
+<script context="module">
   import ErrorType from '../Error';
   import LoaderType from '../Loader';
 
-  import extensions from '../../shared/exts';
-  import components from '../../shared/deps';
+  import { componentType } from '../../shared';
   import { reduceRefs } from '../../shared/utils';
 </script>
 
@@ -56,14 +55,6 @@
       }
     }
 
-    if (schema.id && uiSchema['ui:refs']) {
-      uiSchema['ui:refs'].forEach(key => {
-        _schema.properties[key] = refs[key];
-        _schema.required = _schema.required || [];
-        _schema.required.push(key);
-      });
-    }
-
     schema = _schema;
   }
 
@@ -71,11 +62,8 @@
     propType = ErrorType;
   } else if (!schema) {
     propType = LoaderType;
-  } else if (components) {
-    const Type = components[schema.type || 'object'];
-    const Ext = extensions[uiSchema['ui:component']];
-
-    propType = Ext || Type;
+  } else {
+    propType = componentType(schema, uiSchema);
   }
 </script>
 

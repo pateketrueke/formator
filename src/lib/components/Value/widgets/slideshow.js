@@ -15,18 +15,15 @@ export default function slideShow($, data, values, parentNode) {
   }
 
   const prefix = values[0].name || values[0].path;
-
-  let size;
-  if (values[0].size) {
-    size = ['small', humanFileSize(values[0].size)];
-  }
+  const size = values[0].size ? ['small', null, humanFileSize(values[0].size)] : null;
+  const length = values.length > 1 ? ['small', null, `${values.length} files`] : null;
 
   let ref;
   let open;
   let isImage;
   let isResource;
 
-  return ['span.flex', [['a', {
+  return ['span.flex', null, [['a', {
     href: '#',
     class: 'chunk',
     target: '_blank',
@@ -78,17 +75,17 @@ export default function slideShow($, data, values, parentNode) {
         } else if (isResource) {
           node = $(['iframe', { src: srcFile, width: 853, height: 505 }]);
         } else {
-          node = $(['div', [
-            ['dl', [
-              ['dd', [['a', { href: srcFile, target: '_blank' }, name || values[offset].path]]],
-              values[offset].path && ['dt', 'File path'],
-              values[offset].path && ['dd', values[offset].path],
-              values[offset].size && ['dt', 'File size'],
-              values[offset].size && ['dd', humanFileSize(values[offset].size)],
-              values[offset].type && ['dt', 'MIME Type'],
-              values[offset].type && ['dd', values[offset].type],
-              values[offset].mtime && ['dt', 'Last Modified'],
-              values[offset].mtime && ['dd', values[offset].mtime],
+          node = $(['div', null, [
+            ['dl', null, [
+              ['dd', null, [['a', { href: srcFile, target: '_blank' }, name || values[offset].path]]],
+              values[offset].path && ['dt', null, 'File path'],
+              values[offset].path && ['dd', null, values[offset].path],
+              values[offset].size && ['dt', null, 'File size'],
+              values[offset].size && ['dd', null, humanFileSize(values[offset].size)],
+              values[offset].type && ['dt', null, 'MIME Type'],
+              values[offset].type && ['dd', null, values[offset].type],
+              values[offset].mtime && ['dt', null, 'Last Modified'],
+              values[offset].mtime && ['dd', null, values[offset].mtime],
             ]],
           ]]);
         }
@@ -139,5 +136,5 @@ export default function slideShow($, data, values, parentNode) {
         open = true;
       });
     },
-  }, prefix], size]];
+  }, prefix], size, length]];
 }

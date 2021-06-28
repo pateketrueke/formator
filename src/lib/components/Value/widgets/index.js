@@ -6,7 +6,7 @@ import {
 import slideshow from './slideshow';
 import attachment from './attachment';
 
-export { mount, patch } from 'somedom';
+export { unmount, mount, patch } from 'somedom';
 
 export const $ = bind(render,
   listeners(),

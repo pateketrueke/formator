@@ -1,5 +1,4 @@
 @import './components/Form/variables';
-@import './components/Form/reset';
 
 .formator {
   @import './components/Form/style';
@@ -9,6 +8,8 @@
 
 .formator,
 .formator-layer {
+  font-size: @size;
+
   dl {
     margin: @sp1 0 @sp2;
     font-size: .9em;
@@ -43,7 +44,7 @@
 
       dt {
         clear: left;
-        width: 30%;
+        width: 35%;
         margin-right: @sp2;
 
         &::after {
@@ -53,7 +54,7 @@
 
       dd {
         border: 0;
-        width: 66%;
+        width: 60%;
         clear: right;
       }
     }
@@ -84,6 +85,7 @@
 
   &.overlay {
     display: flex;
+    overflow: auto;
 
     &::after {
       top: 0;
@@ -92,8 +94,7 @@
       z-index: 1;
       padding: @sp1;
       color: @white;
-      position: absolute;
-      cursor: pointer;
+      position: fixed;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -111,9 +112,11 @@
       z-index: 1;
       margin: auto;
       max-width: 100%;
+      cursor: crosshair;
       position: relative;
       transition: opacity .5s;
       background-color: white;
+      outline: 1px dashed @mid;
     }
 
     > div {
@@ -131,6 +134,7 @@
     right: 0;
     bottom: 0;
     background-color: rgba(255, 255, 255, .8);
+    background-image: url(data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAQDAwMDAwQDAwQGBAMEBgcFBAQFBwgGBgcGBggKCAkJCQkICgoMDAwMDAoMDA0NDAwRERERERQUFBQUFBQUFBT/2wBDAQQFBQgHCA8KCg8UDg4OFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAAoACgDAREAAhEBAxEB/8QAFwABAQEBAAAAAAAAAAAAAAAAAAUGCP/EACIQAQAABQMFAQAAAAAAAAAAAAAFFUNjgqLB4RESEzVRkf/EABQBAQAAAAAAAAAAAAAAAAAAAAD/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwDv4AE6K0stgTgAaIAE6K0stgTgAUZra1cATW1q4A9na8WXXu/PgEqu6eQJVd08gnAAowqrjuCiADOgAowqrjuCiAD/2Q==);
   }
 
   &.active {
