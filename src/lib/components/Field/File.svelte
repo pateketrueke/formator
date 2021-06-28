@@ -2,7 +2,7 @@
   import { getContext, createEventDispatcher } from 'svelte';
   import { withKeys, defaultValue, getId, jsonData, humanFileSize } from '../../shared/utils';
 
-  import ObjectType from './Object.svelte';
+  import ObjectType from './types/Object.svelte';
 
   export let name;
   export let model;
