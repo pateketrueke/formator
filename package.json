@@ -19,7 +19,7 @@
     "concat:bundle:js": "concat dist/vendor.js dist/main-iife.js -o dist/bundle.js",
     "concat:bundles": "npm run concat:bundle:css && npm run concat:bundle:js",
     "prepublishOnly": "rm -rf dist/* && NODE_ENV=production npm run build -- -Xspec",
-    "postbuild": "npm run concat:bundles && rm -rf dist/components dist/*.html",
+    "postbuild": "npm run concat:bundles && rm -rf dist/{node_modules,components} dist/*.html",
     "prebuild": "npm run copy:pickr",
     "lint": "eslint --ext js,svelte lib src e2e",
     "test": "npm run lint && npm run test:e2e --",
