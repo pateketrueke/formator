@@ -9,7 +9,6 @@ lint: src lib e2e deps ## Lint all sources
 
 dev: src deps ## Start dev tasks  (nodejs)
 	@mkdir -p tmp
-	@npm run dist
 	@npm start & npm run dev
 
 e2e: src deps ## Run E2E locally  (nodejs)
@@ -22,7 +21,7 @@ test: src deps ## Run tests on locally  (nodejs)
 	@make e2e TESTCAFE_FLAGS="--color --skip-js-errors -a 'make dev >/dev/null 2>&1'"
 
 dist: src deps ## Build final output for production
-	@npm run dist -- -f
+	@npm run build -- -f
 
 clean: ## Remove unwanted artifacts
 	@rm -rf dist/* tmp/* cache.json

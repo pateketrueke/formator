@@ -12,15 +12,15 @@
   ],
   "scripts": {
     "dev": "npm run build -- -w",
-    "dist": "npm run build",
-    "build": "mortero -P/db:3001/db/ -P/tmp:3001/tmp/ -ecss.less -I.gitignore -Ddist",
+    "build": "mortero src -X{_,schema,shared,components} -P/db,/tmp:3001 -ecss.less -I.gitignore -Ddist",
     "start": "API_PORT=3001 nodemon -i dist -i cache.json e2e/server.js",
     "copy:pickr": "cp node_modules/flatpickr/dist/flatpickr.min.css dist/flatpickr.css",
-    "concat:bundle:js": "concat dist/vendor.js dist/main-iife.js -o dist/bundle.js",
     "concat:bundle:css": "concat dist/flatpickr.css dist/style.css -o dist/bundle.css",
+    "concat:bundle:js": "concat dist/vendor.js dist/main-iife.js -o dist/bundle.js",
     "concat:bundles": "npm run concat:bundle:css && npm run concat:bundle:js",
-    "postdist": "npm run copy:pickr && npm run concat:bundles",
-    "prepublishOnly": "npm run dist",
+    "prepublishOnly": "rm -rf dist/* && NODE_ENV=production npm run build -- -Xspec",
+    "postbuild": "npm run concat:bundles && rm -rf dist/components dist/*.html",
+    "prebuild": "npm run copy:pickr",
     "lint": "eslint --ext js,svelte lib src e2e",
     "test": "npm run lint && npm run test:e2e --",
     "test:e2e": "BASE_URL=http://localhost:${PORT:-8080} testcafe ${BROWSER:-chrome:headless} -q --retry-test-pages --hostname localhost"
@@ -28,18 +28,9 @@
   "author": "Alvaro Cabrera <pateketrueke@gmail.com>",
   "license": "MIT",
   "mortero": {
+    "bundle": "**/{main,vendor}*.js",
     "rename": [
       "src/**:{filepath/2}"
-    ],
-    "filter": [
-      "!_*",
-      "!**/_*",
-      "!**/_*/**",
-      "!**/shared/**",
-      "!**/components/**"
-    ],
-    "bundle": [
-      "**/{main,vendor}*.js"
     ],
     "options": {
       "less": {
@@ -50,11 +41,9 @@
     }
   },
   "devDependencies": {
-    "acorn": ">=6.4.1",
     "ajv": "^8.6.0",
     "body-parser": "^1.19.0",
     "concat": "^1.0.3",
-    "dot-prop": ">=4.2.1",
     "eslint": "^7.27.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.18.2",
@@ -67,17 +56,14 @@
     "json-schema-sequelizer": "^0.22.5",
     "less": "^4.1.1",
     "less-plugin-autoprefix": "^2.0.0",
-    "lodash": ">=4.17.19",
-    "minimist": ">=1.2.3",
-    "mortero": "^0.0.25",
+    "mortero": "^0.0.34",
     "nodemon": "^2.0.7",
     "pug": "^3.0.1",
-    "set-value": ">=2.0.1",
-    "smoo": "^0.0.10",
-    "somedom": "^0.3.2",
+    "smoo": "^0.0.13",
+    "somedom": "^0.3.3",
     "sqlite3": "^5.0.2",
     "svelte": "^3.38.2",
-    "testcafe": "^1.14.2"
+    "testcafe": "^1.9.4"
   },
   "peerDependencies": {
     "json-schema-sequelizer": "*"

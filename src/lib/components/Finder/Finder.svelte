@@ -1,7 +1,6 @@
 <script>
   import { getContext, createEventDispatcher } from 'svelte';
-  import Failure from 'smoo/src/components/Failure.svelte';
-  import Search from 'smoo/src/components/Search.svelte';
+  import { Failure, Search } from 'smoo';
 
   import Value from '../Value';
   import { API } from '../../shared/utils';

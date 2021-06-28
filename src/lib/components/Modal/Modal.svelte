@@ -1,7 +1,7 @@
 <script>
   import { createEventDispatcher } from 'svelte';
 
-  import Fence from 'smoo/src/components/Fence.svelte';
+  import { Fence } from 'smoo';
 
   export let visible = false;
   export let updating = false;

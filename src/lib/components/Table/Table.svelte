@@ -1,6 +1,6 @@
 <script>
   import { onMount, setContext, createEventDispatcher } from 'svelte';
-  import Failure from 'smoo/src/components/Failure.svelte';
+  import { Failure } from 'smoo';
 
   import Modal from '../Modal';
   import Field from '../Field';
