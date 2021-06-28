@@ -97,18 +97,26 @@
   flex: 1 1 auto;
 }
 
-.min {
-  min-width: auto;
+.nosel {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  white-space: nowrap;
 }
 
 .center {
   text-align: center;
 }
 
-.margin-left { margin-left: 1em; }
-.margin-top { margin-top: 1em; }
-.margin-right { margin-right: 1em; }
-.margin-bottom { margin-bottom: 1em; }
+.focused {
+  outline-color: @outline;
+}
+
+[data-actions] .min, .min {
+  min-width: auto;
+  overflow: visible;
+}
 
 .show-actions() {
   [data-before] {
@@ -130,8 +138,4 @@
 
 @media @md {
   .show-actions();
-}
-
-.focused() {
-  outline-color: @outline;
 }
