@@ -35,15 +35,13 @@
 
 <slot />
 
-<div class="formator">
-  <Form schema={$schema} uiSchema={$uiSchema} on:submit={update} on:change={validate}>
-    <div slot="after" data-actions>
-      <slot name="actions">
-        <button type="submit">Save</button>
-      </slot>
-    </div>
-  </Form>
-</div>
+<Form schema={$schema} uiSchema={$uiSchema} on:submit={update} on:change={validate}>
+  <div slot="after" data-actions>
+    <slot name="actions">
+      <button type="submit">Save</button>
+    </slot>
+  </div>
+</Form>
 
 {#if debug}
   <details>

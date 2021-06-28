@@ -3,6 +3,7 @@
 
   import { Fence } from 'smoo';
 
+  export let noform = false;
   export let visible = false;
   export let updating = false;
   export let resource = 'input';
@@ -34,7 +35,7 @@
   }
 </style>
 
-<Fence modal autofocus bind:visible on:cancel={close} on:submit={save}>
+<Fence modal autofocus {noform} bind:visible on:cancel={close} on:submit={save}>
   {#if uiSchema['ui:caption']}
     <div data-titlebar>
       {#if !uiSchema['ui:closing']}
