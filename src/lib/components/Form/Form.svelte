@@ -30,6 +30,8 @@
     uiSchema,
   });
 
+  let el;
+
   function save(e) {
     if (typeof onsubmit === 'function') {
       if (onsubmit(e, result) !== true) return;
@@ -39,6 +41,7 @@
     dispatch('submit', result);
   }
 
+  $: dispatch('change', { valid: el && el.checkValidity(), result });
   $: hasChildren = schema.type === 'object' || schema.type === 'array';
   $: nextAction = (schema.id && actions[schema.id]) ? actions[schema.id][ACTION_MAP[action]] || {} : {};
 
@@ -55,7 +58,7 @@
   <h2>{uiSchema['ui:title']}</h2>
 {/if}
 
-<form on:submit={save} {...formProps}>
+<form on:submit={save} bind:this={el} {...formProps}>
   <slot name="before" />
   {#if !hasChildren}
     <div data-field="/">
