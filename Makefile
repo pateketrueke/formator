@@ -29,7 +29,12 @@ clean: ## Remove unwanted artifacts
 purge: ## Delete all installed modules
 	@rm -rf node_modules/*
 
-.PHONY: help lint dev test logs build clean dist node_modules
+release:
+ifneq ($(CI),)
+	@echo '//registry.npmjs.org/:_authToken=$${NODE_AUTH_TOKEN}' > .npmrc
+endif
+
+.PHONY: help lint dev test logs build clean dist release node_modules
 deps: node_modules
 node_modules:
 	@(((ls node_modules | grep .) > /dev/null 2>&1) || npm i) || true

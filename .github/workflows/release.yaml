@@ -1,0 +1,19 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  Release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Publish
+        run: make release && npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
