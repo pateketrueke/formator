@@ -21,6 +21,7 @@ html
         font-family: Helvetica;
       }
 
+      #builder > details,
       body > div > details {
         box-shadow: 0 1px 2px silver;
         margin: auto;
@@ -32,6 +33,7 @@ html
         margin-bottom: 0;
       }
 
+      #builder details > summary,
       body > div > details > summary {
         cursor: default;
         padding: 6px;
@@ -39,6 +41,7 @@ html
         user-select: none;
       }
 
+      #builder details[open] > summary,
       body > div > details[open] > summary {
         color: black;
       }
@@ -47,6 +50,7 @@ html
         padding: 6px;
       }
 
+      .formator + details,
       .debug {
         box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
         background-color: white;
@@ -58,12 +62,17 @@ html
         max-width: 320px;
       }
 
+      .formator + details pre,
       .debug pre {
         overflow: auto;
       }
 
-      #editor > div {
+      #editor > div,
+      #builder {
         padding: 6px;
+      }
+      #builder > details {
+        margin-bottom: 0;
       }
   body
     block before
@@ -73,7 +82,7 @@ html
           details
             summary(id=`test-${test.testName}`) Test ##{i + 1} &mdash; #{(test && test.description) || ''}
             script(type='application/json' rel='resource' data-debug=`#json-${i}`) !{JSON.stringify(test, null, 2)}
-            .debug: summary: details: pre(id=`json-${i}`)
+            .debug: details: pre(id=`json-${i}`)
         block after
 
       import(from='vendor.js')
