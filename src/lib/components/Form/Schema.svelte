@@ -1,10 +1,11 @@
 <script>
+  import { createEventDispatcher, setContext } from 'svelte';
   import { writable } from 'svelte/store';
-  import { setContext } from 'svelte';
   import Form from './Form.svelte';
 
   export let debug = false;
 
+  const dispatch = createEventDispatcher();
   const value = writable(null);
 
   const schema = writable({
@@ -24,15 +25,22 @@
 
   function update(e) {
     value.set(e.detail);
+    dispatch('submit', e.detail);
+  }
+
+  function validate(e) {
+    dispatch('change', e.detail);
   }
 </script>
 
 <slot />
 
 <div class="formator">
-  <Form schema={$schema} uiSchema={$uiSchema} on:submit={update}>
+  <Form schema={$schema} uiSchema={$uiSchema} on:submit={update} on:change={validate}>
     <div slot="after" data-actions>
-      <button type="submit">Save</button>
+      <slot name="actions">
+        <button type="submit">Save</button>
+      </slot>
     </div>
   </Form>
 </div>
