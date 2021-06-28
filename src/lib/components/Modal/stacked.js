@@ -1,12 +1,11 @@
 const STACK = [];
 
-let skip;
-let t;
+window.addEventListener('keydown', e => {
+  if ((e.shiftKey && e.keyCode !== 9) || e.ctrlKey || e.altKey || e.metaKey) return;
 
-function onClose(e) {
-  if (skip) {
-    skip = false;
-    return;
+  if (STACK.length) {
+    e.preventDefault();
+    e.stopPropagation();
   }
 
   const last = STACK[STACK.length - 1];
@@ -16,27 +15,9 @@ function onClose(e) {
   }
 
   if (last && e.keyCode === 27) {
-    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
-      if (e.target.type === 'search' && e.target.value) {
-        e.target.value = '';
-      }
-
-      e.target.blur();
-      return;
-    }
-
     last.close();
   }
-}
-
-window.addEventListener('keyup', e => {
-  clearTimeout(t);
-  t = setTimeout(() => onClose(e), 60);
-});
-
-export function stopPropagation() {
-  skip = true;
-}
+}, true);
 
 export function destroy(target) {
   const offset = STACK.indexOf(target);

@@ -10,10 +10,6 @@
   ~ [data-actions] {
     margin-top: @sp2;
   }
-
-  + [data-required] {
-    margin-top: 10px;
-  }
 }
 
 [data-failure] {
@@ -27,7 +23,7 @@
   top: @sp1;
 
   &[open] {
-    border: 1px dashed @light;
+    border: @separator;
     z-index: 1;
   }
 
@@ -44,24 +40,16 @@
   }
 }
 
-[data-required] {
-  pointer-events: none;
-  position: absolute;
-  margin-left: 10px;
-  display: block;
-  width: 50px;
-  height: 30px;
-  opacity: 0;
-
-  &:focus ~ button,
-  &:focus ~ div > button {
-    box-shadow: 0 0 3px @dark;
+[data-fieldset],
+[data-selected] {
+  > label {
+    display: block;
+    max-width: 100%;
+    line-height: 1.5;
   }
-}
-
-[data-fieldset] {
   button + details,
-  details + details {
+  details + details,
+  fieldset + details {
     margin-top: @sp2;
   }
   summary {
@@ -70,12 +58,11 @@
     padding-right: @sp2 * 3;
 
     > button {
-      padding-top: 3px;
       position: absolute;
       margin: auto;
       bottom: 2px;
       top: 2px;
-      right: 1px;
+      right: 2px;
     }
 
     @media @sm {
@@ -84,17 +71,87 @@
   }
 }
 
-[data-actions] {
-  button + button {
-    margin-left: @sp1;
+[data-fieldset] {
+  > [data-actions] {
+    width: 100%;
+    gap: @sp2;
+    display: flex;
+    align-items: center;
+    position: relative;
+
+    > button {
+      ~ label {
+        border: 2px dashed @high;
+        border-radius: 5px;
+        text-align: center;
+      }
+    }
+
+    > label {
+      position: relative;
+      max-width: 100%;
+      &::before {
+        left: @sp1;
+        top: @sp1;
+        width: 100%;
+        position: absolute;
+        text-align: center;
+        pointer-events: none;
+        content: attr(data-caption);
+      }
+      &.hover {
+        border-color: @outline;
+        background-color: @hover;
+        &::before {
+          color: @mid;
+        }
+      }
+      > input {
+        border: @sp1 solid transparent;
+      }
+    }
+    > small {
+      background-color: inherit;
+      padding: 0;
+    }
   }
+
+  label > input {
+    width: inherit;
+    opacity: 0;
+
+    &:focus {
+      outline: none;
+      ~ label button {
+        .focused;
+      }
+    }
+  }
+
+  &::before {
+    top: @sp1;
+    right: @sp1;
+    color: @light;
+    position: absolute;
+    content: attr(data-caption);
+  }
+}
+
+[data-actions] {
+  display: flex;
+  gap: @sp2;
 }
 
 li {
   [data-field] {
     > input,
     > label {
-      min-width: 100px;
+      min-width: 7em;
+    }
+
+    > label {
+      display: block;
+      margin-bottom: @sp1;
     }
 
     > input {
@@ -102,10 +159,14 @@ li {
       padding: 0;
       width: 100%;
       font-size: 1em;
+      margin-bottom: @sp1;
+      padding-bottom: @sp1 - 2px;
+      border-bottom: 2px solid transparent;
 
       &:focus {
         outline: none;
         box-shadow: none;
+        border-color: @outline;
       }
 
       + [data-value] {
@@ -113,7 +174,7 @@ li {
       }
     }
 
-    > input ~ div {
+    > input ~ div {
       width: 100%;
 
       > button {
@@ -122,7 +183,7 @@ li {
     }
 
     > div > fieldset {
-      border-left: 1px dashed @light;
+      border-left: @separator;
       padding-left: @sp2;
 
       + button {
@@ -132,6 +193,16 @@ li {
       + div {
         padding-top: @sp2;
         padding-left: 0;
+      }
+    }
+
+    @media @md {
+      gap: @sp1;
+      display: flex;
+
+      > input {
+        width: 10%;
+        margin-bottom: 0;
       }
     }
   }
@@ -147,13 +218,6 @@ li {
       margin-top: @sp2;
     }
 
-    [data-type] > [data-field] {
-      > input {
-        width: 50%;
-        min-width: auto;
-      }
-    }
-
     > div {
       > div:first-child {
         position: relative;
@@ -162,6 +226,7 @@ li {
         > select,
         > textarea,
         > input[type=text],
+        > input[type=email],
         > input[type=number],
         > input[type=search],
         > input[type=password] {
@@ -171,6 +236,7 @@ li {
     }
   }
 
+  &[data-type=date],
   &[data-type=string],
   &[data-type=number],
   &[data-type=integer],
@@ -189,44 +255,42 @@ button,
 select,
 textarea,
 input[type=text],
+input[type=date],
+input[type=email],
 input[type=number],
 input[type=search],
 input[type=password] {
-  outline: none;
-  transition: box-shadow .2s;
-  border: 1px solid @light;
-  background-color: @white;
+  font-size: inherit;
   padding: @sp1;
 
-  &:hover {
-    border-color: @dark;
-  }
-
   &:focus {
-    box-shadow: 0 0 3px @dark;
+    .focused;
   }
 }
 
 textarea,
 input[type=text],
+input[type=email],
 input[type=number],
 input[type=search],
 input[type=password] {
   width: inherit;
-
-  &:focus,
-  &:hover {
-    background-color: @white;
+  &[size] {
+    width: auto;
   }
 }
 
-input[readonly],
-input[readonly]:hover {
-  border: 1px solid rgba(0, 0, 0, .1);
+textarea {
+  &[cols] {
+    width: auto;
+  }
 }
 
-button {
-  border-style: dashed;
+input[type=radio],
+input[type=checkbox] {
+  &:focus {
+    .focused;
+  }
 }
 
 label {
@@ -243,6 +307,22 @@ label {
 
 details {
   white-space: normal;
+
+  summary {
+    gap: @sp1;
+  }
+  summary::before {
+    color: @light;
+    content: '▹';
+  }
+  &[open] {
+    summary {
+      color: @mid;
+      &::before {
+        content: '▸';
+      }
+    }
+  }
 
   > dl {
     z-index: 1;
@@ -261,7 +341,7 @@ details {
       border-top: 1px solid rgba(0, 0, 0, .1);
       border-left: 1px solid rgba(0, 0, 0, .1);
       top: -7px;
-      left: 48%;
+      left: 10%;
       transform: rotate(45deg);
     }
 
@@ -296,7 +376,7 @@ details {
       padding: @sp2;
 
       ~ div {
-        border-top: 1px dashed @light;
+        border-top: @separator;
         padding: @sp2;
       }
     }

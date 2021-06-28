@@ -8,13 +8,8 @@
   .wrapper {
     width: 100%;
     margin-top: 7em;
-  }
-
-  @media screen and (min-width: @smb) {
-    .wrapper {
-      min-width: @smw;
-      width: auto;
-    }
+    max-width: 720px;
+    border-radius: 3px;
   }
 }
 
@@ -32,12 +27,6 @@ table {
   td,
   td ~ th {
     padding: @sp2;
-  }
-
-  td, thead th {
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
   }
 
   td {
@@ -65,6 +54,12 @@ table {
     tr:nth-child(odd) { background-color: lighten(@light, 30); }
     tr:hover { background-color: @hover; }
   }
+
+  .ems(@counter) when (@counter > 0) {
+    .ems((@counter - 1));
+    th.em@{counter}, td.em@{counter} { width: ~"@{counter}em"; }
+  }
+  .ems(16);
 
   @media @md {
     width: 100%;
@@ -140,9 +135,9 @@ table {
 
     td[data-field] {
       margin: @sp1 0;
+      position: relative;
       min-height: 1.5em;
       padding: @sp1 0 0 30%;
-      position: relative;
 
       &::before {
         content: attr(data-label) ": ";
@@ -158,7 +153,7 @@ table {
       }
 
       + td {
-        border-top: 1px dashed @light;
+        border-top: @separator;
       }
 
       details > dl {
@@ -189,6 +184,11 @@ table {
       top: .2em;
     }
 
+    &[data-field] {
+      padding: 1.5em 0 0 0;
+      min-height: 2em;
+    }
+
     + td {
       padding-top: 1.5em;
     }
@@ -200,6 +200,7 @@ table {
 }
 
 summary > small,
+small + small,
 span + small,
 a + small {
   margin-left: @sp1;
@@ -248,8 +249,10 @@ td.invalid  {
     padding: @sp2;
   }
 
-  > fieldset > ul {
-    max-width: calc(100vw - (@sp2 * 4));
+  > fieldset {
+    > ul {
+      max-width: calc(100vw - (@sp2 * 4));
+    }
   }
 }
 
@@ -298,7 +301,6 @@ form {
 
   > div {
     padding: @sp2;
-    border-top: 1px dashed @light;
   }
 }
 
@@ -313,12 +315,17 @@ caption, h2 {
   text-align: left;
   font-size: 1.5em;
   font-weight: bold;
-  border-bottom: 1px dashed @light;
+  border-bottom: @separator;
 }
 
 a {
   text-decoration: none;
   opacity: .5;
+  display: table;
+  padding-left: 20px;
+  background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"%3E%3Cpath fill-rule="evenodd" d="M10.604 1h4.146a.25.25 0 01.25.25v4.146a.25.25 0 01-.427.177L13.03 4.03 9.28 7.78a.75.75 0 01-1.06-1.06l3.75-3.75-1.543-1.543A.25.25 0 0110.604 1zM3.75 2A1.75 1.75 0 002 3.75v8.5c0 .966.784 1.75 1.75 1.75h8.5A1.75 1.75 0 0014 12.25v-3.5a.75.75 0 00-1.5 0v3.5a.25.25 0 01-.25.25h-8.5a.25.25 0 01-.25-.25v-8.5a.25.25 0 01.25-.25h3.5a.75.75 0 000-1.5h-3.5z"%3E%3C/path%3E%3C/svg%3E');
+  background-repeat: no-repeat;
+  background-position: 0 50%;
 
   &:hover {
     opacity: 1;
@@ -328,14 +335,19 @@ a {
 
   &:focus {
     opacity: 1;
+    .focused;
   }
 }
 
 th,
 h2,
-span,
+dt,
 label,
-button {
+input,
+button,
+summary,
+[data-empty],
+[data-actions] {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -357,21 +369,12 @@ fieldset {
 }
 
 summary {
-  transition: box-shadow .2s;
   white-space: nowrap;
   cursor: default;
-  padding: 0 @sp1;
   color: @dark;
 
   &:focus {
-    outline: none;
-    box-shadow: 0 0 3px @dark;
-  }
-}
-
-details[open] {
-  > summary {
-    box-shadow: 0 0 3px @light;
+    .focused;
   }
 }
 
@@ -381,7 +384,7 @@ ul {
 
 li {
   &[data-type] {
-    border-bottom: 1px dashed @light;
+    border-bottom: @separator;
     margin-bottom: @sp2;
     min-height: 12px * 2;
     position: relative;

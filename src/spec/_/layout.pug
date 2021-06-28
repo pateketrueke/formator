@@ -4,6 +4,23 @@ html
     title Formator #{label ? ` (${label})`: ''}
     block head
     style.
+      *, *::before, *::after {
+        box-sizing: border-box;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      html, body {
+        height: 100%;
+      }
+
+      body {
+        font-family: Helvetica;
+      }
+
       body > div > details {
         box-shadow: 0 1px 2px silver;
         margin: auto;
@@ -59,6 +76,7 @@ html
             .debug: summary: details: pre(id=`json-${i}`)
         block after
 
-      script(src='ajv.js')
-      script(src='main-iife.js')
-      script(src='main-test.js')
+      import(from='vendor.js')
+      import(from='main-iife.js')
+      import(from='main-test.js')
+      import(from='flatpickr.css')

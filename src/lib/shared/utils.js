@@ -1,3 +1,6 @@
+const SHARED_INDEX = {};
+const USED_COLS = [null, 'lg', 'xl', 'wl'];
+
 const DEFAULT_VALUES = {
   object: () => ({}),
   array: () => [],
@@ -7,8 +10,31 @@ const DEFAULT_VALUES = {
   boolean: () => false,
 };
 
-const SHARED_INDEX = {};
-const USED_COLS = [null, 'lg', 'xl', 'wl'];
+export function inputType(schema) {
+  switch (schema.format) {
+    case 'email': return 'email';
+    case 'date': return 'date';
+    default: return 'text';
+  }
+}
+
+export function defaultValue(schema) {
+  if (!schema) {
+    return null;
+  }
+  if (schema.enum) {
+    return undefined;
+  }
+  if (schema.properties) {
+    return Object.keys(schema.properties).reduce((prev, cur) => {
+      prev[cur] = defaultValue(schema.properties[cur]);
+
+      return prev;
+    }, {});
+  }
+
+  return DEFAULT_VALUES[schema.type || 'object']();
+}
 
 export function getId(rootId, forName, incOffset) {
   if (!SHARED_INDEX[forName]) {
@@ -47,28 +73,26 @@ export function getCols(value) {
   return classes;
 }
 
+export function fixedCols(uiSchema, headers) {
+  let classes = [];
+  if (uiSchema && uiSchema['ui:class']) {
+    classes = classes.concat(uiSchema['ui:class']);
+  }
+  if (uiSchema && uiSchema['ui:columns']) {
+    classes = classes.concat(getCols(uiSchema['ui:columns']));
+  }
+  if (!classes.length) {
+    classes.push(`col-${Math.floor(12 / (headers.length + 1))}`);
+  }
+  return classes.join(' ');
+}
+
 export function getItems(schema, offset) {
   return (Array.isArray(schema.items)
     ? schema.items[offset]
     : schema.items)
   || schema.additionalItems
   || null;
-}
-
-export function defaultValue(schema) {
-  if (!schema) {
-    return null;
-  }
-
-  if (schema.properties) {
-    return Object.keys(schema.properties).reduce((prev, cur) => {
-      prev[cur] = defaultValue(schema.properties[cur]);
-
-      return prev;
-    }, {});
-  }
-
-  return DEFAULT_VALUES[schema.type || 'object']();
 }
 
 export function humanFileSize(bytes, decimals = 1) {
@@ -83,7 +107,6 @@ export function humanFileSize(bytes, decimals = 1) {
     bytes /= 1000;
     unit += 1;
   } while (Math.round(Math.abs(bytes) * ratio) / ratio >= 1000 && unit < units.length - 1);
-
 
   return `${bytes.toFixed(decimals)} ${units[unit]}`;
 }
@@ -187,7 +210,7 @@ export function isScalar(value) {
 }
 
 export function isEmpty(value) {
-  if (typeof value === 'object') {
+  if (value !== null && typeof value === 'object') {
     return (Array.isArray(value) && value.length === 0)
       || (Object.keys(value).length === 0);
   }
@@ -197,7 +220,7 @@ export function isEmpty(value) {
     || value === '');
 }
 
-export function loader(components, selector) {
+export function loader(_components, selector) {
   return [].slice.call(document.querySelectorAll(selector)).map(node => {
     let target;
     let data;
@@ -235,8 +258,8 @@ export function loader(components, selector) {
     }
 
     const Component = data.action === 'index'
-      ? components.Table
-      : components.Form;
+      ? _components.Table
+      : _components.Form;
 
     const instance = new Component({
       target,
@@ -324,18 +347,21 @@ export const API = {
       if (!obj || typeof obj !== 'object') return obj;
       Object.keys(obj).forEach(key => {
         if (Array.isArray(obj[key]) && obj[key][0] instanceof window.File) {
-          const prefix = randId('upload_');
+          const out = [];
 
           obj[key].forEach(blob => {
+            const prefix = randId('upload_');
+
             formData.append(prefix, blob);
+            out.push({ ...blob.properties, $upload: prefix });
           });
-          obj[key] = { $upload: prefix };
+          obj[key] = out;
           hasFiles = true;
         } else if (obj[key] instanceof window.File) {
           const prefix = randId('upload_');
 
           formData.append(prefix, obj[key]);
-          obj[key] = { $upload: prefix };
+          obj[key] = { ...obj[key].properties, $upload: prefix };
           hasFiles = true;
         } else if (typeof obj[key] === 'object' && obj[key] !== null) {
           if (!Object.keys(obj[key]).length) delete obj[key];
@@ -348,7 +374,7 @@ export const API = {
       const prefix = randId('upload_');
 
       formData.append(prefix, data);
-      data = { $upload: prefix };
+      data = { ...data.properties, $upload: prefix };
       hasFiles = true;
     } else {
       walkProps(data);

@@ -1,0 +1,9 @@
+description: ENUM values
+testName: enums
+schema:
+  enum:
+    - FOO
+    - BAR
+    - null
+    - 42
+    - false

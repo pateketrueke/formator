@@ -1,6 +1,6 @@
 <script>
   import { getContext, createEventDispatcher } from 'svelte';
-  import { defaultValue, getId } from '../../../shared/utils';
+  import { getId, defaultValue, inputType } from '../../../shared/utils';
 
   export let name;
   export let required = false;
@@ -19,12 +19,20 @@
     result = '';
   }
 
+  $: autocomplete = uiSchema['ui:autocomplete'];
+  $: maxlength = uiSchema['ui:maxlength'] || null;
+  $: size = uiSchema['ui:size'] || null;
+  $: cols = uiSchema['ui:cols'] || null;
+  $: rows = uiSchema['ui:rows'] || null;
+  $: type = inputType(schema);
   $: id = getId(rootId, name);
   $: dispatch('change', result);
 </script>
 
 {#if uiSchema['ui:password']}
-  <input type="password" on:change={update} {id} {name} {required} />
+  <input type="password" on:change={update} {id} {name} {size} {required} {maxlength} {autocomplete} />
+{:else if uiSchema['ui:textarea']}
+  <textarea value={result} on:input={update} {id} {name} {cols} {rows} {required} {maxlength} />
 {:else}
-  <input type="text" bind:value={result} {id} {name} {required} />
+  <input {type} value={result} on:input={update} {id} {name} {size} {required} {maxlength} {autocomplete} />
 {/if}

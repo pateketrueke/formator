@@ -1,20 +1,17 @@
 <script>
   import { createEventDispatcher } from 'svelte';
 
-  import Fence from 'smoo/src/components/Fence.svelte';
-  import { stopPropagation } from './stacked';
+  import { Fence } from 'smoo';
 
   export let visible = false;
   export let updating = false;
-
-  let uiSchema = {};
-  let resource = 'input';
+  export let resource = 'input';
+  export let uiSchema = {};
 
   const dispatch = createEventDispatcher();
 
   function close(e) {
     if (e) {
-      stopPropagation();
       dispatch('cancel');
     }
 
@@ -28,10 +25,10 @@
 </script>
 
 <style>
-  :global(form) {
+  :global(.wrapper form) {
     padding: 0 !important;
   }
-  :global(form > div) {
+  :global(.wrapper form > div) {
     padding: 0;
     border: 0;
   }

@@ -1,19 +1,22 @@
 {
   "$attributes": {
-    "findAll": ["label", "file.path"]
+    "findAll": ["label"]
   },
   "$uiSchema": {
+    "ui:fields": ["label"],
     "ui:add": false,
-    "ui:refs": ["File"],
     "id": {
       "ui:hidden": true
     },
-    "File": {
-      "ui:component": "FileUpload",
-      "ui:template": [["div", "{@file:this}"]]
+    "label": {
+      "ui:template": "#{.FileId} {this}"
     },
     "FileId": {
-      "ui:ref": "File"
+      "ui:ref": "File",
+      "ui:component": "FileUpload",
+      "ui:template": "{@file:this}",
+      "ui:includes": ["kind"],
+      "ui:add": false
     },
     "ExampleId": {
       "ui:hidden": true
@@ -24,7 +27,8 @@
     "properties": {
       "id": {
         "type": "integer",
-        "primaryKey": true
+        "primaryKey": true,
+        "autoIncrement": true
       },
       "label": {
         "type": "string"

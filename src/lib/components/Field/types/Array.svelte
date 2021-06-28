@@ -1,6 +1,6 @@
-<script>//
+<script>
   import { getContext, createEventDispatcher } from 'svelte';
-  import { randId, getItems, defaultValue } from '../../../shared/utils';
+  import { randId, getItems, fixedCols, defaultValue } from '../../../shared/utils';
 
   import Field from '..';
   import Value from '../../Value';
@@ -124,8 +124,8 @@
     <table>
       <thead>
         <tr>
-          {#each headers as { label }}
-            <th>{label}</th>
+          {#each headers as { field, label }}
+            <th class={fixedCols(uiSchema[field], headers)}>{label}</th>
           {/each}
           <th colspan="99"></th>
         </tr>
@@ -134,7 +134,7 @@
         {#each items as { key, path, offset, isFixed, schema, uiSchema } (key)}
           <tr data-field="/{path.join('/')}">
             {#each headers as { field, label }}
-              <td data-field="/{path.concat(field).join('/')}" data-label={label}>
+              <td data-field="/{path.concat(field).join('/')}" data-label={label} class={fixedCols(uiSchema[field], headers)}>
                 <Value {schema} uiSchema={uiSchema[field]} value={result[offset][field]} />
               </td>
             {/each}
@@ -168,7 +168,7 @@
                 <div data-value>
                   <Field {schema} {uiSchema} bind:result={result[offset]} name="{name}[{offset}]" />
                   {#if !isFixed && uiSchema['ui:remove'] !== false}
-                    <button data-is="remove" data-before="&times;" type="button" on:click={() => remove(key)}>
+                    <button data-is="remove" data-before="&minus;" type="button" on:click={() => remove(key)}>
                       <span>{uiSchema['ui:remove'] || 'Remove item'}</span>
                     </button>
                   {/if}
@@ -183,7 +183,7 @@
 {:else}
   <div data-empty>{uiSchema['ui:empty'] || 'No items'}</div>
   {#if required}
-    <input data-required tabIndex="-1" on:input="{e => { e.target.value = ''; }}" {name} {required} />
+    <input type="hidden" tabIndex="-1" on:input="{e => { e.target.value = ''; }}" {name} {required} />
   {/if}
 {/if}
 
