@@ -26,5 +26,5 @@
 </script>
 
 {#if !name}
-  <p>⚠ Missing prop <b>name</b> in: {JSON.stringify($$props, null, 2)}</p>
+  <p data-empty>⚠ Missing prop <b>name</b> in: {JSON.stringify($$props, null, 2)}</p>
 {/if}
