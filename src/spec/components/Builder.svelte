@@ -4,9 +4,9 @@
 
   let status = 'pristine';
   let valid = false;
-  let broken;
   let modal;
   let visible;
+  let missing;
 
   function save(e) {
     alert(JSON.stringify(e.detail, null, 2));
@@ -23,7 +23,7 @@
     modal = e.target.checked;
   }
   function invalid() {
-    broken = !broken;
+    missing = !missing;
   }
 </script>
 
@@ -33,7 +33,7 @@
   <Fence autofocus bind:visible bind:modal on:cancel={toggle}>
     <div class="formator" slot="main">
       <Schema debug on:submit={save} on:change={check}>
-        {#if broken}<Input />{/if}
+        {#if missing}<Input />{/if}
         <Input
           name="email"
           label="E-mail"
@@ -65,7 +65,7 @@
             </label>
             <label class="flex gap min">
               <input type="checkbox" on:change={invalid} />
-              broken
+              missing
             </label>
             <label class="flex gap min">
               <input type="checkbox" bind:checked={valid} />
