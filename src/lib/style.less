@@ -1,6 +1,22 @@
 @import './components/Form/variables';
 @import './components/Form/utilities';
 
+.smoo-fence--overlay {
+  align-items: baseline !important;
+  overflow: auto;
+  z-index: 2;
+
+  .smoo-fence--wrapper {
+    margin-top: 7em;
+    max-width: 720px;
+    border-radius: 3px;
+
+    @media @smx {
+      width: 100%;
+    }
+  }
+}
+
 .smoo-fence--inline {
   width: 100%;
   padding: @sp2;
