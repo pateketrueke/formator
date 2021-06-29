@@ -217,7 +217,7 @@
   $: label = uiSchema['ui:title'] || `Choose or drag file${multiple ? 's' : ''} here`;
 </script>
 
-<div data-fieldset>
+<div data-fileset>
   <ul>
     {#each currentFiles as { key, data } (key)}
       <li data-file>

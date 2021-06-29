@@ -47,9 +47,7 @@
 
   <slot name="before" />
 
-  <div data-body>
-    <slot />
-  </div>
+  <slot />
 
   <slot name="after" />
 

@@ -1,17 +1,13 @@
 table {
   border-spacing: 0;
 
-  ~ div {
-    margin-top: @sp2;
-  }
-
   td ~ th {
     width: 1%;
   }
 
   td,
   td ~ th {
-    padding: @sp2;
+    padding: @sp1;
   }
 
   td {
@@ -232,25 +228,6 @@ td.invalid  {
   }
 }
 
-[data-body] {
-  border-bottom: 1px solid rgba(0, 0, 0, .1);
-  padding: @sp2;
-
-  + [data-actions] {
-    padding: @sp2;
-  }
-
-  > fieldset {
-    > ul {
-      max-width: calc(100vw - (@sp2 * 4));
-    }
-  }
-}
-
-ul + [data-actions] {
-  padding: @sp2 0 0 0;
-}
-
 [data-title],
 [data-titlebar] {
   padding: @sp2;
@@ -260,8 +237,6 @@ ul + [data-actions] {
 [data-titlebar] {
   font-size: 1.5em;
   font-weight: bold;
-  display: flex;
-  gap: @sp2;
 
   button {
     background-color: inherit;
@@ -270,10 +245,6 @@ ul + [data-actions] {
     &:hover {
       background-color: @hover;
     }
-  }
-
-  h3 {
-    flex: 1 0 auto;
   }
 }
 
@@ -362,24 +333,4 @@ summary {
 
 ul {
   list-style-type: none;
-}
-
-li {
-  &[data-type] {
-    border-bottom: @separator;
-    margin-bottom: @sp2;
-    min-height: 12px * 2;
-    position: relative;
-    line-height: 1.5;
-    width: 100%;
-
-    &:last-child {
-      margin-bottom: 0;
-      border: 0;
-    }
-  }
-
-  &[data-type="object"] {
-    margin-bottom: 0;
-  }
 }

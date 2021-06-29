@@ -1,23 +1,8 @@
-> [data-empty] {
-  padding: @sp2;
-
-  ~ div {
-    padding: 0 @sp2;
-  }
-}
-
-[data-empty] {
-  ~ [data-actions] {
-    margin-top: @sp2;
-  }
-}
-
 [data-failure] {
   border: 1px dashed @error;
   background-color: @white;
   position: absolute;
   max-width: 320px;
-  padding: @sp1;
   z-index: 1;
   right: @sp1;
   top: @sp1;
@@ -40,43 +25,31 @@
   }
 }
 
-[data-fieldset],
+[data-fileset],
 [data-selected] {
   > label {
     display: block;
     max-width: 100%;
     line-height: 1.5;
   }
-  button + details,
-  details + details,
-  fieldset + details {
-    margin-top: @sp2;
-  }
   summary {
     position: relative;
-    padding: @sp1;
-    padding-right: @sp2 * 3;
 
     > button {
       position: absolute;
-      margin: auto;
       bottom: 2px;
       top: 2px;
       right: 2px;
     }
 
     @media @sm {
-      padding-right: 25%;
+      xpadding-right: 25%;
     }
   }
 }
 
-[data-fieldset] {
+[data-fileset] {
   > [data-actions] {
-    width: 100%;
-    gap: @sp2;
-    display: flex;
-    align-items: center;
     position: relative;
 
     > button {
@@ -137,23 +110,16 @@
   }
 }
 
-[data-actions] {
-  align-items: center;
-  overflow: auto;
-  display: flex;
-  gap: @sp2;
-}
-
 li {
   [data-field] {
     > input,
     > label {
-      min-width: 10em;
+      xmin-width: 10em;
     }
 
     > label {
-      display: block;
-      margin-bottom: @sp1;
+      xdisplay: block;
+      xmargin-bottom: @sp1;
     }
 
     > input {
@@ -161,9 +127,9 @@ li {
       padding: 0;
       width: 100%;
       font-size: 1em;
-      margin-bottom: @sp1;
-      padding-bottom: @sp1 - 2px;
-      border-bottom: 2px solid transparent;
+      xmargin-bottom: @sp1;
+      xpadding-bottom: @sp1 - 2px;
+      xborder-bottom: 2px solid transparent;
 
       &:focus {
         outline: none;
@@ -172,58 +138,60 @@ li {
       }
 
       + [data-value] {
-        display: flex;
+        xdisplay: flex;
       }
     }
 
     > input ~ div {
-      width: 100%;
+      xwidth: 100%;
 
       > button {
-        margin-left: @sp2;
+        xmargin-left: @sp2;
       }
     }
 
     > div > fieldset {
-      border-left: @separator;
-      padding-left: @sp2;
+      xborder-left: @separator;
+      xpadding-left: @sp2;
 
       + button {
-        margin-top: @sp2;
+        xmargin-top: @sp2;
       }
 
       + div {
-        padding-top: @sp2;
-        padding-left: 0;
+        xpadding-top: @sp2;
+        xpadding-left: 0;
       }
     }
 
     @media @md {
-      gap: @sp1;
-      display: flex;
+      xgap: @sp1;
+      xdisplay: flex;
 
       > input {
-        width: 10%;
-        margin-bottom: 0;
+        xwidth: 10%;
+        xmargin-bottom: 0;
       }
     }
   }
 
   &[data-type] {
-    padding-bottom: @sp2;
+    xpadding-bottom: @sp2;
+    position: relative;
+    line-height: 1.5;
 
     &:last-child {
-      padding-bottom: 0;
+      xpadding-bottom: 0;
     }
 
     + [data-type] {
-      margin-top: @sp2;
+      xmargin-top: @sp2;
     }
 
     > div {
       > div:first-child {
-        position: relative;
-        flex: 1 1 auto;
+        xposition: relative;
+        xflex: 1 1 auto;
 
         > select,
         > textarea,
@@ -232,7 +200,7 @@ li {
         > input[type=number],
         > input[type=search],
         > input[type=password] {
-          width: 100%;
+          xwidth: 100%;
         }
       }
     }
@@ -244,10 +212,10 @@ li {
   &[data-type=integer],
   &[data-type=boolean] {
     > [data-field] > [data-value]:only-child {
-      display: flex;
+      xdisplay: flex;
 
       button {
-        margin-left: @sp2;
+        smargin-left: @sp2;
       }
     }
   }
@@ -303,18 +271,11 @@ label {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-
-  ~ div {
-    width: 100%;
-  }
 }
 
 details {
   white-space: normal;
 
-  summary {
-    gap: @sp1;
-  }
   summary::before {
     color: @light;
     content: '▹';
@@ -351,38 +312,6 @@ details {
 
     @media @md {
       min-width: 350px;
-    }
-  }
-}
-
-[data-modal] {
-  background-color: rgba(0, 0, 0, .3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: fixed;
-  overflow: auto;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  top: 0;
-
-  [data-content] {
-    box-shadow: 0 1px 2px rgba(0, 0, 0, .5);
-    background-color: @white;
-    max-width: @smw;
-    width: 100%;
-
-    @media @sm { max-width: @mdw; }
-    @media @md { max-width: @lgw; }
-
-    > fieldset {
-      padding: @sp2;
-
-      ~ div {
-        border-top: @separator;
-        padding: @sp2;
-      }
     }
   }
 }

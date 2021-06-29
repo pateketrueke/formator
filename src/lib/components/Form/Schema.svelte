@@ -48,8 +48,8 @@
 <slot />
 
 {#if title}
-  <div data-titlebar>
-    <h3>{title}</h3>
+  <div data-titlebar class="flex gap">
+    <h3 class="auto">{title}</h3>
     {#if !noclose}
       <button data-cancel tabindex="-1" type="button" on:click={close}>&times;</button>
     {/if}
@@ -57,7 +57,7 @@
 {/if}
 
 <Form result={$value} schema={$schema} uiSchema={$uiSchema} on:submit={update} on:change={check}>
-  <div slot="after" data-actions>
+  <div slot="after" class="flex gap 2x" data-actions>
     <slot name="actions">
       <button type="submit">Save</button>
     </slot>

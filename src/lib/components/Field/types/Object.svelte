@@ -187,7 +187,7 @@
   $: dispatch('change', result);
 </script>
 
-<fieldset>
+<fieldset class="v-flex gap x2">
   {#if fields.length}
     {#each hidden as { id, key, path, name, field, schema, current } (key)}
       <input
@@ -199,7 +199,7 @@
         bind:value={current}
       />
     {/each}
-    <ul>
+    <ul data-fieldset class="v-flex gap x2">
       {#each fields as { id, key, path, name, field, isFixed, schema, uiSchema, required, current } (key)}
         <li data-type={schema.type || 'object'}>
           <div data-field="/{path.join('/')}">

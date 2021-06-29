@@ -157,7 +157,7 @@
       </tbody>
     </table>
   {:else}
-    <fieldset>
+    <fieldset class="v-flex gap x2">
       <ul>
         {#each items as { key, path, offset, isFixed, schema, uiSchema } (key)}
           <li data-type={schema.type || 'object'}>
