@@ -212,7 +212,7 @@
 
 <table class:loading={loading} data-pending={uiSchema['ui:pending'] || pending}>
   {#if uiSchema['ui:title']}
-    <caption>{uiSchema['ui:title']}</caption>
+    <caption data-title>{uiSchema['ui:title']}</caption>
   {/if}
 
   {#if headers.length}

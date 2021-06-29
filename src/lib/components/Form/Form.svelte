@@ -55,7 +55,9 @@
 </script>
 
 {#if uiSchema['ui:title']}
-  <h2>{uiSchema['ui:title']}</h2>
+  <div data-titlebar>
+    <h3>{uiSchema['ui:title']}</h3>
+  </div>
 {/if}
 
 <form on:submit={save} bind:this={el} {...formProps}>

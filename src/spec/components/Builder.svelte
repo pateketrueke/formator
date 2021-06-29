@@ -11,6 +11,9 @@
   function save(e) {
     alert(JSON.stringify(e.detail, null, 2));
   }
+  function close() {
+    modal = false;
+  }
   function check(e) {
     valid = e.detail.valid;
     status = e.detail.valid ? 'valid' : 'invalid';
@@ -18,9 +21,6 @@
   function toggle() {
     visible = !visible;
     if (!visible) modal = false;
-  }
-  function overlay(e) {
-    modal = e.target.checked;
   }
   function invalid() {
     missing = !missing;
@@ -32,7 +32,7 @@
   <button class="nosel" on:click={toggle}>Toggle form</button>
   <Fence autofocus bind:visible bind:modal on:cancel={toggle}>
     <div class="formator" slot="main">
-      <Schema debug on:submit={save} on:change={check}>
+      <Schema debug noclose={!modal} title="Change password" on:submit={save} on:change={check} on:close={close}>
         {#if missing}<Input />{/if}
         <Input
           name="email"
@@ -60,7 +60,7 @@
           <span class="fill">{status}</span>
           <span class="flex gap x2">
             <label class="flex gap min">
-              <input type="checkbox" on:change={overlay} />
+              <input type="checkbox" bind:checked={modal} />
               modal
             </label>
             <label class="flex gap min">

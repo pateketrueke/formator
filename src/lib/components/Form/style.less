@@ -251,33 +251,30 @@ ul + [data-actions] {
   padding: @sp2 0 0 0;
 }
 
+[data-title],
 [data-titlebar] {
-  border-bottom: 1px solid rgba(0, 0, 0, .1);
-  min-height: 1.6em;
   padding: @sp2;
-  *zoom: 1;
+  border-bottom: 1px solid rgba(0, 0, 0, .1);
+}
 
-  &::before,
-  &::after {
-    content: ' ';
-    display: table;
-  }
-
-  &::after {
-    clear: both;
-  }
+[data-titlebar] {
+  font-size: 1.5em;
+  font-weight: bold;
+  display: flex;
+  gap: @sp2;
 
   button {
-    padding: (@sp1 / 2) @sp1;
+    background-color: inherit;
+    padding: 0 @sp1;
+    border: none;
+    &:hover {
+      background-color: @hover;
+    }
   }
 
   h3 {
-    line-height: 1;
+    flex: 1 0 auto;
   }
-}
-
-[data-cancel] {
-  float: right;
 }
 
 > fieldset,
@@ -299,14 +296,6 @@ pre {
   + button {
     margin-top: @sp1;
   }
-}
-
-caption, h2 {
-  padding: @sp2;
-  text-align: left;
-  font-size: 1.5em;
-  font-weight: bold;
-  border-bottom: @separator;
 }
 
 a {

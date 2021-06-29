@@ -36,13 +36,12 @@
 </style>
 
 <Fence modal autofocus {noform} bind:visible on:cancel={close} on:submit={save}>
-  {#if uiSchema['ui:caption']}
+  {#if uiSchema['ui:title']}
     <div data-titlebar>
-      {#if !uiSchema['ui:closing']}
+      <h3>{uiSchema['ui:title']}</h3>
+      {#if uiSchema['ui:close'] !== false}
         <button data-cancel nofocus type="button" on:click={close}>&times;</button>
       {/if}
-
-      <h3>{uiSchema['ui:caption']}</h3>
     </div>
   {/if}
 

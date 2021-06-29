@@ -4,6 +4,8 @@
   import Form from './Form.svelte';
 
   export let debug = false;
+  export let title = null;
+  export let noclose = false;
   export let validate = null;
 
   const dispatch = createEventDispatcher();
@@ -37,9 +39,22 @@
     if (!validation()) return;
     dispatch('change', e.detail);
   }
+
+  function close() {
+    dispatch('close');
+  }
 </script>
 
 <slot />
+
+{#if title}
+  <div data-titlebar>
+    <h3>{title}</h3>
+    {#if !noclose}
+      <button data-cancel tabindex="-1" type="button" on:click={close}>&times;</button>
+    {/if}
+  </div>
+{/if}
 
 <Form result={$value} schema={$schema} uiSchema={$uiSchema} on:submit={update} on:change={check}>
   <div slot="after" data-actions>
