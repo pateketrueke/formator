@@ -6,16 +6,14 @@
   export let debug = false;
 
   const dispatch = createEventDispatcher();
-  const value = writable(null);
-
+  const uiSchema = writable({});
+  const value = writable({});
   const schema = writable({
     type: 'object',
     required: [],
     properties: {},
     additionalProperties: false,
   });
-
-  const uiSchema = writable({});
 
   setContext('__FORM__', {
     value,
@@ -35,7 +33,7 @@
 
 <slot />
 
-<Form schema={$schema} uiSchema={$uiSchema} on:submit={update} on:change={validate}>
+<Form result={$value} schema={$schema} uiSchema={$uiSchema} on:submit={update} on:change={validate}>
   <div slot="after" data-actions>
     <slot name="actions">
       <button type="submit">Save</button>

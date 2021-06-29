@@ -9,7 +9,10 @@
   export let password = null;
   export let autocomplete = null;
 
-  const { schema, uiSchema } = getContext('__FORM__');
+  let defaultValue;
+  export { defaultValue as value };
+
+  const { value, schema, uiSchema } = getContext('__FORM__');
 
   if (name) {
     $schema.properties[name] = { type };
@@ -18,6 +21,7 @@
     if (required && !$schema.required.includes(name)) $schema.required.push(name);
     if (!required && $schema.required.includes(name)) $schema.required = $schema.required.filter(x => x !== name);
 
+    $value[name] = defaultValue;
     $uiSchema[name] = {};
     if (label) $uiSchema[name]['ui:label'] = label;
     if (password) $uiSchema[name]['ui:password'] = password;
