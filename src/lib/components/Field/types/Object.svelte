@@ -206,7 +206,7 @@
             {#if isFixed}
               <input type="text" required placeholder={uiSchema['ui:key'] || 'key'} on:change={e => prop(e, key)} />
             {:else}
-              <label for={id}>{uiSchema['ui:label'] || field}</label>
+              <label for={id} title={uiSchema['ui:label'] || field}>{uiSchema['ui:label'] || field}</label>
             {/if}
 
             <div data-value class="{isFixed ? 'flex' : 'v-flex'} gap">
