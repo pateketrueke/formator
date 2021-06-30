@@ -1,5 +1,16 @@
 @import './components/Form/variables';
-@import './components/Form/utilities';
+
+html {
+  box-sizing: border-box;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
 
 .smoo-fence--overlay {
   align-items: baseline !important;
@@ -35,6 +46,7 @@
   @import './components/Form/style';
   @import './components/Field/style';
   @import './components/Finder/style';
+  @import './components/Form/utilities';
 }
 
 .formator,
