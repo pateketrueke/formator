@@ -26,6 +26,15 @@
       <span />
     </label>
   </span>
+{:else if uiSchema['ui:radio']}
+  <span class="flex gap x2">
+    <label>
+      <input type="radio" {name} {required} bind:group={result} value={false} /> No
+    </label>
+    <label>
+      <input type="radio" {name} {required} bind:group={result} value={true} /> Yes
+    </label>
+  </span>
 {:else}
   <input type="checkbox" bind:checked={result} {id} {name} {required} />
 {/if}
