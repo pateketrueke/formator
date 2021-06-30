@@ -29,7 +29,7 @@
 
 <details>
   <summary id="test-builder">Form builder</summary>
-  <button class="nosel" on:click={toggle}>Toggle form</button>
+  <button on:click={toggle}>Toggle form</button>
   <Fence noform autofocus bind:visible bind:modal on:cancel={toggle}>
     <div class="formator" slot="main">
       <Schema debug noclose={!modal} title="Change password" on:submit={save} on:change={check} on:close={close}>
