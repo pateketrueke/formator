@@ -1,5 +1,5 @@
 <script>
-  import { setContext, createEventDispatcher } from 'svelte';
+  import { onMount, setContext, createEventDispatcher } from 'svelte';
   import { randId, defaultValue } from '../../shared/utils';
 
   import Field from '../Field';
@@ -41,6 +41,10 @@
     dispatch('submit', result);
   }
 
+  onMount(() => {
+    setTimeout(() => dispatch('change', { valid: null, result }));
+  });
+
   $: dispatch('change', { valid: el && el.checkValidity(), result });
   $: hasChildren = schema.type === 'object' || schema.type === 'array';
   $: nextAction = (schema.id && actions[schema.id]) ? actions[schema.id][ACTION_MAP[action]] || {} : {};
@@ -48,7 +52,7 @@
   $: formProps = nextAction
     ? {
       method: 'post',
-      action: nextAction.path || '',
+      action: nextAction.path || null,
       ...(!hasChildren ? { 'data-type': schema.type } : null),
     }
     : {};

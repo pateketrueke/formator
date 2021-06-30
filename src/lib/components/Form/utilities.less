@@ -85,10 +85,29 @@
   width: 100%;
 }
 
+.v-flex {
+  .flex;
+  align-items: end;
+  flex-direction: column;
+}
+
 .flex {
   display: flex;
   align-items: center;
-  justify-content: center;;
+  flex-direction: row;
+  justify-content: end;
+
+  &.inline {
+    display: inline-flex;
+  }
+
+  &.reset {
+    align-items: end;
+  }
+
+  &.wrap {
+    flex-wrap: wrap;
+  }
 
   &.gap {
     gap: @sp1;
@@ -98,14 +117,8 @@
   }
 }
 
-.v-flex {
-  .flex;
-  align-items: end;
-  flex-direction: column;
-}
-
 .auto {
-  flex: 1 1 auto;
+  flex: 1;
 }
 
 .nosel {
@@ -116,17 +129,16 @@
   white-space: nowrap;
 }
 
+.right {
+  text-align: right;
+}
+
 .center {
   text-align: center;
 }
 
 .focused {
   outline-color: @outline;
-}
-
-[data-actions] .min, .min {
-  min-width: auto;
-  overflow: visible;
 }
 
 .show-actions() {

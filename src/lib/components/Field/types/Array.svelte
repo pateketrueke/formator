@@ -157,28 +157,26 @@
       </tbody>
     </table>
   {:else}
-    <fieldset class="v-flex gap x2">
-      <ul>
-        {#each items as { key, path, offset, isFixed, schema, uiSchema } (key)}
-          <li data-type={schema.type || 'object'}>
-            {#if uiSchema['ui:template']}
-              <Value {uiSchema} {schema} value={result[offset]} />
-            {:else}
-              <div data-field="/{path.join('/')}">
-                <div data-value>
-                  <Field {schema} {uiSchema} bind:result={result[offset]} name="{name}[{offset}]" />
-                  {#if !isFixed && uiSchema['ui:remove'] !== false}
-                    <button data-is="remove" data-before="&minus;" type="button" on:click={() => remove(key)}>
-                      <span>{uiSchema['ui:remove'] || 'Remove item'}</span>
-                    </button>
-                  {/if}
-                </div>
+    <ul class="v-flex fill gap x2">
+      {#each items as { key, path, offset, isFixed, schema, uiSchema } (key)}
+        <li data-type={schema.type || 'object'}>
+          {#if uiSchema['ui:template']}
+            <Value {uiSchema} {schema} value={result[offset]} />
+          {:else}
+            <div data-field="/{path.join('/')}">
+              <div data-value class="v-flex gap">
+                <Field {schema} {uiSchema} bind:result={result[offset]} name="{name}[{offset}]" />
+                {#if !isFixed && uiSchema['ui:remove'] !== false}
+                  <button data-is="remove" data-before="&minus;" type="button" on:click={() => remove(key)}>
+                    <span>{uiSchema['ui:remove'] || 'Remove item'}</span>
+                  </button>
+                {/if}
               </div>
-            {/if}
-          </li>
-        {/each}
-      </ul>
-    </fieldset>
+            </div>
+          {/if}
+        </li>
+      {/each}
+    </ul>
   {/if}
 {:else}
   <div data-empty>{uiSchema['ui:empty'] || 'No items'}</div>
@@ -188,7 +186,7 @@
 {/if}
 
 {#if schema.additionalItems !== false && uiSchema['ui:push'] !== false}
-  <div data-actions>
+  <div data-actions class="flex fill wrap gap x2">
     {#if through}
       <button class="nobreak" data-is="append" data-before="&plus;" type="button" on:click={open}>
         <span>{uiSchema['ui:push'] || `Add ${association.singular}`}</span>

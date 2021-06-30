@@ -1,15 +1,28 @@
+[data-file],
+[data-type],
+[data-value],
+[data-field] {
+  width: inherit;
+}
+
+[data-value],
+[data-field] {
+  > label {
+    flex: 40%;
+    display: inline-block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 100%;
+  }
+}
+
 [data-failure] {
-  border: 1px dashed @error;
+  outline: 1px dashed @error;
   background-color: @white;
-  position: absolute;
-  max-width: 320px;
-  z-index: 1;
-  right: @sp1;
-  top: @sp1;
 
   &[open] {
     border: @separator;
-    z-index: 1;
   }
 
   summary {
@@ -32,31 +45,22 @@
     max-width: 100%;
     line-height: 1.5;
   }
-  summary {
-    position: relative;
-
-    > button {
-      position: absolute;
-      bottom: 2px;
-      top: 2px;
-      right: 2px;
-    }
-
-    @media @sm {
-      xpadding-right: 25%;
-    }
-  }
 }
 
 [data-fileset] {
   > [data-actions] {
     position: relative;
+    border: none;
 
     > button {
       ~ label {
         border: 2px dashed @high;
         border-radius: 5px;
         text-align: center;
+        &:hover {
+          border-color: @mid;
+          background-color: @hover;
+        }
       }
     }
 
@@ -111,25 +115,22 @@
 }
 
 li {
-  [data-field] {
-    > input,
-    > label {
-      xmin-width: 10em;
-    }
+  + li {
+    border-top: @separator;
+    padding-top: @sp2;
+  }
 
-    > label {
-      xdisplay: block;
-      xmargin-bottom: @sp1;
-    }
+  &[data-type] {
+    position: relative;
+    line-height: 1.5;
+  }
 
+  > [data-field] {
     > input {
       border: 0;
-      padding: 0;
-      width: 100%;
       font-size: 1em;
-      xmargin-bottom: @sp1;
-      xpadding-bottom: @sp1 - 2px;
-      xborder-bottom: 2px solid transparent;
+      padding: @sp1 0;
+      border-bottom: 2px solid transparent;
 
       &:focus {
         outline: none;
@@ -137,86 +138,15 @@ li {
         border-color: @outline;
       }
 
-      + [data-value] {
-        xdisplay: flex;
+      @media @sm {
+        width: 40%;
       }
     }
 
-    > input ~ div {
-      xwidth: 100%;
-
-      > button {
-        xmargin-left: @sp2;
-      }
-    }
-
+    > div > ul,
     > div > fieldset {
-      xborder-left: @separator;
-      xpadding-left: @sp2;
-
-      + button {
-        xmargin-top: @sp2;
-      }
-
-      + div {
-        xpadding-top: @sp2;
-        xpadding-left: 0;
-      }
-    }
-
-    @media @md {
-      xgap: @sp1;
-      xdisplay: flex;
-
-      > input {
-        xwidth: 10%;
-        xmargin-bottom: 0;
-      }
-    }
-  }
-
-  &[data-type] {
-    xpadding-bottom: @sp2;
-    position: relative;
-    line-height: 1.5;
-
-    &:last-child {
-      xpadding-bottom: 0;
-    }
-
-    + [data-type] {
-      xmargin-top: @sp2;
-    }
-
-    > div {
-      > div:first-child {
-        xposition: relative;
-        xflex: 1 1 auto;
-
-        > select,
-        > textarea,
-        > input[type=text],
-        > input[type=email],
-        > input[type=number],
-        > input[type=search],
-        > input[type=password] {
-          xwidth: 100%;
-        }
-      }
-    }
-  }
-
-  &[data-type=date],
-  &[data-type=string],
-  &[data-type=number],
-  &[data-type=integer],
-  &[data-type=boolean] {
-    > [data-field] > [data-value]:only-child {
-      xdisplay: flex;
-
-      button {
-        smargin-left: @sp2;
-      }
+      border-left: @separator;
+      padding-left: @sp2;
     }
   }
 }
@@ -263,14 +193,6 @@ input[type=checkbox] {
   &:focus {
     .focused;
   }
-}
-
-label {
-  min-width: 10em;
-  max-width: 100%;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
 }
 
 details {

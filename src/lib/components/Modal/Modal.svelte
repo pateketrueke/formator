@@ -51,7 +51,7 @@
 
   <slot name="after" />
 
-  <div data-actions>
+  <div data-actions class="flex fill wrap gap x2">
     <button data-is="close" type="button" on:click={close}>
       <span>{uiSchema['ui:cancel'] || 'Cancel'}</span>
     </button>

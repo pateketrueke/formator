@@ -217,16 +217,16 @@
   $: label = uiSchema['ui:title'] || `Choose or drag file${multiple ? 's' : ''} here`;
 </script>
 
-<div data-fileset>
-  <ul>
+<div data-fileset class="v-flex fill gap x2">
+  <ul class="v-flex fill gap x2">
     {#each currentFiles as { key, data } (key)}
       <li data-file>
         {#if fixedFields}
           <ObjectType {uiSchema} schema={fixedFields.schema} on:change={sync} bind:result={additionalFields[key]} />
         {/if}
         <details>
-          <summary class="flex">
-            <span class="chunk">{data.name || data.path}</span>
+          <summary class="flex gap">
+            <span class="auto chunk">{data.name || data.path}</span>
             {#if data.size}<small>{humanFileSize(data.size)}</small>{/if}
             <button data-before="&minus;" type="button" on:click={() => removeFile(key)}>
               <span>{uiSchema['ui:remove'] || 'Remove file'}</span>
@@ -258,7 +258,7 @@
       <li data-empty>{uiSchema['ui:empty'] || 'No files'}</li>
     {/each}
   </ul>
-  <div data-actions>
+  <div data-actions class="flex wrap gap">
     <button type="button" class="nobreak" on:click={() => ref.click()}>
       <span>{#if currentFiles.length > 0}{isAppend ? 'Append' : 'Replace'}{:else}Add{/if} file{multiple ? 's' : ''}</span>
     </button>

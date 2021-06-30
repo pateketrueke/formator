@@ -81,14 +81,13 @@ table {
   .cols(12);
 }
 
-> table ~ div {
-  padding: @sp2;
-  margin: 0;
-}
-
-> form {
-  fieldset ~ [data-actions] {
-    border-top: 1px solid rgba(0, 0, 0, .1);
+form {
+  width: inherit;
+  overflow: auto;
+  > [data-field],
+  > fieldset,
+  > ul {
+    padding: @sp2;
   }
 }
 
@@ -248,27 +247,6 @@ td.invalid  {
   }
 }
 
-> fieldset,
-form > fieldset {
-  padding: @sp2;
-}
-
-form {
-  > input {
-    margin: @sp2;
-  }
-
-  > div {
-    padding: @sp2;
-  }
-}
-
-pre {
-  + button {
-    margin-top: @sp1;
-  }
-}
-
 a {
   text-decoration: none;
   opacity: .5;
@@ -309,15 +287,11 @@ input[type=submit] {
 }
 
 fieldset {
-  width: 100%;
   border: 0;
 
-  > ul {
-    > [data-type=array] {
-      > div {
-        display: block;
-      }
-    }
+  + [data-actions] {
+    padding: @sp2;
+    border-top: 1px solid rgba(0, 0, 0, .1);
   }
 }
 
@@ -333,4 +307,5 @@ summary {
 
 ul {
   list-style-type: none;
+  padding: 0;
 }

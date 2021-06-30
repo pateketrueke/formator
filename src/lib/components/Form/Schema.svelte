@@ -45,19 +45,19 @@
   }
 </script>
 
-<slot />
-
 {#if title}
   <div data-titlebar class="flex gap">
-    <h3 class="auto">{title}</h3>
+    <h3 class="auto chunk">{title}</h3>
     {#if !noclose}
       <button data-cancel tabindex="-1" type="button" on:click={close}>&times;</button>
     {/if}
   </div>
 {/if}
 
+<slot />
+
 <Form result={$value} schema={$schema} uiSchema={$uiSchema} on:submit={update} on:change={check}>
-  <div slot="after" class="flex gap 2x" data-actions>
+  <div slot="after" data-actions class="flex fill wrap gap x2">
     <slot name="actions">
       <button type="submit">Save</button>
     </slot>

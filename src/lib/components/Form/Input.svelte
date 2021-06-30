@@ -9,6 +9,7 @@
   export let size = null;
   export let title = null;
   export let label = null;
+  export let radio = null;
   export let format = null;
   export let toggle = null;
   export let hidden = null;
@@ -40,6 +41,7 @@
     $uiSchema[name] = {};
 
     if (className) $uiSchema[name]['ui:class'] = className;
+    if (radio) $uiSchema[name]['ui:radio'] = radio;
     if (hint) $uiSchema[name]['ui:hint'] = hint;
     if (cols) $uiSchema[name]['ui:cols'] = cols;
     if (ros) $uiSchema[name]['ui:ros'] = ros;
@@ -61,5 +63,5 @@
 </script>
 
 {#if !name}
-  <p data-empty>⚠ Missing prop <b>name</b> in: {JSON.stringify($$props, null, 2)}</p>
+  <p data-failure>⚠ Missing prop <b>name</b> in: {JSON.stringify($$props, null, 2)}</p>
 {/if}
