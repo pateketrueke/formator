@@ -11,7 +11,7 @@
     "index.js"
   ],
   "scripts": {
-    "dev": "npm run build -- -w",
+    "dev": "npm run build -- -w -Xmain.js -Gmain-iife.js",
     "dist": "npm run concat:bundles && rm -rf dist/node_modules dist/components dist/*.html",
     "build": "mortero src -X{_,schema,shared,components} -P/db,/tmp:3001 -ecss.less -I.gitignore -Ddist",
     "start": "API_PORT=3001 nodemon -i src -i dist -i cache.json e2e/server.js",
@@ -56,7 +56,7 @@
     "json-schema-sequelizer": "^0.22.5",
     "less": "^4.1.1",
     "less-plugin-autoprefix": "^2.0.0",
-    "mortero": "^0.0.34",
+    "mortero": "^0.0.35",
     "nodemon": "^2.0.7",
     "pug": "^3.0.1",
     "smoo": "^0.0.14",
