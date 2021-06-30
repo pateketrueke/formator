@@ -15,10 +15,8 @@
     overflow: hidden;
     max-width: 100%;
 
-    @media @sm {
-      + div {
-        max-width: 70%;
-      }
+    + div {
+      min-width: 0;
     }
   }
 }
@@ -63,45 +61,50 @@
     border: none;
 
     > label {
-      border: 2px dashed @high;
-      border-radius: 5px;
+      height: 2.5em;
       position: relative;
       text-align: center;
-      height: 2.5em;
+      background-color: inherit;
 
-      &:hover {
-        color: @dark;
-        border-color: @mid;
-        background-color: @hover;
-      }
-
+      &:hover,
       &.hover {
+        color: @dark;
         background-color: @hover;
-        color: @mid;
       }
 
-      > input {
+      &:hover > span::before,
+      &.hover > span::before {
+        border-color: @mid;
+      }
+
+      > input,
+      > span::before {
         position: absolute;
-        width: inherit;
-        opacity: 0;
+        width: 100%;
         bottom: 0;
         right: 0;
         left: 0;
         top: 0;
       }
 
+      > input {
+        opacity: 0;
+        &:focus + span::before {
+          border-color: @outline;
+        }
+      }
       > span {
         color: inherit;
-        width: inherit;
-        line-height: 2.2;
-        padding: 0 @sp2;
+        padding: 0 @sp1;
+        line-height: 2.5;
         pointer-events: none;
-        background-color: inherit;
+
+        &::before {
+          content: '';
+          border-radius: 5px;
+          border: 2px dashed @high;
+        }
       }
-    }
-    > small {
-      background-color: inherit;
-      padding: 0;
     }
   }
 }
@@ -136,7 +139,7 @@ li {
     }
 
     > div > ul,
-    > div > fieldset {
+    > div > [data-fieldset] {
       border-left: @separator;
       padding-left: @sp2;
     }
@@ -190,15 +193,15 @@ input[type=checkbox] {
 details {
   white-space: normal;
 
-  summary::before {
+  summary > span:first-child::before {
     color: @light;
-    content: '▹';
+    content: '▹ ';
   }
   &[open] {
     summary {
       color: @mid;
-      &::before {
-        content: '▸';
+      > span:first-child::before {
+        content: '▸ ';
       }
     }
   }

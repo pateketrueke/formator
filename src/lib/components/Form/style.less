@@ -82,8 +82,8 @@ table {
 
 form {
   width: inherit;
+  > [data-fieldset],
   > [data-field],
-  > fieldset,
   > ul {
     padding: @sp2;
   }
@@ -184,7 +184,9 @@ form {
 }
 
 small {
+  text-shadow: 1px 1px @hover;
   background-color: @high;
+  border-radius: 2px;
   padding: 1px 3px;
   color: @dark;
 }
@@ -238,6 +240,13 @@ td.invalid  {
   }
 }
 
+[data-fieldset] {
+  + [data-actions] {
+    padding: @sp2;
+    border-top: 1px solid rgba(0, 0, 0, .1);
+  }
+}
+
 a {
   text-decoration: none;
   opacity: .5;
@@ -275,15 +284,6 @@ input[type=submit] {
   -ms-user-select: none;
   user-select: none;
   white-space: nowrap;
-}
-
-fieldset {
-  border: 0;
-
-  + [data-actions] {
-    padding: @sp2;
-    border-top: 1px solid rgba(0, 0, 0, .1);
-  }
 }
 
 summary {

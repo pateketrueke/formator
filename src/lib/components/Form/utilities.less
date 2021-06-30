@@ -96,9 +96,10 @@ html, body {
   dd {
     word-break: break-all;
 
-    > a {
+    > img {
+      margin: auto;
       display: block;
-      margin-top: @sp1;
+      margin-bottom: @sp1;
     }
   }
 
@@ -186,7 +187,10 @@ dd.fill,
 }
 
 .auto {
-  flex: 1 0 auto;
+  flex: 1;
+  &.min {
+    flex: 0;
+  }
 }
 
 .nosel {
@@ -199,10 +203,6 @@ dd.fill,
 
 .right {
   text-align: right;
-}
-
-.center {
-  text-align: center;
 }
 
 .focused {

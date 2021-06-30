@@ -187,7 +187,7 @@
   $: dispatch('change', result);
 </script>
 
-<fieldset class="v-flex fill gap x2">
+<div data-fieldset class="v-flex fill gap x2">
   {#if fields.length}
     {#each hidden as { id, key, path, name, field, schema, current } (key)}
       <input
@@ -199,7 +199,7 @@
         bind:value={current}
       />
     {/each}
-    <ul data-fieldset class="v-flex fill gap x2">
+    <ul class="v-flex fill gap x2">
       {#each fields as { id, key, path, name, field, isFixed, schema, uiSchema, required, current } (key)}
         <li data-type={schema.type || 'object'}>
           <div data-field="/{path.join('/')}" class="sm-flex reset v-flex gap">
@@ -247,7 +247,7 @@
       </button>
     </div>
   {/if}
-</fieldset>
+</div>
 
 <Modal updating={isUpdate} resource={association.singular} bind:visible={isOpen} on:cancel={reset} on:save={sync}>
   <Field bind:result={value} {...subProps} {association} {name} {model} {parent} {through} />

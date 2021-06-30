@@ -227,22 +227,24 @@
         <details class="fill">
           <summary class="flex gap">
             <span class="auto chunk">{data.name || data.path}</span>
-            {#if data.size}<small>{humanFileSize(data.size)}</small>{/if}
-            <button data-before="&minus;" type="button" on:click={() => removeFile(key)}>
-              <span>{uiSchema['ui:remove'] || 'Remove file'}</span>
-            </button>
+            <span class="flex gap">
+              {#if data.size}<small>{humanFileSize(data.size)}</small>{/if}
+              <button type="button" on:click={() => removeFile(key)}>
+                <span>{uiSchema['ui:remove'] || 'Remove file'}</span>
+              </button>
+            </span>
           </summary>
           <dl class="meta">
-            {#if data.path}
-              <dd class="fill center">
+            <dd class="fill">
+              {#if data.path}
                 {#if /\.(?:jpe?g|svg|png|gif)$/.test(data.path)}
                   <img alt={data.name || data.path} src={fixedLink(data.path)} width="150" />
                 {/if}
                 <a href={fixedLink(data.path)} target="_blank">{data.path}</a>
-              </dd>
-            {:else}
-              <dd>{data.name}</dd>
-            {/if}
+              {:else}
+                {data.name}
+              {/if}
+            </dd>
             <dt class="chunk">MIME Type</dt>
             <dd class="chunk">{data.type || 'application/octet-stream'}</dd>
             {#if data.lastModifiedDate || data.mtime}
@@ -263,11 +265,11 @@
       <span>{#if currentFiles.length > 0}{isAppend ? 'Append' : 'Replace'}{:else}Add{/if} file{multiple ? 's' : ''}</span>
     </button>
     <label class:hover={dover} on:dragover={allowDrop} on:dragleave={cancelDrop} on:drop={cancelDrop} class="auto chunk">
-      <input type="file" tabindex="-1" required={isRequired} title={label} on:change={setFiles} bind:this={ref} {id} {name} {multiple} />
+      <input type="file" required={isRequired} title={label} on:change={setFiles} bind:this={ref} {id} {name} {multiple} />
       <span>{label}</span>
     </label>
     {#if uiSchema['ui:counter']}
-      <small class="auto">{currentFiles.length} file{currentFiles.length === 1 ? '' : 's'} selected</small>
+      <small class="min auto">{currentFiles.length} file{currentFiles.length === 1 ? '' : 's'} selected</small>
     {/if}
   </div>
 </div>
