@@ -30,7 +30,7 @@
 <details>
   <summary id="test-builder">Form builder</summary>
   <button class="nosel" on:click={toggle}>Toggle form</button>
-  <Fence autofocus bind:visible bind:modal on:cancel={toggle}>
+  <Fence noform autofocus bind:visible bind:modal on:cancel={toggle}>
     <div class="formator" slot="main">
       <Schema debug noclose={!modal} title="Change password" on:submit={save} on:change={check} on:close={close}>
         {#if missing}<Input />{/if}
@@ -56,18 +56,17 @@
           autocomplete="confirm-password"
         />
         <slot slot="actions">
-          <input type="submit" value="Save" disabled={!valid} />
-          <span class="fill">{status}</span>
-          <span class="flex gap x2">
-            <label class="flex gap min">
+          <span class="auto"><input type="submit" value="Save" disabled={!valid} /> {status}</span>
+          <span class="flex wrap gap">
+            <label class="flex gap">
               <input type="checkbox" bind:checked={modal} />
               modal
             </label>
-            <label class="flex gap min">
+            <label class="flex gap">
               <input type="checkbox" on:change={invalid} />
               missing
             </label>
-            <label class="flex gap min">
+            <label class="flex gap">
               <input type="checkbox" bind:checked={valid} />
               validate
             </label>

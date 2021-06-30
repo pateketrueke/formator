@@ -37,12 +37,16 @@ schema:
       required:
         - dateValue
 uiSchema:
+  boolValue:
+    ui:radio: true
   objValues:
     strValue:
       ui:textarea: true
-      ui:rows: 10
+      ui:rows: 3
     boolValue:
       ui:toggle: true
+    enumValues:
+      ui:radio: true
     pickrValue:
       ui:component: Flatpickr
       ui:size: 10
