@@ -247,7 +247,7 @@
               {/each}
             {/if}
             <th>
-              <div data-actions class="flex fill wrap gap x2">
+              <div data-actions class="flex fill gap">
                 {#if uiSchema['ui:edit'] !== false}
                   <button data-is="edit" data-before="&#9998;" type="button" on:click={() => edit(offset)}>
                     <span>{uiSchema['ui:edit'] || 'Edit'}</span>

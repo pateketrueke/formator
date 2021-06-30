@@ -220,11 +220,11 @@
 <div data-fileset class="v-flex fill gap x2">
   <ul class="v-flex fill gap x2">
     {#each currentFiles as { key, data } (key)}
-      <li data-file>
+      <li data-file class="v-flex gap x2">
         {#if fixedFields}
           <ObjectType {uiSchema} schema={fixedFields.schema} on:change={sync} bind:result={additionalFields[key]} />
         {/if}
-        <details>
+        <details class="fill">
           <summary class="flex gap">
             <span class="auto chunk">{data.name || data.path}</span>
             {#if data.size}<small>{humanFileSize(data.size)}</small>{/if}
@@ -232,7 +232,7 @@
               <span>{uiSchema['ui:remove'] || 'Remove file'}</span>
             </button>
           </summary>
-          <dl>
+          <dl class="meta">
             {#if data.path}
               <dd class="fill center">
                 {#if /\.(?:jpe?g|svg|png|gif)$/.test(data.path)}
@@ -258,15 +258,16 @@
       <li data-empty>{uiSchema['ui:empty'] || 'No files'}</li>
     {/each}
   </ul>
-  <div data-actions class="flex wrap gap">
-    <button type="button" class="nobreak" on:click={() => ref.click()}>
+  <div data-actions class="flex fill wrap gap">
+    <button type="button" on:click={() => ref.click()}>
       <span>{#if currentFiles.length > 0}{isAppend ? 'Append' : 'Replace'}{:else}Add{/if} file{multiple ? 's' : ''}</span>
     </button>
-    <label data-caption={label} class:hover={dover} on:dragover={allowDrop} on:dragleave={cancelDrop} on:drop={cancelDrop}>
-      <input required={isRequired} title={label} tabindex="-1" on:change={setFiles} bind:this={ref} type="file" {id} {name} {multiple} />
+    <label class:hover={dover} on:dragover={allowDrop} on:dragleave={cancelDrop} on:drop={cancelDrop} class="auto chunk">
+      <input type="file" tabindex="-1" required={isRequired} title={label} on:change={setFiles} bind:this={ref} {id} {name} {multiple} />
+      <span>{label}</span>
     </label>
     {#if uiSchema['ui:counter']}
-      <small>{currentFiles.length} file{currentFiles.length === 1 ? '' : 's'} selected</small>
+      <small class="auto">{currentFiles.length} file{currentFiles.length === 1 ? '' : 's'} selected</small>
     {/if}
   </div>
 </div>

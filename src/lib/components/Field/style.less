@@ -14,6 +14,12 @@
     white-space: nowrap;
     overflow: hidden;
     max-width: 100%;
+
+    @media @sm {
+      + div {
+        max-width: 70%;
+      }
+    }
   }
 }
 
@@ -48,69 +54,55 @@
 }
 
 [data-fileset] {
+  + [data-actions] {
+    padding: @sp2;
+    border-top: 1px solid rgba(0, 0, 0, .1);
+  }
   > [data-actions] {
     position: relative;
     border: none;
 
-    > button {
-      ~ label {
-        border: 2px dashed @high;
-        border-radius: 5px;
-        text-align: center;
-        &:hover {
-          border-color: @mid;
-          background-color: @hover;
-        }
-      }
-    }
-
     > label {
+      border: 2px dashed @high;
+      border-radius: 5px;
       position: relative;
-      max-width: 100%;
-      &::before {
-        left: @sp1;
-        top: @sp1;
-        width: 100%;
-        position: absolute;
-        text-align: center;
-        pointer-events: none;
-        content: attr(data-caption);
-      }
-      &.hover {
-        border-color: @outline;
+      text-align: center;
+      height: 2.5em;
+
+      &:hover {
+        color: @dark;
+        border-color: @mid;
         background-color: @hover;
-        &::before {
-          color: @mid;
-        }
       }
+
+      &.hover {
+        background-color: @hover;
+        color: @mid;
+      }
+
       > input {
-        border: @sp1 solid transparent;
+        position: absolute;
+        width: inherit;
+        opacity: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        top: 0;
+      }
+
+      > span {
+        color: inherit;
+        width: inherit;
+        line-height: 2.2;
+        padding: 0 @sp2;
+        pointer-events: none;
+        background-color: inherit;
       }
     }
     > small {
       background-color: inherit;
       padding: 0;
     }
-  }
-
-  label > input {
-    width: inherit;
-    opacity: 0;
-
-    &:focus {
-      outline: none;
-      ~ label button {
-        .focused;
-      }
-    }
-  }
-
-  &::before {
-    top: @sp1;
-    right: @sp1;
-    color: @light;
-    position: absolute;
-    content: attr(data-caption);
   }
 }
 
@@ -215,6 +207,7 @@ details {
     z-index: 1;
     padding: @sp2;
     position: absolute;
+    border-radius: 3px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
     background-color: @white;
 

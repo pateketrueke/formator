@@ -43,7 +43,6 @@ table {
   .ems(16);
 
   @media @md {
-    width: 100%;
     max-width: 100%;
     table-layout: fixed;
 
@@ -83,7 +82,6 @@ table {
 
 form {
   width: inherit;
-  overflow: auto;
   > [data-field],
   > fieldset,
   > ul {
@@ -183,13 +181,6 @@ form {
       left: 0;
     }
   }
-}
-
-summary > small,
-small + small,
-span + small,
-a + small {
-  margin-left: @sp1;
 }
 
 small {

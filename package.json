@@ -11,7 +11,7 @@
     "index.js"
   ],
   "scripts": {
-    "dev": "npm run build -- -w -X'**/lib/*.js'",
+    "dev": "npm run build -- -w",
     "dist": "npm run concat:bundles && rm -rf dist/node_modules dist/components dist/*.html",
     "build": "mortero src -X{_,schema,shared,components} -P/db,/tmp:3001 -ecss.less -I.gitignore -Ddist",
     "start": "API_PORT=3001 nodemon -i src -i dist -i cache.json e2e/server.js",
