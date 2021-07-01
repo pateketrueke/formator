@@ -56,7 +56,7 @@
     "json-schema-sequelizer": "^0.22.5",
     "less": "^4.1.1",
     "less-plugin-autoprefix": "^2.0.0",
-    "mortero": "^0.0.35",
+    "mortero": "^0.0.37",
     "nodemon": "^2.0.7",
     "pug": "^3.0.1",
     "smoo": "^0.0.14",
