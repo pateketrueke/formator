@@ -19,6 +19,8 @@ jobs:
           git config user.email github-actions@github.com
 
           make release
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
@@ -27,5 +29,3 @@ jobs:
           tags: true
       - name: Publish version
         run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

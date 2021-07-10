@@ -19,7 +19,7 @@
     "concat:bundle:css": "concat dist/flatpickr.css dist/style.css -o dist/bundle.css",
     "concat:bundle:js": "concat dist/vendor.js dist/main-iife.js -o dist/bundle.js",
     "concat:bundles": "npm run concat:bundle:css && npm run concat:bundle:js",
-    "prepublishOnly": "rm -rf dist/* && rm NODE_ENV=production npm run build -- -Xspec && npm run dist",
+    "prepublishOnly": "rm -rf dist/* && NODE_ENV=production npm run build -- -Xspec && npm run dist",
     "prebuild": "mkdir -p dist && npm run copy:pickr",
     "lint": "eslint --ext js,svelte lib src e2e",
     "test": "npm run lint && npm run test:e2e --",
