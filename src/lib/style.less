@@ -1,64 +1,59 @@
 @import './components/Form/variables';
 
+html {
+  box-sizing: border-box;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+.smoo-fence--overlay {
+  align-items: baseline !important;
+  overflow: auto;
+  z-index: 2;
+
+  .smoo-fence--wrapper {
+    margin-top: 7em;
+    max-width: 720px;
+    border-radius: 3px;
+
+    @media @smx {
+      width: 100%;
+    }
+
+    > form > * {
+      padding: @sp2;
+    }
+  }
+}
+
+.smoo-fence--inline {
+  width: 100%;
+  padding: @sp2;
+}
+
 .formator {
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
   @import './components/Form/style';
   @import './components/Field/style';
   @import './components/Finder/style';
+  @import './components/Form/utilities';
 }
 
 .formator,
 .formator-layer {
+  font-family: Helvetica;
+  position: relative;
   font-size: @size;
-
-  dl {
-    margin: @sp1 0 @sp2;
-    font-size: .9em;
-    line-height: 1;
-
-    dd, dt {
-      margin-top: @sp2;
-    }
-
-    dt:nth-child(1),
-    dd:nth-child(1),
-    dd:nth-child(2) {
-      margin-top: 0;
-    }
-
-    dt {
-      color: @light;
-      font-weight: bold;
-    }
-
-    dd {
-      word-break: break-all;
-    }
-
-    @media @sm {
-      min-width: 300px;
-      display: table;
-
-      dt, dd {
-        float: left;
-      }
-
-      dt {
-        clear: left;
-        width: 35%;
-        margin-right: @sp2;
-
-        &::after {
-          content: ': ';
-        }
-      }
-
-      dd {
-        border: 0;
-        width: 60%;
-        clear: right;
-      }
-    }
-  }
 }
 
 .formator-layer {

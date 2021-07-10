@@ -30,9 +30,7 @@
     uiSchema,
   });
 
-  onMount(() => {
-    setTimeout(() => dispatch('change', result));
-  });
+  let el;
 
   function save(e) {
     if (typeof onsubmit === 'function') {
@@ -40,28 +38,34 @@
     }
 
     e.preventDefault();
-    dispatch('change', result);
+    dispatch('submit', result);
   }
 
-  $: dispatch('change', result);
+  onMount(() => {
+    setTimeout(() => dispatch('change', { valid: null, result }));
+  });
 
+  $: dispatch('change', { valid: el && el.checkValidity(), result });
   $: hasChildren = schema.type === 'object' || schema.type === 'array';
   $: nextAction = (schema.id && actions[schema.id]) ? actions[schema.id][ACTION_MAP[action]] || {} : {};
 
   $: formProps = nextAction
     ? {
       method: 'post',
-      action: nextAction.path || '',
+      action: nextAction.path || null,
       ...(!hasChildren ? { 'data-type': schema.type } : null),
     }
     : {};
 </script>
 
 {#if uiSchema['ui:title']}
-  <h2>{uiSchema['ui:title']}</h2>
+  <div data-titlebar>
+    <h3>{uiSchema['ui:title']}</h3>
+  </div>
 {/if}
 
-<form on:submit={save} {...formProps}>
+<form on:submit={save} bind:this={el} {...formProps}>
+  <slot name="before" />
   {#if !hasChildren}
     <div data-field="/">
       <Field name={name || 'value'} bind:result {model} {schema} {uiSchema} />
@@ -77,4 +81,5 @@
       <input type="hidden" name="_method" value={nextAction.verb} />
     </div>
   {/if}
+  <slot name="after" />
 </form>

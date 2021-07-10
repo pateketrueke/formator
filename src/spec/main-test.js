@@ -1,7 +1,12 @@
 /* eslint-disable no-restricted-globals */
+import App from './components/Builder.svelte';
 
-const details = [].slice.call(document.querySelectorAll('body > div > details'));
-const summaries = [].slice.call(document.querySelectorAll('body > div > details > summary'));
+new App({ // eslint-disable-line
+  target: document.getElementById('builder'),
+});
+
+const details = [].slice.call(document.querySelectorAll('body > div > details, #builder > details'));
+const summaries = [].slice.call(document.querySelectorAll('body summary[id]'));
 
 window.addEventListener('click', e => {
   const index = summaries.indexOf(e.target);

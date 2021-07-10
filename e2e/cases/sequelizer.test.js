@@ -10,7 +10,7 @@ fixture('List models')
 
 test('should list available models at /db', async t => {
   await t.expect($('body').jsonForm.visible).ok();
-  await t.expect(Selector('h2').withText('Resources').visible).ok();
+  await t.expect(Selector('h3').withText('Resources').visible).ok();
   await t.expect(Selector('form [data-type="string"] a').withText('Example').visible).ok();
 });
 

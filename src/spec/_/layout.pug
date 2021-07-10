@@ -4,34 +4,23 @@ html
     title Formator #{label ? ` (${label})`: ''}
     block head
     style.
-      *, *::before, *::after {
-        box-sizing: border-box;
-      }
-
-      * {
-        margin: 0;
-        padding: 0;
-      }
-
-      html, body {
-        height: 100%;
-      }
-
       body {
         font-family: Helvetica;
       }
 
+      .formator > form + details,
       body > div > details {
         box-shadow: 0 1px 2px silver;
         margin: auto;
         max-width: 560px;
-        margin-bottom: 6px;
+        margin-bottom: 10px;
       }
 
       body > div > details:last-child {
         margin-bottom: 0;
       }
 
+      .formator > form + details > summary,
       body > div > details > summary {
         cursor: default;
         padding: 6px;
@@ -39,14 +28,16 @@ html
         user-select: none;
       }
 
+      .formator > form + details[open] > summary,
       body > div > details[open] > summary {
         color: black;
       }
 
       body > div {
-        padding: 6px;
+        margin: 10px;
       }
 
+      .formator > form + details,
       .debug {
         box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
         background-color: white;
@@ -58,12 +49,22 @@ html
         max-width: 320px;
       }
 
+      .formator > form + details pre,
       .debug pre {
         overflow: auto;
+        max-height: 20em;
       }
 
-      #editor > div {
+      #editor > div,
+      #builder {
+        margin: 10px;
+      }
+      #builder > details {
+        margin-bottom: 0;
+      }
+      #builder summary + button {
         padding: 6px;
+        margin: 10px;
       }
   body
     block before
@@ -73,7 +74,7 @@ html
           details
             summary(id=`test-${test.testName}`) Test ##{i + 1} &mdash; #{(test && test.description) || ''}
             script(type='application/json' rel='resource' data-debug=`#json-${i}`) !{JSON.stringify(test, null, 2)}
-            .debug: summary: details: pre(id=`json-${i}`)
+            .debug: details: pre(id=`json-${i}`)
         block after
 
       import(from='vendor.js')

@@ -14,10 +14,10 @@ uiSchema:
     ui:append: false
   list:
     ui:component: FileUpload
+    ui:counter: true
   files:
     ui:component: FileUpload
     ui:attachment: true
-    ui:counter: true
 schema:
   properties:
     blob:

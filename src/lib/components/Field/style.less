@@ -1,30 +1,32 @@
-> [data-empty] {
-  padding: @sp2;
-
-  ~ div {
-    padding: 0 @sp2;
-  }
+[data-file],
+[data-type],
+[data-value],
+[data-field] {
+  width: inherit;
 }
 
-[data-empty] {
-  ~ [data-actions] {
-    margin-top: @sp2;
+[data-value],
+[data-field] {
+  > label {
+    flex: 40%;
+    display: inline-block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 100%;
+
+    + div {
+      min-width: 0;
+    }
   }
 }
 
 [data-failure] {
-  border: 1px dashed @error;
+  outline: 1px dashed @error;
   background-color: @white;
-  position: absolute;
-  max-width: 320px;
-  padding: @sp1;
-  z-index: 1;
-  right: @sp1;
-  top: @sp1;
 
   &[open] {
     border: @separator;
-    z-index: 1;
   }
 
   summary {
@@ -40,127 +42,89 @@
   }
 }
 
-[data-fieldset],
+[data-fileset],
 [data-selected] {
   > label {
     display: block;
     max-width: 100%;
     line-height: 1.5;
   }
-  button + details,
-  details + details,
-  fieldset + details {
-    margin-top: @sp2;
-  }
-  summary {
-    position: relative;
-    padding: @sp1;
-    padding-right: @sp2 * 3;
-
-    > button {
-      position: absolute;
-      margin: auto;
-      bottom: 2px;
-      top: 2px;
-      right: 2px;
-    }
-
-    @media @sm {
-      padding-right: 25%;
-    }
-  }
 }
 
-[data-fieldset] {
+[data-fileset] {
+  + [data-actions] {
+    padding: @sp2;
+    border-top: 1px solid rgba(0, 0, 0, .1);
+  }
   > [data-actions] {
-    width: 100%;
-    gap: @sp2;
-    display: flex;
-    align-items: center;
     position: relative;
-
-    > button {
-      ~ label {
-        border: 2px dashed @high;
-        border-radius: 5px;
-        text-align: center;
-      }
-    }
+    border: none;
 
     > label {
+      height: 2.5em;
       position: relative;
-      max-width: 100%;
-      &::before {
-        left: @sp1;
-        top: @sp1;
-        width: 100%;
-        position: absolute;
-        text-align: center;
-        pointer-events: none;
-        content: attr(data-caption);
-      }
+      text-align: center;
+      background-color: inherit;
+
+      &:hover,
       &.hover {
-        border-color: @outline;
+        color: @dark;
         background-color: @hover;
-        &::before {
-          color: @mid;
+      }
+
+      &:hover > span::before,
+      &.hover > span::before {
+        border-color: @mid;
+      }
+
+      > input,
+      > span::before {
+        position: absolute;
+        width: 100%;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        top: 0;
+      }
+
+      > input {
+        opacity: 0;
+        &:focus + span::before {
+          border-color: @outline;
         }
       }
-      > input {
-        border: @sp1 solid transparent;
-      }
-    }
-    > small {
-      background-color: inherit;
-      padding: 0;
-    }
-  }
+      > span {
+        color: inherit;
+        padding: 0 @sp1;
+        line-height: 2.5;
+        pointer-events: none;
 
-  label > input {
-    width: inherit;
-    opacity: 0;
-
-    &:focus {
-      outline: none;
-      ~ label button {
-        .focused;
+        &::before {
+          content: '';
+          border-radius: 5px;
+          border: 2px dashed @high;
+        }
       }
     }
   }
-
-  &::before {
-    top: @sp1;
-    right: @sp1;
-    color: @light;
-    position: absolute;
-    content: attr(data-caption);
-  }
-}
-
-[data-actions] {
-  display: flex;
-  gap: @sp2;
 }
 
 li {
-  [data-field] {
-    > input,
-    > label {
-      min-width: 7em;
-    }
+  + li {
+    border-top: @separator;
+    padding-top: @sp2;
+  }
 
-    > label {
-      display: block;
-      margin-bottom: @sp1;
-    }
+  &[data-type] {
+    position: relative;
+    line-height: 1.5;
+  }
 
+  > [data-field] {
     > input {
       border: 0;
-      padding: 0;
-      width: 100%;
       font-size: 1em;
-      margin-bottom: @sp1;
-      padding-bottom: @sp1 - 2px;
+      padding: @sp1 0;
       border-bottom: 2px solid transparent;
 
       &:focus {
@@ -169,84 +133,15 @@ li {
         border-color: @outline;
       }
 
-      + [data-value] {
-        display: flex;
+      @media @sm {
+        width: 40%;
       }
     }
 
-    > input ~ div {
-      width: 100%;
-
-      > button {
-        margin-left: @sp2;
-      }
-    }
-
-    > div > fieldset {
+    > div > ul,
+    > div > [data-fieldset] {
       border-left: @separator;
       padding-left: @sp2;
-
-      + button {
-        margin-top: @sp2;
-      }
-
-      + div {
-        padding-top: @sp2;
-        padding-left: 0;
-      }
-    }
-
-    @media @md {
-      gap: @sp1;
-      display: flex;
-
-      > input {
-        width: 10%;
-        margin-bottom: 0;
-      }
-    }
-  }
-
-  &[data-type] {
-    padding-bottom: @sp2;
-
-    &:last-child {
-      padding-bottom: 0;
-    }
-
-    + [data-type] {
-      margin-top: @sp2;
-    }
-
-    > div {
-      > div:first-child {
-        position: relative;
-        flex: 1 1 auto;
-
-        > select,
-        > textarea,
-        > input[type=text],
-        > input[type=email],
-        > input[type=number],
-        > input[type=search],
-        > input[type=password] {
-          width: 100%;
-        }
-      }
-    }
-  }
-
-  &[data-type=date],
-  &[data-type=string],
-  &[data-type=number],
-  &[data-type=integer],
-  &[data-type=boolean] {
-    > [data-field] > [data-value]:only-child {
-      display: flex;
-
-      button {
-        margin-left: @sp2;
-      }
     }
   }
 }
@@ -259,6 +154,8 @@ input[type=date],
 input[type=email],
 input[type=number],
 input[type=search],
+input[type=reset],
+input[type=submit],
 input[type=password] {
   font-size: inherit;
   padding: @sp1;
@@ -293,33 +190,18 @@ input[type=checkbox] {
   }
 }
 
-label {
-  width: 100%;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  max-width: 75px;
-
-  ~ div {
-    width: 100%;
-  }
-}
-
 details {
   white-space: normal;
 
-  summary {
-    gap: @sp1;
-  }
-  summary::before {
+  summary > span:first-child::before {
     color: @light;
-    content: '▹';
+    content: '▹ ';
   }
   &[open] {
     summary {
       color: @mid;
-      &::before {
-        content: '▸';
+      > span:first-child::before {
+        content: '▸ ';
       }
     }
   }
@@ -328,6 +210,7 @@ details {
     z-index: 1;
     padding: @sp2;
     position: absolute;
+    border-radius: 3px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
     background-color: @white;
 
@@ -347,38 +230,6 @@ details {
 
     @media @md {
       min-width: 350px;
-    }
-  }
-}
-
-[data-modal] {
-  background-color: rgba(0, 0, 0, .3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: fixed;
-  overflow: auto;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  top: 0;
-
-  [data-content] {
-    box-shadow: 0 1px 2px rgba(0, 0, 0, .5);
-    background-color: @white;
-    max-width: @smw;
-    width: 100%;
-
-    @media @sm { max-width: @mdw; }
-    @media @md { max-width: @lgw; }
-
-    > fieldset {
-      padding: @sp2;
-
-      ~ div {
-        border-top: @separator;
-        padding: @sp2;
-      }
     }
   }
 }

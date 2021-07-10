@@ -212,7 +212,7 @@
 
 <table class:loading={loading} data-pending={uiSchema['ui:pending'] || pending}>
   {#if uiSchema['ui:title']}
-    <caption>{uiSchema['ui:title']}</caption>
+    <caption data-title>{uiSchema['ui:title']}</caption>
   {/if}
 
   {#if headers.length}
@@ -247,7 +247,7 @@
               {/each}
             {/if}
             <th>
-              <div data-actions>
+              <div data-actions class="flex fill gap">
                 {#if uiSchema['ui:edit'] !== false}
                   <button data-is="edit" data-before="&#9998;" type="button" on:click={() => edit(offset)}>
                     <span>{uiSchema['ui:edit'] || 'Edit'}</span>

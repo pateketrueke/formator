@@ -187,7 +187,7 @@
   $: dispatch('change', result);
 </script>
 
-<fieldset>
+<div data-fieldset class="v-flex fill gap x2">
   {#if fields.length}
     {#each hidden as { id, key, path, name, field, schema, current } (key)}
       <input
@@ -199,17 +199,17 @@
         bind:value={current}
       />
     {/each}
-    <ul>
+    <ul class="v-flex fill gap x2">
       {#each fields as { id, key, path, name, field, isFixed, schema, uiSchema, required, current } (key)}
         <li data-type={schema.type || 'object'}>
-          <div data-field="/{path.join('/')}">
+          <div data-field="/{path.join('/')}" class="sm-flex reset v-flex gap">
             {#if isFixed}
               <input type="text" required placeholder={uiSchema['ui:key'] || 'key'} on:change={e => prop(e, key)} />
             {:else}
-              <label for={id}>{uiSchema['ui:label'] || field}</label>
+              <label for={id} title={uiSchema['ui:label'] || field}>{uiSchema['ui:label'] || field}</label>
             {/if}
 
-            <div data-value>
+            <div data-value class="{isFixed ? 'flex' : 'v-flex'} gap">
               {#if uiSchema['ui:ref']}
                 <Finder
                   {name} {schema} {uiSchema} {current}
@@ -241,13 +241,13 @@
   {/if}
 
   {#if schema.additionalProperties !== false && uiSchema['ui:add'] !== false}
-    <div data-actions>
+    <div data-actions class="flex fill wrap gap x2">
       <button class="nobreak" data-is="append" data-before="&plus;" type="button" on:click={append}>
         <span>{uiSchema['ui:add'] || 'Add prop'}</span>
       </button>
     </div>
   {/if}
-</fieldset>
+</div>
 
 <Modal updating={isUpdate} resource={association.singular} bind:visible={isOpen} on:cancel={reset} on:save={sync}>
   <Field bind:result={value} {...subProps} {association} {name} {model} {parent} {through} />

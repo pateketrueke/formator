@@ -214,35 +214,37 @@
   $: check() || dispatch('change', result); // eslint-disable-line
   $: isRequired = required ? !currentFiles.length : null;
   $: fixedFields = uiSchema['ui:includes'] && getExtraFields();
-  $: label = uiSchema['ui:caption'] || `Choose or drag file${multiple ? 's' : ''} here`;
+  $: label = uiSchema['ui:title'] || `Choose or drag file${multiple ? 's' : ''} here`;
 </script>
 
-<div data-fieldset>
-  <ul>
+<div data-fileset class="v-flex fill gap x2">
+  <ul class="v-flex fill gap x2">
     {#each currentFiles as { key, data } (key)}
-      <li data-file>
+      <li data-file class="v-flex gap x2">
         {#if fixedFields}
           <ObjectType {uiSchema} schema={fixedFields.schema} on:change={sync} bind:result={additionalFields[key]} />
         {/if}
-        <details>
-          <summary class="flex">
-            <span class="chunk">{data.name || data.path}</span>
-            {#if data.size}<small>{humanFileSize(data.size)}</small>{/if}
-            <button data-before="&minus;" type="button" on:click={() => removeFile(key)}>
-              <span>{uiSchema['ui:remove'] || 'Remove file'}</span>
-            </button>
+        <details class="fill">
+          <summary class="flex gap">
+            <span class="auto chunk">{data.name || data.path}</span>
+            <span class="flex gap">
+              {#if data.size}<small>{humanFileSize(data.size)}</small>{/if}
+              <button type="button" on:click={() => removeFile(key)}>
+                <span>{uiSchema['ui:remove'] || 'Remove file'}</span>
+              </button>
+            </span>
           </summary>
-          <dl>
-            {#if data.path}
-              <dd class="fill center">
+          <dl class="meta">
+            <dd class="fill">
+              {#if data.path}
                 {#if /\.(?:jpe?g|svg|png|gif)$/.test(data.path)}
                   <img alt={data.name || data.path} src={fixedLink(data.path)} width="150" />
                 {/if}
                 <a href={fixedLink(data.path)} target="_blank">{data.path}</a>
-              </dd>
-            {:else}
-              <dd>{data.name}</dd>
-            {/if}
+              {:else}
+                {data.name}
+              {/if}
+            </dd>
             <dt class="chunk">MIME Type</dt>
             <dd class="chunk">{data.type || 'application/octet-stream'}</dd>
             {#if data.lastModifiedDate || data.mtime}
@@ -258,15 +260,16 @@
       <li data-empty>{uiSchema['ui:empty'] || 'No files'}</li>
     {/each}
   </ul>
-  <div data-actions>
-    <button type="button" class="nobreak" on:click={() => ref.click()}>
+  <div data-actions class="flex fill wrap gap">
+    <button type="button" on:click={() => ref.click()}>
       <span>{#if currentFiles.length > 0}{isAppend ? 'Append' : 'Replace'}{:else}Add{/if} file{multiple ? 's' : ''}</span>
     </button>
-    <label data-caption={label} class:hover={dover} on:dragover={allowDrop} on:dragleave={cancelDrop} on:drop={cancelDrop}>
-      <input required={isRequired} title={label} tabindex="-1" on:change={setFiles} bind:this={ref} type="file" {id} {name} {multiple} />
+    <label class:hover={dover} on:dragover={allowDrop} on:dragleave={cancelDrop} on:drop={cancelDrop} class="auto chunk">
+      <input type="file" required={isRequired} title={label} on:change={setFiles} bind:this={ref} {id} {name} {multiple} />
+      <span>{label}</span>
     </label>
     {#if uiSchema['ui:counter']}
-      <small>{currentFiles.length} file{currentFiles.length === 1 ? '' : 's'} selected</small>
+      <small class="min auto">{currentFiles.length} file{currentFiles.length === 1 ? '' : 's'} selected</small>
     {/if}
   </div>
 </div>

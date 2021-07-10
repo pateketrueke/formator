@@ -3,6 +3,7 @@
 
   import { Fence } from 'smoo';
 
+  export let noform = false;
   export let visible = false;
   export let updating = false;
   export let resource = 'input';
@@ -25,35 +26,32 @@
 </script>
 
 <style>
-  :global(.wrapper form) {
+  :global(.smoo-fence--form) {
     padding: 0 !important;
   }
-  :global(.wrapper form > div) {
+  :global(.smoo-fence--form > div) {
     padding: 0;
     border: 0;
   }
 </style>
 
-<Fence modal autofocus bind:visible on:cancel={close} on:submit={save}>
-  {#if uiSchema['ui:caption']}
+<Fence modal autofocus {noform} bind:visible on:cancel={close} on:submit={save}>
+  {#if uiSchema['ui:title']}
     <div data-titlebar>
-      {#if !uiSchema['ui:closing']}
+      <h3>{uiSchema['ui:title']}</h3>
+      {#if uiSchema['ui:close'] !== false}
         <button data-cancel nofocus type="button" on:click={close}>&times;</button>
       {/if}
-
-      <h3>{uiSchema['ui:caption']}</h3>
     </div>
   {/if}
 
   <slot name="before" />
 
-  <div data-body>
-    <slot />
-  </div>
+  <slot />
 
   <slot name="after" />
 
-  <div data-actions>
+  <div data-actions class="flex fill wrap gap x2">
     <button data-is="close" type="button" on:click={close}>
       <span>{uiSchema['ui:cancel'] || 'Cancel'}</span>
     </button>
