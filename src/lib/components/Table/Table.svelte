@@ -161,7 +161,7 @@
         if (typeof offset === 'undefined') {
           result = result.concat(value);
         } else {
-          result[offset] = { ...value, key: getKey(value) };
+          result[offset] = value;
         }
 
         dispatch('change', result);
