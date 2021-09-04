@@ -12,6 +12,8 @@ const DEFAULT_VALUES = {
 
 export function inputType(schema) {
   switch (schema.format) {
+    case 'time': return 'time';
+    case 'date-time': return 'datetime-local';
     case 'email': return 'email';
     case 'date': return 'date';
     default: return 'text';
