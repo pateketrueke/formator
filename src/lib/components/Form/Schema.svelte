@@ -43,6 +43,8 @@
   function close() {
     dispatch('close');
   }
+
+  $: payload = { $value, $schema, $uiSchema };
 </script>
 
 {#if title}
@@ -66,6 +68,6 @@
 
 {#if debug}
   <details>
-    <pre>{JSON.stringify({ $value, $schema, $uiSchema }, null, 2)}</pre>
+    <pre>{JSON.stringify(payload, null, 2)}</pre>
   </details>
 {/if}

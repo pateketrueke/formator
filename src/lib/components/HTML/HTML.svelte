@@ -1,6 +1,9 @@
+<script context="module">
+  import { $ as render, mount, unmount } from '../Value/widgets';
+</script>
+
 <script>
   import { onMount, onDestroy } from 'svelte';
-  import { $ as render, mount, unmount } from '../Value/widgets';
 
   export let vnode;
 

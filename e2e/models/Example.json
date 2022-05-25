@@ -54,7 +54,9 @@
       "FileId": {
         "ui:ref": "File",
         "ui:component": "FileUpload",
-        "ui:template": "{@file:this}"
+        "ui:template": "{@file:this}",
+        "ui:includes": ["kind"],
+        "ui:add": false
       },
       "File": {
         "ui:columns": "10",

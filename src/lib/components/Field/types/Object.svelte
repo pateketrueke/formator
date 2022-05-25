@@ -1,16 +1,20 @@
 <script context="module">
-  function ucfirst(value) {
-    return value[0].toUpperCase() + value.substr(1);
-  }
+  import { defaultValue, randId, getId } from '../../../shared/utils';
+
+  // eslint-disable-next-line import/no-named-as-default, import/no-named-as-default-member
+  import getField from '../../../shared/field';
 </script>
 
 <script>
   import { getContext, createEventDispatcher } from 'svelte';
-  import { defaultValue, randId, getId } from '../../../shared/utils';
 
-  import Field from '..';
   import Modal from '../../Modal';
   import Finder from '../../Finder';
+
+  let Field;
+  getField().then(x => {
+    Field = x;
+  });
 
   export let uiSchema = {};
   export let schema = { type: 'object' };
@@ -41,6 +45,10 @@
   let hidden = [];
   let fields = [];
   let keys = [];
+
+  function ucfirst(x) {
+    return x[0].toUpperCase() + x.substr(1);
+  }
 
   function uniqueItems(a, b) {
     const _set = (a && Object.keys(a)) || [];
@@ -189,7 +197,7 @@
 
 <div data-fieldset class="v-flex fill gap x2">
   {#if fields.length}
-    {#each hidden as { id, key, path, name, field, schema, current } (key)}
+    {#each hidden as { id, key, path, name, schema, current } (key)}
       <input
         {id}
         {name}
@@ -216,11 +224,12 @@
                   on:change={e => set(key, e.detail)}
                 />
               {/if}
-              <Field
+              <svelte:component
                 {id} {path} {name} {field} {model} {schema} {through} {required} {uiSchema}
                 on:change={e => set(key, e.detail)}
                 parent={fixedResult}
                 result={current}
+                this={Field}
               />
 
               {#if isFixed && uiSchema['ui:remove'] !== false}
@@ -250,5 +259,5 @@
 </div>
 
 <Modal updating={isUpdate} resource={association.singular} bind:visible={isOpen} on:cancel={reset} on:save={sync}>
-  <Field bind:result={value} {...subProps} {association} {name} {model} {parent} {through} />
+  <svelte:component bind:result={value} this={Field} {...subProps} {association} {name} {model} {parent} {through} />
 </Modal>

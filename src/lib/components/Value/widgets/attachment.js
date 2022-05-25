@@ -6,6 +6,10 @@ export default function attachment($, data, values) {
     path: value,
   })));
 
+  if ('this' in data) {
+    data = { path: data.this };
+  }
+
   if (!(values[0] && values[0].path)) {
     if (!data.path) return;
     values = [data];

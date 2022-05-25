@@ -1,10 +1,20 @@
-<script>
-  import { getContext, createEventDispatcher } from 'svelte';
+<script context="module">
   import { randId, getItems, fixedCols, defaultValue } from '../../../shared/utils';
 
-  import Field from '..';
+  // eslint-disable-next-line import/no-named-as-default, import/no-named-as-default-member
+  import getField from '../../../shared/field';
+</script>
+
+<script>
+  import { getContext, createEventDispatcher } from 'svelte';
+
   import Value from '../../Value';
   import Modal from '../../Modal';
+
+  let Field;
+  getField().then(x => {
+    Field = x;
+  });
 
   export let name;
   export let model;
@@ -165,7 +175,7 @@
           {:else}
             <div data-field="/{path.join('/')}">
               <div data-value class="v-flex gap">
-                <Field {schema} {uiSchema} bind:result={result[offset]} name="{name}[{offset}]" />
+                <svelte:component {schema} {uiSchema} bind:result={result[offset]} name="{name}[{offset}]" this={Field} />
                 {#if !isFixed && uiSchema['ui:remove'] !== false}
                   <button data-is="remove" data-before="&minus;" type="button" on:click={() => remove(key)}>
                     <span>{uiSchema['ui:remove'] || 'Remove item'}</span>
@@ -200,5 +210,11 @@
 {/if}
 
 <Modal updating={isUpdate} resource={association.singular} bind:visible={isOpen} on:cancel={reset} on:save={sync}>
-  <Field name="{name}[{items.length}]" bind:result={value} schema={refs[through]} {uiSchema} {association} {model} {parent} {through} />
+  <svelte:component
+    bind:result={value}
+    {uiSchema} {association} {model} {parent} {through}
+    name="{name}[{items.length}]"
+    schema={refs[through]}
+    this={Field}
+  />
 </Modal>
