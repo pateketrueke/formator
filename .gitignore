@@ -8,3 +8,4 @@ tmp
 dist
 public
 node_modules
+package-lock.json
