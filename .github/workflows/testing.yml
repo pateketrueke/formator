@@ -12,7 +12,15 @@ jobs:
   build-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: tacoss/nodejs@master
+      - uses: actions/checkout@v2
         with:
-          args: make ci
+          fetch-depth: 0
+
+      - uses: actions/cache@v3
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+
+      - uses: tacoss/nodejs@v1
+        with:
+          args: make ci BROWSER=chromium:headless

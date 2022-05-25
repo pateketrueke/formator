@@ -23,7 +23,7 @@
     "prebuild": "mkdir -p dist && npm run copy:pickr",
     "lint": "eslint --ext js,svelte lib src e2e",
     "test": "npm run lint && npm run test:e2e --",
-    "test:e2e": "BASE_URL=http://localhost:${PORT:-8080} testcafe ${BROWSER:-chrome:headless} -q --retry-test-pages --hostname localhost"
+    "test:e2e": "BASE_URL=http://localhost:${PORT:-8080} testcafe ${BROWSER:-chrome:headless} --color --debug-on-fail"
   },
   "author": "Alvaro Cabrera <pateketrueke@gmail.com>",
   "license": "MIT",
