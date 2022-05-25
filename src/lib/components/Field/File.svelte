@@ -1,6 +1,9 @@
+<script context="module">
+  import { withKeys, defaultValue, getId, jsonData, humanFileSize } from '../../shared/utils';
+</script>
+
 <script>
   import { getContext, createEventDispatcher } from 'svelte';
-  import { withKeys, defaultValue, getId, jsonData, humanFileSize } from '../../shared/utils';
 
   import ObjectType from './types/Object.svelte';
 
@@ -210,6 +213,7 @@
     dover = false;
   }
 
+  // FIXME: attachment are not working on updates?
   $: id = getId(rootId, name);
   $: check() || dispatch('change', result); // eslint-disable-line
   $: isRequired = required ? !currentFiles.length : null;

@@ -1,9 +1,13 @@
+<script context="module">
+  // eslint-disable-next-line import/order
+  import { API } from '../../shared/utils';
+</script>
+
 <script>
   import { getContext, createEventDispatcher } from 'svelte';
   import { Failure, Search } from 'smoo';
 
   import Value from '../Value';
-  import { API } from '../../shared/utils';
 
   export let uiSchema = {};
   export let schema = {};

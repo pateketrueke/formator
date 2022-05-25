@@ -228,7 +228,7 @@ export function loader(_components, selector) {
     let data;
 
     try {
-      data = JSON.parse(node.dataset.resource || node.innerText);
+      data = JSON.parse(node.dataset.resource || node.textContent);
     } catch (e) {
       data = {};
     }

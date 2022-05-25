@@ -1,10 +1,19 @@
+<script context="module">
+  // eslint-disable-next-line import/no-named-as-default, import/no-named-as-default-member, import/order
+  import getField from '../../shared/field';
+</script>
+
 <script>
   import { onMount, setContext, createEventDispatcher } from 'svelte';
   import { Failure } from 'smoo';
 
   import Modal from '../Modal';
-  import Field from '../Field';
   import Value from '../Value';
+
+  let Field;
+  getField().then(x => {
+    Field = x;
+  });
 
   import {
     API, randId, fixedCols, defaultValue,
@@ -291,5 +300,5 @@
 </table>
 
 <Modal {uiSchema} updating={isUpdate} resource={model} bind:visible={isOpen} on:save={sync} on:cancel={reset}>
-  <Field name="__ROOT__" bind:result={value} {...fieldProps} />
+  <svelte:component name="__ROOT__" bind:result={value} this={Field} {...fieldProps} />
 </Modal>

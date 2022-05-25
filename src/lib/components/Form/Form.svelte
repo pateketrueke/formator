@@ -1,8 +1,17 @@
-<script>
-  import { onMount, setContext, createEventDispatcher } from 'svelte';
+<script context="module">
   import { randId, defaultValue } from '../../shared/utils';
 
-  import Field from '../Field';
+  // eslint-disable-next-line import/no-named-as-default, import/no-named-as-default-member
+  import getField from '../../shared/field';
+</script>
+
+<script>
+  import { onMount, setContext, createEventDispatcher } from 'svelte';
+
+  let Field;
+  getField().then(x => {
+    Field = x;
+  });
 
   export let refs = {};
   export let schema = {};
@@ -68,10 +77,10 @@
   <slot name="before" />
   {#if !hasChildren}
     <div data-field="/">
-      <Field name={name || 'value'} bind:result {model} {schema} {uiSchema} />
+      <svelte:component name={name || 'value'} bind:result this={Field} {model} {schema} {uiSchema} />
     </div>
   {:else}
-    <Field name={name || 'value'} bind:result {model} {schema} {uiSchema} />
+    <svelte:component name={name || 'value'} bind:result this={Field} {model} {schema} {uiSchema} />
   {/if}
   {#if actions}
     <div>

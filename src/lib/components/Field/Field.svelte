@@ -67,8 +67,10 @@
   }
 </script>
 
-<svelte:component
-  {id} {err} {path} {name} {model} {parent} {schema} {uiSchema} {rootId} {through} {required} {association}
-  on:change on:sync={validate} bind:result
-  this={propType}
-/>
+{#if propType}
+  <svelte:component
+    {id} {err} {path} {name} {model} {parent} {schema} {uiSchema} {rootId} {through} {required} {association}
+    on:change on:sync={validate} bind:result
+    this={propType.default || propType}
+  />
+{/if}

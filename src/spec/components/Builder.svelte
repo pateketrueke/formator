@@ -1,6 +1,6 @@
 <script>
   import { Fence } from 'smoo';
-  import { Schema, Input } from '../../lib/main.js';
+  import { Schema, Input } from '../../../components';
 
   let status = 'pristine';
   let valid = false;
@@ -9,6 +9,7 @@
   let missing;
 
   function save(e) {
+    // eslint-disable-next-line no-alert
     alert(JSON.stringify(e.detail, null, 2));
   }
   function close() {

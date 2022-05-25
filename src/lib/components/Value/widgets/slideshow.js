@@ -9,6 +9,10 @@ export default function slideShow($, data, values, parentNode) {
       path: value,
     })));
 
+  if ('this' in data) {
+    data = { path: data.this };
+  }
+
   if (!(values[0] && values[0].path)) {
     if (!data.path) return;
     values = [data];
@@ -23,7 +27,7 @@ export default function slideShow($, data, values, parentNode) {
   let isImage;
   let isResource;
 
-  return ['span.flex', null, [['a', {
+  return ['span.gap.flex', null, [['a', {
     href: '#',
     class: 'chunk',
     target: '_blank',
@@ -52,9 +56,15 @@ export default function slideShow($, data, values, parentNode) {
           return;
         }
 
-        destroy(closeMe);
-        unmount(target);
-        open = false;
+        node.parentNode.style.transition = 'opacity 260ms';
+        node.parentNode.style.pointerEvents = 'none';
+        node.parentNode.style.opacity = 0;
+
+        setTimeout(() => {
+          destroy(closeMe);
+          unmount(target);
+          open = false;
+        }, 260);
       }
 
       function showMe() {
