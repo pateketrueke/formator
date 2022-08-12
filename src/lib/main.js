@@ -1,5 +1,5 @@
-import Form$ from './components/Form';
-import Table$ from './components/Table';
+import Form$ from './components/Form/Form.svelte';
+import Table$ from './components/Form/Table.svelte';
 
 import { loader as loader$ } from './shared/utils';
 

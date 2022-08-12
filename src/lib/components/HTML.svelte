@@ -1,5 +1,5 @@
 <script context="module">
-  import { $ as render, mount, unmount } from '../Value/widgets';
+  import { $ as render, mount, unmount } from './Value/widgets';
 </script>
 
 <script>

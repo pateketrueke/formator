@@ -7,8 +7,8 @@
   import { onMount, setContext, createEventDispatcher } from 'svelte';
   import { Failure } from 'smoo';
 
-  import Modal from '../Modal';
-  import Value from '../Value';
+  import Modal from '../Modal/Modal.svelte';
+  import Value from '../Value/Value.svelte';
 
   let Field;
   getField().then(x => {

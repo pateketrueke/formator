@@ -18,7 +18,7 @@ lint: src lib e2e deps ## Lint all sources
 dev: src deps ## Start dev tasks  (nodejs)
 	@mkdir -p tmp
 	@npm run build
-	@npm start & npm run dev
+	@npm run dev & npm start
 
 dist: src deps ## Build final output for production
 	@npm run build -- -f

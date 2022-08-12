@@ -4,5 +4,5 @@ function get(promise) {
 
 // FIXME: move all lazy deps this way...
 export default function getField() {
-  return get(import('../components/Field'));
+  return get(import('../components/Field/Field.svelte'));
 }

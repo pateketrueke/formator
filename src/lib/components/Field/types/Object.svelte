@@ -8,8 +8,8 @@
 <script>
   import { getContext, createEventDispatcher } from 'svelte';
 
-  import Modal from '../../Modal';
-  import Finder from '../../Finder';
+  import Modal from '../../Modal/Modal.svelte';
+  import Finder from '../../Finder/Finder.svelte';
 
   let Field;
   getField().then(x => {

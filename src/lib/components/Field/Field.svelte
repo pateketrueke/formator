@@ -1,6 +1,6 @@
 <script context="module">
-  import ErrorType from '../Error';
-  import LoaderType from '../Loader';
+  import ErrorType from '../Error.svelte';
+  import LoaderType from '../Loader.svelte';
 
   import { componentType } from '../../shared';
   import { reduceRefs } from '../../shared/utils';

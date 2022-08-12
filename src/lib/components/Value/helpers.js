@@ -1,6 +1,6 @@
 import { humanFileSize } from '../../shared/utils';
 import TYPES from './types';
-import HTML from '../HTML';
+import _ from '../HTML.svelte';
 
 const RE_PLACEHOLDER = /\{(?:(@?[^{}|?!:@]*)(?::([\w*,.]+))?([|?!:])?(.*?)|)\}/;
 const RE_IDENTITY = /\{\}/g;
@@ -198,7 +198,7 @@ export function reduce(it, value, template) {
 
 export function renderDOM(it, value, template) {
   return [{
-    component: HTML,
+    component: _,
     options: {
       vnode: [].concat(template).map(x => reduce(it, value, x)),
     },

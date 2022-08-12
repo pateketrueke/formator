@@ -8,8 +8,8 @@
 <script>
   import { getContext, createEventDispatcher } from 'svelte';
 
-  import Value from '../../Value';
-  import Modal from '../../Modal';
+  import Value from '../../Value/Value.svelte';
+  import Modal from '../../Modal/Modal.svelte';
 
   let Field;
   getField().then(x => {

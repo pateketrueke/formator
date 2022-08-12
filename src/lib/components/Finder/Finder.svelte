@@ -7,7 +7,7 @@
   import { getContext, createEventDispatcher } from 'svelte';
   import { Failure, Search } from 'smoo';
 
-  import Value from '../Value';
+  import Value from '../Value/Value.svelte';
 
   export let uiSchema = {};
   export let schema = {};
