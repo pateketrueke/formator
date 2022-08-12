@@ -7,7 +7,7 @@ export default function attachment($, data, values) {
   })));
 
   if ('this' in data) {
-    data = { path: data.this };
+    data = jsonData(data.this, () => ({ path: data.this }));
   }
 
   if (!(values[0] && values[0].path)) {
@@ -24,8 +24,8 @@ export default function attachment($, data, values) {
   const length = values.length > 1 ? ['small', null, `${values.length} files`] : null;
 
   return ['details', null, [
-    ['summary.flex', null, [['span.chunk', null, name], size, length]],
-    ['dl', null, values.map(value => [
+    ['summary.gap.flex', null, [['span.chunk', null, name], size, length]],
+    ['dl.meta', null, values.map(value => [
       value.path && ['dd', null, [['a', { href: srcFile, target: '_blank' }, value.path]]],
       value.type && ['dt.chunk', null, 'MIME Type'],
       value.type && ['dd.chunk', null, value.type],

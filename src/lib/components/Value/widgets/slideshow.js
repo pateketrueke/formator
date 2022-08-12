@@ -10,7 +10,7 @@ export default function slideShow($, data, values, parentNode) {
     })));
 
   if ('this' in data) {
-    data = { path: data.this };
+    data = jsonData(data.this, () => ({ path: data.this }));
   }
 
   if (!(values[0] && values[0].path)) {

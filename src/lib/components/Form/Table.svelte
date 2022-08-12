@@ -130,6 +130,7 @@
     });
   }
 
+  // FIXME: turn this confirmation into a Svelte component?
   function remove(fixedOffset) {
     if (!confirm('Are you sure?')) return; // eslint-disable-line
 

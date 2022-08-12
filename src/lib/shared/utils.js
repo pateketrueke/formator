@@ -126,6 +126,17 @@ export function jsonData(value, cb) {
     return value;
   }
 
+  if (typeof value === 'string' && value.indexOf('url:') === 0) {
+    const matches = value.match(/^url:([^;]+);(\d+),(.+?)(?:\[(.+?)\])?$/);
+
+    return {
+      type: matches[1],
+      size: +matches[2],
+      path: matches[3],
+      name: matches[4],
+    };
+  }
+
   return cb();
 }
 
