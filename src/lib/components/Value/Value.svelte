@@ -10,7 +10,7 @@
   export let uiSchema = {};
 
   function getNodes() {
-    const { type, default: defaultValue } = schema;
+    const { type, default: defaultValue } = schema || {};
 
     if (value instanceof window.File) {
       value = {

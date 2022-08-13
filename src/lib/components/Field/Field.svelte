@@ -31,7 +31,7 @@
   $: {
     let _schema = reduceRefs(schema, refs);
 
-    if (refs[name] && !schema.id) {
+    if (refs[name] && !schema.id && schema.items) {
       const { through: through$, ...association$ } = refs[name];
       const refItems = schema.items;
       const refSchema = refs[through];

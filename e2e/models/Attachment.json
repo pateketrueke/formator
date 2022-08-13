@@ -12,7 +12,8 @@
       "ui:template": "#{.FileId} {.File.kind} {this}"
     },
     "File":{
-      "ui:template": "{@file:this}"
+      "ui:template": "{@file:this}",
+      "ui:edit": false
     },
     "FileId": {
       "ui:ref": "File",

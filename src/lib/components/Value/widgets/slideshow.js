@@ -27,7 +27,7 @@ export default function slideShow($, data, values, parentNode) {
   let isImage;
   let isResource;
 
-  return ['span.gap.flex', null, [['a', {
+  return ['span.gap.flex.between', null, [['a', {
     href: '#',
     class: 'chunk',
     target: '_blank',

@@ -24,7 +24,7 @@ export default function attachment($, data, values) {
   const length = values.length > 1 ? ['small', null, `${values.length} files`] : null;
 
   return ['details', null, [
-    ['summary.gap.flex', null, [['span.chunk', null, name], size, length]],
+    ['summary.gap.flex.between', null, [['span.chunk', null, name], size, length]],
     ['dl.meta', null, values.map(value => [
       value.path && ['dd', null, [['a', { href: srcFile, target: '_blank' }, value.path]]],
       value.type && ['dt.chunk', null, 'MIME Type'],
