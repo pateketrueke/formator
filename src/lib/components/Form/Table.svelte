@@ -251,7 +251,12 @@
               </td>
             {:else}
               {#each headers as { field, label }}
-                <td data-field="/{offset}/{field}" data-type={schema[field].type || 'object'} data-label={label} class={fixedCols(uiSchema[field], headers)}>
+                <td
+                  class={fixedCols(uiSchema[field], headers)}
+                  data-field="/{offset}/{field}"
+                  data-type="{(field in schema && schema[field].type) || 'object'}"
+                  data-label={label}
+                >
                   <Value schema={schema[field]} uiSchema={uiSchema[field]} value={data[field]} root={data} />
                 </td>
               {/each}

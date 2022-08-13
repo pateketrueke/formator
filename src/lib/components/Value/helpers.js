@@ -10,7 +10,7 @@ export function getProp(result, from, key) {
 
   if (key.charAt() === '.') {
     if (key === '..') return result;
-    return result[key.substr(1)];
+    return getProp(null, result, key.substr(1));
   }
 
   if (key === 'this') {
