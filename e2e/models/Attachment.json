@@ -1,18 +1,16 @@
 {
   "$attributes": {
-    "findAll": ["label", "File.name", "File.path", "File.type", "File.size"]
+    "findAll": ["label", "File.kind", "File.name", "File.path", "File.type", "File.size"]
   },
   "$uiSchema": {
-    "ui:fields": ["label", "File"],
+    "ui:headers": ["Attachment", "Kind", "File"],
+    "ui:fields": ["label", "File.kind", "File"],
     "ui:add": false,
     "id": {
       "ui:hidden": true
     },
-    "label": {
-      "ui:template": "#{.FileId} {.File.kind} {this}"
-    },
-    "File":{
-      "ui:template": "{@file:this}",
+    "File": {
+      "ui:template": "{@embed:this}",
       "ui:edit": false
     },
     "FileId": {

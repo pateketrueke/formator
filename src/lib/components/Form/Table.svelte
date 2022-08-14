@@ -1,6 +1,7 @@
 <script context="module">
   // eslint-disable-next-line import/no-named-as-default, import/no-named-as-default-member, import/order
   import getField from '../../shared/field';
+  import { getProp } from '../../shared/utils';
 </script>
 
 <script>
@@ -254,10 +255,9 @@
                 <td
                   class={fixedCols(uiSchema[field], headers)}
                   data-field="/{offset}/{field}"
-                  data-type="{(field in schema && schema[field].type) || 'object'}"
                   data-label={label}
                 >
-                  <Value schema={schema[field]} uiSchema={uiSchema[field]} value={data[field]} root={data} />
+                  <Value schema={schema[field]} uiSchema={uiSchema[field]} root={data} value="{getProp(data, data, field)}" />
                 </td>
               {/each}
             {/if}

@@ -97,6 +97,67 @@ export function getItems(schema, offset) {
   || null;
 }
 
+export function getProp(result, from, key) {
+  if (!key) return null;
+
+  if (key.charAt() === '.') {
+    if (key === '..') return result;
+    return getProp(null, result, key.substr(1));
+  }
+
+  if (key === 'this') {
+    if (!Array.isArray(from)) return from[key];
+    return from;
+  }
+
+  if (Array.isArray(from)) {
+    return getProp(result, { from }, `from.${key}`);
+  }
+
+  const keys = key.split('.');
+
+  let o = from;
+  let k;
+
+  try {
+    for (let i = 0; ;) {
+      if (!keys.length) {
+        break;
+      }
+
+      k = keys.shift();
+      o = o[k];
+
+      if (Array.isArray(o)) {
+        if (keys[i] === '*') {
+          return o.reduce((prev, y) => {
+            const next = keys.slice(i + 1).join('.');
+
+            if (next === '*') {
+              return prev.concat(y);
+            }
+
+            const sub = getProp(result, y, next);
+
+            if (typeof sub !== 'undefined') {
+              prev.push(sub);
+            }
+
+            return prev;
+          }, []);
+        }
+        o = o[0];
+      }
+
+      i += 1;
+    }
+  } catch (e) {
+    return null;
+  }
+
+  return o;
+}
+
 export function humanFileSize(bytes, decimals = 1) {
   if (Math.abs(bytes) < 1000) return `${bytes} B`;
 
