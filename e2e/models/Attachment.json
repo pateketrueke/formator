@@ -1,6 +1,6 @@
 {
   "$attributes": {
-    "findAll": ["label", "File.kind", "File.name", "File.path", "File.type", "File.size"]
+    "findAll": ["label", "File.kind", "File.name", "File.type", "File.size", "File.path"]
   },
   "$uiSchema": {
     "ui:headers": ["Attachment", "Kind", "File"],
@@ -11,14 +11,12 @@
     },
     "File": {
       "ui:template": "{@embed:this}",
-      "ui:edit": false
-    },
-    "FileId": {
-      "ui:ref": "File",
       "ui:component": "FileUpload",
-      "ui:template": "{@file:this}",
       "ui:includes": ["kind"],
       "ui:add": false
+    },
+    "FileId": {
+      "ui:hidden": true
     },
     "ExampleId": {
       "ui:hidden": true

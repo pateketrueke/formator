@@ -5,10 +5,12 @@
       "blob",
       "file",
       "title",
+      "fileset.kind",
       "fileset.name",
       "fileset.path",
       "fileset.size",
       "fileset.mtime",
+      "file.kind",
       "file.name",
       "file.path",
       "file.size",
@@ -41,30 +43,30 @@
       "ui:columns": "9::6"
     },
     "fileset": {
-      "ui:template": "{@embed:*.File}",
+      "ui:template": "{@embed:this}",
       "ui:add": false,
       "ui:columns": "9",
-      "ui:fields": ["id", "label", "File"],
+      "ui:fields": ["Attachment"],
       "id": {
-        "ui:class": "em2",
-        "ui:edit": false
-      },
-      "label": {
-        "ui:columns": "9"
-      },
-      "FileId": {
-        "ui:ref": "File",
-        "ui:component": "FileUpload",
-        "ui:template": "{@file:this}",
-        "ui:includes": ["kind"],
-        "ui:add": false
+        "ui:hidden": true
       },
       "File": {
+        "ui:add": false,
+        "ui:lookup": "File",
+        "ui:through": "Attachment",
         "ui:columns": "10",
-        "ui:template": "{@file:this}"
+        "ui:includes": ["kind"],
+        "ui:component": "FileUpload",
+        "ui:template": "{@embed:this}"
+      },
+      "FileId": {
+        "ui:hidden": true
       },
       "ExampleId": {
         "ui:hidden": true
+      },
+      "Attachment": {
+        "ui:template": "{label} {@embed:..}"
       }
     },
     "id": {

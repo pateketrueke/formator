@@ -1,15 +1,10 @@
-<script context="module">
-  // eslint-disable-next-line import/no-named-as-default, import/no-named-as-default-member, import/order
-  import getField from '../../shared/field';
-  import { getProp } from '../../shared/utils';
-</script>
-
 <script>
   import { onMount, setContext, createEventDispatcher } from 'svelte';
   import { Failure } from 'smoo';
 
   import Modal from '../Modal/Modal.svelte';
   import Value from '../Value/Value.svelte';
+  import getField from '../../shared/field';
 
   let Field;
   getField().then(x => {
@@ -17,7 +12,7 @@
   });
 
   import {
-    API, randId, fixedCols, defaultValue,
+    API, randId, getProp, fixedCols, defaultValue,
   } from '../../shared/utils';
 
   export let pending = 'Loading...';
@@ -32,6 +27,10 @@
 
   export let association = refs[model];
 
+  const keys = refs[model].references.primaryKeys.map(x => x.prop);
+  const pk = refs[model].references.primaryKeys[0].prop;
+  const fieldProps = { model, schema, uiSchema };
+
   const dispatch = createEventDispatcher();
   const rootId = randId();
 
@@ -43,8 +42,6 @@
     uiSchema,
   });
 
-  let pk = 'id';
-  let keys = [];
   let items = [];
   let offset = -1;
   let failure = null;
@@ -68,6 +65,10 @@
       if (prev === root) prev = null;
       else prev = root;
     }
+  }
+  function toggler(node) {
+    node.addEventListener('click', toggleActive);
+    return { destroy: () => node.removeEventListener('click', toggleActive) };
   }
 
   function handleClick(e) {
@@ -140,9 +141,9 @@
         [pk]: result[fixedOffset][pk],
       }))
       .then(data => {
-        loading = null;
         if (data && data.status !== 'ok') return fail(data);
         result = result.filter((_, k) => k !== fixedOffset);
+        loading = null;
       });
   }
 
@@ -190,11 +191,8 @@
     return () => document.removeEventListener('click', handleClick, true);
   });
 
-  $: items = getItems(result);
   $: headers = getHeaders();
-  $: fieldProps = { model, schema, uiSchema };
-  $: pk = refs[model].references.primaryKeys[0].prop;
-  $: keys = refs[model].references.primaryKeys.map(x => x.prop);
+  $: items = getItems(result);
 </script>
 
 <style>
@@ -237,9 +235,9 @@
     </thead>
   {/if}
 
-  <tbody data-field="/" data-type="array" on:click={toggleActive}>
+  <tbody data-field="/" data-type="array" use:toggler>
     {#if payload}
-      {#await payload}
+      {#await Promise.resolve(payload)}
         <tr>
           <td colspan="99" data-empty>Loading data...</td>
         </tr>
@@ -254,15 +252,16 @@
               {#each headers as { field, label }}
                 <td
                   class={fixedCols(uiSchema[field], headers)}
+                  data-type="{schema[field].type || 'object'}"
                   data-field="/{offset}/{field}"
                   data-label={label}
                 >
-                  <Value schema={schema[field]} uiSchema={uiSchema[field]} root={data} value="{getProp(data, data, field)}" />
+                  <Value schema={schema[field]} uiSchema={uiSchema[field]} value="{getProp(data, data, field)}" root={data} />
                 </td>
               {/each}
             {/if}
             <th>
-              <div data-actions class="flex fill gap">
+              <div data-actions class="flex fill gap end">
                 {#if uiSchema['ui:edit'] !== false}
                   <button data-is="edit" data-before="&#9998;" type="button" on:click={() => edit(offset)}>
                     <span>{uiSchema['ui:edit'] || 'Edit'}</span>

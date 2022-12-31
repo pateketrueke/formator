@@ -59,7 +59,7 @@
 <slot />
 
 <Form result={$value} schema={$schema} uiSchema={$uiSchema} on:submit={update} on:change={check}>
-  <div slot="after" data-actions class="flex fill wrap gap x2">
+  <div slot="after" data-actions class="flex fill wrap gap end x2">
     <slot name="actions">
       <button type="submit">Save</button>
     </slot>

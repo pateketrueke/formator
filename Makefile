@@ -32,7 +32,7 @@ purge: ## Delete all installed modules
 release: deps
 ifneq ($(CI),)
 	@echo '//registry.npmjs.org/:_authToken=$(NODE_AUTH_TOKEN)' > .npmrc
-	@npm version patch
+	@npm version $(USE_RELEASE_VERSION)
 endif
 
 .PHONY: help lint dev test logs build clean dist release node_modules

@@ -45,6 +45,8 @@
     "no-underscore-dangle": 0,
     "no-multiple-empty-lines": 0,
     "import/first": 0,
+    "import/no-named-as-default": 0,
+    "import/no-named-as-default-member": 0,
     "import/extensions": 0,
     "import/no-unresolved": 0,
     "import/no-dynamic-require": 0,

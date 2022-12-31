@@ -63,5 +63,5 @@
 </script>
 
 {#if !name}
-  <p data-failure>⚠ Missing prop <b>name</b> in: {JSON.stringify($$props, null, 2)}</p>
+  <p data-failure>&#9888; Missing prop <b>name</b> in: {JSON.stringify($$props, null, 2)}</p>
 {/if}

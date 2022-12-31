@@ -53,12 +53,11 @@ export function renderValue(it, data, template) {
       result.push(values.shift());
     }
 
-    return result.filter(x => x).reduce((prev, cur) => {
+    return result.filter(Boolean).reduce((prev, cur) => {
       if (typeof cur === 'string') {
         prev.push(cur);
       } else {
         let retval;
-
         if (cur.expression.charAt() === '@' && cur.expression.length > 1) {
           try {
             const method = cur.expression.substr(1);
@@ -80,7 +79,6 @@ export function renderValue(it, data, template) {
           retval = typeof data === 'object' ? getProp(it, data, cur.value) : cur.value;
         } else if (!retval && cur.operator === '!') {
           prev.push(cur.value);
-
           return prev;
         }
 
@@ -93,11 +91,7 @@ export function renderValue(it, data, template) {
             retval = JSON.stringify(retval);
           }
 
-          if (Array.isArray(retval)) {
-            prev.push(...retval);
-          } else {
-            prev.push(retval);
-          }
+          prev.push(retval);
         }
       }
 

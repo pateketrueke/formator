@@ -183,18 +183,28 @@ export function jsonData(value, cb) {
     }
   }
 
+  if (value instanceof window.File) {
+    return {
+      name: value.name.split('/').pop(),
+      path: value.name,
+      size: value.size,
+      type: value.type,
+      mmtime: value.lastModifiedDate.toGMTString(),
+    };
+  }
+
   if (value !== null && typeof value === 'object') {
     return value;
   }
 
   if (typeof value === 'string' && value.indexOf('url:') === 0) {
-    const matches = value.match(/^url:([^;]+);(\d+),(.+?)(?:\[(.+?)\])?$/);
+    const matches = value.match(/^url:([^;]+);(?:(\d+),)?(.+?)(?:@(.+?))?$/);
 
     return {
       type: matches[1],
       size: +matches[2],
-      path: matches[3],
-      name: matches[4],
+      name: matches[3],
+      path: matches[4],
     };
   }
 
@@ -460,6 +470,12 @@ export const API = {
     } else {
       fixedHeaders['Content-Type'] = 'application/json';
       payload = JSON.stringify({ payload: data });
+    }
+
+    if (path.includes('?')) {
+      path += '&reload=1';
+    } else {
+      path += '?reload=1';
     }
 
     return fetch(path, {

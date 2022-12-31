@@ -70,6 +70,13 @@
   }
 
   function sync() {
+    if (through) {
+      const ref = value[association.model];
+
+      delete value[association.model];
+      ref[through] = value;
+      value = ref;
+    }
     result = result.concat(value);
   }
 
@@ -145,7 +152,7 @@
           <tr data-field="/{path.join('/')}">
             {#each headers as { field, label }}
               <td data-field="/{path.concat(field).join('/')}" data-label={label} class={fixedCols(uiSchema[field], headers)}>
-                <Value {schema} uiSchema={uiSchema[field]} value={result[offset][field]} />
+                <Value {schema} uiSchema={uiSchema[field]} value={result[offset][field]} root={result[offset]} />
               </td>
             {/each}
             <th>
@@ -196,7 +203,7 @@
 {/if}
 
 {#if schema.additionalItems !== false && uiSchema['ui:push'] !== false}
-  <div data-actions class="flex fill wrap gap x2">
+  <div data-actions class="flex fill wrap gap end x2">
     {#if through}
       <button class="nobreak" data-is="append" data-before="&plus;" type="button" on:click={open}>
         <span>{uiSchema['ui:push'] || `Add ${association.singular}`}</span>

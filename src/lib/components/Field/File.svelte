@@ -9,6 +9,7 @@
 
   export let name;
   export let model;
+  export let parent;
   export let uiSchema = {};
   export let required = false;
   export let schema = { type: 'string' };
@@ -48,6 +49,10 @@
       currentFiles = withKeys([jsonData(result, () => ({ path: result }))]);
     }
 
+    if (typeof parent === 'object' && uiSchema['ui:lookup']) {
+      currentFiles = withKeys([{ ...parent }]);
+    }
+
     if (uiSchema['ui:includes']) {
       additionalFields = currentFiles.reduce((memo, cur) => {
         memo[cur.key] = {};
@@ -61,13 +66,13 @@
   }
 
   function getExtraFields() {
-    const _target = uiSchema['ui:ref'] || model;
+    const _target = uiSchema['ui:lookup'] || model;
     const _props = schema.properties || refs[_target].properties;
     const _req = schema.required || refs[_target].required;
     const _ui = {
       ...uiSchema,
       ...refs[_target].uiSchema,
-      'ui:ref': undefined,
+      'ui:lookup': undefined,
       'ui:component': undefined,
     };
 
@@ -119,18 +124,23 @@
   }
 
   function fix(file) {
-    const _target = uiSchema['ui:ref'] || model;
+    const _target = uiSchema['ui:lookup'] || model;
     const _props = (schema.properties || refs[_target] || {}).properties;
 
     if (file.data instanceof window.File) {
-      file.data.properties = { ...additionalFields[file.key] };
+      if (!('properties' in file.data)) {
+        Object.defineProperty(file.data, 'properties', {
+          get: () => additionalFields[file.key],
+        });
+      }
     } else if (_props) {
       const payload = Object.keys(_props).reduce((memo, cur) => {
         memo[cur] = additionalFields[file.key][cur] || file.data[cur];
         return memo;
       }, {});
 
-      file.data = { ...additionalFields[file.key], ...payload };
+      file.data = additionalFields[file.key];
+      Object.assign(file.data, payload);
     }
     return file.data;
   }
@@ -226,7 +236,7 @@
     {#each currentFiles as { key, data } (key)}
       <li data-file class="v-flex gap x2">
         {#if fixedFields}
-          <ObjectType {uiSchema} schema={fixedFields.schema} on:change={sync} bind:result={additionalFields[key]} />
+          <ObjectType {uiSchema} schema={fixedFields.schema} bind:result={additionalFields[key]} />
         {/if}
         <details class="fill">
           <summary class="flex gap">
@@ -244,7 +254,7 @@
                 {#if /\.(?:jpe?g|svg|png|gif)$/.test(data.path)}
                   <img alt={data.name || data.path} src={fixedLink(data.path)} width="150" />
                 {/if}
-                <a href={fixedLink(data.path)} target="_blank">{data.path}</a>
+                <a href={fixedLink(data.path)} target="_blank" rel="noreferrer">{data.path}</a>
               {:else}
                 {data.name}
               {/if}
@@ -264,7 +274,7 @@
       <li data-empty>{uiSchema['ui:empty'] || 'No files'}</li>
     {/each}
   </ul>
-  <div data-actions class="flex fill wrap gap">
+  <div data-actions class="flex fill wrap gap end">
     <button type="button" on:click={() => ref.click()}>
       <span>{#if currentFiles.length > 0}{isAppend ? 'Append' : 'Replace'}{:else}Add{/if} file{multiple ? 's' : ''}</span>
     </button>

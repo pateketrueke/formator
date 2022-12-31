@@ -218,19 +218,27 @@
             {/if}
 
             <div data-value class="{isFixed ? 'flex' : 'v-flex'} gap">
-              {#if uiSchema['ui:ref']}
+              {#if uiSchema['ui:lookup']}
                 <Finder
                   {name} {schema} {uiSchema} {current}
                   on:change={e => set(key, e.detail)}
                 />
+                <svelte:component
+                  {id} {path} {name} {field} {model} {schema} {through} {required} {uiSchema}
+                  on:change={e => set(key, e.detail)}
+                  parent={result[uiSchema['ui:lookup']]}
+                  result={current}
+                  this={Field}
+                />
+              {:else}
+                <svelte:component
+                  {id} {path} {name} {field} {model} {schema} {through} {required} {uiSchema}
+                  on:change={e => set(key, e.detail)}
+                  parent={fixedResult}
+                  result={current}
+                  this={Field}
+                />
               {/if}
-              <svelte:component
-                {id} {path} {name} {field} {model} {schema} {through} {required} {uiSchema}
-                on:change={e => set(key, e.detail)}
-                parent={fixedResult}
-                result={current}
-                this={Field}
-              />
 
               {#if isFixed && uiSchema['ui:remove'] !== false}
                 <button data-is="remove" data-before="&minus;" type="button" on:click={() => remove(key)}>
@@ -250,7 +258,7 @@
   {/if}
 
   {#if schema.additionalProperties !== false && uiSchema['ui:add'] !== false}
-    <div data-actions class="flex fill wrap gap x2">
+    <div data-actions class="flex fill wrap gap end x2">
       <button class="nobreak" data-is="append" data-before="&plus;" type="button" on:click={append}>
         <span>{uiSchema['ui:add'] || 'Add prop'}</span>
       </button>

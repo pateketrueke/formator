@@ -17,6 +17,7 @@
   const dispatch = createEventDispatcher();
   const { actions } = getContext('__ROOT__');
 
+  const id = name.replace(/\W+/g, '_').replace(/_$/, '');
   const fallback = uiSchema['ui:empty'] || 'No items were found';
   const placeholder = uiSchema['ui:placeholder'] || 'Find items...';
 
@@ -34,7 +35,7 @@
   }
 
   function find(term) {
-    const req = { ...actions[uiSchema['ui:ref']].index };
+    const req = { ...actions[uiSchema['ui:lookup']].index };
 
     if (term) {
       req.path += `?search=${term}`;
@@ -48,8 +49,8 @@
 
   function sync(e) {
     value = e.detail;
-    result = data.find(x => x.id.toString() === value[0]);
-    dispatch('change', value[0]);
+    result = data.find(x => x.id === +value[0]);
+    dispatch('change', result);
   }
 
   function reset() {
@@ -72,7 +73,7 @@
   $: values = getItems(value);
 </script>
 
-<Search {data} {fallback} {placeholder} on:input={search} on:change={sync} bind:value nofilter autoclose />
+<Search {id} {data} {fallback} {placeholder} on:input={search} on:change={sync} bind:value nofilter autoclose />
 
 {#await pending}
   <div data-loading>{uiSchema['ui:loading'] || 'Loading results...'}</div>

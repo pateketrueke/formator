@@ -42,9 +42,6 @@
     }
   }
 
-  [role=listbox] + * {
-    min-height: 35px;
-  }
   [role=listbox] + div {
     margin-top: @sp1;
   }
@@ -52,8 +49,13 @@
     box-shadow: 0 0 3px @dark;
     z-index: 2;
   }
+
+  [data-fileset] [data-empty],
   [role=listbox] + [data-empty],
-  [role=listbox] + [data-loading],
+  [role=listbox] + [data-loading] {
+    opacity: .5;
+  }
+
   [data-selected] > [data-loading] {
     padding: @sp1;
     opacity: .5;
@@ -64,10 +66,8 @@
     position: relative;
 
     > button:last-child {
-      position: absolute;
-      margin: 0;
-      right: 2px;
-      top: 2px;
+      margin-top: 2px;
+      float: right;
     }
   }
 
